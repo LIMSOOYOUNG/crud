@@ -1,6 +1,5 @@
 package com.deft.crud.configuration;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -15,11 +14,12 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @EnableWebSecurity
 public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter{
 
-	
-	@Autowired
-	public SpringSecurityConfiguration() {
-		
-	}
+//	private final MemberService memberService;
+//	
+//	@Autowired
+//	public SpringSecurityConfiguration(MemberService memberService) {
+//		this.memberService = memberService;
+//	}
 	
 	@Bean
 	public PasswordEncoder passwordEncoder() {
@@ -58,32 +58,9 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter{
 	}
 	
 	@Override
-	public void configure(AuthenticationManagerBuilder auth) {
+	public void configure(AuthenticationManagerBuilder auth) throws Exception {
 		
-		
-		
+//		auth.userDetailsService(memberService).passwordEncoder(passwordEncoder());
 	}
 	
-	
-	
-	
-	
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

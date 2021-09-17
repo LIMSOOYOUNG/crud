@@ -1,2 +1,15 @@
+# server port config
 server:
   port: 8007
+  
+# oracle driver config
+spring:
+  datasource:
+    driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+    url: jdbc:log4jdbc:oracle:thin:@oracle.team-greedy.com:1521:xe
+    username: GREEDY  
+    password: GREEDY
+    
+# mybatis config
+mybatis:
+  mapper-locations: mappers/**/*.xml     
