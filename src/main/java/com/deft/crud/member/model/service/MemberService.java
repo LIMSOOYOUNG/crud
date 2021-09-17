@@ -1,5 +1,7 @@
 package com.deft.crud.member.model.service;
 
-public interface MemberService {
+import org.springframework.security.core.userdetails.UserDetailsService;
 
+public interface MemberService extends UserDetailsService {
+	
 }
