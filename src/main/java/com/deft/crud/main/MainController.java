@@ -27,11 +27,11 @@ public class MainController {
 	@PostMapping(value = "/")
 	public String redirectMain() {
 		
-		List<String> menuList = mainService.selectMenuList();
-		
-		for(String menu : menuList) {
-			System.out.println(menu);
-		}
+//		List<String> menuList = mainService.selectMenuList();
+//		
+//		for(String menu : menuList) {
+//			System.out.println(menu);
+//		}
 		
 		return "main/main";
 	}
