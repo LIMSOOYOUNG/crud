@@ -2,6 +2,7 @@ package com.deft.crud.admin.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,7 +27,7 @@ public class AdminController {
 	}
 	
 	/* 사원등록 페이지로 이동 */
-	@GetMapping(value = {"/emp/insert"})
+	@GetMapping(value = {"/member/insert"})
 	public ModelAndView insertMember(ModelAndView mv) {
 		
 		mv.setViewName("/admin/insertMember");
@@ -35,24 +36,35 @@ public class AdminController {
 	}
 	
 	/* 사원 등록 페이지에서 데이터 가져옴 */
-	@PostMapping(value = "/emp/insert")
+	@PostMapping(value = "/member/insert")
 	
 	public String redirectInsertMember(MemberDTO member) {
 		
 		System.out.println(member);
 		
-//		int result = adminService.insertMember();
+	
+		int result = adminService.insertMember(member);
 		
+		System.out.println(result);
 		
 		return "main/main";
 	}
 	
-	
-	@GetMapping(value = "/emp/checkUserId")
+	@GetMapping(value = "/member/checkUserId")
 	@ResponseBody
-	public boolean checkUserId(@RequestParam String empId) {
+	public Boolean checkUserId(@RequestParam String empId) {
 		
-		return adminService.checkUserId(empId);
+		int result = adminService.checkUserId(empId);
+		
+		Boolean idCheckResult = false;
+		if(result == 0) {
+			idCheckResult = true;
+		} 
+		
+		return idCheckResult;
 	}
+	
+	
+	
 	
 }
