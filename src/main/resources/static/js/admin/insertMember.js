@@ -12,7 +12,7 @@ const insertMember = {
 		document.getElementById('pwd2').addEventListener('keyup', insertMember.equalsPassword)		
 	},
 	
-	onKeyupUserIdCheck: () => {
+	onKeyupUserIdCheck: function() {
 		const userId = document.getElementById('empId').value
 		const request = {empId: userId}
 		let queryString = '?' + $.param(request)
@@ -22,12 +22,16 @@ const insertMember = {
 			url: "/admin/emp/checkUserId" + queryString,
 			success: (res) => {
 				console.log(res)
+				if(res == true){
+					document.getElementById('checkId').innerHTML = "(사용가능한 ID 입니다.)"
+					document.getElementById('checkId').style.color = 'green'
+				}
 			}
 		})
 		
 	},
 	
-	onKeyupPassword: () => {
+	onKeyupPassword: function() {
 		const password = document.getElementById('pwd1').value
 		
 		//재확인 비밀번호 일치 여부 확인
@@ -38,7 +42,7 @@ const insertMember = {
 		
 	},
 	
-	validPassword: (password) => {
+	validPassword: function(password) {
 		//비밀번호가 없는 경우
 		if(password === '' || typeof password === 'undefined')
 			return document.getElementById('checkPwd1').innerHTML = ""	
@@ -46,7 +50,7 @@ const insertMember = {
 		//소문자 대문자 숫자를 포함하여 8~16자 체크
 		if(!/^[a-zA-Z0-9]{8,16}$/.test(password)){
 			document.getElementById('checkPwd1').style.color = 'red'
-    		document.getElementById('checkPwd1').innerHTML = "8~16 자리로 입력해주세요."	
+    		document.getElementById('checkPwd1').innerHTML = "(8~16 자리(영문+숫자)로 입력해주세요.)"	
    			return false;
   		}
 
@@ -56,14 +60,14 @@ const insertMember = {
 		//숫자와 영문 사용 여부 확인
   		if(checkNum <0 || checkEng <0){
 			document.getElementById('checkPwd1').style.color = 'red'
-    		document.getElementById('checkPwd1').innerHTML = "숫자와 영문자를 조합하여야 합니다."	
+    		document.getElementById('checkPwd1').innerHTML = "(숫자와 영문자를 조합하여야 합니다.)"	
     		return false;
  		}
  		
  		return document.getElementById('checkPwd1').innerHTML = ""	
 	},
 	
-	equalsPassword: () => {
+	equalsPassword: function() {
 		const password = document.getElementById('pwd1').value
 		const checkPassword = document.getElementById('pwd2').value
 		
@@ -73,13 +77,13 @@ const insertMember = {
 		
 		//비밀번호가 일치하지 않는 경우
 		if(password !== checkPassword) {
-			document.getElementById('checkPwd2').innerHTML = "비밀번호가 일치하지 않습니다."	
+			document.getElementById('checkPwd2').innerHTML = "(비밀번호가 일치하지 않습니다.)"	
 			return document.getElementById('checkPwd2').style.color = 'red'
 		}
 		
 		//서로 같은 경우 통과
 		if(password === checkPassword) {
-			document.getElementById('checkPwd2').innerHTML = "비밀번호가 일치합니다."	
+			document.getElementById('checkPwd2').innerHTML = "(비밀번호가 일치합니다.)"	
 			return document.getElementById('checkPwd2').style.color = 'green'
 		}
 	}

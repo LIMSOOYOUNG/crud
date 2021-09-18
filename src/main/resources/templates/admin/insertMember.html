@@ -34,14 +34,13 @@
 										<div class="row">
 											<div class="col-lg-2" style="margin-top: 60px;">
 												<div align="center">
-													<label style="">프로필 사진</label>
-												</div>
-												<div
-													style="height: 300px; width: 200px; border: 1px solid black">
+													<label>프로필 사진</label>
+												<div style="height: 300px; width: 200px; border: 1px solid black">
 												</div>
 												<br>
 												<div>
 													<input type="file">
+												</div>
 												</div>
 											</div>
 											<div class="col-lg-5">
@@ -50,7 +49,8 @@
 														name="empNo" placeholder="사원번호">
 												</div>
 												<div class="form-group">
-													<label>ID</label> <input type="text" id="empId" class="form-control"
+													<label>ID</label>&nbsp;<span id="checkId"></span>
+													<input type="text" id="empId" class="form-control"
 														name="empId" placeholder="ID" required>
 												</div>
 												<div class="form-group">
@@ -58,18 +58,34 @@
 													<input type="password"	class="form-control" name="empPwd" id="pwd1" placeholder="Password">
 												</div>
 												<div class="form-group">
+													<label>비밀번호 재확인</label>&nbsp;<span id="checkPwd2"></span>
+														<input type="password" name="empPwd2" id="pwd2" class="form-control" placeholder="Repeat Password" required>
+														</div>
+												<div class="form-group">
 													<label>Email</label> <input type="email"
 														class="form-control" name="empEmail"
 														aria-describedby="emailHelp"
 														placeholder="Enter Email Address" required>
 												</div>
-												<div class="form-group">
-													<label>성별</label>
-													<div class="form-control">
-														<input type="radio" name="gender" value="남" required> <label>남</label>
-														<input type="radio" name="gender" value="여" required> <label>여</label>
+												<div class="row">
+													<div class="form-group col-xl-6">
+														<label>부서</label>
+															<input type="text" name="deptNo" class="form-control" required>
 													</div>
-
+													<div class="form-group col-xl-6">
+														<label>직급</label>
+															<input type="text" name="jobNo" class="form-control"  required>
+													</div>
+												</div>
+												<div class="row">
+													<div class="form-group col-xl-6">
+														<label>담당자</label>
+															<input type="text" name="managerNo" class="form-control"  required>
+													</div>
+													<div class="form-group col-xl-6">
+														<label>권한</label>
+															<input type="text" name="authority" class="form-control"  required>
+													</div>
 												</div>
 											</div>
 											<div class="col-lg-5">
@@ -83,43 +99,25 @@
 															<input type="date" class="form-control" name="empBirth" required>
 													</div>
 													<div class="form-group col-xl-6">
-														<label>재직상태</label>
-														<div class="form-control">
-															<input type="radio" name="hireYn" value="Y" required> <label>Y</label>
-															<input type="radio" name="hireYn" value="N" required> <label>N</label>
-														</div>
+													<label>성별</label>
+													<div class="form-control">
+														<input type="radio" name="gender" value="남" required> <label>남</label>
+														<input type="radio" name="gender" value="여" required> <label>여</label>
 													</div>
 												</div>
-												<div class="form-group">
-													<label>비밀번호 재확인</label>&nbsp;<span id="checkPwd2"></span>
-														<input type="password" name="empPwd2" id="pwd2" class="form-control" placeholder="Repeat Password" required>
+													
+												</div>
 												<div class="row">
-													<div class="form-group col-xl-6">
-														<label>부서</label>
-														<div class="form-control">
-															<input type="text" name="deptNo" required>
-														</div>
-													</div>
-													<div class="form-group col-xl-6">
-														<label>직급</label>
-														<div class="form-control">
-															<input type="text" name="jobNo" required>
-														</div>
+												<div class="form-group col-xl-6">
+														<label>PHONE</label>
+															<input type="text" name="empPhone" class="form-control" id="empPhone" required> 
+													</div>		
+												<div class="form-group col-xl-6">
+														<label>자택번호</label>
+															<input type="text" class="form-control" name="empTel" >
 													</div>
 												</div>
 												<div class="row">
-													<div class="form-group col-xl-6">
-														<label>담당자</label>
-														<div class="form-control">
-															<input type="text" name="managerNo">
-														</div>
-													</div>
-													<div class="form-group col-xl-6">
-														<label>권한</label>
-														<div class="form-control">
-															<input type="text" name="authority">
-														</div>
-													</div>
 													<div class="form-group col-xl-6">
 														<label>입사일</label>
 															<input type="date" class="form-control"	name="hireDate" required>
@@ -130,7 +128,7 @@
 													</div>
 												</div>
 											</div>
-
+											</div>
 											<div class="form-group col-xl-12">
 												<br>
 												<button type="submit" class="btn btn-primary btn-block">사원등록</button>
