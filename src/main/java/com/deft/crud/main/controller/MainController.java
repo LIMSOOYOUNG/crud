@@ -1,6 +1,4 @@
-package com.deft.crud.main;
-
-import java.util.List;
+package com.deft.crud.main.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
