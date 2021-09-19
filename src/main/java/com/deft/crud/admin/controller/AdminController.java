@@ -64,7 +64,4 @@ public class AdminController {
 		return idCheckResult;
 	}
 	
-	
-	
-	
 }
