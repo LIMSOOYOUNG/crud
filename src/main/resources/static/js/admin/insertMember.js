@@ -1,18 +1,21 @@
 const insertMember = {
 	
-	init: () => {
+	init: function() {
 		//바로 실행되는 스크립트들을 호출	
 		insertMember.bind()
 	},
 	
-	bind: () => {
+	bind: function() {
 		//이벤트 추가하는 부분
 		document.getElementById('empId').addEventListener('keyup', insertMember.onKeyupUserIdCheck)
 		document.getElementById('pwd1').addEventListener('keyup', insertMember.onKeyupPassword)
 		document.getElementById('pwd2').addEventListener('keyup', insertMember.equalsPassword)		
 	},
 	
-	onKeyupUserIdCheck: function() {
+	onKeyupUserIdCheck: function(empId) {
+		if(empId === '' || typeof empId === 'undefined')
+			return document.getElementById('checkId').innerHTML = ""	
+		
 		const userId = document.getElementById('empId').value
 		const request = {empId: userId}
 		let queryString = '?' + $.param(request)
@@ -20,16 +23,25 @@ const insertMember = {
 		$.ajax({
 			type: "GET",
 			url: "/admin/emp/checkUserId" + queryString,
-			success: (res) => {
+			success: function(res) {
 				console.log(res)
-				if(res == true){
+				
+				if(document.getElementById('empId').value === '') {
+					document.getElementById('checkId').innerHTML = ""	
+				
+				} else if(res == true){
 					document.getElementById('checkId').innerHTML = "(사용가능한 ID 입니다.)"
 					document.getElementById('checkId').style.color = 'green'
+				} else {
+					document.getElementById('checkId').innerHTML = "(이미사용중인 ID 입니다.)"
+					document.getElementById('checkId').style.color = 'red'
 				}
 			}
 		})
+	
 		
 	},
+	
 	
 	onKeyupPassword: function() {
 		const password = document.getElementById('pwd1').value
