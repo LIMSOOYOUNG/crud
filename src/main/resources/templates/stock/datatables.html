@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org"
+	xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-spingsecurity5">
+
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="description" content="">
+<meta name="author" content="">
+<link href="img/logo/logo.png" rel="icon">
+<title>RuangAdmin - DataTables</title>
+<link href="/vendor/fontawesome-free/css/all.min.css" rel="stylesheet"
+	type="text/css">
+<link href="/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet"
+	type="text/css">
+<link href="/css/ruang-admin.min.css" rel="stylesheet">
+<link href="/vendor/datatables/dataTables.bootstrap4.min.css"
+	rel="stylesheet">
+</head>
+
+<body id="page-top">
+
+	<!-- Topbar -->
+	<!-- Container Fluid-->
+	<div class="container-fluid" id="container-wrapper">
+		<div class="d-sm-flex align-items-center justify-content-between mb-4">
+			<h1 class="h3 mb-0 text-gray-800">재고관리</h1>
+			<ol class="breadcrumb">
+				<li class="breadcrumb-item"><a href="./">Home</a></li>
+				<li class="breadcrumb-item">Tables</li>
+				<li class="breadcrumb-item active" aria-current="page">재고관리</li>
+			</ol>
+		</div>
+
+		<!-- Row -->
+		<div class="row">
+
+
+			<!-- DataTable with Hover -->
+			<div class="col-lg-12">
+				<div class="card mb-4">
+					<div
+						class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+						<h6 class="m-0 font-weight-bold text-primary">전체상품 재고현황</h6>
+						<div>
+							<input type="button" onclick="location.href=''" value="출고요청서작성">
+						</div>
+					</div>
+
+					<div class="table-responsive p-3">
+						<table class="table align-items-center table-flush table-hover"
+							id="dataTableHover">
+							<thead align="center" class="thead-light">
+								<tr>
+									<th>카테고리</th>
+									<th>상품번호</th>
+									<th>상품명</th>
+									<th>재고수량</th>
+									<th>단위</th>
+									<th>상태</th>
+									<th>관리</th>
+								</tr>
+							</thead>
+							<tbody align="center">
+							<th:each = "stock : ${stockList}">
+								<td th:text = "${stock.categoryName}"></td>
+								<td th:text = "${stock.productNo}"></td>
+								<td th:text = "${stock.productName}"></td>
+								<td th:text = "${stock.productAmount}"></td>
+								<td th:text = "${stock.unit}"></td>
+								<td th:text = "${stock.productStatus}"></td>
+								<td th:oclick = "'location.href=\' '+ @{/stock/detail/{pno}(pno=${stock.productNo)} + '\''">
+							
+							</th:each>
+							
+								<tr>
+									<th>복사용지</th>
+									<td><a href="#">RA4943</a></td>
+									<td>A4(80g/더블에이)</td>
+									<td>200</td>
+									<td>BOX</td>
+									<td><span class="badge badge-success">판매중</span></td>
+									<td><a href="#" class="btn btn-sm btn-primary">상품관리</a></td>
+								</tr>
+								<tr>
+									<th>노트/수첩/다이어리/독서대</th>
+									<td><a href="#">RA0449</a></td>
+									<td>에이스독서대</td>
+									<td>300</td>
+									<td>EA</td>
+									<td><span class="badge badge-success">판매중</span></td>
+									<td><a href="#" class="btn btn-sm btn-primary">상품관리</a></td>
+								</tr>
+								<tr>
+									<th>노트/수첩/다이어리/독서대</th>
+									<td><a href="#">RA5324</a></td>
+									<td>스프링노트</td>
+									<td>10</td>
+									<td>EA</td>
+									<td><span class="badge badge-success">판매중</span></td>
+									<td><a href="#" class="btn btn-sm btn-primary">상품관리</a></td>
+								</tr>
+								<tr>
+									<th>사물함/서류함</th>
+									<td><a href="#">RA8568</a></td>
+									<td>오픈형서류함(3단/카파맥스)</td>
+									<td>500</td>
+									<td>EA</td>
+									<td><span class="badge badge-success">판매중</span></td>
+									<td><a href="#" class="btn btn-sm btn-primary">상품관리</a></td>
+								</tr>
+								<tr>
+									<th>사물함/서류함</th>
+									<td><a href="#">RA1453</a></td>
+									<td>마이룸서류함(5단/시스맥스)</td>
+									<td>150</td>
+									<td>EA</td>
+									<td><span class="badge badge-danger">판매중지</span></td>
+									<td><a href="#" class="btn btn-sm btn-primary">상품관리</a></td>
+								</tr>
+								<tr>
+									<th>칼/가위</th>
+									<td><a href="#">RA1998</a></td>
+									<td>컷터(220/평화)</td>
+									<td>200</td>
+									<td>EA</td>
+									<td><span class="badge badge-danger">판매중지</span></td>
+									<td><a href="#" class="btn btn-sm btn-primary">상품관리</a></td>
+								</tr>
+								<tr>
+									<th>복사용지</th>
+									<td><a href="#">RA4943</a></td>
+									<td>A4(80g/더블에이)</td>
+									<td>200</td>
+									<td>BOX</td>
+									<td><span class="badge badge-success">판매중</span></td>
+									<td><a href="#" class="btn btn-sm btn-primary">상품관리</a></td>
+								</tr>
+								<tr>
+									<th>노트/수첩/다이어리/독서대</th>
+									<td><a href="#">RA0449</a></td>
+									<td>에이스독서대</td>
+									<td>300</td>
+									<td>EA</td>
+									<td><span class="badge badge-success">판매중</span></td>
+									<td><a href="#" class="btn btn-sm btn-primary">상품관리</a></td>
+								</tr>
+								<tr>
+									<th>노트/수첩/다이어리/독서대</th>
+									<td><a href="#">RA5324</a></td>
+									<td>스프링노트</td>
+									<td>10</td>
+									<td>EA</td>
+									<td><span class="badge badge-success">판매중</span></td>
+									<td><a href="#" class="btn btn-sm btn-primary">상품관리</a></td>
+								</tr>
+								<tr>
+									<th>사물함/서류함</th>
+									<td><a href="#">RA8568</a></td>
+									<td>오픈형서류함(3단/카파맥스)</td>
+									<td>500</td>
+									<td>EA</td>
+									<td><span class="badge badge-success">판매중</span></td>
+									<td><a href="#" class="btn btn-sm btn-primary">상품관리</a></td>
+								</tr>
+								<tr>
+									<th>사물함/서류함</th>
+									<td><a href="#">RA1453</a></td>
+									<td>마이룸서류함(5단/시스맥스)</td>
+									<td>150</td>
+									<td>EA</td>
+									<td><span class="badge badge-danger">판매중지</span></td>
+									<td><a href="#" class="btn btn-sm btn-primary">상품관리</a></td>
+								</tr>
+								<tr>
+									<th>칼/가위</th>
+									<td><a href="#">RA1998</a></td>
+									<td>컷터(220/평화)</td>
+									<td>200</td>
+									<td>EA</td>
+									<td><span class="badge badge-danger">판매중지</span></td>
+									<td><a href="#" class="btn btn-sm btn-primary">상품관리</a></td>
+								</tr>
+							</tbody>
+							<!--  <tfoot align="center">
+                      			<tr>
+									<th>카테고리</th>
+									<th>상품번호</th>
+									<th>상품명</th>
+									<th>재고수량</th>
+									<th>단위</th>
+									<th>상태</th>
+									<th>관리</th>
+								</tr>
+                   			</tfoot> -->
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!--Row-->
+
+	</div>
+
+	<!-- Scroll to top -->
+
+
+	<script src="/vendor/jquery/jquery.min.js"></script>
+	<script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+	<script src="/vendor/jquery-easing/jquery.easing.min.js"></script>
+	<script src="/js/ruang-admin.min.js"></script>
+	<!-- Page level plugins -->
+	<script src="/vendor/datatables/jquery.dataTables.min.js"></script>
+	<script src="/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+
+	<!-- Page level custom scripts -->
+	<script>
+    $(document).ready(function () {
+      $('#dataTable').DataTable(); // ID From dataTable 
+      $('#dataTableHover').DataTable(); // ID From dataTable with Hover
+    });
+  </script>
+</html>
