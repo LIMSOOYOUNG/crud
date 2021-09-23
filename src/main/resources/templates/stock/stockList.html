@@ -14,15 +14,16 @@
 	<link href="/css/ruang-admin.min.css" rel="stylesheet">
 </head>
 
+
 <body>
 	<!-- Container Fluid-->
 	<div class="container-fluid" id="container-wrapper">
 		<div class="d-sm-flex align-items-center justify-content-between mb-4">
-			<h1 class="h3 mb-0 text-gray-800">Simple Tables</h1>
+			<h1 class="h3 mb-0 text-gray-800">재고관리</h1>
 			<ol class="breadcrumb">
 				<li class="breadcrumb-item"><a href="./">Home</a></li>
 				<li class="breadcrumb-item">Tables</li>
-				<li class="breadcrumb-item active" aria-current="page">Simple Tables</li>
+				<li class="breadcrumb-item active" aria-current="page">재고관리</li>
 			</ol>
 		</div>
 
@@ -31,54 +32,75 @@
 				<!-- Simple Tables -->
 				<div class="card">
 					<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-						<h6 class="m-0 font-weight-bold text-primary">Simple Tables</h6>
+						<h6 class="m-0 font-weight-bold text-primary">상품 재고 상태</h6>
 					</div>
 					<div class="table-responsive">
 						<table class="table align-items-center table-flush">
-							<thead class="thead-light">
+							<thead align="center"  class="thead-light">
 								<tr>
-									<th>Order ID</th>
-									<th>Customer</th>
-									<th>Item</th>
-									<th>Status</th>
-									<th>Action</th>
+									<th>카테고리</th>
+									<th>상품번호</th>
+									<th>상품명</th>
+									<th>재고수량</th>
+									<th>단위</th>
+									<th>상태</th>
+									<th>관리</th>
 								</tr>
 							</thead>
-							<tbody>
+							<tbody align="center">
 								<tr>
+									<th>복사용지</th>
+									<td><a href="#">RA4943</a></td>
+									<td>A4(80g/더블에이)</td>
+									<td>200</td>
+									<td>BOX</td>
+									<td><span class="badge badge-success">판매중</span></td>
+									<td><a href="#" class="btn btn-sm btn-primary">상품관리</a></td>
+								</tr>
+								<tr>
+									<th>노트/수첩/다이어리/독서대</th>
 									<td><a href="#">RA0449</a></td>
-									<td>Udin Wayang</td>
-									<td>Nasi Padang</td>
-									<td><span class="badge badge-success">Delivered</span></td>
-									<td><a href="#" class="btn btn-sm btn-primary">Detail</a></td>
+									<td>에이스독서대</td>
+									<td>300</td>
+									<td>EA</td>
+									<td><span class="badge badge-success">판매중</span></td>
+									<td><a href="#" class="btn btn-sm btn-primary">상품관리</a></td>
 								</tr>
 								<tr>
+									<th>노트/수첩/다이어리/독서대</th>
 									<td><a href="#">RA5324</a></td>
-									<td>Jaenab Bajigur</td>
-									<td>Gundam 90' Edition</td>
-									<td><span class="badge badge-warning">Shipping</span></td>
-									<td><a href="#" class="btn btn-sm btn-primary">Detail</a></td>
+									<td>스프링노트</td>
+									<td>10</td>
+									<td>EA</td>
+									<td><span class="badge badge-success">판매중</span></td>
+									<td><a href="#" class="btn btn-sm btn-primary">상품관리</a></td>
 								</tr>
 								<tr>
+									<th>사물함/서류함</th>
 									<td><a href="#">RA8568</a></td>
-									<td>Rivat Mahesa</td>
-									<td>Oblong T-Shirt</td>
-									<td><span class="badge badge-danger">Pending</span></td>
-									<td><a href="#" class="btn btn-sm btn-primary">Detail</a></td>
+									<td>오픈형서류함(3단/카파맥스)</td>
+									<td>500</td>
+									<td>EA</td>
+									<td><span class="badge badge-success">판매중</span></td>
+									<td><a href="#" class="btn btn-sm btn-primary">상품관리</a></td>
 								</tr>
 								<tr>
+									<th>사물함/서류함</th>
 									<td><a href="#">RA1453</a></td>
-									<td>Indri Junanda</td>
-									<td>Hat Rounded</td>
-									<td><span class="badge badge-info">Processing</span></td>
-									<td><a href="#" class="btn btn-sm btn-primary">Detail</a></td>
+									<td>마이룸서류함(5단/시스맥스)</td>
+									<td>150</td>
+									<td>EA</td>
+									<td><span class="badge badge-danger">판매중지</span></td>
+									<td><a href="#" class="btn btn-sm btn-primary">상품관리</a></td>
 								</tr>
 								<tr>
+									<th>칼/가위</th>
 									<td><a href="#">RA1998</a></td>
-									<td>Udin Cilok</td>
-									<td>Baby Powder</td>
-									<td><span class="badge badge-success">Delivered</span></td>
-									<td><a href="#" class="btn btn-sm btn-primary">Detail</a></td>
+									<td>컷터(220/평화)</td>
+									<td>200</td>
+									<td>EA</td>
+									<td><span class="badge badge-danger">판매중지</span></td>
+									<td><a href="#" class="btn btn-sm btn-primary">상품관리</a></td>
 								</tr>
 							</tbody>
 						</table>
