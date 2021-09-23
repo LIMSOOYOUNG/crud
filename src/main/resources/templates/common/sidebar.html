@@ -1,22 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="img/logo/crudLogo2.png" rel="icon">
-    <title>Document</title>
-    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css">
-    <link href="css/ruang-admin.min.css" rel="stylesheet">
-</head>
-<body id="page-top">
-    <div id="wrapper">
-        <!-- start Emp Sidebar -->
+<html lang="ko"
+    xmlns:th="https://www.thymeleaf.org">
+
+    <!-- start Emp Sidebar -->
+    <div th:fragment="sidebar" id="wrapper">
         <ul class="navbar-nav sidebar sidebar-light accordion" id="accordionSidebar">
             <a class="sidebar-brand d-flex align-items-center justify-content-center" href="#">
                 <div class="sidebar-brand-icon">
-                    <img src="img/logo/crudLogo.png">
+                    <img th:src="@{img/logo/crudLogo.png}">
                 </div>
                 <div class="sidebar-brand-text mx-3">CRUD</div>
             </a>
@@ -152,11 +142,11 @@
         <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
         <script src="js/ruang-admin.min.js"></script> -->
         <!-- Page level plugins -->
-        <!-- <script src="vendor/chart.js/Chart.min.js"></script> -->
+        <script src="vendor/chart.js/Chart.min.js"></script>
         <!-- Page level custom scripts -->
-        <!-- <script src="js/demo/chart-area-demo.js"></script>
+        <script src="js/demo/chart-area-demo.js"></script>
         <script src="js/demo/chart-pie-demo.js"></script>
-        <script src="js/demo/chart-bar-demo.js"></script> -->
+        <script src="js/demo/chart-bar-demo.js"></script>
     </div>
-</body>
+
 </html>
