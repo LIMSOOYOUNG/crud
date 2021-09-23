@@ -1,3 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.deft.crud.employee.model.dao.EmployeeMapper"></mapper>
+<mapper namespace="com.deft.crud.employee.model.dao.EmployeeMapper">
+	<resultMap type="com.deft.crud.employee.model.dto.EmployeeDTO" id="employeeResultMap">
+		<id property="employeeNo" column="EMP_NO"/>
+		<result property="employeeName" column="EMP_NAME"/>
+		<result property="employeeId" column="EMP_ID"/>
+		<result property="employeePwd" column="EMP_PWD"/>
+		<result property="email" column="EMP_EMAIL"/>
+		<result property="gender" column="GENDER"/>
+		<result property="employeeBirth" column="EMP_BIRTH"/>
+		<result property="hireYn" column="HIRE_YN"/>
+		<result property="authority" column="AUTHORITY"/>
+		<result property="hireDate" column="HIRE_DATE"/>
+		<result property="entDate" column="ENT_DATE"/>
+		<result property="address" column="EMP_ADDRESS"/>
+		<result property="phone" column="EMP_PHONE"/>
+		<result property="tel" column="EMP_TEL"/>
+		<result property="fax" column="EMP_FAX"/>
+		<result property="jobCode" column="JOB_NO"/>
+		<result property="deptCode" column="DEPT_NO"/>
+		<result property="managerNo" column="MANAGER_NO"/>
+	</resultMap>
+	<select id="selectEmployee">
+		SELECT
+			   EMP_NO
+			 , EMP_NAME
+			 , DEPT_NO
+			 , JOB_NO
+			 , GENDER
+	    	 , EMP_PHONE
+	      FROM EMP_INFO
+	      <!-- join 추가 할 예정 -->
+	</select>
+
+
+
+
+
+
+</mapper>
