@@ -13,6 +13,7 @@ public interface StockMapper {
 
 	List<StorageDTO> storageSelectAll();
 
-	List<StockDTO> prodcutSelectByNo(int productNo);
+	StockDTO stockSelectAll(int productNo);
+
 
 }

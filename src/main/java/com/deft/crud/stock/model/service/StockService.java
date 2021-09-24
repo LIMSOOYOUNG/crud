@@ -28,10 +28,12 @@ public class StockService {
 
 
 
-	public List<StockDTO> prodcutSelectByNo(int productNo) {
-		List<StockDTO> productList = mapper.prodcutSelectByNo(productNo);
+
+
+	public StockDTO stockSelectAll(int productNo) {
+		StockDTO stockDTO = mapper.stockSelectAll(productNo);
 		
-		return productList;
+		return stockDTO;
 	}
 
 }
