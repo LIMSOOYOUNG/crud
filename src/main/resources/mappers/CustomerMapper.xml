@@ -1,3 +1,122 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.deft.crud.customer.model.dao.CustomerMapper"></mapper>
+<mapper namespace="com.deft.crud.customer.model.dao.CustomerMapper">
+
+    <resultMap id="extCustomerDetailResultMap" type="com.deft.crud.customer.model.dto.ExtCustomerDetailDTO">
+        <id property="customerNo" column="CUSTOMER_NO"/>
+        <result property="customerStatus" column="CUSTOMER_STATUS"/>
+        <result property="customizationDate" column="CUSTOMIZATION_DATE"/>
+    </resultMap>
+
+    <resultMap id="customerResultMap" type="com.deft.crud.customer.model.dto.CustomerDTO">
+        <id property="customerNo" column="CUSTOMER_NO"/>
+        <result property="customerCompanyNo" column="CUSTOMER_COMPANY_NO"/>
+        <result property="empNo" column="EMP_NO"/>
+        <result property="customerName" column="CUSTOMER_NAME"/>
+        <result property="customerEmail" column="CUSTOMER_EMAIL"/>
+        <result property="customerAddress" column="CUSTOMER_ADDRESS"/>
+        <result property="customerPhone" column="CUSTOMER_PHONE"/>
+        <result property="customerFax" column="CUSTOMER_FAX"/>
+
+        <association property="extCustomerDetail" resultMap="extCustomerDetailResultMap"/>
+        <association property="anaCustomerDetail" resultMap="anaCustomerDetailResultMap"/>
+        <association property="empInfo" resultMap="empInfoResultMap"/>
+
+        <collection property="customerProductList" resultMap="customerProductResultMap"/>
+    </resultMap>
+
+    <resultMap id="anaCustomerDetailResultMap" type="com.deft.crud.customer.model.dto.AnaCustomerDetailDTO">
+        <id property="customerNo" column="CUSTOMER_NO"/>
+        <result property="customerStatus" column="CUSTOMER_STATUS"/>
+        <result property="customizationLevel" column="CUSTOMIZATION_LEVEL"/>
+        <result property="customizationPosibillity" column="CUSTOMIZATION_POSIBILLITY"/>
+    </resultMap>
+
+    <resultMap id="empInfoResultMap" type="com.deft.crud.customer.model.dto.EmpInfoDTO">
+        <id property="empNo" column="EMP_NO"/>
+        <result property="empName" column="EMP_NAME"/>
+        <result property="empId" column="EMP_ID"/>
+        <result property="empPwd" column="EMP_PWD"/>
+        <result property="empEmail" column="EMP_EMAIL"/>
+        <result property="empGender" column="EMP_GENDER"/>
+        <result property="empBirth" column="EMP_BIRTH"/>
+        <result property="empAddress" column="EMP_ADDRESS"/>
+        <result property="empPhone" column="EMP_PHONE"/>
+        <result property="empTel" column="EMP_TEL"/>
+        <result property="hireDate" column="HIRE_DATE"/>
+        <result property="entDate" column="ENT_DATE"/>
+        <result property="entYn" column="ENT_YN"/>
+        <result property="authority" column="AUTHORITY"/>
+        <result property="jobCode" column="JOB_CODE"/>
+        <result property="deptCode" column="DEPT_CODE"/>
+        <result property="managerNo" column="MANAGER_NO"/>
+    </resultMap>
+    
+    <resultMap id="customerCompanyResultMap" type="com.deft.crud.customer.model.dto.CustomerCompanyDTO">
+        <id property="customerCompanyNo" column="CUSTOMER_COMPANY_NO"/>
+        <result property="companyRegistNo" column="COMPANY_REGIST_NO"/>
+        <result property="businessStatus" column="BUSINESS_STATUS"/>
+        <result property="businessType" column="BUSINESS_TYPE"/>
+        <result property="numberOfEmployees" column="NUMBER_OF_EMPLOYEES"/>
+        <result property="companyRevenue" column="COMPANY_REVENUE"/>
+        <result property="homepage" column="HOMEPAGE"/>
+        <result property="companyAddress" column="COMPANY_ADDRESS"/>
+        <result property="companyName" column="COMPANY_NAME"/>
+        <result property="ceoName" column="CEO_NAME"/>
+
+        <collection property="customerList" resultMap="customerResultMap"/>
+    </resultMap>
+
+    <resultMap id="customerProductResultMap" type="com.deft.crud.customer.model.dto.CustomerProductDTO">
+        <id property="customerNo" column="CUSTOMER_NO"/>
+        <result property="productNo" column="PRODUCT_NO"/>
+
+        <association property="product" resultMap="productResultMap"/>
+    </resultMap>
+
+    <resultMap id="productResultMap" type="com.deft.crud.customer.model.dto.ProductDTO">
+        <id property="productNo" column="PRODUCT_NO"/>
+        <result property="sellStatus" column="SELL_STATUS"/>
+        <result property="productName" column="PRODUCT_NAME"/>
+        <result property="purchasePrice" column="PURCHASE_PRICE"/>
+        <result property="sellingPrice" column="SELLING_PRICE"/>
+        <result property="unit" column="UNIT"/>
+        <result property="categoryCode" column="CATEGORY_CODE"/>
+        <result property="accountNo" column="ACCOUNT_NO"/>
+        <result property="manufacturerNo" column="MANUFACTURER_NO"/>
+    </resultMap>
+
+
+    <!-- 전체 고객 조회 -->
+    <select id="selectAllCustomer" resultMap="customerCompanyResultMap">
+        SELECT
+               C.CUSTOMER_NAME
+             , CP.COMPANY_NAME
+             , E.EMP_NAME
+             , EX.CUSTOMER_STATUS
+             , CP.BUSINESS_STATUS
+             , EX.CUSTOMIZATION_DATE
+          FROM TBL_CUSTOMER C
+          LEFT JOIN TBL_CUSTOMER_COMPANY CP ON (C.CUSTOMER_COMPANY_NO = CP.CUSTOMER_COMPANY_NO)
+          LEFT JOIN TBL_EMP_INFO E ON (C.EMP_NO = E.EMP_NO)
+          LEFT JOIN TBL_EXT_CUSTOMER_DETAIL EX ON (C.CUSTOMER_NO = EX.CUSTOMER_NO)
+    </select>
+
+    <!-- 분석 고객 조회 -->
+    <select id="selectAllAnalysisCustomer" resultMap="customerCompanyResultMap">
+        SELECT
+               C.CUSTOMER_NAME
+             , CP.COMPANY_NAME
+             , E.EMP_NAME
+             , AN.CUSTOMER_STATUS
+             , CP.BUSINESS_STATUS
+             , P.PRODUCT_NAME
+          FROM TBL_CUSTOMER C
+          LEFT JOIN TBL_CUSTOMER_COMPANY CP ON (C.CUSTOMER_COMPANY_NO = CP.CUSTOMER_COMPANY_NO)
+          LEFT JOIN TBL_EMP_INFO E ON (C.EMP_NO = E.EMP_NO)
+          LEFT JOIN TBL_ANA_CUSTOMER_DETAIL AN ON (C.CUSTOMER_NO = AN.CUSTOMER_NO)
+          LEFT JOIN TBL_CUSTOMER_PRODUCT CD ON (AN.CUSTOMER_NO = CD.CUSTOMER_NO)
+          LEFT JOIN TBL_PRODUCT P ON (P.PRODUCT_NO = CD.PRODUCT_NO)
+         WHERE CD.CUSTOMER_NO IS NOT NULL
+    </select>
+</mapper>

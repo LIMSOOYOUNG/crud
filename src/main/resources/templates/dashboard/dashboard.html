@@ -13,7 +13,17 @@
     <!-- Sidebar -->
     <th:block th:replace="@{/common/sidebar} :: sidebar"></th:block>
 
-	<h1>Dashboard 화면입니다.</h1>
+	<!-- body -->
+	<table>
+		<thead>
+			<tr th:each="customer : ${ customerList }">
+				<td th:text="${}"></td>
+
+			</tr>
+		</thead>
+
+	</table>
+
 	<button onclick="location.href='/member/logout'">로그아웃</button>
 
 	<!-- Script -->
