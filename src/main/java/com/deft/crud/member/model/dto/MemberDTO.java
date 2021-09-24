@@ -9,43 +9,41 @@ public class MemberDTO {
 	private String empId;
 	private String empPwd;
 	private String empEmail;
-	private String gender;
+	private String empGender;
 	private String empBirth;
-	private String hireYn;
-	private String authority;
-	private java.sql.Date hireDate;
-	private java.sql.Date entDate;
 	private String empAddress;
 	private String empPhone;
 	private String empTel;
-	private String empFax;
-	private String jobNo;
-	private String deptNo;
+	private java.sql.Date hireDate;
+	private java.sql.Date entDate;
+	private String entYn;
+	private String authority;
+	private String jobCode;
+	private String deptCode;
 	private int managerNo;
 	
 	public MemberDTO() {}
 
-	public MemberDTO(int empNo, String empName, String empId, String empPwd, String empEmail, String gender,
-			String empBirth, String hireYn, String authority, Date hireDate, Date entDate, String empAddress,
-			String empPhone, String empTel, String empFax, String jobNo, String deptNo, int managerNo) {
+	public MemberDTO(int empNo, String empName, String empId, String empPwd, String empEmail, String empGender,
+			String empBirth, String empAddress, String empPhone, String empTel, Date hireDate, Date entDate,
+			String entYn, String authority, String jobCode, String deptCode, int managerNo) {
 		super();
 		this.empNo = empNo;
 		this.empName = empName;
 		this.empId = empId;
 		this.empPwd = empPwd;
 		this.empEmail = empEmail;
-		this.gender = gender;
+		this.empGender = empGender;
 		this.empBirth = empBirth;
-		this.hireYn = hireYn;
-		this.authority = authority;
-		this.hireDate = hireDate;
-		this.entDate = entDate;
 		this.empAddress = empAddress;
 		this.empPhone = empPhone;
 		this.empTel = empTel;
-		this.empFax = empFax;
-		this.jobNo = jobNo;
-		this.deptNo = deptNo;
+		this.hireDate = hireDate;
+		this.entDate = entDate;
+		this.entYn = entYn;
+		this.authority = authority;
+		this.jobCode = jobCode;
+		this.deptCode = deptCode;
 		this.managerNo = managerNo;
 	}
 
@@ -89,12 +87,12 @@ public class MemberDTO {
 		this.empEmail = empEmail;
 	}
 
-	public String getGender() {
-		return gender;
+	public String getEmpGender() {
+		return empGender;
 	}
 
-	public void setGender(String gender) {
-		this.gender = gender;
+	public void setEmpGender(String empGender) {
+		this.empGender = empGender;
 	}
 
 	public String getEmpBirth() {
@@ -103,38 +101,6 @@ public class MemberDTO {
 
 	public void setEmpBirth(String empBirth) {
 		this.empBirth = empBirth;
-	}
-
-	public String getHireYn() {
-		return hireYn;
-	}
-
-	public void setHireYn(String hireYn) {
-		this.hireYn = hireYn;
-	}
-
-	public String getAuthority() {
-		return authority;
-	}
-
-	public void setAuthority(String authority) {
-		this.authority = authority;
-	}
-
-	public java.sql.Date getHireDate() {
-		return hireDate;
-	}
-
-	public void setHireDate(java.sql.Date hireDate) {
-		this.hireDate = hireDate;
-	}
-
-	public java.sql.Date getEntDate() {
-		return entDate;
-	}
-
-	public void setEntDate(java.sql.Date entDate) {
-		this.entDate = entDate;
 	}
 
 	public String getEmpAddress() {
@@ -161,28 +127,52 @@ public class MemberDTO {
 		this.empTel = empTel;
 	}
 
-	public String getEmpFax() {
-		return empFax;
+	public java.sql.Date getHireDate() {
+		return hireDate;
 	}
 
-	public void setEmpFax(String empFax) {
-		this.empFax = empFax;
+	public void setHireDate(java.sql.Date hireDate) {
+		this.hireDate = hireDate;
 	}
 
-	public String getJobNo() {
-		return jobNo;
+	public java.sql.Date getEntDate() {
+		return entDate;
 	}
 
-	public void setJobNo(String jobNo) {
-		this.jobNo = jobNo;
+	public void setEntDate(java.sql.Date entDate) {
+		this.entDate = entDate;
 	}
 
-	public String getDeptNo() {
-		return deptNo;
+	public String getEntYn() {
+		return entYn;
 	}
 
-	public void setDeptNo(String deptNo) {
-		this.deptNo = deptNo;
+	public void setEntYn(String entYn) {
+		this.entYn = entYn;
+	}
+
+	public String getAuthority() {
+		return authority;
+	}
+
+	public void setAuthority(String authority) {
+		this.authority = authority;
+	}
+
+	public String getJobCode() {
+		return jobCode;
+	}
+
+	public void setJobCode(String jobCode) {
+		this.jobCode = jobCode;
+	}
+
+	public String getDeptCode() {
+		return deptCode;
+	}
+
+	public void setDeptCode(String deptCode) {
+		this.deptCode = deptCode;
 	}
 
 	public int getManagerNo() {
@@ -196,9 +186,9 @@ public class MemberDTO {
 	@Override
 	public String toString() {
 		return "MemberDTO [empNo=" + empNo + ", empName=" + empName + ", empId=" + empId + ", empPwd=" + empPwd
-				+ ", empEmail=" + empEmail + ", gender=" + gender + ", empBirth=" + empBirth + ", hireYn=" + hireYn
-				+ ", authority=" + authority + ", hireDate=" + hireDate + ", entDate=" + entDate + ", empAddress="
-				+ empAddress + ", empPhone=" + empPhone + ", empTel=" + empTel + ", empFax=" + empFax + ", jobNo="
-				+ jobNo + ", deptNo=" + deptNo + ", managerNo=" + managerNo + "]";
+				+ ", empEmail=" + empEmail + ", empGender=" + empGender + ", empBirth=" + empBirth + ", empAddress="
+				+ empAddress + ", empPhone=" + empPhone + ", empTel=" + empTel + ", hireDate=" + hireDate + ", entDate="
+				+ entDate + ", entYn=" + entYn + ", authority=" + authority + ", jobCode=" + jobCode + ", deptCode="
+				+ deptCode + ", managerNo=" + managerNo + "]";
 	}
 }

@@ -14,18 +14,17 @@ public class UserImpl extends User {
 	private String empId;
 	private String empPwd;
 	private String empEmail;
-	private String gender;
+	private String empGender;
 	private String empBirth;
-	private String hireYn;
-	private String authority;
-	private java.sql.Date hireDate;
-	private java.sql.Date entDate;
 	private String empAddress;
 	private String empPhone;
 	private String empTel;
-	private String empFax;
-	private String jobNo;
-	private String deptNo;
+	private java.sql.Date hireDate;
+	private java.sql.Date entDate;
+	private String entYn;
+	private String authority;
+	private String jobCode;
+	private String deptCode;
 	private int managerNo;
 
 	public UserImpl(String username, String password, Collection<? extends GrantedAuthority> authorities) {
@@ -38,18 +37,17 @@ public class UserImpl extends User {
 		this.empId = member.getEmpId();
 		this.empPwd = member.getEmpPwd();
 		this.empEmail = member.getEmpEmail();
-		this.gender = member.getGender();
+		this.empGender = member.getEmpGender();
 		this.empBirth = member.getEmpBirth();
-		this.hireYn = member.getHireYn();
-		this.authority = member.getAuthority();
-		this.hireDate = member.getHireDate();
-		this.entDate = member.getEntDate();
 		this.empAddress = member.getEmpAddress();
 		this.empPhone = member.getEmpPhone();
 		this.empTel = member.getEmpTel();
-		this.empFax = member.getEmpFax();
-		this.jobNo = member.getJobNo();
-		this.deptNo = member.getDeptNo();
+		this.hireDate = member.getHireDate();
+		this.entDate = member.getEntDate();
+		this.entYn = member.getEntYn();
+		this.authority = member.getAuthority();
+		this.jobCode = member.getJobCode();
+		this.deptCode = member.getDeptCode();
 		this.managerNo = member.getManagerNo();
 	}
 
@@ -73,28 +71,12 @@ public class UserImpl extends User {
 		return empEmail;
 	}
 
-	public String getGender() {
-		return gender;
+	public String getEmpGender() {
+		return empGender;
 	}
 
 	public String getEmpBirth() {
 		return empBirth;
-	}
-
-	public String getHireYn() {
-		return hireYn;
-	}
-
-	public String getAuthority() {
-		return authority;
-	}
-
-	public java.sql.Date getHireDate() {
-		return hireDate;
-	}
-
-	public java.sql.Date getEntDate() {
-		return entDate;
 	}
 
 	public String getEmpAddress() {
@@ -109,16 +91,28 @@ public class UserImpl extends User {
 		return empTel;
 	}
 
-	public String getEmpFax() {
-		return empFax;
+	public java.sql.Date getHireDate() {
+		return hireDate;
 	}
 
-	public String getJobNo() {
-		return jobNo;
+	public java.sql.Date getEntDate() {
+		return entDate;
 	}
 
-	public String getDeptNo() {
-		return deptNo;
+	public String getEntYn() {
+		return entYn;
+	}
+
+	public String getAuthority() {
+		return authority;
+	}
+
+	public String getJobCode() {
+		return jobCode;
+	}
+
+	public String getDeptCode() {
+		return deptCode;
 	}
 
 	public int getManagerNo() {
