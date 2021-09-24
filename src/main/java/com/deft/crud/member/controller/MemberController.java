@@ -10,5 +10,10 @@ public class MemberController {
 	
 	@GetMapping("/login")
 	public void memberLogin() {}
-
+	
+	@GetMapping("/findId")
+	public void memberFindId() {}
+	
+	@GetMapping("/findPwd")
+	public void memberFindPwd() {}
 }

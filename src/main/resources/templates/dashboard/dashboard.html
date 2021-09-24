@@ -1,20 +1,28 @@
 <!DOCTYPE html>
 <html lang="ko"
-	xmlns:th="https://www.thymeleaf.org"
-	xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-spingsecurity5">
+	xmlns:th="https://www.thymeleaf.org">
 <head>
 	<th:block th:replace="@{common/config} :: config"></th:block>
 </head>
 
-<body>
-	<!-- Header -->
-    <th:block th:replace="@{/common/header} :: header"></th:block>
-    
-    <!-- Sidebar -->
-    <th:block th:replace="@{/common/sidebar} :: sidebar"></th:block>
+<body id="page-top">
+	<div id="wrapper">
+		<!-- Sidebar -->
+		<th:block th:replace="@{/common/sidebar} :: sidebar"></th:block>
 
-	<h1>Dashboard 화면입니다.</h1>
-	<button onclick="location.href='/member/logout'">로그아웃</button>
+		<div id="content-wrapper" class="d-flex flex-column">
+			<div id="content">
+				<!-- Header -->
+				<th:block th:replace="@{/common/header} :: header"></th:block>
+
+				<!-- Content -->
+				<div class="container-fluid" id="container-wrapper">
+					<h1>Dashboard 화면입니다.</h1>
+					<button onclick="location.href='/member/logout'">로그아웃</button>
+				</div>
+			</div>
+		</div>
+	</div>
 
 	<!-- Script -->
     <th:block th:replace="@{/common/script} :: script"></th:block>
