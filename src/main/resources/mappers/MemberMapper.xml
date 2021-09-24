@@ -7,25 +7,25 @@
 		<result property="empName" column="EMP_NAME"/>
 		<result property="empId" column="EMP_ID"/>
 		<result property="empPwd" column="EMP_PWD"/>
-		<result property="gender" column="GENDER"/>
+		<result property="empEmail" column="EMP_EMAIL"/>
+		<result property="empGender" column="EMP_GENDER"/>
 		<result property="empBirth" column="EMP_BIRTH"/>
-		<result property="hireYn" column="HIRE_YN"/>
-		<result property="authority" column="AUTHORITY"/>
-		<result property="hireDate" column="HIRE_DATE"/>
-		<result property="entDate" column="ENT_DATE"/>
 		<result property="empAddress" column="EMP_ADDRESS"/>
 		<result property="empPhone" column="EMP_PHONE"/>
 		<result property="empTel" column="EMP_TEL"/>
-		<result property="empFax" column="EMP_FAX"/>
-		<result property="jobNo" column="JOB_NO"/>
-		<result property="deptNo" column="DEPT_NO"/>
+		<result property="hireDate" column="HIRE_DATE"/>
+		<result property="entDate" column="ENT_DATE"/>
+		<result property="entYn" column="ENT_YN"/>
+		<result property="authority" column="AUTHORITY"/>
+		<result property="jobCode" column="JOB_CODE"/>
+		<result property="deptCode" column="DEPT_CODE"/>
 		<result property="managerNo" column="MANAGER_NO"/>
 	</resultMap>
 	
 	<select id="findMemberById" resultMap="loginMemberResultMap">
         SELECT
                A.*
-          FROM EMP_INFO A
+          FROM TBL_EMP_INFO A
          WHERE A.EMP_ID = #{ id }
 	</select>
 </mapper>
