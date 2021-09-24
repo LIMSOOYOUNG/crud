@@ -14,10 +14,10 @@ public class EmployeeDTO {
 	private String address;
 	private String phone;
 	private String tel;
-	private int deptCode;
-	private int jobCode;
+	private String deptName;
+	private String jobName;
 	private String authority;
-	private int mangerNo;
+	private int managerNo;
 	private String fax;
 	private String hireYn;
 	private java.util.Date hireDate;
@@ -26,8 +26,8 @@ public class EmployeeDTO {
 	public EmployeeDTO() {}
 
 	public EmployeeDTO(int employeeNo, String employeeName, String employeeId, String employeePwd, Date employeeBirth,
-			String gender, String email, String address, String phone, String tel, int deptCode, int jobCode,
-			String authority, int mangerNo, String fax, String hireYn, Date hireDate, Date entDate) {
+			String gender, String email, String address, String phone, String tel, String deptName, String jobName,
+			String authority, int managerNo, String fax, String hireYn, Date hireDate, Date entDate) {
 		super();
 		this.employeeNo = employeeNo;
 		this.employeeName = employeeName;
@@ -39,10 +39,10 @@ public class EmployeeDTO {
 		this.address = address;
 		this.phone = phone;
 		this.tel = tel;
-		this.deptCode = deptCode;
-		this.jobCode = jobCode;
+		this.deptName = deptName;
+		this.jobName = jobName;
 		this.authority = authority;
-		this.mangerNo = mangerNo;
+		this.managerNo = managerNo;
 		this.fax = fax;
 		this.hireYn = hireYn;
 		this.hireDate = hireDate;
@@ -129,20 +129,20 @@ public class EmployeeDTO {
 		this.tel = tel;
 	}
 
-	public int getDeptCode() {
-		return deptCode;
+	public String getDeptName() {
+		return deptName;
 	}
 
-	public void setDeptCode(int deptCode) {
-		this.deptCode = deptCode;
+	public void setDeptName(String deptName) {
+		this.deptName = deptName;
 	}
 
-	public int getJobCode() {
-		return jobCode;
+	public String getJobName() {
+		return jobName;
 	}
 
-	public void setJobCode(int jobCode) {
-		this.jobCode = jobCode;
+	public void setJobName(String jobName) {
+		this.jobName = jobName;
 	}
 
 	public String getAuthority() {
@@ -153,12 +153,12 @@ public class EmployeeDTO {
 		this.authority = authority;
 	}
 
-	public int getMangerNo() {
-		return mangerNo;
+	public int getManagerNo() {
+		return managerNo;
 	}
 
-	public void setMangerNo(int mangerNo) {
-		this.mangerNo = mangerNo;
+	public void setManagerNo(int managerNo) {
+		this.managerNo = managerNo;
 	}
 
 	public String getFax() {
@@ -197,11 +197,9 @@ public class EmployeeDTO {
 	public String toString() {
 		return "EmployeeDTO [employeeNo=" + employeeNo + ", employeeName=" + employeeName + ", employeeId=" + employeeId
 				+ ", employeePwd=" + employeePwd + ", employeeBirth=" + employeeBirth + ", gender=" + gender
-				+ ", email=" + email + ", address=" + address + ", phone=" + phone + ", tel=" + tel + ", deptCode="
-				+ deptCode + ", jobCode=" + jobCode + ", authority=" + authority + ", mangerNo=" + mangerNo + ", fax="
+				+ ", email=" + email + ", address=" + address + ", phone=" + phone + ", tel=" + tel + ", deptName="
+				+ deptName + ", jobName=" + jobName + ", authority=" + authority + ", mangerNo=" + managerNo + ", fax="
 				+ fax + ", hireYn=" + hireYn + ", hireDate=" + hireDate + ", entDate=" + entDate + "]";
 	}
-	
-	
-	
+		
 }

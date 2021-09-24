@@ -7,7 +7,7 @@
 		<result property="employeeId" column="EMP_ID"/>
 		<result property="employeePwd" column="EMP_PWD"/>
 		<result property="email" column="EMP_EMAIL"/>
-		<result property="gender" column="GENDER"/>
+		<result property="gender" column="EMP_GENDER"/>
 		<result property="employeeBirth" column="EMP_BIRTH"/>
 		<result property="hireYn" column="HIRE_YN"/>
 		<result property="authority" column="AUTHORITY"/>
@@ -16,21 +16,21 @@
 		<result property="address" column="EMP_ADDRESS"/>
 		<result property="phone" column="EMP_PHONE"/>
 		<result property="tel" column="EMP_TEL"/>
-		<result property="fax" column="EMP_FAX"/>
-		<result property="jobCode" column="JOB_NO"/>
-		<result property="deptCode" column="DEPT_NO"/>
+		<result property="jobName" column="JOB_NAME"/>
+		<result property="deptName" column="DEPT_NAME"/>
 		<result property="managerNo" column="MANAGER_NO"/>
 	</resultMap>
-	<select id="selectEmployee">
+	<select id="selectEmployee" resultMap="employeeResultMap">
 		SELECT
-			   EMP_NO
-			 , EMP_NAME
-			 , DEPT_NO
-			 , JOB_NO
-			 , GENDER
-	    	 , EMP_PHONE
-	      FROM EMP_INFO
-	      <!-- join 추가 할 예정 -->
+			   E.EMP_NO
+			 , E.EMP_NAME
+             , D.DEPT_NAME
+             , J.JOB_NAME
+			 , E.EMP_GENDER
+	    	 , E.EMP_PHONE
+             FROM TBL_EMP_INFO E
+             JOIN TBL_JOB J ON (E.JOB_CODE = J.JOB_CODE)
+             JOIN TBL_DEPARTMENT D ON (E.DEPT_CODE = D.DEPT_CODE)
 	</select>
 
 
