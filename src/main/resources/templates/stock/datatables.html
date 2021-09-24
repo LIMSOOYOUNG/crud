@@ -64,125 +64,16 @@
 								</tr>
 							</thead>
 							<tbody align="center">
-							<th:each = "stock : ${stockList}">
+							<tr th:each = "stock : ${stockList}">
 								<td th:text = "${stock.categoryName}"></td>
 								<td th:text = "${stock.productNo}"></td>
 								<td th:text = "${stock.productName}"></td>
 								<td th:text = "${stock.productAmount}"></td>
 								<td th:text = "${stock.unit}"></td>
-								<td th:text = "${stock.productStatus}"></td>
-								<td th:oclick = "'location.href=\' '+ @{/stock/detail/{pno}(pno=${stock.productNo)} + '\''">
-							
-							</th:each>
-							
-								<tr>
-									<th>복사용지</th>
-									<td><a href="#">RA4943</a></td>
-									<td>A4(80g/더블에이)</td>
-									<td>200</td>
-									<td>BOX</td>
-									<td><span class="badge badge-success">판매중</span></td>
-									<td><a href="#" class="btn btn-sm btn-primary">상품관리</a></td>
-								</tr>
-								<tr>
-									<th>노트/수첩/다이어리/독서대</th>
-									<td><a href="#">RA0449</a></td>
-									<td>에이스독서대</td>
-									<td>300</td>
-									<td>EA</td>
-									<td><span class="badge badge-success">판매중</span></td>
-									<td><a href="#" class="btn btn-sm btn-primary">상품관리</a></td>
-								</tr>
-								<tr>
-									<th>노트/수첩/다이어리/독서대</th>
-									<td><a href="#">RA5324</a></td>
-									<td>스프링노트</td>
-									<td>10</td>
-									<td>EA</td>
-									<td><span class="badge badge-success">판매중</span></td>
-									<td><a href="#" class="btn btn-sm btn-primary">상품관리</a></td>
-								</tr>
-								<tr>
-									<th>사물함/서류함</th>
-									<td><a href="#">RA8568</a></td>
-									<td>오픈형서류함(3단/카파맥스)</td>
-									<td>500</td>
-									<td>EA</td>
-									<td><span class="badge badge-success">판매중</span></td>
-									<td><a href="#" class="btn btn-sm btn-primary">상품관리</a></td>
-								</tr>
-								<tr>
-									<th>사물함/서류함</th>
-									<td><a href="#">RA1453</a></td>
-									<td>마이룸서류함(5단/시스맥스)</td>
-									<td>150</td>
-									<td>EA</td>
-									<td><span class="badge badge-danger">판매중지</span></td>
-									<td><a href="#" class="btn btn-sm btn-primary">상품관리</a></td>
-								</tr>
-								<tr>
-									<th>칼/가위</th>
-									<td><a href="#">RA1998</a></td>
-									<td>컷터(220/평화)</td>
-									<td>200</td>
-									<td>EA</td>
-									<td><span class="badge badge-danger">판매중지</span></td>
-									<td><a href="#" class="btn btn-sm btn-primary">상품관리</a></td>
-								</tr>
-								<tr>
-									<th>복사용지</th>
-									<td><a href="#">RA4943</a></td>
-									<td>A4(80g/더블에이)</td>
-									<td>200</td>
-									<td>BOX</td>
-									<td><span class="badge badge-success">판매중</span></td>
-									<td><a href="#" class="btn btn-sm btn-primary">상품관리</a></td>
-								</tr>
-								<tr>
-									<th>노트/수첩/다이어리/독서대</th>
-									<td><a href="#">RA0449</a></td>
-									<td>에이스독서대</td>
-									<td>300</td>
-									<td>EA</td>
-									<td><span class="badge badge-success">판매중</span></td>
-									<td><a href="#" class="btn btn-sm btn-primary">상품관리</a></td>
-								</tr>
-								<tr>
-									<th>노트/수첩/다이어리/독서대</th>
-									<td><a href="#">RA5324</a></td>
-									<td>스프링노트</td>
-									<td>10</td>
-									<td>EA</td>
-									<td><span class="badge badge-success">판매중</span></td>
-									<td><a href="#" class="btn btn-sm btn-primary">상품관리</a></td>
-								</tr>
-								<tr>
-									<th>사물함/서류함</th>
-									<td><a href="#">RA8568</a></td>
-									<td>오픈형서류함(3단/카파맥스)</td>
-									<td>500</td>
-									<td>EA</td>
-									<td><span class="badge badge-success">판매중</span></td>
-									<td><a href="#" class="btn btn-sm btn-primary">상품관리</a></td>
-								</tr>
-								<tr>
-									<th>사물함/서류함</th>
-									<td><a href="#">RA1453</a></td>
-									<td>마이룸서류함(5단/시스맥스)</td>
-									<td>150</td>
-									<td>EA</td>
-									<td><span class="badge badge-danger">판매중지</span></td>
-									<td><a href="#" class="btn btn-sm btn-primary">상품관리</a></td>
-								</tr>
-								<tr>
-									<th>칼/가위</th>
-									<td><a href="#">RA1998</a></td>
-									<td>컷터(220/평화)</td>
-									<td>200</td>
-									<td>EA</td>
-									<td><span class="badge badge-danger">판매중지</span></td>
-									<td><a href="#" class="btn btn-sm btn-primary">상품관리</a></td>
-								</tr>
+								<td th:if="${stock.productStatus}" == "판매"><span class="badge badge-success">판매중</span>></td>
+								<td th:if="${stock.productStatus}" == "미판매"><span class="badge badge-danger">판매중지</span></td>
+								<td th:oclick = "'location.href=\' '+ @{/stock/detail/{pno}(pno=${stock.productNo)} + '\''"></td>
+							</tr>
 							</tbody>
 							<!--  <tfoot align="center">
                       			<tr>
