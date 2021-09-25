@@ -2,7 +2,7 @@ package com.deft.crud.employee.model.dto;
 
 import java.util.Date;
 
-public class EmployeeDTO implements java.io.Serializable{
+public class EmployeeDTO {
 							
 	private int employeeNo;
 	private String employeeName;
@@ -14,10 +14,10 @@ public class EmployeeDTO implements java.io.Serializable{
 	private String address;
 	private String phone;
 	private String tel;
-	private String deptName;
-	private String jobName;
+	private int deptCode;
+	private int jobCode;
 	private String authority;
-	private int managerNo;
+	private int mangerNo;
 	private String fax;
 	private String hireYn;
 	private java.util.Date hireDate;
@@ -26,8 +26,8 @@ public class EmployeeDTO implements java.io.Serializable{
 	public EmployeeDTO() {}
 
 	public EmployeeDTO(int employeeNo, String employeeName, String employeeId, String employeePwd, Date employeeBirth,
-			String gender, String email, String address, String phone, String tel, String deptName, String jobName,
-			String authority, int managerNo, String fax, String hireYn, Date hireDate, Date entDate) {
+			String gender, String email, String address, String phone, String tel, int deptCode, int jobCode,
+			String authority, int mangerNo, String fax, String hireYn, Date hireDate, Date entDate) {
 		super();
 		this.employeeNo = employeeNo;
 		this.employeeName = employeeName;
@@ -39,10 +39,10 @@ public class EmployeeDTO implements java.io.Serializable{
 		this.address = address;
 		this.phone = phone;
 		this.tel = tel;
-		this.deptName = deptName;
-		this.jobName = jobName;
+		this.deptCode = deptCode;
+		this.jobCode = jobCode;
 		this.authority = authority;
-		this.managerNo = managerNo;
+		this.mangerNo = mangerNo;
 		this.fax = fax;
 		this.hireYn = hireYn;
 		this.hireDate = hireDate;
@@ -129,20 +129,20 @@ public class EmployeeDTO implements java.io.Serializable{
 		this.tel = tel;
 	}
 
-	public String getDeptName() {
-		return deptName;
+	public int getDeptCode() {
+		return deptCode;
 	}
 
-	public void setDeptName(String deptName) {
-		this.deptName = deptName;
+	public void setDeptCode(int deptCode) {
+		this.deptCode = deptCode;
 	}
 
-	public String getJobName() {
-		return jobName;
+	public int getJobCode() {
+		return jobCode;
 	}
 
-	public void setJobName(String jobName) {
-		this.jobName = jobName;
+	public void setJobCode(int jobCode) {
+		this.jobCode = jobCode;
 	}
 
 	public String getAuthority() {
@@ -153,12 +153,12 @@ public class EmployeeDTO implements java.io.Serializable{
 		this.authority = authority;
 	}
 
-	public int getManagerNo() {
-		return managerNo;
+	public int getMangerNo() {
+		return mangerNo;
 	}
 
-	public void setManagerNo(int managerNo) {
-		this.managerNo = managerNo;
+	public void setMangerNo(int mangerNo) {
+		this.mangerNo = mangerNo;
 	}
 
 	public String getFax() {
@@ -197,9 +197,11 @@ public class EmployeeDTO implements java.io.Serializable{
 	public String toString() {
 		return "EmployeeDTO [employeeNo=" + employeeNo + ", employeeName=" + employeeName + ", employeeId=" + employeeId
 				+ ", employeePwd=" + employeePwd + ", employeeBirth=" + employeeBirth + ", gender=" + gender
-				+ ", email=" + email + ", address=" + address + ", phone=" + phone + ", tel=" + tel + ", deptName="
-				+ deptName + ", jobName=" + jobName + ", authority=" + authority + ", mangerNo=" + managerNo + ", fax="
+				+ ", email=" + email + ", address=" + address + ", phone=" + phone + ", tel=" + tel + ", deptCode="
+				+ deptCode + ", jobCode=" + jobCode + ", authority=" + authority + ", mangerNo=" + mangerNo + ", fax="
 				+ fax + ", hireYn=" + hireYn + ", hireDate=" + hireDate + ", entDate=" + entDate + "]";
 	}
-		
+	
+	
+	
 }

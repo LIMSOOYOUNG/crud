@@ -15,26 +15,26 @@ import com.deft.crud.employee.model.service.EmployeeService;
 @RequestMapping("/employee/*")
 public class EmployeeController {
 
-	private EmployeeService employeeService;
-	
-	@Autowired
-	public EmployeeController(EmployeeService employeeService) {
-		this.employeeService = employeeService;
-	}
-	
-	/* 사원 조회 */
-	
-	@GetMapping("/selectemployee")
-	public ModelAndView selectEmployee(ModelAndView mv) {
-		
-		List<EmployeeDTO>employeeList = employeeService.selectEmployee();
-		
-		mv.setViewName("employee/selectemployee");
-		mv.addObject("employeeList", employeeList);
-		
-		System.out.println(employeeList);
-		
-		return mv;
-	}
-		
+   private EmployeeService employeeService;
+   
+   @Autowired
+   public EmployeeController(EmployeeService employeeService) {
+      this.employeeService = employeeService;
+   }
+   
+   /* 사원 조회 */
+   
+   @GetMapping("/selectemployee")
+   public ModelAndView selectEmployee(ModelAndView mv) {
+      
+      List<EmployeeDTO>employeeList = employeeService.selectEmployee();
+      
+      mv.setViewName("employee/selectemployee");
+      mv.addObject("employeeList", employeeList);
+      
+      System.out.println(employeeList);
+      
+      return mv;
+   }
+      
 }

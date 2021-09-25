@@ -11,19 +11,19 @@ import com.deft.crud.employee.model.dto.EmployeeDTO;
 @Service
 public class EmployeeService {
 
-	@Autowired
-	private EmployeeMapper employeeMapper;
-	
-	public EmployeeService(EmployeeMapper employeeMapper) {
-		this.employeeMapper = employeeMapper;
-	}
-	
-	public List<EmployeeDTO> selectEmployee(){
-		
-		List<EmployeeDTO> employeeList = employeeMapper.selectEmployee();
-		
-		System.out.println("list");
-		
-		return employeeList;
-	}
+    @Autowired
+    private EmployeeMapper employeeMapper;
+
+    public EmployeeService(EmployeeMapper employeeMapper) {
+        this.employeeMapper = employeeMapper;
+    }
+
+    public List<EmployeeDTO> selectEmployee(){
+
+        List<EmployeeDTO> employeeList = employeeMapper.selectEmployee();
+
+        System.out.println("list");
+
+        return employeeList;
+    }
 }
