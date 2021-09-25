@@ -9,7 +9,14 @@ spring:
     url: jdbc:log4jdbc:oracle:thin:@oracle.team-greedy.com:1521:xe
     username: FINAL_502_TEAM_1
     password: FINAL_502_TEAM_1
+  devtools:
+    livereload:
+      enabled: true
+  freemarker:
+    cache: false
 
 # mybatis config
 mybatis:
-  mapper-locations: mappers/**/*.xml 
+  mapper-locations: mappers/**/*.xml
+
+
