@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.deft.crud.product.model.dao.ProductMapper;
+import com.deft.crud.product.model.dto.ProductCategoryDTO;
 import com.deft.crud.product.model.dto.ProductDTO;
 
 @Service
@@ -23,6 +24,18 @@ public class ProductService {
 	public List<ProductDTO> allProductList() {
 
 		return productMapper.allProductList();
+	}
+
+
+	public List<ProductCategoryDTO> allCategoryList() {
+
+		return productMapper.allCategoryList();
+	}
+
+
+	public List<ProductDTO> productDetail(int productNo) {
+
+		return productMapper.productDetail(productNo);
 	}
 
 }
