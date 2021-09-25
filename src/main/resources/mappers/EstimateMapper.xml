@@ -2,11 +2,39 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.deft.crud.estimate.model.dao.EstimateMapper">
 	<resultMap type="com.deft.crud.estimate.model.dto.EstimateDTO" id="estimateSelectResultMap">
-	
+		<id property="estimateNo" column="ESTIMATE_NO"/>
+		<result property="estimateTitle" column="ESTIMATE_TITLE"/>
+		<result property="estimateDate" column="ESTIMATE_DATE"/>
+		<result property="customerNo" column="CUSTOMER_NO"/>
+		<result property="discountRate" column="DISCOUNT_RATE"/>
+		<result property="estimateStatus" column="ESTIMATE_STATUS"/>
+		<result property="providerRegistNo" column="PROVIDER_REGIST_NO"/>
+		
+		<association property="customer" javaType="com.deft.crud.customer.model.dto.CustomerDTO">
+			<id property="customerNo" column="CUSTOMER_NO"/>
+			<result property="customerName" column="CUSTOMER_NAME"/>
+
+			<association property="empInfo" javaType="com.deft.crud.customer.model.dto.EmpInfoDTO">
+				<id property="empNo" column="EMP_NO"/>
+				<result property="empName" column="EMP_NAME"/>
+			</association>
+		</association>
+		
+		<association property="provider" javaType="com.deft.crud.estimate.model.dto.ProviderDTO">
+			<id property="providerRegistNo" column="PROVIDER_REGIST_NO"/>
+		</association>
 	</resultMap>
+	
 	<select id="estimateSelectAll" resultMap="estimateSelectResultMap">
-        SELECT
-               SYSDATE
-          FROM DUAL;
+        SELECT /* com.deft.crud.estimate.model.dao.EstimateMapper#estimateSelectAll() */
+               A.ESTIMATE_NO
+             , B.CUSTOMER_NAME
+             , A.ESTIMATE_TITLE
+             , A.ESTIMATE_STATUS
+             , C.EMP_NAME
+             , A.ESTIMATE_DATE
+          FROM TBL_ESTIMATE A
+          LEFT JOIN TBL_CUSTOMER B ON (A.CUSTOMER_NO = B.CUSTOMER_NO)
+          LEFT JOIN TBL_EMP_INFO C ON (B.EMP_NO = C.EMP_NO)
 	</select>
 </mapper>

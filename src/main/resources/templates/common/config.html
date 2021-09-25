@@ -1,5 +1,6 @@
 <html lang="ko"
-    xmlns:th="https://www.thymeleaf.org">
+    xmlns:th="https://www.thymeleaf.org"
+    xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-spingsecurity5">
 
     <!-- Config -->
     <th:block th:fragment="config">
@@ -11,7 +12,8 @@
         <link th:href="@{/images/logo/crudLogo2.png}" rel="icon"/>
         <link th:href="@{/vendor/fontawesome-free/css/all.min.css}" rel="stylesheet" type="text/css">
         <link th:href="@{/vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet" type="text/css">
-        <link th:href="@{/css/ruang-admin.min.css}" rel="stylesheet">
+        <link th:href="@{/vendor/datatables/dataTables.bootstrap4.min.css}" rel="stylesheet" type="text/css">
+        <link th:href="@{/css/ruang-admin.min.css}" rel="stylesheet" type="text/css">
     </th:block>
 
 </html>

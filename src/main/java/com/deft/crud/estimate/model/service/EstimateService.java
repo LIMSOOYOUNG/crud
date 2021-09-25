@@ -2,10 +2,25 @@ package com.deft.crud.estimate.model.service;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.deft.crud.estimate.model.dao.EstimateMapper;
 import com.deft.crud.estimate.model.dto.EstimateDTO;
 
-public interface EstimateService {
+@Service
+public class EstimateService {
 
-	public List<EstimateDTO> estimateSelectAll();
-
+	private final EstimateMapper estimateMapper;
+	
+	@Autowired
+	public EstimateService(EstimateMapper estimateMapper) {
+		
+		this.estimateMapper = estimateMapper;
+	}
+	
+	public List<EstimateDTO> estimateSelectAll() {
+		
+		return estimateMapper.estimateSelectAll();
+	}
 }
