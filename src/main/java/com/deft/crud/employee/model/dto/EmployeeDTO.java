@@ -2,7 +2,7 @@ package com.deft.crud.employee.model.dto;
 
 import java.util.Date;
 
-public class EmployeeDTO {
+public class EmployeeDTO implements java.io.Serializable{
 							
 	private int employeeNo;
 	private String employeeName;
