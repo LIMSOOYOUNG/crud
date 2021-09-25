@@ -27,6 +27,8 @@ public class CustomerControllerTests {
     @Autowired
     private CustomerController customerController;
 
+    private final int customerNo = 1;
+
     private MockMvc mockMvc;
 
     @BeforeEach
@@ -47,11 +49,21 @@ public class CustomerControllerTests {
 
     /* 분석 고객 조회용 테스트 코드 */
     @Test
+    @Disabled
     public void testSelectAllAnalysisCustomer() throws Exception {
 
         mockMvc.perform(get("/customer/ana"))
                 .andExpect(status().isOk())
                 .andExpect(forwardedUrl("customer/selectAllAnalysisCustomer"))
+                .andDo(print());
+    }
+
+    @Test
+    public void testSelectCustomerInfo(int customerNo) throws Exception {
+
+        mockMvc.perform(get("/customer/cusinfo"))
+                .andExpect(status().isOk())
+                .andExpect(forwardedUrl("customer/selectCustomerInfo"))
                 .andDo(print());
     }
 }

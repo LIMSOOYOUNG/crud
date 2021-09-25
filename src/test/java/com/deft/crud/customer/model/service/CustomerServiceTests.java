@@ -2,6 +2,8 @@ package com.deft.crud.customer.model.service;
 
 import com.deft.crud.configuration.CrudApplication;
 import com.deft.crud.customer.model.dto.CustomerCompanyDTO;
+import com.deft.crud.customer.model.dto.CustomerDTO;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -9,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -22,16 +25,10 @@ public class CustomerServiceTests {
     @Autowired
     private CustomerService customerService;
 
-//    private CustomerDTO testNewCustomer;
+    private CustomerDTO testNewCustomer;
 
-//    @BeforeEach
+    //    @BeforeEach
 //    public void init() {
-//        this.testNewCustomer = new CustomerDTO();
-//        this.testNewCustomer.setCustomerNo(999);
-//        this.testNewCustomer.setCustomerCompanyNo(999);
-//        this.testNewCustomer.setEmpNo(300);
-//        this.testNewCustomer.setCustomerName("테스트담당사원");
-//        this.testNewCustomer.
 //    }
 
     /* 기존 고객 조회용 테스트 코드 */
@@ -50,6 +47,7 @@ public class CustomerServiceTests {
 
     /* 분석 고객 조회용 테스트 코드 */
     @Test
+    @Disabled
     public void testSelectAllAnalysisCustomer() {
 
         List<CustomerCompanyDTO> customerList = customerService.selectAllAnalysisCustomer();
@@ -59,5 +57,30 @@ public class CustomerServiceTests {
         for(CustomerCompanyDTO customer : customerList) {
             System.out.println(customer);
         }
+    }
+
+    /* 기존 고객 기본정보 조회용 테스트 코드 */
+    @Test
+    @Disabled
+    public void testSelectCustomerInfo() {
+
+        int customerNo = 1;
+        CustomerCompanyDTO customerInfo = customerService.selectCustomerInfo(customerNo);
+
+        assertNotNull(customerInfo);
+
+        System.out.println(customerInfo);
+    }
+
+    /* 분석 고객 기본정보 조회용 테스트 코드 */
+    @Test
+    public void testSelectAnalysisCustomerInfo() {
+
+        int customerNo = 3;
+        CustomerCompanyDTO customerInfo = customerService.selectAnalysisCustomerInfo(customerNo);
+
+        assertNotNull(customerInfo);
+
+        System.out.println(customerInfo);
     }
 }

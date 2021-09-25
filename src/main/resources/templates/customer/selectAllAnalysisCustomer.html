@@ -1,65 +1,70 @@
 <!DOCTYPE html>
 <html lang="ko"
-      xmlns:th="https://www.thymeleaf.org"
-      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-spingsecurity5">
+      xmlns:th="https://www.thymeleaf.org">
 <head>
     <th:block th:replace="@{common/config} :: config"></th:block>
     <link href="/vendor/datatables/dataTables.bootstrap4.min.css"
           rel="stylesheet">
 </head>
 
-<body>
-    <!-- Header -->
-    <th:block th:replace="@{/common/header} :: header"></th:block>
-
+<body id="page-top">
+<div id="wrapper">
     <!-- Sidebar -->
     <th:block th:replace="@{/common/sidebar} :: sidebar"></th:block>
 
-    <!-- body -->
-    <div class="col-xl-7 col-lg-7 col-md-7 col-sm-7">
-        <table id="table_customer" class="table align-items-center table-flush table-hover">
-            <thead>
-                <tr>
-                    <th>고객상태</th>
-                    <th>업태</th>
-                    <th>고객사명</th>
-                    <th>고객명</th>
-                    <th>담당사원</th>
-                    <th>관심상품</th>
-                    <th>상세보기</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr th:each="customer : ${ customerCompanyList }" >
-                    <td th:each="cus : ${ customer.customerList }"
-                        th:text="${ cus.extCustomerDetail.customerStatus }"></td>
-                    <td th:text="${ customer.businessStatus }"></td>
-                    <td th:text="${ customer.companyName }"></td>
-                    <td th:each="cus : ${ customer.customerList }"
-                        th:text="${ cus.customerName }"></td>
-                    <td th:each="cus : ${ customer.customerList }"
-                        th:text="${ cus.empInfo.empName }"></td>
-                    <td th:each="cus, i : ${ customer.customerList }"
-                        th:text="${ cus.customerProductList[i.index].product.productName }"></td>
-                    <td><button type="button">상세정보</button></td>
-                </tr>
-            </tbody>
-        </table>
+    <div id="content-wrapper" class="d-flex flex-column">
+        <div id="content">
+            <!-- Header -->
+            <th:block th:replace="@{/common/header} :: header"></th:block>
+
+            <!-- Content -->
+            <div class="container-fluid" id="container-wrapper">
+                <table id="table_customer" class="table align-items-center table-flush table-hover">
+                    <thead>
+                    <tr>
+                        <th>고객상태</th>
+                        <th>업태</th>
+                        <th>고객사명</th>
+                        <th>고객명</th>
+                        <th>담당사원</th>
+                        <th>관심상품</th>
+                        <th>상세보기</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="customer : ${ customerCompanyList }" >
+                        <td th:each="cus : ${ customer.customerList }"
+                            th:text="${ cus.extCustomerDetail.customerStatus }"></td>
+                        <td th:text="${ customer.businessStatus }"></td>
+                        <td th:text="${ customer.companyName }"></td>
+                        <td th:each="cus : ${ customer.customerList }"
+                            th:text="${ cus.customerName }"></td>
+                        <td th:each="cus : ${ customer.customerList }"
+                            th:text="${ cus.empInfo.empName }"></td>
+                        <td th:each="cus, i : ${ customer.customerList }"
+                            th:text="${ cus.customerProductList[i.index].product.productName }"></td>
+                        <td th:each="cus : ${ customer.customerList }">
+                            <a th:href="@{/customer/anainfo(customerNo=${ cus.customerNo })}">
+                                <button type="button">상세정보</button></a></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
+</div>
 
-    <button onclick="location.href='/member/logout'">로그아웃</button>
+<!-- Script -->
+<th:block th:replace="@{/common/script} :: script"></th:block>
+<script src="/vendor/datatables/jquery.dataTables.min.js"></script>
+<script src="/vendor/datatables/dataTables.bootstrap4.min.js"></script>
 
-    <!-- Script -->
-    <th:block th:replace="@{/common/script} :: script"></th:block>
-    <script src="/vendor/datatables/jquery.dataTables.min.js"></script>
-    <script src="/vendor/datatables/dataTables.bootstrap4.min.js"></script>
-
-    <script>
-      $(document).ready(function () {
+<script>
+    $(document).ready(function () {
         $('#dataTable').DataTable(); // ID From dataTable
         $('#table_customer').DataTable(); // ID From dataTable with Hover
-      });
-    </script>
+    });
+</script>
 </body>
 
 </html>

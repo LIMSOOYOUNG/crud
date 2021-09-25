@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="https://www.thymeleaf.org">
+<head>
+    <th:block th:replace="@{common/config} :: config"></th:block>
+</head>
+
+<body id="page-top">
+<div id="wrapper">
+    <!-- Sidebar -->
+    <th:block th:replace="@{/common/sidebar} :: sidebar"></th:block>
+
+    <div id="content-wrapper" class="d-flex flex-column">
+        <div id="content">
+            <!-- Header -->
+            <th:block th:replace="@{/common/header} :: header"></th:block>
+
+            <!-- Content -->
+            <div class="container-fluid" id="container-wrapper">
+                <th:block th:text="${ customerInfo.companyName }"></th:block>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Script -->
+<th:block th:replace="@{/common/script} :: script"></th:block>
+</body>
+
+</html>
