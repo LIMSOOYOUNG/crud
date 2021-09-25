@@ -1,3 +1,50 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.deft.crud.stock.model.dao.StockMapper"></mapper>
+<mapper namespace="com.deft.crud.stock.model.dao.StockMapper">
+
+	<resultMap type="com.deft.crud.stock.model.dto.StorageDTO" id="storageResultMap">
+		<result property="productNo" column="PRODUCT_NO"/>
+		<result property="storageSection" column="STORAGE_SECTION"/>
+		<result property="storageSpace" column="STORAGE_SPACE"/>
+		<result property="productStock" column="PRODUCT_STOCK"/>
+	</resultMap>
+	
+	<resultMap type="com.deft.crud.stock.model.dto.StockDTO" id="stockResultMap">
+		<id property="productNo" column="PRODUCT_NO"/>
+		<result property="sellStatus" column="SELL_STATUS"/>
+		<result property="ProductName" column="PRODUCT_NAME"/>
+		<result property="unit" column="UNIT"/>
+		<result property="categoryName" column="CATEGORY_NAME"/>
+		<result property="storageSection" column="STORAGE_SECTION"/>
+		<result property="storageSpace" column="STORAGE_SPACE"/>
+		<result property="productStock" column="PRODUCT_STOCK"/>
+	</resultMap>
+	
+	<!-- 창고에 보관중인 상품리스트 조회 -->
+	<select id="storageSelectAll" resultMap="storageResultMap">
+	SELECT
+	       A.STORAGE_SECTION
+	     , A.STORAGE_SPACE
+	     , A.PRODUCT_STOCK
+	     , A.PRODUCT_NO
+	  FROM TBL_STORAGE A    
+	</select>
+	
+	<!-- 창고에 보관중인 상품번호로 상품 재고관련 정보 조회 -->
+	<select id="stockSelectAll" resultMap="stockResultMap" parameterType="_int">
+	SELECT
+	       B.PRODUCT_NO
+	     , B.SELL_STATUS
+	     , B.PRODUCT_NAME
+	     , B.UNIT
+	     , C.CATEGORY_NAME
+	     , A.STORAGE_SECTION
+	     , A.STORAGE_SPACE
+	     , A.PRODUCT_STOCK
+	  FROM TBL_STORAGE A
+	  JOIN TBL_PRODUCT B ON (A.PRODUCT_NO = B.PRODUCT_NO)
+	  JOIN TBL_PRODUCT_CATEGORY C ON (B.CATEGORY_CODE = C.CATEGORY_CODE)
+	 WHERE A.PRODUCT_NO = #{ productNo }       
+	</select>
+	
+</mapper>
