@@ -1,3 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.deft.crud.product.model.dao.ProductMapper"></mapper>
+<mapper namespace="com.deft.crud.product.model.dao.ProductMapper">
+	<resultMap type="com.deft.crud.product.model.dto.ProductDTO" id="productResultMap">
+		<id property="productNo" column="PRODUCT_NO"/>
+		<result property="sellStatus" column="SELL_STATUS"/>
+		<result property="productName" column="PRODUCT_NAME"/>
+		<result property="purchasePrice" column="PURCHASE_PRICE"/>
+		<result property="sellingPrice" column="SELLING_PRICE"/>
+		<result property="unit" column="UNIT"/>
+		<result property="accountNo" column="MANUFACTURER_NO"/>
+
+		<association property="category" resultMap="productCategoryResultMap"/>		
+		
+	</resultMap>
+	
+	<resultMap type="com.deft.crud.product.model.dto.ProductCategoryDTO" id="productCategoryResultMap">
+		<id property="categoryCode" column="CATEGORY_CODE"/>
+		<result property="refCategoryName" column="REF_CATEGORY_NAME"/>
+		<result property="categoryName" column="CATEGORY_NAME"/>
+		<result property="refCategoryCode" column="REF_CATEGORY_CODE"/>
+		<result property="categoryStatus" column="CATEGORY_STATUS"/>
+	</resultMap>
+	
+	<select id="allProductList" resultMap="productResultMap">
+	   SELECT
+	          P.PRODUCT_NO
+     		, P.PRODUCT_NAME
+     		, B.CATEGORY_NAME "REF_CATEGORY_NAME"
+     		, A.CATEGORY_NAME
+         FROM TBL_PRODUCT P
+	     LEFT JOIN TBL_PRODUCT_CATEGORY A ON(P.CATEGORY_CODE = A.CATEGORY_CODE)
+	     LEFT JOIN TBL_PRODUCT_CATEGORY B ON(A.REF_CATEGORY_CODE = B.CATEGORY_CODE)
+	</select>
+
+</mapper>
