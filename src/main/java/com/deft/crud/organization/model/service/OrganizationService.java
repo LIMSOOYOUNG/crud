@@ -6,7 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.deft.crud.organization.model.dao.OrganizationMapper;
-import com.deft.crud.organization.model.dto.OrganizationDTO;
+import com.deft.crud.organization.model.dto.DepartmentDTO;
+import com.deft.crud.organization.model.dto.JobDTO;
 
 @Service
 public class OrganizationService {
@@ -18,12 +19,21 @@ public class OrganizationService {
 		this.organizationMapper = organizationMapper;
 	}
 	
-	
-	public List<OrganizationDTO> selectOrganization() {
+	/* 부서관리 조회 */
+	public List<DepartmentDTO> selectOrganization() {
 		
-		List<OrganizationDTO> organizationList = organizationMapper.selectOrganization();
+		List<DepartmentDTO> departmentList = organizationMapper.selectDepartment();
 		
-		return organizationList;
+		return departmentList;
+	}
+
+
+	/* 직급관리 조회*/
+	public List<JobDTO> selectJob() {
+		
+		List<JobDTO> jobList = organizationMapper.selectJob();
+		
+		return jobList;
 	}
 
 	
