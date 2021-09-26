@@ -10,5 +10,4 @@ import com.deft.crud.estimate.model.dto.EstimateDTO;
 public interface EstimateMapper {
 
 	List<EstimateDTO> estimateSelectAll();
-
 }
