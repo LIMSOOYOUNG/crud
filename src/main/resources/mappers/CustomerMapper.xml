@@ -96,16 +96,19 @@
              , EX.CUSTOMER_STATUS
              , CP.BUSINESS_STATUS
              , EX.CUSTOMIZATION_DATE
+             , C.CUSTOMER_NO
           FROM TBL_CUSTOMER C
           LEFT JOIN TBL_CUSTOMER_COMPANY CP ON (C.CUSTOMER_COMPANY_NO = CP.CUSTOMER_COMPANY_NO)
           LEFT JOIN TBL_EMP_INFO E ON (C.EMP_NO = E.EMP_NO)
           LEFT JOIN TBL_EXT_CUSTOMER_DETAIL EX ON (C.CUSTOMER_NO = EX.CUSTOMER_NO)
+         WHERE EX.CUSTOMER_STATUS IS NOT NULL
     </select>
 
     <!-- 분석 고객 조회 -->
     <select id="selectAllAnalysisCustomer" resultMap="customerCompanyResultMap">
         SELECT
                C.CUSTOMER_NAME
+             , C.CUSTOMER_NO
              , CP.COMPANY_NAME
              , E.EMP_NAME
              , AN.CUSTOMER_STATUS
@@ -118,5 +121,45 @@
           LEFT JOIN TBL_CUSTOMER_PRODUCT CD ON (AN.CUSTOMER_NO = CD.CUSTOMER_NO)
           LEFT JOIN TBL_PRODUCT P ON (P.PRODUCT_NO = CD.PRODUCT_NO)
          WHERE CD.CUSTOMER_NO IS NOT NULL
+    </select>
+
+    <!-- 기존 고객 기본정보 조회 -->
+    <select id="selectCustomerInfo" resultMap="customerCompanyResultMap" parameterType="_int">
+        SELECT
+               C.CUSTOMER_NAME
+             , C.CUSTOMER_NO
+             , CP.COMPANY_NAME
+             , E.EMP_NAME
+             , C.CUSTOMER_EMAIL
+             , CP.BUSINESS_STATUS
+             , EX.CUSTOMER_STATUS
+             , C.CUSTOMER_PHONE
+             , CP.NUMBER_OF_EMPLOYEES
+             , NVL(C.CUSTOMER_FAX, ' ')
+             , CP.COMPANY_REVENUE
+          FROM TBL_CUSTOMER C
+          LEFT JOIN TBL_CUSTOMER_COMPANY CP ON (C.CUSTOMER_COMPANY_NO = CP.CUSTOMER_COMPANY_NO)
+          LEFT JOIN TBL_EMP_INFO E ON (C.EMP_NO = E.EMP_NO)
+          LEFT JOIN TBL_EXT_CUSTOMER_DETAIL EX ON (C.CUSTOMER_NO = EX.CUSTOMER_NO)
+         WHERE C.CUSTOMER_NO = #{ customerNo, jdbcType=INTEGER }
+    </select>
+
+    <!-- 분석 고객 기본정보 조회 -->
+    <select id="selectAnalysisCustomerInfo" resultMap="customerCompanyResultMap" parameterType="_int">
+        SELECT
+               C.CUSTOMER_NAME
+             , C.CUSTOMER_NO
+             , CP.COMPANY_NAME
+             , C.CUSTOMER_EMAIL
+             , CP.BUSINESS_STATUS
+             , C.CUSTOMER_PHONE
+             , NVL(C.CUSTOMER_FAX, ' ')
+             , AN.CUSTOMIZATION_LEVEL
+             , AN.CUSTOMIZATION_POSIBILLITY
+          FROM TBL_CUSTOMER C
+          LEFT JOIN TBL_CUSTOMER_COMPANY CP ON (C.CUSTOMER_COMPANY_NO = CP.CUSTOMER_COMPANY_NO)
+          LEFT JOIN TBL_EMP_INFO E ON (C.EMP_NO = E.EMP_NO)
+          LEFT JOIN TBL_ANA_CUSTOMER_DETAIL AN ON (C.CUSTOMER_NO = AN.CUSTOMER_NO)
+         WHERE C.CUSTOMER_NO = #{ customerNo }
     </select>
 </mapper>

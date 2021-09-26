@@ -29,4 +29,14 @@ public class CustomerService {
 
         return customerMapper.selectAllAnalysisCustomer();
     }
+
+    public CustomerCompanyDTO selectCustomerInfo(int customerNo) {
+
+        return customerMapper.selectCustomerInfo(customerNo);
+    }
+
+    public CustomerCompanyDTO selectAnalysisCustomerInfo(int customerNo) {
+
+        return customerMapper.selectAnalysisCustomerInfo(customerNo);
+    }
 }

@@ -12,4 +12,8 @@ public interface CustomerMapper {
     List<CustomerCompanyDTO> selectAllCustomer();
 
     List<CustomerCompanyDTO> selectAllAnalysisCustomer();
+
+    CustomerCompanyDTO selectCustomerInfo(int customerNo);
+
+    CustomerCompanyDTO selectAnalysisCustomerInfo(int customerNo);
 }
