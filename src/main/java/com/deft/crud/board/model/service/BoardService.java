@@ -55,13 +55,5 @@ public class BoardService {
 		return result;
 	}
 
-	/* 공지사항 삭제 */
-	public int deleteNotice(int boardNo) {
-
-		int result = boardMapper.deleteNotice(boardNo);
-
-		return result;
-	}
-
 
 }
