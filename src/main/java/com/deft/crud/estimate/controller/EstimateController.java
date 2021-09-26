@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.deft.crud.estimate.model.dto.EstimateDTO;
@@ -24,12 +25,25 @@ public class EstimateController {
 	
 	
 	@GetMapping("/selectAll")
-	public ModelAndView selectEstimateSelectAll(ModelAndView mv) {
+	public ModelAndView selectEstimateList(ModelAndView mv) {
 		
-		List<EstimateDTO> estimateList = estimateService.estimateSelectAll();
+		List<EstimateDTO> estimateList = estimateService.selectEstimateList();
 		
 		mv.addObject("estimateList", estimateList);
-		mv.setViewName("estimate/selectAll");
+		mv.setViewName("estimate/selectAllEstimate");
+		
+		return mv;
+	}
+	
+	@GetMapping("/select/status")
+	public ModelAndView selectEstimateByStatus(ModelAndView mv, @RequestParam String status) {
+		
+		System.out.println(status);
+		
+//		List<EstimateDTO> estimateList = estimateService.selectEstimateList();
+		
+//		mv.addObject("estimateList", estimateList);
+		mv.setViewName("estimate/selectAllEstimate");
 		
 		return mv;
 	}

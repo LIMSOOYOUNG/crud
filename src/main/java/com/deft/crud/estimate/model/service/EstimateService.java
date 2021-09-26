@@ -19,8 +19,8 @@ public class EstimateService {
 		this.estimateMapper = estimateMapper;
 	}
 	
-	public List<EstimateDTO> estimateSelectAll() {
+	public List<EstimateDTO> selectEstimateList() {
 		
-		return estimateMapper.estimateSelectAll();
+		return estimateMapper.selectEstimateList();
 	}
 }

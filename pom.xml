@@ -69,6 +69,11 @@
 			<artifactId>spring-security-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
 		
 		<!-- https://mvnrepository.com/artifact/org.bgee.log4jdbc-log4j2/log4jdbc-log4j2-jdbc4.1 -->
 		<dependency>
@@ -76,11 +81,6 @@
 		    <artifactId>log4jdbc-log4j2-jdbc4.1</artifactId>
 		    <version>1.16</version>
 		</dependency>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <scope>test</scope>
-        </dependency>
 
 		<!-- https://mvnrepository.com/artifact/net.sf.json-lib/json-lib-ext-spring -->
 		<dependency>
@@ -104,9 +104,6 @@
 		</dependency>
 
 	</dependencies>
-
-
-
 
 	<build>
 		<plugins>
