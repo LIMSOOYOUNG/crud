@@ -1,3 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.deft.crud.business.model.dao.BusinessMapper"></mapper>
+<mapper namespace="com.deft.crud.business.model.dao.BusinessMapper">
+	
+	<resultMap type="com.deft.crud.business.model.dto.BusinessDTO" id="businessChanceResultMap">
+		<id property="businessChanceNo" column="BUSINESS_CHANCE_NO"/>
+		<result property="progressStatus" column="PROGRESS_STATUS" />
+		<result property="salesLevel" column="SALES_LEVEL" />
+		<result property="successPosibillity" column="SUCCESS_POSIBILLITY" />
+		<result property="businessTitle" column="BUSINESS_TITLE" />
+		<result property="dueDate" column="DUE_DATE" />
+		<result property="empName" column="EMP_NAME" />
+		<result property="customerName" column="CUSTOMER_NAME" />
+	</resultMap>
+
+	<select id="businessChanceSelectAll" resultMap="businessChanceResultMap">
+		SELECT
+		       A.BUSINESS_CHANCE_NO
+		     , A.PROGRESS_STATUS
+		     , A.SALES_LEVEL
+		     , A.SUCCESS_POSIBILLITY
+		     , A.BUSINESS_TITLE
+		     , A.DUE_DATE
+		     , C.EMP_NAME
+		     , B.CUSTOMER_NAME 
+		  FROM TBL_BUSINESS_CHANCE A    
+		  JOIN TBL_CUSTOMER B ON (A.CUSTOMER_NO = B.CUSTOMER_NO)
+		  JOIN TBL_EMP_INFO C ON (A.EMP_NO = C.EMP_NO)
+	</select>
+</mapper>

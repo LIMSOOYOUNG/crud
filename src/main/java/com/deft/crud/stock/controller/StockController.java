@@ -25,13 +25,14 @@ public class StockController {
 		this.stockService = stockService;
 	}
 
+	/* 창고보유(재고) 상품목록 조회 */
 	@GetMapping("/selectAll")
 	public ModelAndView selectStockAll(ModelAndView mv) {
 		
 		
 		List<StorageDTO> storageList = new ArrayList<>();
 		
-		storageList = stockService.storageSelectAll();		//창고보유(재고) 상품목록
+		storageList = stockService.storageSelectAll();		
 		
 		List<StockDTO> stockList = new ArrayList<>();
 		StockDTO stockDTO = new StockDTO();					
