@@ -1,6 +1,6 @@
 package com.deft.crud.organization.model.dto;
 
-public class OrganizationDTO implements java.io.Serializable{
+public class DepartmentDTO implements java.io.Serializable{
 
 	private String deptCode;
 	private String deptName;
@@ -8,9 +8,9 @@ public class OrganizationDTO implements java.io.Serializable{
 	private String depttel;
 	private String deptStatus;
 	
-	public OrganizationDTO() {}
+	public DepartmentDTO() {}
 
-	public OrganizationDTO(String deptCode, String deptName, String deptFax, String depttel, String deptStatus) {
+	public DepartmentDTO(String deptCode, String deptName, String deptFax, String depttel, String deptStatus) {
 		super();
 		this.deptCode = deptCode;
 		this.deptName = deptName;

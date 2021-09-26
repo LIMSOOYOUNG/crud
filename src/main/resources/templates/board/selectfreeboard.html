@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="https://www.thymeleaf.org">
+<head>
+<th:block th:replace="@{common/config} :: config"></th:block>
+</head>
+
+<body id="page-top">
+	<div id="wrapper">
+		<!-- Sidebar -->
+		<th:block th:replace="@{/common/sidebar} :: sidebar"></th:block>
+
+		<div id="content-wrapper" class="d-flex flex-column">
+			<div id="content">
+				<!-- Header -->
+				<th:block th:replace="@{/common/header} :: header"></th:block>
+
+				<!-- Content -->
+				<div class="container-fluid" id="container-wrapper">
+					<div class="d-sm-flex align-items-center justify-content-between mb-4">
+						<h1 class="h3 mb-0 text-gray-800">자유게시글 관리</h1>
+						<ol class="breadcrumb">
+							<li class="breadcrumb-item"><a href="./">Home</a></li>
+							<li class="breadcrumb-item">Tables</li>
+							<li class="breadcrumb-item active" aria-current="page">자유게시글</li>
+						</ol>
+					</div>
+					
+
+					<!-- Row -->
+					<div class="row">
+
+						<!-- DataTable with Hover -->
+						<div class="col-lg-12">
+							<div class="card mb-4">
+								<div
+									class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+									
+								</div>
+
+								<div class="table-responsive p-3">
+									<table class="table align-items-center table-flush table-hover"
+										id="dataTableHover">
+										<thead align="center" class="thead-light">
+											<tr>
+												<th>글번호</th>
+												<th>게시글</th>
+												<th>작성자</th>
+												<th>작성일</th>
+												<th>조회수</th>
+											</tr>
+										</thead>
+										<tbody align="center">
+											<tr th:each="freeboard: ${freeboardList}">
+												<td th:text="${freeboard.boardNo}"></td>
+												<td th:text="${freeboard.boardName}"></td>
+												<td th:text="${freeboard.writeNo}"></td>
+												<td th:text="${freeboard.writeDate}"></td>
+												<td th:text="${freeboard.views}"></td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+
+
+	<!-- Script -->
+	<th:block th:replace="@{/common/script} :: script"></th:block>
+</body>
+
+</html>
