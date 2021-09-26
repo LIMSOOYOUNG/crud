@@ -3,18 +3,14 @@
 	xmlns:th="https://www.thymeleaf.org">
 <head>
 	<th:block th:replace="@{common/config} :: config"></th:block>
-	<link href="/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
 	<style>
-		.border {
-			display: grid;
-			width: 316px;
-			height: 316px;
-			top: 381px;
+		.update_delete_back_btn {
+			text-align:center;
 		}
 	</style>
 </head>
-<body>
-	<body id="page-top">
+
+<body id="page-top">
 	<div id="wrapper">
 		<!-- Sidebar -->
 		<th:block th:replace="@{/common/sidebar} :: sidebar"></th:block>
@@ -27,19 +23,111 @@
 				<!-- Content -->
 				<div class="container-fluid" id="container-wrapper">
 					<div class="d-sm-flex align-items-center justify-content-between mb-4">
-						<h1 class="h3 mb-0 text-gray-800">상품수정</h1>
+						<h1 class="h3 mb-0 text-gray-800">상품관리</h1>
 						<ol class="breadcrumb">
 							<li class="breadcrumb-item"><a href="./">Home</a></li>
-							<li class="breadcrumb-item">상품관리</li>
+							<li class="breadcrumb-item">상품조회</li>
 							<li class="breadcrumb-item active" aria-current="page">상품수정</li>
 						</ol>
 					</div>
-				</div>
-					<div class="border">
-					<div class="productImg">이미지</div>
+					<div class="row">
+						<div class="col-lg-3">
+							<div class="card mb-4">
+								<div
+									class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+									<h6 class="m-0 font-weight-bold text-primary">Form Basic</h6>
+								</div>
+								<div class="card-body">
+								<form>
+									<div class="form-group">
+										<img alt="noImage" src="" weight=200px; height=250px;> 
+									</div>
+									<div class="form-group">
+										<div class="custom-file">
+											<input type="file" class="custom-file-input" id="customFile">
+											<label class="custom-file-label" for="customFile">Choosefile</label>
+										</div>
+									</div>
+									<button type="submit" class="btn btn-primary">Submit</button>
+								</form>
+								</div>
+							</div>
+						</div>
+						<div class="col-lg-9">
+							<div class="card mb-4">
+								<br>
+								<h3 align="center">상품정보</h3>
+								<div class="row">
+									<div class="form-group col-lg-6 row">
+										<label for="refCategoryName" class="col-sm-3 col-form-label" align="center">카테고리 (중)</label>
+										<select class="form-control col-sm-9" id="refCategoryName">
+											<option th:each="allProduct : ${allProductList}" th:text="${allProduct.category.refCategoryName}" th:selected="${productDetail.category.refCategoryName == allProduct.category.refCategoryName}"></option>
+										</select>
+									</div>
+									<div class="form-group col-lg-6 row">
+										<label for="categoryName" class="col-sm-3 col-form-label" align="center">카테고리 (소)</label>
+										<select class="form-control col-sm-9" id="categoryName">
+											<option th:each="allProduct : ${allProductList}" th:text="${allProduct.category.categoryName}" th:selected="${productDetail.category.categoryName == allProduct.category.categoryName}"></option>
+										</select>
+									</div>
+								</div>
+								<div class="row">
+                     					<div class="form-group col-lg-6 row">
+										<label for="manufacturerName" class="col-sm-3 col-form-label" align="center">제조사</label>
+										<input type="text" class="form-control col-sm-9" id="manufacturerName" th:value="${productDetail.manufacturer.manufacturerName}">
+									</div>
+									<div class="form-group col-lg-6 row">
+										<label for="companyName" class="col-sm-3 col-form-label" align="center">거래처</label>
+										<input type="text" class="form-control col-sm-9" id="companyName" th:value="${productDetail.account.companyName}">
+									</div>
+								</div>
+								
+								<div class="row">
+									<div class="form-group col-lg-6 row">
+										<label for="productNo" class="col-sm-3 col-form-label" align="center">상품번호</label>
+										<input type="text" class="form-control col-sm-9" id="productNo" th:value="${productDetail.productNo}">
+									</div>
+									<div class="form-group col-lg-6 row">
+										<label for="productName" class="col-sm-3 col-form-label" align="center">상품명</label>
+										<input type="text" class="form-control col-sm-9" id="productName" th:value="${productDetail.productName}">
+									</div>
+									
+								</div>
+								<div class="row">
+									<div class="form-group col-lg-6 row">
+										<label for="purchasePrice" class="col-sm-3 col-form-label" align="center">원가</label>
+										<input type="number" class="form-control col-sm-9" id="purchasePrice" th:value="${productDetail.purchasePrice}">
+									</div>	
+									<div class="form-group col-lg-6 row">
+										<label for="sellingPrice" class="col-sm-3 col-form-label" align="center">판매가</label>
+										<input type="number" class="form-control col-sm-9" id="sellingPrice" th:value="${productDetail.sellingPrice}">
+									</div>	
+								</div>
+								<div class="row">
+									<div class="form-group col-lg-6 row">
+										<label for="productNo" class="col-sm-3 col-form-label" align="center">판매상태</label>
+										<select class="form-control col-sm-9" id="sellStatus">
+											<option th:each = "allProduct : ${allProductList}" th:text = "${allProduct.sellStatus}" th:selected="${allProduct.sellStatus == productDetail.sellStatus}"></option>
+										</select>
+									</div>
+								</div>
+								<div class="row">
+									<div class="update_delete_back_btn">
+									<button type="button" class="btn btn-primary mb-1">상품수정</button>
+                  					<button type="button" class="btn btn-secondary mb-1">상품삭제</button>
+                  					<button type="button" class="btn btn-success mb-1">뒤로가기</button>
+                  					</div>
+								</div>			
+							</div>
+						</div>
 					</div>
+				</div>
 			</div>
 		</div>
 	</div>
+	<!-- Script -->
+    <th:block th:replace="@{/common/script} :: script"></th:block>
 </body>
+
 </html>
+

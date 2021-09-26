@@ -56,11 +56,16 @@ public class ProductController {
 	public ModelAndView productDetail(ModelAndView mv,
 									  @RequestParam("productNo") int productNo) {
 		
-		System.out.println("productNo : " + productNo);
 		
-		List<ProductDTO> productDetail = productService.productDetail(productNo);
+		List<ProductDTO> allProductList = productService.allProductList();
+		
+		ProductDTO productDetail = productService.productDetail(productNo);
 		
 		System.out.println("productDetail : " + productDetail);
+		
+		mv.addObject("productDetail", productDetail);
+		mv.addObject("allProductList", allProductList);
+		mv.setViewName("product/productDetail");
 		
 		return mv;
 	}

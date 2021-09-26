@@ -14,6 +14,6 @@ public interface ProductMapper {
 
 	List<ProductCategoryDTO> allCategoryList();
 
-	List<ProductDTO> productDetail(int productNo);
+	ProductDTO productDetail(int productNo);
 
 }
