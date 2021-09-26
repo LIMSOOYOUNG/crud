@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="ko"
 	xmlns:th="https://www.thymeleaf.org">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <head>
 	<th:block th:replace="@{common/config} :: config"></th:block>
 	<link href="/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
@@ -24,7 +23,7 @@
 						<ol class="breadcrumb">
 							<li class="breadcrumb-item"><a href="./">Home</a></li>
 							<li class="breadcrumb-item">Tables</li>
-							<li class="breadcrumb-item active" aria-current="page">상품조회</li>
+							<li class="breadcrumb-item active" aria-current="page">재고관리</li>
 						</ol>
 					</div>
 			
@@ -35,28 +34,25 @@
 						<div class="col-lg-12">
 							<div class="card mb-4">
 								<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-									<h6 class="m-0 font-weight-bold text-primary">전체상품현황</h6>
-									<input type="button" id="insertProduct" value="상품등록">
+									<h6 class="m-0 font-weight-bold text-primary">전체상품 재고현황</h6>
 								</div>
 			
 								<div class="table-responsive p-3">
 									<table class="table align-items-center table-flush table-hover" id="dataTableHover">
 										<thead align="center" class="thead-light">
 											<tr>
-												<th>상품번호</th>
-												<th>상품명</th>
 												<th>카테고리(중)</th>
 												<th>카테고리(소)</th>
-												<th>수정하기</th>
+												<th>카테고리 번호</th>
+												<th>상세보기</th>
 											</tr>
 										</thead>
 										<tbody align="center">
-											<tr th:each = "productList : ${allProductList}">
-												<td th:text = "${productList.productNo}"></td>
-												<td th:text = "${productList.productName}"></td>
-												<td th:text = "${productList.category.refCategoryName}"></td>
-												<td th:text = "${productList.category.categoryName}"></td>
-												<td><a th:href="@{/product/productDetail(productNo=${productList.productNo})}"><input type="button" id="detailButton" value="수정하기"></a></td>
+											<tr th:each = "categoryList : ${allCategoryList}">
+												<td th:text = "${categoryList.refCategoryName}"></td>
+												<td th:text = "${categoryList.categoryName}"></td>
+												<td th:text = "${categoryList.refCategoryCode}"></td>
+												<td><input type="button" id="updateButton" value="카테고리 수정"></td>
 											</tr>
 										</tbody>
 									</table>

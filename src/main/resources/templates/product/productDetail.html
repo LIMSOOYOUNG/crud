@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ko"
+	xmlns:th="https://www.thymeleaf.org">
+<head>
+	<th:block th:replace="@{common/config} :: config"></th:block>
+	<link href="/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+	<style>
+		.border {
+			display: grid;
+			width: 316px;
+			height: 316px;
+			top: 381px;
+		}
+	</style>
+</head>
+<body>
+	<body id="page-top">
+	<div id="wrapper">
+		<!-- Sidebar -->
+		<th:block th:replace="@{/common/sidebar} :: sidebar"></th:block>
+
+		<div id="content-wrapper" class="d-flex flex-column">
+			<div id="content">
+				<!-- Header -->
+				<th:block th:replace="@{/common/header} :: header"></th:block>
+
+				<!-- Content -->
+				<div class="container-fluid" id="container-wrapper">
+					<div class="d-sm-flex align-items-center justify-content-between mb-4">
+						<h1 class="h3 mb-0 text-gray-800">상품수정</h1>
+						<ol class="breadcrumb">
+							<li class="breadcrumb-item"><a href="./">Home</a></li>
+							<li class="breadcrumb-item">상품관리</li>
+							<li class="breadcrumb-item active" aria-current="page">상품수정</li>
+						</ol>
+					</div>
+				</div>
+					<div class="border">
+					<div class="productImg">이미지</div>
+					</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
