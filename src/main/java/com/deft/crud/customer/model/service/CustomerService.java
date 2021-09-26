@@ -1,6 +1,7 @@
 package com.deft.crud.customer.model.service;
 
 import com.deft.crud.customer.model.dao.CustomerMapper;
+import com.deft.crud.customer.model.dto.BusinessActivityDTO;
 import com.deft.crud.customer.model.dto.CustomerCompanyDTO;
 import com.deft.crud.customer.model.dto.CustomerDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,5 +39,10 @@ public class CustomerService {
     public CustomerCompanyDTO selectAnalysisCustomerInfo(int customerNo) {
 
         return customerMapper.selectAnalysisCustomerInfo(customerNo);
+    }
+
+    public List<BusinessActivityDTO> selectBusinessActivity(int customerNo) {
+
+        return customerMapper.selectBusinessActivity(customerNo);
     }
 }

@@ -86,6 +86,22 @@
         <result property="manufacturerNo" column="MANUFACTURER_NO"/>
     </resultMap>
 
+    <resultMap id="businessActivityResultMap" type="com.deft.crud.customer.model.dto.BusinessActivityDTO">
+        <id property="activityNo" column="ACTIVITY_NO"/>
+        <result property="businessSubject" column="BUSINESS_SUBJECT"/>
+        <result property="businessType" column="BUSINESS_TYPE"/>
+        <result property="businessLocation" column="BUSINESS_LOCATION"/>
+        <result property="businessPurpose" column="BUSINESS_PURPOSE"/>
+        <result property="businessContents" column="BUSINESS_CONTENTS"/>
+        <result property="writingDate" column="WRITING_TIME"/>
+        <result property="activityStartTime" column="ACTIVITY_START_TIME"/>
+        <result property="activityEndTime" column="ACTIVITY_END_TIME"/>
+        <result property="customerNo" column="CUSTOMER_NO"/>
+        <result property="empNo" column="EMP_NO"/>
+
+        <association property="empInfo" resultMap="empInfoResultMap"/>
+    </resultMap>
+
 
     <!-- 전체 고객 조회 -->
     <select id="selectAllCustomer" resultMap="customerCompanyResultMap">
@@ -123,7 +139,7 @@
          WHERE CD.CUSTOMER_NO IS NOT NULL
     </select>
 
-    <!-- 기존 고객 기본정보 조회 -->
+    <!-- 기존 고객 정보 조회 -->
     <select id="selectCustomerInfo" resultMap="customerCompanyResultMap" parameterType="_int">
         SELECT
                C.CUSTOMER_NAME
@@ -137,6 +153,11 @@
              , CP.NUMBER_OF_EMPLOYEES
              , NVL(C.CUSTOMER_FAX, ' ')
              , CP.COMPANY_REVENUE
+             , CP.BUSINESS_TYPE
+             , CP.HOMEPAGE
+             , CP.COMPANY_ADDRESS
+             , CP.COMPANY_REGIST_NO
+             , EX.CUSTOMIZATION_DATE
           FROM TBL_CUSTOMER C
           LEFT JOIN TBL_CUSTOMER_COMPANY CP ON (C.CUSTOMER_COMPANY_NO = CP.CUSTOMER_COMPANY_NO)
           LEFT JOIN TBL_EMP_INFO E ON (C.EMP_NO = E.EMP_NO)
@@ -156,10 +177,38 @@
              , NVL(C.CUSTOMER_FAX, ' ')
              , AN.CUSTOMIZATION_LEVEL
              , AN.CUSTOMIZATION_POSIBILLITY
+             , CP.BUSINESS_TYPE
+             , CP.COMPANY_REGIST_NO
+             , CP.NUMBER_OF_EMPLOYEES
+             , CP.COMPANY_REVENUE
+             , CP.HOMEPAGE
+             , CP.COMPANY_ADDRESS
+             , P.PRODUCT_NAME
           FROM TBL_CUSTOMER C
           LEFT JOIN TBL_CUSTOMER_COMPANY CP ON (C.CUSTOMER_COMPANY_NO = CP.CUSTOMER_COMPANY_NO)
           LEFT JOIN TBL_EMP_INFO E ON (C.EMP_NO = E.EMP_NO)
           LEFT JOIN TBL_ANA_CUSTOMER_DETAIL AN ON (C.CUSTOMER_NO = AN.CUSTOMER_NO)
+          LEFT JOIN TBL_CUSTOMER_PRODUCT CD ON (AN.CUSTOMER_NO = CD.CUSTOMER_NO)
+          LEFT JOIN TBL_PRODUCT P ON (P.PRODUCT_NO = CD.PRODUCT_NO)
          WHERE C.CUSTOMER_NO = #{ customerNo }
+    </select>
+
+    <!-- 영업 활동 조회 -->
+    <select id="selectBusinessActivity" resultMap="businessActivityResultMap" parameterType="_int">
+        SELECT
+               BA.ACTIVITY_NO
+             , BA.CUSTOMER_NO
+             , BA.BUSINESS_SUBJECT
+             , BA.BUSINESS_TYPE
+             , NVL(BA.BUSINESS_LOCATION, ' ')
+             , BA.BUSINESS_PURPOSE
+             , NVL(BA.BUSINESS_CONTENTS, ' ')
+             , BA.WRITING_TIME
+             , BA.ACTIVITY_START_TIME
+             , BA.ACTIVITY_END_TIME
+             , E.EMP_NAME
+          FROM TBL_BUSINESS_ACTIVITY BA
+          LEFT JOIN TBL_EMP_INFO E ON (BA.EMP_NO = E.EMP_NO)
+         WHERE BA.CUSTOMER_NO = #{ customerNo }
     </select>
 </mapper>

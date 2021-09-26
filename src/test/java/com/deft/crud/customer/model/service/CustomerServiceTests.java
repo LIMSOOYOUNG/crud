@@ -1,6 +1,7 @@
 package com.deft.crud.customer.model.service;
 
 import com.deft.crud.configuration.CrudApplication;
+import com.deft.crud.customer.model.dto.BusinessActivityDTO;
 import com.deft.crud.customer.model.dto.CustomerCompanyDTO;
 import com.deft.crud.customer.model.dto.CustomerDTO;
 import org.junit.jupiter.api.BeforeEach;
@@ -82,5 +83,18 @@ public class CustomerServiceTests {
         assertNotNull(customerInfo);
 
         System.out.println(customerInfo);
+    }
+
+    /* 영업 활동 조회용 테스트 코드 */
+    @Test
+    @Disabled
+    public void testSelectBusinessActivity() {
+
+        int customerNo = 1;
+        List<BusinessActivityDTO> businessActivity = customerService.selectBusinessActivity(customerNo);
+
+        assertNotNull(businessActivity);
+
+        System.out.println(businessActivity);
     }
 }
