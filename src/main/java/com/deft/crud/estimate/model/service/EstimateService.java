@@ -23,4 +23,9 @@ public class EstimateService {
 		
 		return estimateMapper.selectEstimateList();
 	}
+
+	public List<EstimateDTO> selectEstimateListByStatus(String estimateStatus) {
+		
+		return estimateMapper.selectEstimateListByStatus(estimateStatus);
+	}
 }

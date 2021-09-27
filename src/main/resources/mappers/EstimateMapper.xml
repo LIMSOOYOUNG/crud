@@ -38,4 +38,32 @@
           LEFT JOIN TBL_EMP_INFO C ON (B.EMP_NO = C.EMP_NO)
          ORDER BY A.ESTIMATE_NO DESC
 	</select>
+	
+	<select id="selectEstimateListByStatus" resultMap="estimateSelectResultMap">
+        SELECT /* com.deft.crud.estimate.model.dao.EstimateMapper#selectEstimateList() */
+               A.ESTIMATE_NO
+             , B.CUSTOMER_NAME
+             , A.ESTIMATE_TITLE
+             , A.ESTIMATE_STATUS
+             , C.EMP_NAME
+             , A.ESTIMATE_DATE
+          FROM TBL_ESTIMATE A
+          LEFT JOIN TBL_CUSTOMER B ON (A.CUSTOMER_NO = B.CUSTOMER_NO)
+          LEFT JOIN TBL_EMP_INFO C ON (B.EMP_NO = C.EMP_NO)
+		<choose>
+			<when test="estimateStatus == 'progress'">
+                WHERE A.ESTIMATE_STATUS = '진행중'
+         	</when>
+         	<when test="estimateStatus == 'success'">
+                WHERE A.ESTIMATE_STATUS = '완료'
+         	</when>
+         	<when test="estimateStatus == 'postpone'">
+                WHERE A.ESTIMATE_STATUS = '보류'
+         	</when>
+         	<when test="estimateStatus == 'failed'">
+                WHERE A.ESTIMATE_STATUS = '실패'
+         	</when>
+         </choose>
+         ORDER BY A.ESTIMATE_NO DESC
+	</select>
 </mapper>
