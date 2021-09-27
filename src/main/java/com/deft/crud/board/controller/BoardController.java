@@ -99,24 +99,5 @@ public class BoardController {
 		return mv;
 	}
 	
-	/* 공지사항 삭제 */
-	@GetMapping("deletenotice")
-	public void deleteNotice() {}
-	
-	@PostMapping("deletenotice")
-	public ModelAndView deleteNoticeForm(ModelAndView mv, RedirectAttributes rttr
-			, @RequestParam(defaultValue = "0")int BoardNo) {
-		
-		int result = boardService.deleteNotice(BoardNo);
-		
-		if(result > 0) {
-			rttr.addAttribute("flashMessage", "공지사항 삭제성공!!");
-		}else {
-			rttr.addFlashAttribute("flashMessage", "공지사항 삭제실패!!");
-		}
-		mv.setViewName("board/selectfreeboard");
-		
-		
-		return mv;
-	}
+
 }

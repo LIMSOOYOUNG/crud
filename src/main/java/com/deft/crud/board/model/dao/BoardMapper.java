@@ -22,8 +22,5 @@ public interface BoardMapper {
 	/* 자유게시글 삭제 */
 	int deleteFreeboard(int boardNo);
 
-	/* 공지사항 삭제*/
-	int deleteNotice(int boardNo);
-
 
 }
