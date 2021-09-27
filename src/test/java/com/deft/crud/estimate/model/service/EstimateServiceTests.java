@@ -26,9 +26,9 @@ public class EstimateServiceTests {
 	public void testSelectAllEstimate() throws Exception {
 
 		List<EstimateDTO> estimateList = estimateService.estimateSelectAll();
-		
+
 		assertNotNull(estimateList);
-		
+
 		for(EstimateDTO estimate : estimateList) {
 			System.out.println(estimate);
 		}
