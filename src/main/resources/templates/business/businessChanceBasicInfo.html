@@ -34,18 +34,18 @@
 						<div style="background: lightgray;">
 						<div align="center" style="font-size: 20px; font-weight: bold; padding-top: 5px; padding-bottom: 5px;">고객화 단계이력</div>
 						</div>
-							<div class="card mb-4" style="overflow-y:scroll; width:105%; height:400px;">
+							<div class="card mb-4" style="overflow-y:scroll; width:100%; height:400px;">
 							<div align="center" style="margin-left: 4px; margin-right: 4px; margin-top: 15px; margin-bottom: 15px;">
-                       			 <p>"김병준"님이 가능성을 "100%"로 수정하셨습니다.</p>
-                       			 <p>"김병준"님이 가능성을 "90%"로 수정하셨습니다.</p>
-                       			 <p>"김병준"님이 가능성을 "80%"로 수정하셨습니다.</p>
-                       			 <p>"김병준"님이 가능성을 "70%"로 수정하셨습니다.</p>
-                       			 <p>"김병준"님이 가능성을 "60%"로 수정하셨습니다.</p>
-                       			 <p>"김병준"님이 가능성을 "50%"로 수정하셨습니다.</p>
-                       			 <p>"김병준"님이 가능성을 "40%"로 수정하셨습니다.</p>
-                       			 <p>"김병준"님이 가능성을 "30%"로 수정하셨습니다.</p>
-                       			 <p>"김병준"님이 가능성을 "20%"로 수정하셨습니다.</p>
-                       			 <p>"김병준"님이 가능성을 "10%"로 수정하셨습니다.</p>
+                       			 <p>"2021-09-27" "김병준"님이 가능성을 "100%"로 수정하셨습니다.</p>
+                       			 <p>"2021-09-26" "김병준"님이 가능성을 "90%"로 수정하셨습니다.</p>
+                       			 <p>"2021-09-25" "김병준"님이 가능성을 "80%"로 수정하셨습니다.</p>
+                       			 <p>"2021-09-24" "김병준"님이 가능성을 "70%"로 수정하셨습니다.</p>
+                       			 <p>"2021-09-23" "김병준"님이 가능성을 "60%"로 수정하셨습니다.</p>
+                       			 <p>"2021-09-22" "김병준"님이 가능성을 "50%"로 수정하셨습니다.</p>
+                       			 <p>"2021-09-21" "김병준"님이 가능성을 "40%"로 수정하셨습니다.</p>
+                       			 <p>"2021-09-20" "김병준"님이 가능성을 "30%"로 수정하셨습니다.</p>
+                       			 <p>"2021-09-19" "김병준"님이 가능성을 "20%"로 수정하셨습니다.</p>
+                       			 <p>"2021-09-18" "김병준"님이 가능성을 "10%"로 수정하셨습니다.</p>
                        		</div>	 
                       		</div>								
 						</div>
@@ -68,8 +68,8 @@
 														<label>영업기회명</label> 
 															<input type="text" name="jobNo" class="form-control" required>
 													</div>
-													<div class="form-group col-xl-1"></div>
-													<div class="form-group col-xl-3">
+													<div class="form-group col-xl-2"></div>
+													<div class="form-group col-xl-2">
 														<label>담당사원</label> 
 															<input type="text" name="jobNo" class="form-control" required>
 													</div>
@@ -83,47 +83,44 @@
 														<label>고객측담당자</label> 
 															<input type="text" name="jobNo" class="form-control" required>
 													</div>
-													<div class="form-group col-xl-3"></div>
-													<div class="form-group col-xl-3">
-														<label>마감일</label> 
-															<input type="date" name="jobNo" class="form-control" required>
-													</div>
-													
-												</div>
-												<div class="row">
 													<div class="form-group col-xl-3">
 														<label>관심상품</label> 
 															<input type="text" name="deptNo" class="form-control" required>
 													</div>
-													<div class="form-group col-xl-3">
-														<label>진행단계</label> 
-															<input type="text" name="deptNo" class="form-control" required>
+													<div class="form-group col-xl-1"></div>
+													<div class="form-group col-xl-2">
+														<label>성공가능성</label> 
+															<input type="text" name="jobNo" class="form-control" required>
 													</div>
 													
 												</div>
 												<div class="row">
+													
+													<div class="form-group col-xl-3">
+														<label>진행단계</label> 
+															<input type="text" name="deptNo" class="form-control" required>
+													</div>
 													<div class="form-group col-xl-3">
 														<label>영업단계</label> 
 															<input type="text" name="jobNo" class="form-control" required>
 													</div>
-													<div class="form-group col-xl-3">
-														<label>성공 가능성</label> 
-															<input type="text" name="jobNo" class="form-control" required>
+													<div class="form-group col-xl-4"></div>
+													<div class="form-group col-xl-2">
+														<label>마감일</label> 
+															<input type="date" name="jobNo" class="form-control" required>
 													</div>
-													<div class="form-group col-xl-2"></div>
-													<div class="form-group col-xl-2" align="right">
-													<br>
-														<button class="btn btn-dark btn-icon-split" style="margin-right: 5%; margin-top: 10px;"
+												</div>
+												<div class="row">
+													
+													<div class="form-group col-xl-12" align="center">
+														<button class="btn btn-dark btn-icon-split" style="margin-right: 1%; margin-top: 2%"
 														th:onclick="location.href=''">
 													<span class="icon text-white-50">
 														<i class="fas fa-edit"></i>
 													</span>
 													<span class="text text-white">수정하기</span>
 													</button>
-													</div>
-													<div class="form-group col-xl-2" align="left">
-													<br>
-													<a class="btn btn-dark btn-icon-split" style="margin-right: 5%; margin-top: 10px;"
+													<a class="btn btn-dark btn-icon-split" style="margin-left: 1%; margin-top: 2%"
 													th:onclick="location.href=''">
 													<span class="icon text-white-50">
 														<i class="fas fa-info-circle"></i>
@@ -137,7 +134,7 @@
 											</div>
 									</div>		
 					</div>		
-				</div>
+				
 					
 					<!-- Row -->
 					<div class="row">
