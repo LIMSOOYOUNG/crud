@@ -25,10 +25,10 @@ public class EstimateServiceTests {
 	@Test
 	public void testSelectAllEstimate() throws Exception {
 
-		List<EstimateDTO> estimateList = estimateService.estimateSelectAll();
-
+		List<EstimateDTO> estimateList = estimateService.selectEstimateList();
+		
 		assertNotNull(estimateList);
-
+		
 		for(EstimateDTO estimate : estimateList) {
 			System.out.println(estimate);
 		}
