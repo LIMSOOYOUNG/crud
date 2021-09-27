@@ -27,6 +27,7 @@ public class AdminBoardDTO {
 		this.contents = contents;
 		this.type = type;
 		this.empNo = empNo;
+		
 	}
 
 	public int getBoardNo() {

@@ -37,6 +37,7 @@ public class AdminBoardController {
 		mv.setViewName("board/selectfreeboard");
 		
 		
+		
 		return mv;
 	}
 }
