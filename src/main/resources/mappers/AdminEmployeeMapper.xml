@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.deft.crud.admin.employee.model.dao.AdminEmployeeMapper">
+<resultMap type="com.deft.crud.admin.employee.model.dto.AdminEmployeeDTO" id="adminEmployeeResultMap">
+		<id property="employeeNo" column="EMP_NO"/>
+		<result property="employeeName" column="EMP_NAME"/>
+		<result property="employeeId" column="EMP_ID"/>
+		<result property="employeePwd" column="EMP_PWD"/>
+		<result property="email" column="EMP_EMAIL"/>
+		<result property="gender" column="EMP_GENDER"/>
+		<result property="employeeBirth" column="EMP_BIRTH"/>
+		<result property="entYn" column="ENT_YN"/>
+		<result property="authority" column="AUTHORITY"/>
+		<result property="hireDate" column="HIRE_DATE"/>
+		<result property="entDate" column="ENT_DATE"/>
+		<result property="address" column="EMP_ADDRESS"/>
+		<result property="phone" column="EMP_PHONE"/>
+		<result property="tel" column="EMP_TEL"/>
+		<result property="jobName" column="JOB_NAME"/>
+		<result property="deptName" column="DEPT_NAME"/>
+		<result property="managerNo" column="MANAGER_NO"/>
+	</resultMap>
+	
+		<select id="selectDetailEmployee" resultMap="adminEmployeeResultMap">
+		SELECT
+		       A.EMP_NO
+		     , A.EMP_NAME
+		     , A.EMP_ID  
+		     , A.EMP_EMAIL  
+		     , A.EMP_GENDER
+		     , A.EMP_BIRTH
+		     , A.ENT_YN
+		     , A.AUTHORITY
+		     , A.HIRE_DATE  
+		     , A.ENT_DATE
+		     , A.EMP_ADDRESS  
+		     , A.EMP_PHONE  
+		     , A.EMP_TEL
+		     , J.JOB_NAME 
+		     , D.DEPT_NAME
+		  FROM TBL_EMP_INFO A
+          JOIN TBL_JOB J ON (A.JOB_CODE = J.JOB_CODE)
+          JOIN TBL_DEPARTMENT D ON (A.DEPT_CODE = D.DEPT_CODE)	
+         WHERE EMP_NO = #{ employeeNo }
+	</select>
+
+</mapper>

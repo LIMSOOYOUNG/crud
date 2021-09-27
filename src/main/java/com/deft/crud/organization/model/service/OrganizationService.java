@@ -36,5 +36,52 @@ public class OrganizationService {
 		return jobList;
 	}
 
+	/* 부서 등록 */
+	public int departmentInsert(DepartmentDTO departDTO) {
+		
+		int result = organizationMapper.departmentInsert(departDTO);
+		
+		return result;
+	}
+	
+	/* 직급 등록 */
+	public int jobInsert(JobDTO jobDTO) {
+		
+		int result = organizationMapper.jobInsert(jobDTO);
+		
+		return result;
+	}
+
+	/* 부서 수정 */
+	public int departmentModify(DepartmentDTO departmentDTO) {
+
+		int result = organizationMapper.departmentModify(departmentDTO);
+
+		return result;
+	}
+	/* 직급 수정 */
+	public int jobModify(JobDTO jobDTO) {
+		
+		int result = organizationMapper.jobModify(jobDTO);
+		
+		return result;
+	}
+
+	/* 부서 비활성화 */
+	public int departmentDisabled(DepartmentDTO deptDTO) {
+		
+		int result = organizationMapper.departmentDisabled(deptDTO);
+		
+		return result;
+	}
+
+	/* 직급 비활성화*/
+	public int jobDisabled(JobDTO jobDTO) {
+		
+		int result = organizationMapper.jobDisabled(jobDTO);
+		
+		return result;
+	}
+
 	
 }

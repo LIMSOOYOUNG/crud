@@ -74,7 +74,7 @@ public class BoardController {
 		}else {
 			rttr.addFlashAttribute("flashMessage", "실패!!");
 		}
-		mv.setViewName("redirect:/main");
+		mv.setViewName("redirect:/insertfreeboard");
 
 		return mv;
 	}

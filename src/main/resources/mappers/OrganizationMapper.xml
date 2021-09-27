@@ -31,6 +31,72 @@
           FROM TBL_JOB J
 	</select>
 
+	<insert id="departmentInsert" parameterType="com.deft.crud.organization.model.dto.DepartmentDTO">
+		INSERT
+		  INTO TBL_DEPARTMENT D
+		     (
+		       D.DEPT_CODE
+		     , D.DEPT_NAME  
+		     , D.DEPT_FAX
+		     , D.DEPT_TEL
+		     , D.DEPT_STATUS
+		     )
+		VALUES
+		     (
+		       SEQ_DEPT_CODE.NEXTVAL
+		     , #{ deptName }  
+		     , #{ deptFax }
+		     , #{ deptTel }
+		     , #{ deptStatus }
+		     )
+	</insert>
 	
+	<insert id="jobInsert" parameterType="com.deft.crud.organization.model.dto.JobDTO">
+		INSERT
+		  INTO TBL_JOB J
+		     (
+		       J.JOB_CODE
+		     , J.JOB_NAME
+		     , J.JOB_STATUS
+		     )
+		VALUES    
+	         (
+	           SEQ_JOB_CODE.NEXTVAL  
+	         , #{ jobName }
+	         , #{ jobStatus }
+	         )
+	</insert>
+	
+	<update id="departmentModify" parameterType="com.deft.crud.organization.model.dto.DepartmentDTO">
+		UPDATE 
+		       TBL_DEPARTMENT D
+	       SET D.DEPT_NAME = #{ deptName }
+	         , D.DEPT_FAX = #{ deptFax }
+	         , D.DEPT_TEL = #{ deptTel}
+	     WHRER D.DEPT_CODE = #{ deptCode }   
+	</update>
 
+	<update id="jobModify" parameterType="com.deft.crud.organization.model.dto.JobDTO">
+		UPDATE 
+		       TBL_JOB J
+	       SET J.JOB_NAME = #{ jobName }
+	     WHRER J.JOB_CODE = #{ jobCode }   
+	</update>
+	
+	<update id="departmentDisabled" parameterType="com.deft.crud.organization.model.dto.DepartmentDTO">
+		UPDATE 
+		       TBL_DEPARTMENT D
+	       SET D.DEPT_STATUS = #{ deptStatus }
+	      WHRER D.DEPT_CODE = #{ deptCode }   
+	</update>
+	
+	<update id="jobDisabled" parameterType="com.deft.crud.organization.model.dto.JobDTO">
+		UPDATE 
+		       TBL_JOB J
+	       SET J.JOB_STATUS = #{ jobStatus }
+	     WHRER J.JOB_CODE = #{ jobCode }   
+	
+	
+	</update>
+	
 </mapper>

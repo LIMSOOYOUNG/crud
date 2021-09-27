@@ -1,4 +1,6 @@
-package com.deft.crud.admin.employee.controller;
+package com.deft.crud.admin.adminemployee.controller;
+
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -9,7 +11,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.deft.crud.admin.employee.model.service.AdminEmployeeService;
+import com.deft.crud.admin.adminemployee.model.dto.AdminEmployeeDTO;
+import com.deft.crud.admin.adminemployee.model.service.AdminEmployeeService;
 import com.deft.crud.member.model.dto.MemberDTO;
 
 @Controller
@@ -52,11 +55,21 @@ public class AdminEmployeeController {
 		
 		return adminEmployeeService.checkUserId(empId);
 	}
-	
-	
-	/* 사원 인사기록 수정 */
-	
-//	@GetMapping()
+	 
+	/* 사원상세 정보 */
+	@GetMapping("detailselectemployee")
+	public ModelAndView employeeDetailSelect(ModelAndView mv, @RequestParam int employeeNo) {
+		
+		List<AdminEmployeeDTO> employeList = adminEmployeeService.detailselect(employeeNo);
+		
+		System.out.println(employeList);
+		
+		mv.setViewName("admin/detailselectemployee");
+		mv.addObject("employeList", employeList);
+		
+		return mv;
+	}
+
 	
 	
 }
