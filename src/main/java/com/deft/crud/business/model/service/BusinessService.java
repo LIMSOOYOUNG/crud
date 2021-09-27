@@ -33,6 +33,11 @@ public class BusinessService {
 	
 	
 	/* 선택한 엽업기회의 기본정보 */
+	public BusinessChanceDTO selectChanceInfoByNo(int businessChanceNo) {
+		BusinessChanceDTO businessChanceInfo = businessMapper.selectChanceInfoByNo(businessChanceNo);
+		
+		return businessChanceInfo;
+	}
 	
 	
 	/* 영업활동기록 목록조회*/
@@ -41,5 +46,6 @@ public class BusinessService {
 		
 		return businessActivityList;
 	}
+
 
 }

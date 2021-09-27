@@ -40,20 +40,26 @@ public class BusinessController {
 	}
 
 	@GetMapping("/selectBasicInfo")
-	public ModelAndView selectBasicInfoByNo(ModelAndView mv, @RequestParam("customerNo") int customerNo ) {
+	public ModelAndView selectBasicInfoByNo(ModelAndView mv,
+											@RequestParam("customerNo") int customerNo,
+											@RequestParam("businessChanceNo") int businessChanceNo) {
 		
 		/* 선택한 영업기회 내용 변경 이력*/
 		
 		
-		/* 선택한 엽업기회의 기본정보 */
+		/* 선택한 엽업기회의 정보 */
+		BusinessChanceDTO businessChanceInfo = businessService.selectChanceInfoByNo(businessChanceNo);
 		
-		
+		System.out.println(" 영업기회정보" + businessChanceInfo);
 		
 		/* 선택한 영업기회의 활동이력*/
 		List<BusinessActivityDTO> businessActivityList = businessService.selectActivityInfoByNo(customerNo);
 		
+		
+		
+		mv.addObject("businessChanceInfo", businessChanceInfo);
 		mv.addObject("businessActivityList", businessActivityList);
-		mv.setViewName("business/businessChanceBasicInfo");
+		mv.setViewName("business/businessChanceInfo");
 		
 		return mv;
 	}

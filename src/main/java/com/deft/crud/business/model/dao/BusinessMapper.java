@@ -14,4 +14,6 @@ public interface BusinessMapper {
 
 	List<BusinessActivityDTO> selectActivityInfoByNo(int customerNo);
 
+	BusinessChanceDTO selectChanceInfoByNo(int businessChanceNo);
+
 }
