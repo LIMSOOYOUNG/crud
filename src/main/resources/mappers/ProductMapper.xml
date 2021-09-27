@@ -12,6 +12,10 @@
 
 		<association property="category" resultMap="productCategoryResultMap"/>		
 		
+		<association property="manufacturer" resultMap="manufacturerResultMap"/>
+
+		<association property="account" resultMap="accountResultMap"/>
+		
 	</resultMap>
 	
 	<resultMap type="com.deft.crud.product.model.dto.ProductCategoryDTO" id="productCategoryResultMap">
@@ -22,10 +26,29 @@
 		<result property="categoryStatus" column="CATEGORY_STATUS"/>
 	</resultMap>
 	
+	<resultMap type="com.deft.crud.product.model.dto.ManufacturerDTO" id="manufacturerResultMap">
+		<id property="manufacturerNo" column="MANUFACTURER_NO"/>
+		<result property="manufacturerName" column="MANUFACTURER_NAME"/>
+	</resultMap>
+	
+	<resultMap type="com.deft.crud.product.model.dto.AccountDTO" id="accountResultMap">
+		<id property="accountNo" column="ACCOUNT_NO"/>
+		<result property="companyName" column="COMPANY_NAME"/>
+		<result property="accountCeo" column="ACCOUNT_CEO"/>
+		<result property="accountAddress" column="ACCOUNT_ADDRESS"/>
+		<result property="accountStatus" column="ACCOUNT_STATUS"/>
+		<result property="accountBusinessItem" column="ACCOUNT_BUSINESS_ITEM"/>
+		<result property="resName" column="RES_NAME"/>
+		<result property="resPhone" column="RES_PHONE"/>
+		<result property="resEmail" column="RES_EMAIL"/>
+		
+	</resultMap>
+	
 	<select id="allProductList" resultMap="productResultMap">
 	   SELECT
 	          P.PRODUCT_NO
      		, P.PRODUCT_NAME
+     		, P.SELL_STATUS
      		, B.CATEGORY_NAME "REF_CATEGORY_NAME"
      		, A.CATEGORY_NAME
           FROM TBL_PRODUCT P
@@ -46,16 +69,18 @@
 		 SELECT
 	          P.PRODUCT_NO
      		, P.PRODUCT_NAME
+     		, T.MANUFACTURER_NAME
      		, P.SELL_STATUS
      		, P.SELLING_PRICE
      		, P.PURCHASE_PRICE
+     		, CB.CATEGORY_NAME "REF_CATEGORY_NAME"
+     		, CA.CATEGORY_NAME
      		, A.COMPANY_NAME
-     		, B.CATEGORY_NAME "REF_CATEGORY_NAME"
-     		, A.CATEGORY_NAME
           FROM TBL_PRODUCT P
-	      LEFT JOIN TBL_PRODUCT_CATEGORY A ON(P.CATEGORY_CODE = A.CATEGORY_CODE)
-	      LEFT JOIN TBL_PRODUCT_CATEGORY B ON(A.REF_CATEGORY_CODE = B.CATEGORY_CODE)
+	      LEFT JOIN TBL_PRODUCT_CATEGORY CA ON(P.CATEGORY_CODE = CA.CATEGORY_CODE)
+	      LEFT JOIN TBL_PRODUCT_CATEGORY CB ON(CA.REF_CATEGORY_CODE = CB.CATEGORY_CODE)
 	      JOIN TBL_ACCOUNT A ON(P.ACCOUNT_NO = A.ACCOUNT_NO)
+	      JOIN TBL_MANUFACTURER T ON(P.MANUFACTURER_NO = T.MANUFACTURER_NO)
 	      WHERE P.PRODUCT_NO = #{ productNo }
 	</select>
 	

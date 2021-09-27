@@ -33,9 +33,10 @@ public class ProductService {
 	}
 
 
-	public List<ProductDTO> productDetail(int productNo) {
+	public ProductDTO productDetail(int productNo) {
 
 		return productMapper.productDetail(productNo);
 	}
+
 
 }

@@ -11,11 +11,14 @@ public class ProductDTO {
 	private int accountNo;
 	private int manufacturerNo;
 	private ProductCategoryDTO category;
+	private ManufacturerDTO manufacturer;
+	private AccountDTO account;
 	
 	public ProductDTO() {}
 
 	public ProductDTO(int productNo, String sellStatus, String productName, int purchasePrice, int sellingPrice,
-			String unit, int accountNo, int manufacturerNo, ProductCategoryDTO category) {
+			String unit, int accountNo, int manufacturerNo, ProductCategoryDTO category, ManufacturerDTO manufacturer,
+			AccountDTO account) {
 		super();
 		this.productNo = productNo;
 		this.sellStatus = sellStatus;
@@ -26,6 +29,8 @@ public class ProductDTO {
 		this.accountNo = accountNo;
 		this.manufacturerNo = manufacturerNo;
 		this.category = category;
+		this.manufacturer = manufacturer;
+		this.account = account;
 	}
 
 	public int getProductNo() {
@@ -100,14 +105,28 @@ public class ProductDTO {
 		this.category = category;
 	}
 
+	public ManufacturerDTO getManufacturer() {
+		return manufacturer;
+	}
+
+	public void setManufacturer(ManufacturerDTO manufacturer) {
+		this.manufacturer = manufacturer;
+	}
+
+	public AccountDTO getAccount() {
+		return account;
+	}
+
+	public void setAccount(AccountDTO account) {
+		this.account = account;
+	}
+
 	@Override
 	public String toString() {
 		return "ProductDTO [productNo=" + productNo + ", sellStatus=" + sellStatus + ", productName=" + productName
 				+ ", purchasePrice=" + purchasePrice + ", sellingPrice=" + sellingPrice + ", unit=" + unit
-				+ ", accountNo=" + accountNo + ", manufacturerNo=" + manufacturerNo + ", category=" + category + "]";
+				+ ", accountNo=" + accountNo + ", manufacturerNo=" + manufacturerNo + ", category=" + category
+				+ ", manufacturer=" + manufacturer + ", account=" + account + "]";
 	}
 
-	
-	
-	
 }
