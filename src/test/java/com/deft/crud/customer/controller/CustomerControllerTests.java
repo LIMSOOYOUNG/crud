@@ -58,12 +58,24 @@ public class CustomerControllerTests {
                 .andDo(print());
     }
 
+    /* 기존 고객 기본정보 조회용 테스트 코드 */
     @Test
+    @Disabled
     public void testSelectCustomerInfo(int customerNo) throws Exception {
 
         mockMvc.perform(get("/customer/cusinfo"))
                 .andExpect(status().isOk())
                 .andExpect(forwardedUrl("customer/selectCustomerInfo"))
+                .andDo(print());
+    }
+
+    /* 분석 고객 기본정보 조회용 테스트 코드 */
+    @Test
+    public void testSelectAnalysisCustomerInfo() throws Exception {
+
+        mockMvc.perform(get("/customer/anainfo"))
+                .andExpect(status().isOk())
+                .andExpect(forwardedUrl("customer/selectAnalysisCustomerInfo"))
                 .andDo(print());
     }
 }

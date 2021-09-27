@@ -1,5 +1,6 @@
 package com.deft.crud.customer.controller;
 
+import com.deft.crud.customer.model.dto.BusinessActivityDTO;
 import com.deft.crud.customer.model.dto.CustomerCompanyDTO;
 import com.deft.crud.customer.model.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,22 +47,30 @@ public class CustomerController {
         return mv;
     }
 
+    /* 기존 고객 기본 정보 조회 */
     @GetMapping("/cusinfo")
     public ModelAndView selectCustomerInfo(ModelAndView mv, @RequestParam int customerNo) {
 
         CustomerCompanyDTO customerInfo = customerService.selectCustomerInfo(customerNo);
 
+        List<BusinessActivityDTO> businessActivityList = customerService.selectBusinessActivity(customerNo);
+
         mv.addObject("customerInfo", customerInfo);
+        mv.addObject("businessActivityList", businessActivityList);
         mv.setViewName("customer/selectCustomerInfo");
 
         return mv;
     }
 
+    /* 분석 고객 기본정보 조회 */
     @GetMapping("/anainfo")
     public ModelAndView selectAnalysisCustomerInfo(ModelAndView mv, @RequestParam int customerNo) {
 
         CustomerCompanyDTO customerInfo = customerService.selectAnalysisCustomerInfo(customerNo);
 
+        List<BusinessActivityDTO> businessActivityList = customerService.selectBusinessActivity(customerNo);
+
+        mv.addObject("businessActivityList", businessActivityList);
         mv.addObject("customerInfo", customerInfo);
         mv.setViewName("customer/selectAnalysisCustomerInfo");
 
