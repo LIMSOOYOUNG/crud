@@ -4,11 +4,14 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
-import com.deft.crud.business.model.dto.BusinessDTO;
+import com.deft.crud.business.model.dto.BusinessActivityDTO;
+import com.deft.crud.business.model.dto.BusinessChanceDTO;
 
 @Mapper
 public interface BusinessMapper {
 
-	List<BusinessDTO> businessChanceSelectAll();
+	List<BusinessChanceDTO> businessChanceSelectAll();
+
+	List<BusinessActivityDTO> selectActivityInfoByNo(int customerNo);
 
 }

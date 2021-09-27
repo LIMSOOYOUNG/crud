@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="ko"
+	xmlns:th="https://www.thymeleaf.org">
+<head>
+	<th:block th:replace="@{common/config} :: config"></th:block>
+</head>
+
+<body id="page-top">
+	<div id="wrapper">
+		<!-- Sidebar -->
+		<th:block th:replace="@{/common/sidebar} :: sidebar"></th:block>
+
+		<div id="content-wrapper" class="d-flex flex-column">
+			<div id="content">
+				<!-- Header -->
+				<th:block th:replace="@{/common/header} :: header"></th:block>
+
+								<!-- Container Fluid-->
+				<div class="container-fluid" id="container-wrapper">
+					<div class="d-sm-flex align-items-center justify-content-between mb-4">
+						<h1 class="h3 mb-0 text-gray-800">영업기회 기본정보</h1>
+						<ol class="breadcrumb">
+							<li class="breadcrumb-item"><a th:href="@{/dashboard}">Home</a></li>
+							<li class="breadcrumb-item">영업관리</li>
+							<li class="breadcrumb-item active" aria-current="page">영업기회 기본정보</li>
+						</ol>
+					</div>
+
+					<!-- Row -->
+					<div class="row">
+
+						<!-- DataTable with Hover -->
+						<div class="col-lg-3">
+						<div style="background: lightgray;">
+						<div align="center" style="font-size: 20px; font-weight: bold; padding-top: 5px; padding-bottom: 5px;">고객화 단계이력</div>
+						</div>
+							<div class="card mb-4" style="overflow-y:scroll; width:105%; height:400px;">
+							<div align="center" style="margin-left: 4px; margin-right: 4px; margin-top: 15px; margin-bottom: 15px;">
+                       			 <p>"김병준"님이 가능성을 "100%"로 수정하셨습니다.</p>
+                       			 <p>"김병준"님이 가능성을 "90%"로 수정하셨습니다.</p>
+                       			 <p>"김병준"님이 가능성을 "80%"로 수정하셨습니다.</p>
+                       			 <p>"김병준"님이 가능성을 "70%"로 수정하셨습니다.</p>
+                       			 <p>"김병준"님이 가능성을 "60%"로 수정하셨습니다.</p>
+                       			 <p>"김병준"님이 가능성을 "50%"로 수정하셨습니다.</p>
+                       			 <p>"김병준"님이 가능성을 "40%"로 수정하셨습니다.</p>
+                       			 <p>"김병준"님이 가능성을 "30%"로 수정하셨습니다.</p>
+                       			 <p>"김병준"님이 가능성을 "20%"로 수정하셨습니다.</p>
+                       			 <p>"김병준"님이 가능성을 "10%"로 수정하셨습니다.</p>
+                       		</div>	 
+                      		</div>								
+						</div>
+						<div class="col-lg-9">
+						<div style="background: lightgray;">
+						<div align="center" style="font-size: 25px; font-weight: bold; padding-top: 5px; padding-bottom: 5px;">기본정보</div>
+						</div>
+							<div class="card mb-4">
+								
+												<form action="location.herf=''">
+												<div class="form-group" style="margin-left: 30px; margin-right: 30px; margin-top: 15px;">
+												
+												<div class="row">
+													<div class="form-group col-xl-2">
+														<label>영업기회번호</label> 
+															<input type="text" name="deptNo" class="form-control" required>
+													</div>
+													<div class="form-group col-xl-1"></div>
+													<div class="form-group col-xl-5">
+														<label>영업기회명</label> 
+															<input type="text" name="jobNo" class="form-control" required>
+													</div>
+													<div class="form-group col-xl-1"></div>
+													<div class="form-group col-xl-3">
+														<label>담당사원</label> 
+															<input type="text" name="jobNo" class="form-control" required>
+													</div>
+													</div>
+												<div class="row">
+													<div class="form-group col-xl-3">
+														<label>고객사</label> 
+															<input type="text" name="deptNo" class="form-control" required>
+													</div>
+													<div class="form-group col-xl-3">
+														<label>고객측담당자</label> 
+															<input type="text" name="jobNo" class="form-control" required>
+													</div>
+													<div class="form-group col-xl-3"></div>
+													<div class="form-group col-xl-3">
+														<label>마감일</label> 
+															<input type="date" name="jobNo" class="form-control" required>
+													</div>
+													
+												</div>
+												<div class="row">
+													<div class="form-group col-xl-3">
+														<label>관심상품</label> 
+															<input type="text" name="deptNo" class="form-control" required>
+													</div>
+													<div class="form-group col-xl-3">
+														<label>진행단계</label> 
+															<input type="text" name="deptNo" class="form-control" required>
+													</div>
+													
+												</div>
+												<div class="row">
+													<div class="form-group col-xl-3">
+														<label>영업단계</label> 
+															<input type="text" name="jobNo" class="form-control" required>
+													</div>
+													<div class="form-group col-xl-3">
+														<label>성공 가능성</label> 
+															<input type="text" name="jobNo" class="form-control" required>
+													</div>
+													<div class="form-group col-xl-2"></div>
+													<div class="form-group col-xl-2" align="right">
+													<br>
+														<button class="btn btn-dark btn-icon-split" style="margin-right: 5%; margin-top: 10px;"
+														th:onclick="location.href=''">
+													<span class="icon text-white-50">
+														<i class="fas fa-edit"></i>
+													</span>
+													<span class="text text-white">수정하기</span>
+													</button>
+													</div>
+													<div class="form-group col-xl-2" align="left">
+													<br>
+													<a class="btn btn-dark btn-icon-split" style="margin-right: 5%; margin-top: 10px;"
+													th:onclick="location.href=''">
+													<span class="icon text-white-50">
+														<i class="fas fa-info-circle"></i>
+													</span>
+													<span class="text text-white">상세정보</span>
+													</a>
+													</div>
+													</div>
+												</div>
+												</form>
+											</div>
+									</div>		
+					</div>		
+				</div>
+					
+					<!-- Row -->
+					<div class="row">
+
+						<!-- DataTable with Hover -->
+						<div class="col-lg-3">
+							
+						</div>
+						<div class="col-lg-9">
+							<div class="card mb-4" style="background: #F6F2FB;">
+								<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between" style="background: lightgray;">
+									<h6 class="m-0 font-weight-bold text-primary">영업활동내역</h6>
+									<div>
+										<a class="btn btn-info btn-icon-split"
+											th:onclick="location.href=''">
+												<span class="icon text-white">
+													<i class="fas fa-edit"></i>
+												</span>
+												<span class="text text-white">활동이력등록</span>
+										</a>
+									</div>
+								</div>
+
+								<div class="table-responsive p-3" style="overflow-y: scroll; height: 450px;">
+									<table class="table align-items-center table-flush table-hover"
+										id="dataTableHover">
+										<thead align="center" class="thead-light">
+											<tr>
+												<th>활동이력번호</th>
+												<th>활동주제</th>
+												<th>등록자</th>
+												<th>등록일</th>
+												<th>관리</th>
+											</tr>
+										</thead>
+										
+										<tbody align="center">
+											<tr th:each="activityList : ${businessActivityList}">
+												<td th:text="${activityList.activityNo}"></td>
+												<td th:text="${activityList.businessSubject}"></td>
+												<td th:text="${activityList.empName}"></td>
+												<td th:text="${activityList.writingTime}"></td>
+												<td><a class="btn btn-dark btn-icon-split" 
+													th:href="@{/business/selectBasicInfo(activityNo=${ activityList.activityNo })}">
+													<span class="icon text-white-50">
+														<i class="fas fa-clipboard-list"></i>
+													</span>
+													<span class="text text-white">상세정보</span>
+													</a>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+				
+				
+				</div>		<!-- End ContainerFluid -->
+			</div>
+		</div>
+	</div>
+
+	<!-- Script -->
+	<th:block th:replace="@{/common/script} :: script"></th:block>
+
+	<!-- Page level plugins -->
+	<script src="/vendor/datatables/jquery.dataTables.min.js"></script>
+	<script src="/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+
+	<!-- Page level custom scripts -->
+	<script>
+    $(document).ready(function () {
+      $('#dataTable').DataTable(); // ID From dataTable 
+      $('#dataTableHover').DataTable(); // ID From dataTable with Hover
+    });
+  </script>
+</body>
+</html>

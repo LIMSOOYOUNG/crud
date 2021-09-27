@@ -2,7 +2,7 @@ package com.deft.crud.business.model.dto;
 
 import java.sql.Date;
 
-public class BusinessDTO {
+public class BusinessChanceDTO {
 
 	private int businessChanceNo;
 	private String progressStatus;
@@ -11,12 +11,14 @@ public class BusinessDTO {
 	private String businessTitle;
 	private java.sql.Date dueDate;
 	private String empName;
+	private int empNo;
 	private String customerName;
+	private int customerNo;
 	
-	public BusinessDTO() {}
+	public BusinessChanceDTO() {}
 
-	public BusinessDTO(int businessChanceNo, String progressStatus, String salesLevel, int successPosibillity,
-			String businessTitle, Date dueDate, String empName, String customerName) {
+	public BusinessChanceDTO(int businessChanceNo, String progressStatus, String salesLevel, int successPosibillity,
+			String businessTitle, Date dueDate, String empName, int empNo, String customerName, int customerNo) {
 		super();
 		this.businessChanceNo = businessChanceNo;
 		this.progressStatus = progressStatus;
@@ -25,7 +27,9 @@ public class BusinessDTO {
 		this.businessTitle = businessTitle;
 		this.dueDate = dueDate;
 		this.empName = empName;
+		this.empNo = empNo;
 		this.customerName = customerName;
+		this.customerNo = customerNo;
 	}
 
 	public int getBusinessChanceNo() {
@@ -84,6 +88,14 @@ public class BusinessDTO {
 		this.empName = empName;
 	}
 
+	public int getEmpNo() {
+		return empNo;
+	}
+
+	public void setEmpNo(int empNo) {
+		this.empNo = empNo;
+	}
+
 	public String getCustomerName() {
 		return customerName;
 	}
@@ -92,12 +104,20 @@ public class BusinessDTO {
 		this.customerName = customerName;
 	}
 
+	public int getCustomerNo() {
+		return customerNo;
+	}
+
+	public void setCustomerNo(int customerNo) {
+		this.customerNo = customerNo;
+	}
+
 	@Override
 	public String toString() {
-		return "BusinessDTO [businessChanceNo=" + businessChanceNo + ", progressStatus=" + progressStatus
+		return "BusinessChanceDTO [businessChanceNo=" + businessChanceNo + ", progressStatus=" + progressStatus
 				+ ", salesLevel=" + salesLevel + ", successPosibillity=" + successPosibillity + ", businessTitle="
-				+ businessTitle + ", dueDate=" + dueDate + ", empName=" + empName + ", customerName=" + customerName
-				+ "]";
+				+ businessTitle + ", dueDate=" + dueDate + ", empName=" + empName + ", empNo=" + empNo
+				+ ", customerName=" + customerName + ", customerNo=" + customerNo + "]";
 	}
 
 	

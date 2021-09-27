@@ -31,9 +31,20 @@
 
 					<!-- Row -->
 					<div class="row">
+					
+					<div class="col-lg-2">
+							<ul class="navbar-nav">
+								<li class="alert alert-danger mb-1">전체</li>
+								<li class="alert alert-light mb-1">진행중</li>
+								<li class="alert alert-light mb-1">성공</li>
+								<li class="alert alert-light mb-1">실패</li>
+								<li class="alert alert-light mb-1">보류중</li>
+							</ul>
+						</div>
 
+						
 						<!-- DataTable with Hover -->
-						<div class="col-lg-12">
+						<div class="col-lg-10">
 							<div class="card mb-4">
 								<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
 									<h6 class="m-0 font-weight-bold text-primary">영업 기회 현황</h6>
@@ -83,7 +94,7 @@
 												<td th:text="${chanceList.successPosibillity} + '%'"></td>
 												<td th:text="${chanceList.dueDate}"></td>
 												<td><a class="btn btn-dark btn-icon-split" 
-													th:onclick="location.href=''">
+													th:href="@{/business/selectBasicInfo(customerNo=${ chanceList.customerNo })}">
 													<span class="icon text-white-50">
 														<i class="fas fa-clipboard-list"></i>
 													</span>
