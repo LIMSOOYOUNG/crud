@@ -6,25 +6,187 @@
 </head>
 
 <body id="page-top">
-<div id="wrapper">
-    <!-- Sidebar -->
-    <th:block th:replace="@{/common/sidebar} :: sidebar"></th:block>
+    <div id="wrapper">
+        <!-- Sidebar -->
+        <th:block th:replace="@{/common/sidebar} :: sidebar"></th:block>
 
-    <div id="content-wrapper" class="d-flex flex-column">
-        <div id="content">
-            <!-- Header -->
-            <th:block th:replace="@{/common/header} :: header"></th:block>
+        <div id="content-wrapper" class="d-flex flex-column">
+            <div id="content">
+                <!-- Header -->
+                <th:block th:replace="@{/common/header} :: header"></th:block>
 
-            <!-- Content -->
-            <div class="container-fluid" id="container-wrapper">
-                <th:block th:text="${ customerInfo.companyName }"></th:block>
+                <!-- Content -->
+                <div class="container-fluid" id="container-wrapper">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <h1>분석 고객 조회</h1>
+                            <hr>
+                        </div>
+
+                        <div class="col-lg-2">
+                            <h3>고객화 단계 이력</h3>
+
+                            <ul class="navbar-nav">
+                                <li class="alert alert-danger mb-1">구매내역</li>
+                                <li class="alert alert-light mb-1">진행중</li>
+                                <li class="alert alert-light mb-1">성공</li>
+                                <li class="alert alert-light mb-1">실패</li>
+                                <li class="alert alert-light mb-1">보류중</li>
+                            </ul>
+                        </div>
+
+                        <div class="col-lg-1"><input type="hidden" value="emptyRow"></div>
+                        <div class="col-lg-8">
+                            <h3>기본정보</h3>
+                            <div class="card mb-auto">
+                                <div class="row">
+                                    <div class="form-group col-lg-12"><input type="hidden" value="emptyRow"></div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-lg-4 row">
+                                        <label for="customerNo" class="col-lg-4 form-control-plaintext"
+                                               th:align="center">고객번호</label>
+                                        <input th:disabled="${customerInfo.customerList[0].customerNo}"
+                                               id="customerNo" type="text" class="form-control col-lg-8"
+                                               th:value="${customerInfo.customerList[0].customerNo}">
+                                    </div>
+                                    <div class="form-group col-lg-4 row">
+                                        <label for="customerName" class="col-lg-4 form-control-plaintext"
+                                               th:align="center">고객명</label>
+                                        <input th:disabled="${customerInfo.customerList[0].customerName}"
+                                               id="customerName" type="text" class="form-control col-lg-8"
+                                               th:value="${customerInfo.customerList[0].customerName}">
+                                    </div>
+                                    <div class="form-group col-lg-4 row">
+                                        <label for="empName" class="col-lg-4 form-control-plaintext"
+                                               th:align="center">담당사원</label>
+                                        <input th:disabled="${customerInfo.customerList[0].empInfo.empName}"
+                                               id="empName" type="text" class="form-control col-lg-8"
+                                               th:value="${customerInfo.customerList[0].empInfo.empName}">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-lg-4 row">
+                                        <label for="email" class="col-lg-4 form-control-plaintext"
+                                               th:align="center">이메일</label>
+                                        <input th:disabled="${customerInfo.customerList[0].customerEmail}"
+                                               id="email" type="text" class="form-control col-lg-8"
+                                               th:value="${customerInfo.customerList[0].customerEmail}">
+                                    </div>
+                                    <div class="form-group col-lg-4 row">
+                                        <label for="businessStatus" class="col-lg-4 form-control-plaintext"
+                                               th:align="center">업태</label>
+                                        <input th:disabled="${customerInfo.businessStatus}"
+                                               id="businessStatus" type="text" class="form-control col-lg-8"
+                                               th:value="${customerInfo.businessStatus}">
+                                    </div>
+                                    <div class="form-group col-lg-4 row">
+                                        <label for="customerStatus" class="col-lg-4 form-control-plaintext"
+                                               th:align="center">고객상태</label>
+                                        <input th:disabled="${customerInfo.customerList[0].anaCustomerDetail.customerStatus}"
+                                               id="customerStatus" type="text" class="form-control col-lg-8"
+                                               th:value="${customerInfo.customerList[0].anaCustomerDetail.customerStatus}">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-lg-4 row">
+                                        <label for="phone" class="col-lg-4 form-control-plaintext"
+                                               th:align="center">전화번호</label>
+                                        <input th:disabled="${customerInfo.customerList[0].customerPhone}"
+                                               id="phone" type="text" class="form-control col-lg-8"
+                                               th:value="${customerInfo.customerList[0].customerPhone}">
+                                    </div>
+                                    <div class="form-group col-lg-4 row">
+                                        <label for="posibillity" class="col-lg-4 form-control-plaintext"
+                                               th:align="center">가능성(%)</label>
+                                        <input th:disabled="${customerInfo.customerList[0].anaCustomerDetail.customizationPosibillity}"
+                                               id="posibillity" type="text" class="form-control col-lg-8"
+                                               th:value="${customerInfo.customerList[0].anaCustomerDetail.customizationPosibillity}">
+                                    </div>
+                                    <div class="form-group col-lg-4 row">
+                                        <div class="col-lg-1"><input type="hidden"></div>
+                                        <a class="btn btn-primary btn-icon-split col-lg-5"
+                                           th:onclick="location.href='#'">
+                                            <span class="text text-white">담당사원변경</span>
+                                        </a>
+                                        <div class="col-lg-1"><input type="hidden"></div>
+                                        <a class="btn btn-primary btn-icon-split col-lg-5"
+                                           th:onclick="location.href='#'">
+                                            <span class="text text-white">고객상태변경</span>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-lg-4 row">
+                                        <label for="fax" class="col-lg-4 form-control-plaintext"
+                                               th:align="center">팩스</label>
+                                        <input th:disabled="${customerInfo.customerList[0].customerFax}"
+                                               id="fax" type="text" class="form-control col-lg-8"
+                                               th:value="${customerInfo.customerList[0].customerFax}">
+                                    </div>
+                                    <div class="form-group col-lg-4 row">
+                                        <label for="revenue" class="col-lg-4 form-control-plaintext"
+                                               th:align="center">매출액(만)</label>
+                                        <input th:disabled="${customerInfo.companyRevenue}"
+                                               id="revenue" type="text" class="form-control col-lg-8"
+                                               th:value="${customerInfo.companyRevenue}">
+                                    </div>
+                                    <div class="form-group col-lg-4 row">
+                                        <div class="col-lg-1"><input type="hidden"></div>
+                                        <a class="btn btn-primary btn-icon-split col-lg-5"
+                                           th:onclick="location.href='#'">
+                                            <span class="text text-white">기본정보수정</span>
+                                        </a>
+                                        <div class="col-lg-1"><input type="hidden"></div>
+                                        <a class="btn btn-primary btn-icon-split col-lg-5"
+                                           th:onclick="location.href='#'">
+                                            <span class="text text-white">상세정보</span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group col-lg-12"><input type="hidden" value="emptyRow"></div>
+                            <br>
+                            <h3>활동 이력</h3>
+                            <div class="form-group col-lg-12" style="overflow-y: scroll; height: 200px;">
+
+                                <table id="table_activity" class="table align-items-center table-flush table-hover">
+                                    <thead class="thead-light" th:align="center">
+                                    <tr>
+                                        <th>활동이력번호</th>
+                                        <th>활동주제</th>
+                                        <th>등록자</th>
+                                        <th>등록일</th>
+                                        <th>고객접촉일자</th>
+                                        <th> </th>
+                                    </tr>
+                                    </thead>
+                                    <tbody th:align="center">
+                                    <tr th:each="activity : ${ businessActivityList }">
+                                        <td th:text="${ activity.activityNo }"></td>
+                                        <td th:text="${ activity.businessSubject }"></td>
+                                        <td th:text="${ activity.empInfo.empName }"></td>
+                                        <td th:text="${ activity.writingDate }"></td>
+                                        <td th:text="${ activity.activityStartTime}"></td>
+                                        <td>
+                                            <a class="btn btn-primary btn-icon-split"
+                                               th:onclick="location.href='#'">
+                                                <span class="text text-white">상세정보</span>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-<!-- Script -->
-<th:block th:replace="@{/common/script} :: script"></th:block>
+    <!-- Script -->
+    <th:block th:replace="@{/common/script} :: script"></th:block>
 </body>
 
 </html>
