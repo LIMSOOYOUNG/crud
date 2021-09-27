@@ -25,8 +25,8 @@
 		</association>
 	</resultMap>
 	
-	<select id="estimateSelectAll" resultMap="estimateSelectResultMap">
-        SELECT /* com.deft.crud.estimate.model.dao.EstimateMapper#estimateSelectAll() */
+	<select id="selectEstimateList" resultMap="estimateSelectResultMap">
+        SELECT /* com.deft.crud.estimate.model.dao.EstimateMapper#selectEstimateList() */
                A.ESTIMATE_NO
              , B.CUSTOMER_NAME
              , A.ESTIMATE_TITLE
@@ -36,5 +36,6 @@
           FROM TBL_ESTIMATE A
           LEFT JOIN TBL_CUSTOMER B ON (A.CUSTOMER_NO = B.CUSTOMER_NO)
           LEFT JOIN TBL_EMP_INFO C ON (B.EMP_NO = C.EMP_NO)
+         ORDER BY A.ESTIMATE_NO DESC
 	</select>
 </mapper>
