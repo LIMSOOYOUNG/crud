@@ -19,7 +19,7 @@ import com.deft.crud.member.model.dto.MemberDTO;
 @RequestMapping("/admin")
 public class AdminEmployeeController {
 
-	private AdminEmployeeService adminEmployeeService;
+	private final AdminEmployeeService adminEmployeeService;
 	
 	@Autowired
 	public AdminEmployeeController(AdminEmployeeService adminEmployeeService) {

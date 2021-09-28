@@ -19,7 +19,7 @@ import com.deft.crud.board.model.service.BoardService;
 @RequestMapping("/board")
 public class BoardController {
 
-	private BoardService boardService;
+	private final BoardService boardService;
 	
 	@Autowired
 	public BoardController(BoardService boardService) {
