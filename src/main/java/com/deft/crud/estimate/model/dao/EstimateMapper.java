@@ -10,4 +10,6 @@ import com.deft.crud.estimate.model.dto.EstimateDTO;
 public interface EstimateMapper {
 
 	List<EstimateDTO> selectEstimateList();
+
+	List<EstimateDTO> selectEstimateListByStatus(String estimateStatus);
 }

@@ -30,28 +30,28 @@
 						<div class="col-lg-12">
 							<div class="card mb-4">
 								<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-									<h6 class="m-0 font-weight-bold text-primary">전체 견적서 조회</h6>
+									<h6 class="m-0 font-weight-bold text-primary" id="tableTitle">견적서 조회 (전체)</h6>
 								</div>
 								<ul class="nav nav-tabs nav-justfied">
 									<li class="nav-item">
-										<a th:href="@{/estimate/selectAll}" name="all" class="nav-link active" data-toggle="tab">전체</a>
+										<a th:href="@{/}" name="status" value="all" class="nav-link active" data-toggle="tab">전체</a>
 									</li>
 									<li class="nav-item">
-										<a th:href="@{/estimate/select/status(status='진행중')}" name="status" class="nav-link" data-toggle="tab">진행중</a>
+										<a th:href="@{/}" name="status" value="progress" class="nav-link" data-toggle="tab">진행중</a>
 									</li>
 									<li class="nav-item">
-										<a th:href="@{/estimate/select/status(status='완료')}" name="status" class="nav-link" data-toggle="tab">완료</a>
+										<a th:href="@{/}" name="status" value="success" class="nav-link" data-toggle="tab">완료</a>
 									</li>
 									<li class="nav-item">
-										<a th:href="@{/estimate/select/status(status='보류')}" name="status" class="nav-link" data-toggle="tab">보류</a>
+										<a th:href="@{/}" name="status" value="postpone" class="nav-link" data-toggle="tab">보류</a>
 									</li>
 									<li class="nav-item">
-										<a th:href="@{/estimate/select/status(status='실패')}" name="status" class="nav-link" data-toggle="tab">실패</a>
+										<a th:href="@{/}" name="status" value="failed" class="nav-link" data-toggle="tab">실패</a>
 									</li>
 								</ul>
 								<div class="table-responsive p-3">
-									<table class="table align-items-center table-flush table-hover" id="dataTableHover">
-										<thead class="thead-light" align="center">
+									<table class="table align-items-center table-flush table-hover" id="estimateTable">
+										<thead class="thead-light" th:align="center">
 											<tr>
 												<th>견적번호</th>
 												<th>고객명</th>
@@ -93,42 +93,67 @@
 
 	<script>
 		$(document).ready(function () {
-        	$('#dataTableHover').DataTable(); // ID From dataTable with Hover
+        	$('#estimateTable').DataTable(); // ID From dataTable with Hover
         });
 	</script>
 
-	<!-- <script>
-		$("#tab a").click(function() {
+	<script>
+		$("a[name=status]").click(function() {
+			
+			let estimateStatus = $(this).attr('value');
+			
+			$.ajax({
+				url: '/estimate/select?estimateStatus=' + estimateStatus,
+				type: "get",
+				success: function(data, status, xhr) {
+					const estimateList = JSON.parse(data.estimateList);
+					
+					const $table = $("#estimateTable tbody");
 
-			const estimateStatus = $(this).value;
+					if(estimateStatus != 'all') {
+						$("#tableTitle").html("견적서 조회 (" + estimateList[0].estimateStatus + ")");
+					} else {
+						$("#tableTitle").html("견적서 조회 (전체)");
+					}
 
-			if(estimateStatus == '전체') {
-				$.ajax({
-					url: "/estimate/selectByStatus",
-					type: "get",
-					data: { estimateStatus: estimateStatus },
-					success: function(data, status, xhr) {
-						console.log(data);
-					},
-					error: function(xhr, status, error) {
-						console.log(xhr);
+					$table.html("");
+					
+					for(let index in estimateList) {
+						let estimate = estimateList[index];
+
+						$tr = $("<tr>");
+						$estimateNoTd = $("<td>").text(estimate.estimateNo);
+						$customerNameTd = $("<td>").text(estimate.customer.customerName);
+						$estimateTitleTd = $("<td>").text(estimate.estimateTitle);
+						$badgeSpan = $("<span>").text(estimate.estimateStatus);
+						switch(estimate.estimateStatus) {
+							case '진행중' : $badgeSpan.addClass("badge badge-success"); break;
+							case '완료' : $badgeSpan.addClass("badge badge-info"); break;
+							case '보류' : $badgeSpan.addClass("badge badge-warning"); break;
+							case '실패' : $badgeSpan.addClass("badge badge-danger"); break;
+						}
+						$estimateStatusTd = $("<td>").append($badgeSpan);
+						$empNameTd = $("<td>").text(estimate.customer.empInfo.empName);
+						$estimateDateTd = $("<td>").text(estimate.estimateDate);
+						$detailTd = $("<td>").append("<a href='#' class='btn btn-sm btn-primary'>detail</a>");
+						
+						$tr.append($estimateNoTd);
+						$tr.append($customerNameTd);
+						$tr.append($estimateTitleTd);
+						$tr.append($estimateStatusTd);
+						$tr.append($empNameTd);
+						$tr.append($estimateDateTd);
+						$tr.append($detailTd);
+						
+						$table.append($tr);
 					}
-				});
-			} else {
-				$.ajax({
-					url: "/estimate/selectByStatus",
-					type: "get",
-					data: { estimateStatus: estimateStatus },
-					success: function(data, status, xhr) {
-						console.log(data);
-					},
-					error: function(xhr, status, error) {
-						console.log(xhr);
-					}
-				});
-			}
+				},
+				error: function(xhr, status, error) {
+					console.log(xhr);
+				}
+			});
 		});
-	</script> -->
+		</script>
 </body>
 
 </html>
