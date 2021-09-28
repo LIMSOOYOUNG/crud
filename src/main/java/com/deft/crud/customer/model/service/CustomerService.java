@@ -31,16 +31,19 @@ public class CustomerService {
         return customerMapper.selectAllAnalysisCustomer();
     }
 
+    /* 기존 고객 정보 조회 */
     public CustomerCompanyDTO selectCustomerInfo(int customerNo) {
 
         return customerMapper.selectCustomerInfo(customerNo);
     }
 
+    /* 분석 고객 정보 조회 */
     public CustomerCompanyDTO selectAnalysisCustomerInfo(int customerNo) {
 
         return customerMapper.selectAnalysisCustomerInfo(customerNo);
     }
 
+    /* 영업 활동 조회 */
     public List<BusinessActivityDTO> selectBusinessActivity(int customerNo) {
 
         return customerMapper.selectBusinessActivity(customerNo);

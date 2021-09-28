@@ -75,6 +75,7 @@ public class CustomerServiceTests {
 
     /* 분석 고객 기본정보 조회용 테스트 코드 */
     @Test
+    @Disabled
     public void testSelectAnalysisCustomerInfo() {
 
         int customerNo = 3;
@@ -87,7 +88,7 @@ public class CustomerServiceTests {
 
     /* 영업 활동 조회용 테스트 코드 */
     @Test
-    @Disabled
+//    @Disabled
     public void testSelectBusinessActivity() {
 
         int customerNo = 1;

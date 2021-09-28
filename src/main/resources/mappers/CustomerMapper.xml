@@ -105,7 +105,7 @@
 
     <!-- 전체 고객 조회 -->
     <select id="selectAllCustomer" resultMap="customerCompanyResultMap">
-        SELECT
+        SELECT /* com.deft.crud.customer.model.dao.CustomerMapper#selectAllCustomer() */
                C.CUSTOMER_NAME
              , CP.COMPANY_NAME
              , E.EMP_NAME
@@ -122,26 +122,27 @@
 
     <!-- 분석 고객 조회 -->
     <select id="selectAllAnalysisCustomer" resultMap="customerCompanyResultMap">
-        SELECT
+        SELECT /* com.deft.crud.customer.model.dao.CustomerMapper#selectAllAnalysisCustomer() */
                C.CUSTOMER_NAME
              , C.CUSTOMER_NO
              , CP.COMPANY_NAME
              , E.EMP_NAME
              , AN.CUSTOMER_STATUS
              , CP.BUSINESS_STATUS
-             , P.PRODUCT_NAME
+             , LISTAGG(P.PRODUCT_NAME, ', ') WITHIN GROUP (ORDER BY P.PRODUCT_NO) AS PRODUCT_NAME
           FROM TBL_CUSTOMER C
           LEFT JOIN TBL_CUSTOMER_COMPANY CP ON (C.CUSTOMER_COMPANY_NO = CP.CUSTOMER_COMPANY_NO)
           LEFT JOIN TBL_EMP_INFO E ON (C.EMP_NO = E.EMP_NO)
           LEFT JOIN TBL_ANA_CUSTOMER_DETAIL AN ON (C.CUSTOMER_NO = AN.CUSTOMER_NO)
           LEFT JOIN TBL_CUSTOMER_PRODUCT CD ON (AN.CUSTOMER_NO = CD.CUSTOMER_NO)
           LEFT JOIN TBL_PRODUCT P ON (P.PRODUCT_NO = CD.PRODUCT_NO)
-         WHERE CD.CUSTOMER_NO IS NOT NULL
+         WHERE CD.CUSTOMER_NO IS NOT NULL GROUP BY C.CUSTOMER_NAME, CP.COMPANY_NAME
+             , E.EMP_NAME, AN.CUSTOMER_STATUS, CP.BUSINESS_STATUS, C.CUSTOMER_NO
     </select>
 
     <!-- 기존 고객 정보 조회 -->
     <select id="selectCustomerInfo" resultMap="customerCompanyResultMap" parameterType="_int">
-        SELECT
+        SELECT /* com.deft.crud.customer.model.dao.CustomerMapper#selectCustomerInfo() */
                C.CUSTOMER_NAME
              , C.CUSTOMER_NO
              , CP.COMPANY_NAME
@@ -151,7 +152,7 @@
              , EX.CUSTOMER_STATUS
              , C.CUSTOMER_PHONE
              , CP.NUMBER_OF_EMPLOYEES
-             , NVL(C.CUSTOMER_FAX, ' ')
+             , NVL(C.CUSTOMER_FAX, ' ') AS CUSTOMER_FAX
              , CP.COMPANY_REVENUE
              , CP.BUSINESS_TYPE
              , CP.HOMEPAGE
@@ -167,14 +168,14 @@
 
     <!-- 분석 고객 기본정보 조회 -->
     <select id="selectAnalysisCustomerInfo" resultMap="customerCompanyResultMap" parameterType="_int">
-        SELECT
+        SELECT /* com.deft.crud.customer.model.dao.CustomerMapper#selectAnalysisCustomerInfo() */
                C.CUSTOMER_NAME
              , C.CUSTOMER_NO
              , CP.COMPANY_NAME
              , C.CUSTOMER_EMAIL
              , CP.BUSINESS_STATUS
              , C.CUSTOMER_PHONE
-             , NVL(C.CUSTOMER_FAX, ' ')
+             , NVL(C.CUSTOMER_FAX, ' ') AS CUSTOMER_FAX
              , AN.CUSTOMIZATION_LEVEL
              , AN.CUSTOMIZATION_POSIBILLITY
              , CP.BUSINESS_TYPE
@@ -183,7 +184,9 @@
              , CP.COMPANY_REVENUE
              , CP.HOMEPAGE
              , CP.COMPANY_ADDRESS
-             , P.PRODUCT_NAME
+             , LISTAGG(P.PRODUCT_NAME, ', ') WITHIN GROUP (ORDER BY P.PRODUCT_NO) AS PRODUCT_NAME
+             , E.EMP_NAME
+             , AN.CUSTOMER_STATUS
           FROM TBL_CUSTOMER C
           LEFT JOIN TBL_CUSTOMER_COMPANY CP ON (C.CUSTOMER_COMPANY_NO = CP.CUSTOMER_COMPANY_NO)
           LEFT JOIN TBL_EMP_INFO E ON (C.EMP_NO = E.EMP_NO)
@@ -191,18 +194,22 @@
           LEFT JOIN TBL_CUSTOMER_PRODUCT CD ON (AN.CUSTOMER_NO = CD.CUSTOMER_NO)
           LEFT JOIN TBL_PRODUCT P ON (P.PRODUCT_NO = CD.PRODUCT_NO)
          WHERE C.CUSTOMER_NO = #{ customerNo }
+         GROUP BY C.CUSTOMER_NAME, C.CUSTOMER_NO, CP.COMPANY_NAME, C.CUSTOMER_EMAIL, CP.BUSINESS_STATUS
+             , C.CUSTOMER_PHONE, NVL(C.CUSTOMER_FAX, ' '), AN.CUSTOMIZATION_LEVEL, AN.CUSTOMIZATION_POSIBILLITY, CP.BUSINESS_TYPE
+             , CP.COMPANY_REGIST_NO, CP.NUMBER_OF_EMPLOYEES, CP.COMPANY_REVENUE, CP.HOMEPAGE, CP.COMPANY_ADDRESS
+             , E.EMP_NAME, AN.CUSTOMER_STATUS
     </select>
 
     <!-- 영업 활동 조회 -->
     <select id="selectBusinessActivity" resultMap="businessActivityResultMap" parameterType="_int">
-        SELECT
+        SELECT /* com.deft.crud.customer.model.dao.CustomerMapper#selectBusinessActivity() */
                BA.ACTIVITY_NO
              , BA.CUSTOMER_NO
              , BA.BUSINESS_SUBJECT
              , BA.BUSINESS_TYPE
-             , NVL(BA.BUSINESS_LOCATION, ' ')
+             , NVL(BA.BUSINESS_LOCATION, ' ') AS BUSINESS_LOCATION
              , BA.BUSINESS_PURPOSE
-             , NVL(BA.BUSINESS_CONTENTS, ' ')
+             , NVL(BA.BUSINESS_CONTENTS, ' ') AS BUSINESS_CONTENTS
              , BA.WRITING_TIME
              , BA.ACTIVITY_START_TIME
              , BA.ACTIVITY_END_TIME
