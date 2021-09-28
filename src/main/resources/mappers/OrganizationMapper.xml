@@ -73,6 +73,7 @@
 	       SET D.DEPT_NAME = #{ deptName }
 	         , D.DEPT_FAX = #{ deptFax }
 	         , D.DEPT_TEL = #{ deptTel}
+	         , D.DEPT_STATUS = #{ deptStatus }
 	     WHRER D.DEPT_CODE = #{ deptCode }   
 	</update>
 
@@ -80,6 +81,7 @@
 		UPDATE 
 		       TBL_JOB J
 	       SET J.JOB_NAME = #{ jobName }
+	         , J.JOB_STATUS = #{ jobStatus}
 	     WHRER J.JOB_CODE = #{ jobCode }   
 	</update>
 	
@@ -95,8 +97,5 @@
 		       TBL_JOB J
 	       SET J.JOB_STATUS = #{ jobStatus }
 	     WHRER J.JOB_CODE = #{ jobCode }   
-	
-	
 	</update>
-	
 </mapper>
