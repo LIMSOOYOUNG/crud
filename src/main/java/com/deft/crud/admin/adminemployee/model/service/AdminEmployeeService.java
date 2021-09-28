@@ -27,6 +27,7 @@ public class AdminEmployeeService {
 	}
 
 
+	
 	public List<AdminEmployeeDTO> detailselect(int employeeNo) {
 		
 		List<AdminEmployeeDTO> employeList = adminEmployeeMapper.detailselect(employeeNo);

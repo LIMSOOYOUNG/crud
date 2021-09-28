@@ -20,7 +20,7 @@ import com.deft.crud.organization.model.service.OrganizationService;
 public class OrganizationController {
 
 	
-	private OrganizationService organizationService;
+	private final OrganizationService organizationService;
 	
 	@Autowired
 	public OrganizationController(OrganizationService organizationService) {
