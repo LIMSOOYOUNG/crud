@@ -18,11 +18,11 @@
 								<!-- Container Fluid-->
 				<div class="container-fluid" id="container-wrapper">
 					<div class="d-sm-flex align-items-center justify-content-between mb-4">
-						<h1 class="h3 mb-0 text-gray-800">영업기회 기본정보</h1>
+						<h1 class="h3 mb-0 text-gray-800">영업기회</h1>
 						<ol class="breadcrumb">
 							<li class="breadcrumb-item"><a th:href="@{/dashboard}">Home</a></li>
 							<li class="breadcrumb-item">영업관리</li>
-							<li class="breadcrumb-item active" aria-current="page">영업기회 기본정보</li>
+							<li class="breadcrumb-item active" aria-current="page">영업기회정보</li>
 						</ol>
 					</div>
 
@@ -30,28 +30,29 @@
 					<div class="row">
 
 						<!-- DataTable with Hover -->
-						<div class="col-lg-3">
+						<div class="col-lg-3" style="padding-left: 50px;">
 						<div style="background: lightgray;">
-						<div align="center" style="font-size: 20px; font-weight: bold; padding-top: 5px; padding-bottom: 5px;">고객화 단계이력</div>
+						<div th:align="center" style="font-size: 20px; font-weight: bold; padding-top: 5px; padding-bottom: 5px;">고객화 단계이력</div>
 						</div>
 							<div class="card mb-4" style="overflow-y:scroll; width:100%; height:400px;">
-							<div align="center" style="margin-left: 4px; margin-right: 4px; margin-top: 15px; margin-bottom: 15px;">
-                       			 <p>"2021-09-27" "김병준"님이 가능성을 "100%"로 수정하셨습니다.</p>
-                       			 <p>"2021-09-26" "김병준"님이 가능성을 "90%"로 수정하셨습니다.</p>
-                       			 <p>"2021-09-25" "김병준"님이 가능성을 "80%"로 수정하셨습니다.</p>
-                       			 <p>"2021-09-24" "김병준"님이 가능성을 "70%"로 수정하셨습니다.</p>
-                       			 <p>"2021-09-23" "김병준"님이 가능성을 "60%"로 수정하셨습니다.</p>
-                       			 <p>"2021-09-22" "김병준"님이 가능성을 "50%"로 수정하셨습니다.</p>
-                       			 <p>"2021-09-21" "김병준"님이 가능성을 "40%"로 수정하셨습니다.</p>
-                       			 <p>"2021-09-20" "김병준"님이 가능성을 "30%"로 수정하셨습니다.</p>
-                       			 <p>"2021-09-19" "김병준"님이 가능성을 "20%"로 수정하셨습니다.</p>
-                       			 <p>"2021-09-18" "김병준"님이 가능성을 "10%"로 수정하셨습니다.</p>
+							<div th:align="center" style="margin-left: 4px; margin-right: 4px; margin-top: 15px; margin-bottom: 15px;">
+                       			 <p>"2021-09-27"<br>"김병준"님이 가능성을 "100%"로 수정하셨습니다.</p>
+                       			 <p>"2021-09-26"<br>"김병준"님이 가능성을 "90%"로 수정하셨습니다.</p>
+                       			 <p>"2021-09-25"<br>"김병준"님이 가능성을 "80%"로 수정하셨습니다.</p>
+                       			 <p>"2021-09-24"<br>"김병준"님이 가능성을 "70%"로 수정하셨습니다.</p>
+                       			 <p>"2021-09-23"<br>"김병준"님이 가능성을 "60%"로 수정하셨습니다.</p>
+                       			 <p>"2021-09-22"<br>"김병준"님이 가능성을 "50%"로 수정하셨습니다.</p>
+                       			 <p>"2021-09-21"<br>"김병준"님이 가능성을 "40%"로 수정하셨습니다.</p>
+                       			 <p>"2021-09-20"<br>"김병준"님이 가능성을 "30%"로 수정하셨습니다.</p>
+                       			 <p>"2021-09-19"<br>"김병준"님이 가능성을 "20%"로 수정하셨습니다.</p>
+                       			 <p>"2021-09-18"<br>"김병준"님이 가능성을 "10%"로 수정하셨습니다.</p>
                        		</div>	 
                       		</div>								
 						</div>
-						<div class="col-lg-9">
+						<div class="col-lg-9" th:align="center">
+						<div class="col-lg-10">
 						<div style="background: lightgray;">
-						<div align="center" style="font-size: 25px; font-weight: bold; padding-top: 5px; padding-bottom: 5px;">기본정보</div>
+						<div th:align="center" style="font-size: 25px; font-weight: bold; padding-top: 5px; padding-bottom: 5px;">영업기회정보</div>
 						</div>
 							<div class="card mb-4">
 								
@@ -59,60 +60,66 @@
 												<div class="form-group" style="margin-left: 30px; margin-right: 30px; margin-top: 15px;">
 												
 												<div class="row">
-													<div class="form-group col-xl-2">
-														<label>영업기회번호</label> 
-															<input type="text" name="deptNo" class="form-control" required>
+													<div class="form-group col-xl-1">
+														<label>No</label> 
+															<div id="businessChanceNo" name="businessChanceNo" class="form-control" th:text="${businessChanceInfo.businessChanceNo}"></div>
 													</div>
-													<div class="form-group col-xl-1"></div>
 													<div class="form-group col-xl-5">
 														<label>영업기회명</label> 
-															<input type="text" name="jobNo" class="form-control" required>
+															<div id="businessTitle" name="businessTitle" class="form-control" th:text="${businessChanceInfo.businessTitle}"></div>
 													</div>
-													<div class="form-group col-xl-2"></div>
+													<div class="form-group col-xl-1"></div>
+													<div class="form-group col-xl-2">
+														<label>진행상태</label> 
+															<div id="progressStatus" name="progressStatus" class="form-control" th:text="${businessChanceInfo.progressStatus}"></div>
+													</div>
+													<div class="form-group col-xl-1">
+													</div>
 													<div class="form-group col-xl-2">
 														<label>담당사원</label> 
-															<input type="text" name="jobNo" class="form-control" required>
+															<div id="empName" name="empName" class="form-control" th:text="${businessChanceInfo.empName}"></div>
 													</div>
 													</div>
 												<div class="row">
 													<div class="form-group col-xl-3">
 														<label>고객사</label> 
-															<input type="text" name="deptNo" class="form-control" required>
-													</div>
+															<div id="customerCompanyName" name="customerCompanyName" class="form-control" th:text="${businessChanceInfo.customerCompanyName}"></div>
+													</div>		
 													<div class="form-group col-xl-3">
 														<label>고객측담당자</label> 
-															<input type="text" name="jobNo" class="form-control" required>
+															<div id="customerName" name="customerName" class="form-control" th:text="${businessChanceInfo.customerName}"></div>
 													</div>
-													<div class="form-group col-xl-3">
-														<label>관심상품</label> 
-															<input type="text" name="deptNo" class="form-control" required>
-													</div>
+													
 													<div class="form-group col-xl-1"></div>
 													<div class="form-group col-xl-2">
+														<label>영업단계</label> 
+															<div id="salesLevel" name="salesLevel" class="form-control" th:text="${businessChanceInfo.salesLevel}"></div>
+													</div>
+													<div class="form-group col-xl-1"></div>
+													
+													<div class="form-group col-xl-2">
 														<label>성공가능성</label> 
-															<input type="text" name="jobNo" class="form-control" required>
+															<div id="successPosibillity" name="successPosibillity" class="form-control" th:text="${businessChanceInfo.successPosibillity}+'%'"></div>
 													</div>
 													
 												</div>
 												<div class="row">
+													<div class="form-group col-xl-6">
+														<label>관심상품</label> 
+														<div style="white-space:nowrap; overflow-x:auto; width: auto; height: 50px; border: 1px solid lightgray; " >
+															<div id="productName" name="productName" th:text="${businessChanceInfo.productName}"></div>
+															</div>
+													</div>
 													
-													<div class="form-group col-xl-3">
-														<label>진행단계</label> 
-															<input type="text" name="deptNo" class="form-control" required>
-													</div>
-													<div class="form-group col-xl-3">
-														<label>영업단계</label> 
-															<input type="text" name="jobNo" class="form-control" required>
-													</div>
 													<div class="form-group col-xl-4"></div>
 													<div class="form-group col-xl-2">
 														<label>마감일</label> 
-															<input type="date" name="jobNo" class="form-control" required>
+															<div id="dueDate" name="dueDate" class="form-control" th:text="${businessChanceInfo.dueDate}"></div>
 													</div>
 												</div>
 												<div class="row">
 													
-													<div class="form-group col-xl-12" align="center">
+													<div class="form-group col-xl-12" th:align="center">
 														<button class="btn btn-dark btn-icon-split" style="margin-right: 1%; margin-top: 2%"
 														th:onclick="location.href=''">
 													<span class="icon text-white-50">
@@ -125,13 +132,14 @@
 													<span class="icon text-white-50">
 														<i class="fas fa-info-circle"></i>
 													</span>
-													<span class="text text-white">상세정보</span>
+													<span class="text text-white">고객정보</span>
 													</a>
 													</div>
 													</div>
 												</div>
 												</form>
 											</div>
+										</div>	
 									</div>		
 					</div>		
 				
@@ -143,7 +151,8 @@
 						<div class="col-lg-3">
 							
 						</div>
-						<div class="col-lg-9">
+						<div class="col-lg-9" th:align="center">
+						<div class="col-lg-10">
 							<div class="card mb-4" style="background: #F6F2FB;">
 								<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between" style="background: lightgray;">
 									<h6 class="m-0 font-weight-bold text-primary">영업활동내역</h6>
@@ -165,7 +174,7 @@
 											<tr>
 												<th>활동이력번호</th>
 												<th>활동주제</th>
-												<th>등록자</th>
+												<th>담당자</th>
 												<th>등록일</th>
 												<th>관리</th>
 											</tr>
@@ -189,6 +198,7 @@
 										</tbody>
 									</table>
 								</div>
+							</div>
 							</div>
 						</div>
 					</div>

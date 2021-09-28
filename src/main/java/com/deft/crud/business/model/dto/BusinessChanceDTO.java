@@ -14,11 +14,14 @@ public class BusinessChanceDTO {
 	private int empNo;
 	private String customerName;
 	private int customerNo;
+	private String productName;
+	private String customerCompanyName;
 	
 	public BusinessChanceDTO() {}
 
 	public BusinessChanceDTO(int businessChanceNo, String progressStatus, String salesLevel, int successPosibillity,
-			String businessTitle, Date dueDate, String empName, int empNo, String customerName, int customerNo) {
+			String businessTitle, Date dueDate, String empName, int empNo, String customerName, int customerNo,
+			String productName, String customerCompanyName) {
 		super();
 		this.businessChanceNo = businessChanceNo;
 		this.progressStatus = progressStatus;
@@ -30,6 +33,8 @@ public class BusinessChanceDTO {
 		this.empNo = empNo;
 		this.customerName = customerName;
 		this.customerNo = customerNo;
+		this.productName = productName;
+		this.customerCompanyName = customerCompanyName;
 	}
 
 	public int getBusinessChanceNo() {
@@ -112,14 +117,32 @@ public class BusinessChanceDTO {
 		this.customerNo = customerNo;
 	}
 
+	public String getProductName() {
+		return productName;
+	}
+
+	public void setProductName(String productName) {
+		this.productName = productName;
+	}
+
+	public String getCustomerCompanyName() {
+		return customerCompanyName;
+	}
+
+	public void setCustomerCompanyName(String customerCompanyName) {
+		this.customerCompanyName = customerCompanyName;
+	}
+
 	@Override
 	public String toString() {
 		return "BusinessChanceDTO [businessChanceNo=" + businessChanceNo + ", progressStatus=" + progressStatus
 				+ ", salesLevel=" + salesLevel + ", successPosibillity=" + successPosibillity + ", businessTitle="
 				+ businessTitle + ", dueDate=" + dueDate + ", empName=" + empName + ", empNo=" + empNo
-				+ ", customerName=" + customerName + ", customerNo=" + customerNo + "]";
+				+ ", customerName=" + customerName + ", customerNo=" + customerNo + ", productName=" + productName
+				+ ", customerCompanyName=" + customerCompanyName + "]";
 	}
 
+	
 	
 	
 }

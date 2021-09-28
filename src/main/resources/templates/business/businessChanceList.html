@@ -30,7 +30,7 @@
 					</div>
 
 					<!-- Row -->
-					<div class="row">
+					<div class="row" style="margin-left: 30px;">
 					
 					<div class="col-lg-2">
 							<ul class="navbar-nav">
@@ -42,9 +42,8 @@
 							</ul>
 						</div>
 
-						
 						<!-- DataTable with Hover -->
-						<div class="col-lg-10">
+						<div class="col-lg-9" th:align="center" style="margin-left: 30px;">
 							<div class="card mb-4">
 								<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
 									<h6 class="m-0 font-weight-bold text-primary">영업 기회 현황</h6>
@@ -70,8 +69,7 @@
 												<th>진행상태</th>
 												<th>담당자</th>
 												<th>영업단계</th>
-												<th>가능성</th>
-												<th>작성일</th>
+												<th>등록일</th>
 												<th>관리</th>
 											</tr>
 										</thead>
@@ -91,10 +89,9 @@
 													<span class="badge badge-warning">보류중</span></td>		
 												<td th:text="${chanceList.empName}"></td>
 												<td th:text="${chanceList.salesLevel}"></td>
-												<td th:text="${chanceList.successPosibillity} + '%'"></td>
 												<td th:text="${chanceList.dueDate}"></td>
 												<td><a class="btn btn-dark btn-icon-split" 
-													th:href="@{/business/selectBasicInfo(customerNo=${ chanceList.customerNo })}">
+													th:href="@{/business/selectBasicInfo(customerNo=${ chanceList.customerNo }, businessChanceNo=${ chanceList.businessChanceNo })}">
 													<span class="icon text-white-50">
 														<i class="fas fa-clipboard-list"></i>
 													</span>
