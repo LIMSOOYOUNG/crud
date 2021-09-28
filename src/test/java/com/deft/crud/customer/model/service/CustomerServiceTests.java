@@ -88,11 +88,23 @@ public class CustomerServiceTests {
 
     /* 영업 활동 조회용 테스트 코드 */
     @Test
-//    @Disabled
+    @Disabled
     public void testSelectBusinessActivity() {
 
         int customerNo = 1;
         List<BusinessActivityDTO> businessActivity = customerService.selectBusinessActivity(customerNo);
+
+        assertNotNull(businessActivity);
+
+        System.out.println(businessActivity);
+    }
+
+    @Test
+//    @Disabled
+    public void testSelectBusinessActivityByActivityNo() {
+
+        int activityNo = 1;
+        BusinessActivityDTO businessActivity = customerService.selectBusinessActivityByActivityNo(activityNo);
 
         assertNotNull(businessActivity);
 

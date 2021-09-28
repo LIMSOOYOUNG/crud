@@ -1,7 +1,7 @@
 package com.deft.crud.customer.model.dto;
 
 import java.io.Serializable;
-import java.sql.Date;
+import java.sql.Timestamp;
 
 public class BusinessActivityDTO implements Serializable {
 
@@ -11,9 +11,9 @@ public class BusinessActivityDTO implements Serializable {
     private String businessLocation;
     private String businessPurpose;
     private String businessContents;
-    private java.sql.Date writingDate;
-    private java.sql.Date activityStartTime;
-    private java.sql.Date activityEndTime;
+    private java.sql.Timestamp writingDate;
+    private java.sql.Timestamp activityStartTime;
+    private java.sql.Timestamp activityEndTime;
     private int customerNo;
     private int empNo;
 
@@ -21,7 +21,7 @@ public class BusinessActivityDTO implements Serializable {
 
     public BusinessActivityDTO() {}
 
-    public BusinessActivityDTO(int activityNo, String businessSubject, String businessType, String businessLocation, String businessPurpose, String businessContents, Date writingDate, Date activityStartTime, Date activityEndTime, int customerNo, int empNo, EmpInfoDTO empInfo) {
+    public BusinessActivityDTO(int activityNo, String businessSubject, String businessType, String businessLocation, String businessPurpose, String businessContents, Timestamp writingDate, Timestamp activityStartTime, Timestamp activityEndTime, int customerNo, int empNo, EmpInfoDTO empInfo) {
         this.activityNo = activityNo;
         this.businessSubject = businessSubject;
         this.businessType = businessType;
@@ -84,27 +84,27 @@ public class BusinessActivityDTO implements Serializable {
         this.businessContents = businessContents;
     }
 
-    public Date getWritingDate() {
+    public Timestamp getWritingDate() {
         return writingDate;
     }
 
-    public void setWritingDate(Date writingDate) {
+    public void setWritingDate(Timestamp writingDate) {
         this.writingDate = writingDate;
     }
 
-    public Date getActivityStartTime() {
+    public Timestamp getActivityStartTime() {
         return activityStartTime;
     }
 
-    public void setActivityStartTime(Date activityStartTime) {
+    public void setActivityStartTime(Timestamp activityStartTime) {
         this.activityStartTime = activityStartTime;
     }
 
-    public Date getActivityEndTime() {
+    public Timestamp getActivityEndTime() {
         return activityEndTime;
     }
 
-    public void setActivityEndTime(Date activityEndTime) {
+    public void setActivityEndTime(Timestamp activityEndTime) {
         this.activityEndTime = activityEndTime;
     }
 
