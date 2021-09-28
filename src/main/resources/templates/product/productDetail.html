@@ -2,6 +2,7 @@
 <html lang="ko"
 	xmlns:th="https://www.thymeleaf.org">
 <head>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 	<th:block th:replace="@{common/config} :: config"></th:block>
 </head>
 
@@ -25,7 +26,8 @@
 							<li class="breadcrumb-item active" aria-current="page">상품수정</li>
 						</ol>
 					</div>
-					<div class="row">
+<!-- 					<div class="row"> -->
+					<form class="row" action="/product/updateProduct" method="post" onsubmit="return check()">
 						<div class="col-lg-3">
 							<div class="card mb-4">
 								<div
@@ -33,18 +35,15 @@
 									<h6 class="m-0 font-weight-bold text-primary">Form Basic</h6>
 								</div>
 								<div class="card-body">
-								<form>
 									<div class="form-group">
 										<img alt="noImage" src="" weight=200px; height=250px;> 
 									</div>
 									<div class="form-group">
 										<div class="custom-file">
-											<input type="file" class="custom-file-input" id="customFile">
-											<label class="custom-file-label" for="customFile">Choosefile</label>
+											<input type="file" class="custom-file-input" id="customFile" name="singleFile">
+											<label class="custom-file-label" for="customFile">이미지</label>
 										</div>
 									</div>
-									<button type="submit" class="btn btn-primary">Submit</button>
-								</form>
 								</div>
 							</div>
 						</div>
@@ -52,70 +51,82 @@
 							<div class="card mb-4">
 								<br>
 								<h3 align="center">상품정보</h3>
+<!-- 								<form > -->
 								<div class="row">
 									<div class="form-group col-lg-6 row">
-										<label for="refCategoryName" class="col-sm-3 col-form-label" align="center">카테고리 (중)</label>
-										<select class="form-control col-sm-9" id="refCategoryName">
-											<option th:each="allProduct : ${allProductList}" th:text="${allProduct.category.refCategoryName}" th:selected="${productDetail.category.refCategoryName == allProduct.category.refCategoryName}"></option>
+										<label for="refCategoryName" class="col-sm-3 col-form-label" th:align="center">카테고리 (중)</label>
+										<select class="form-control col-sm-9" id="refCategoryName" name="refCategoryName">
+											<option th:each="allProduct : ${allProductList}" th:text="${allProduct.category.refCategoryName}" 
+													th:selected="${productDetail.category.refCategoryName == allProduct.category.refCategoryName}"></option>
 										</select>
 									</div>
 									<div class="form-group col-lg-6 row">
-										<label for="categoryName" class="col-sm-3 col-form-label" align="center">카테고리 (소)</label>
-										<select class="form-control col-sm-9" id="categoryName">
-											<option th:each="allProduct : ${allProductList}" th:text="${allProduct.category.categoryName}" th:selected="${productDetail.category.categoryName == allProduct.category.categoryName}"></option>
+										<label for="categoryName" class="col-sm-3 col-form-label" th:align="center">카테고리 (소)</label>
+										<select class="form-control col-sm-9" id="categoryName" name="categoryName">
+											
+											<option th:each="allProduct : ${allProductList}" th:text="${allProduct.category.categoryName}" 
+													th:selected="${productDetail.category.categoryName == allProduct.category.categoryName}">
+											</option>
 										</select>
 									</div>
 								</div>
 								<div class="row">
                      					<div class="form-group col-lg-6 row">
-										<label for="manufacturerName" class="col-sm-3 col-form-label" align="center">제조사</label>
-										<input type="text" class="form-control col-sm-9" id="manufacturerName" th:value="${productDetail.manufacturer.manufacturerName}">
+										<label for="manufacturerName" class="col-sm-3 col-form-label" th:align="center">제조사</label>
+										<input type="text" class="form-control col-sm-9" th:value="${productDetail.manufacturer.manufacturerName}" 
+												id="manufacturerName" name="manufacturerName">
 									</div>
 									<div class="form-group col-lg-6 row">
-										<label for="companyName" class="col-sm-3 col-form-label" align="center">거래처</label>
-										<input type="text" class="form-control col-sm-9" id="companyName" th:value="${productDetail.account.companyName}">
+										<label for="companyName" class="col-sm-3 col-form-label" th:align="center">거래처</label>
+										<input type="text" class="form-control col-sm-9" th:value="${productDetail.account.companyName}" 
+												id="companyName" name="companyName">
 									</div>
 								</div>
 								
 								<div class="row">
 									<div class="form-group col-lg-6 row">
-										<label for="productNo" class="col-sm-3 col-form-label" align="center">상품번호</label>
-										<input type="text" class="form-control col-sm-9" id="productNo" th:value="${productDetail.productNo}">
+										<label for="productNo" class="col-sm-3 col-form-label" th:align="center">상품번호</label>
+										<input type="text" class="form-control col-sm-9" th:value="${productDetail.productNo}" 
+												id="productNo" name="productNo" readonly>
 									</div>
 									<div class="form-group col-lg-6 row">
-										<label for="productName" class="col-sm-3 col-form-label" align="center">상품명</label>
-										<input type="text" class="form-control col-sm-9" id="productName" th:value="${productDetail.productName}">
+										<label for="productName" class="col-sm-3 col-form-label" th:align="center">상품명</label>
+										<input type="text" class="form-control col-sm-9" th:value="${productDetail.productName}" 
+												id="productName" name="productName">
 									</div>
 									
 								</div>
 								<div class="row">
 									<div class="form-group col-lg-6 row">
-										<label for="purchasePrice" class="col-sm-3 col-form-label" align="center">원가</label>
-										<input type="number" class="form-control col-sm-9" id="purchasePrice" th:value="${productDetail.purchasePrice}">
+										<label for="purchasePrice" class="col-sm-3 col-form-label" th:align="center">원가</label>
+										<input type="number" class="form-control col-sm-9" th:value="${productDetail.purchasePrice}" 
+												id="purchasePrice" name="purchasePrice">
 									</div>	
 									<div class="form-group col-lg-6 row">
-										<label for="sellingPrice" class="col-sm-3 col-form-label" align="center">판매가</label>
-										<input type="number" class="form-control col-sm-9" id="sellingPrice" th:value="${productDetail.sellingPrice}">
+										<label for="sellingPrice" class="col-sm-3 col-form-label" th:align="center">판매가</label>
+										<input type="number" class="form-control col-sm-9" th:value="${productDetail.sellingPrice}" 
+												id="sellingPrice" name="sellingPrice">
 									</div>	
 								</div>
 								<div class="row">
 									<div class="form-group col-lg-6 row">
-										<label for="productNo" class="col-sm-3 col-form-label" align="center">판매상태</label>
-										<select class="form-control col-sm-9" id="sellStatus">
-											<option th:each = "allProduct : ${allProductList}" th:text = "${allProduct.sellStatus}" th:selected="${allProduct.sellStatus == productDetail.sellStatus}"></option>
+										<label for="productNo" class="col-sm-3 col-form-label" th:align="center">판매상태</label>
+										<select class="form-control col-sm-9" id="sellStatus" name="sellStatus">
+											<option th:each = "allProduct : ${allProductList}" th:text = "${allProduct.sellStatus}" 
+													th:selected="${allProduct.sellStatus == productDetail.sellStatus}"></option>
 										</select>
 									</div>
 								</div>
 								<div class="row">
-									<div class="form-group col-lg-12 mt-3" align="center">
-										<button type="button" class="btn btn-primary mb-1">상품수정</button>
-	                  					<button type="button" class="btn btn-secondary mb-1">상품삭제</button>
-	                  					<button type="button" class="btn btn-success mb-1">뒤로가기</button>
+									<div class="form-group col-lg-12 mt-3" th:align="center">
+										<button type="submit" class="btn btn-primary mb-1 mx-3" id="updateBtn">상품수정</button>
+	                  					<button type="button" class="btn btn-outline-danger mb-1 mx-3" id="backBtn" onclick="goBack()">뒤로가기</button>
                   					</div>
-								</div>			
+								</div>
 							</div>
 						</div>
-					</div>
+						</form>
+<!-- 					</div> -->
 				</div>
 			</div>
 		</div>
@@ -123,6 +134,18 @@
 	<!-- Script -->
     <th:block th:replace="@{/common/script} :: script"></th:block>
 </body>
+	<script>
+		function check() {
+			if(!confirm("상품을 수정하시겠습니까?")) {
+			 	return false;
+			}
+		}
+		
+		function goBack() {
+			window.history.back();
+		}
+		
+	</script>
 
 </html>
 
