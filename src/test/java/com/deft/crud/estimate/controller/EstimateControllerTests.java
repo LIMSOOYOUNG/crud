@@ -6,6 +6,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 
 import com.deft.crud.configuration.CrudApplication;
 import com.deft.crud.configuration.MybatisConfiguration;
@@ -34,11 +37,24 @@ public class EstimateControllerTests {
 	}
 	
 	@Test
-	public void testSelectAllEstimate() throws Exception {
+	@Disabled
+	public void testSelectEstimateList() throws Exception {
 		
 		mockMvc.perform(get("/estimate/selectAll"))
 				.andExpect(status().isOk())
-				.andExpect(forwardedUrl("estimate/selectAll"))
+				.andExpect(forwardedUrl("estimate/selectAllEstimate"))
+				.andDo(print());
+	}
+	
+	@Test
+	public void testSelectEstimateByStatus() throws Exception {
+		
+		MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+		params.add("estimateStatus", "progress");
+		
+		mockMvc.perform(get("/estimate/select").params(params))
+				.andExpect(status().isOk())
+				.andExpect(forwardedUrl("jsonView"))
 				.andDo(print());
 	}
 }

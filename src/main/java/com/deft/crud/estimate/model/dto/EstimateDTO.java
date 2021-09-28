@@ -1,7 +1,7 @@
 package com.deft.crud.estimate.model.dto;
 
 import java.io.Serializable;
-import java.sql.Date;
+import java.time.LocalDate;
 
 import com.deft.crud.customer.model.dto.CustomerDTO;
 
@@ -9,7 +9,7 @@ public class EstimateDTO implements Serializable {
 	
 	private String estimateNo;
 	private String estimateTitle;
-	private java.sql.Date estimateDate;
+	private LocalDate estimateDate;
 	private int customerNo;
 	private double discountRate;
 	private String estimateStatus;
@@ -20,8 +20,9 @@ public class EstimateDTO implements Serializable {
 	
 	public EstimateDTO() {}
 
-	public EstimateDTO(String estimateNo, String estimateTitle, Date estimateDate, int customerNo, double discountRate,
-			String estimateStatus, String providerRegistNo, CustomerDTO customer, ProviderDTO provider) {
+	public EstimateDTO(String estimateNo, String estimateTitle, LocalDate estimateDate, int customerNo,
+			double discountRate, String estimateStatus, String providerRegistNo, CustomerDTO customer,
+			ProviderDTO provider) {
 		super();
 		this.estimateNo = estimateNo;
 		this.estimateTitle = estimateTitle;
@@ -50,11 +51,11 @@ public class EstimateDTO implements Serializable {
 		this.estimateTitle = estimateTitle;
 	}
 
-	public java.sql.Date getEstimateDate() {
+	public LocalDate getEstimateDate() {
 		return estimateDate;
 	}
 
-	public void setEstimateDate(java.sql.Date estimateDate) {
+	public void setEstimateDate(LocalDate estimateDate) {
 		this.estimateDate = estimateDate;
 	}
 
