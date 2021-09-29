@@ -16,7 +16,8 @@
 
 				<!-- Content -->
 				<div class="container-fluid" id="container-wrapper">
-					<div class="d-sm-flex align-items-center justify-content-between mb-4">
+					<div
+						class="d-sm-flex align-items-center justify-content-between mb-4">
 						<h1 class="h3 mb-0 text-gray-800">직급 관리</h1>
 						<ol class="breadcrumb">
 							<li class="breadcrumb-item"><a href="./">Home</a></li>
@@ -24,8 +25,11 @@
 							<li class="breadcrumb-item active" aria-current="page">직급 관리</li>
 						</ol>
 					</div>
+					<div align="right">
+							<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalLong" id="#jobbtn">직급 추가</button>
+					</div>
+						<br>
 					
-
 					<!-- Row -->
 					<div class="row">
 
@@ -53,7 +57,9 @@
 												<td th:text="${job.jobCode}"></td>
 												<td th:text="${job.jobName}"></td>
 												<td th:text="${job.jobStatus}"></td>
-												<td><button>직급관리</button></td>
+												<td><button type="submit" class="btn btn-primary"
+														data-toggle="modal" data-target="#jobModify"
+														id="#jobModifyBtn" class="btn btn-primary">직급관리</button></td>
 											</tr>
 										</tbody>
 									</table>
@@ -62,14 +68,77 @@
 						</div>
 					</div>
 				</div>
-
+				
+				<!-- 직급 추가 모달 -->
+				<form action="jobinsert" method="post">
+				<div class="modal fade" id="exampleModalLong" tabindex="-1"
+					role="dialog" aria-labelledby="exampleModalLongTitle"
+					aria-hidden="true">
+					<div class="modal-dialog" role="document">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h5 class="modal-title" id="exampleModalLongTitle"
+									style="color: blue;">직급추가</h5>
+								<button type="button" class="close" data-dismiss="modal"
+									aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								</button>
+							</div>
+							<div class="modal-body">
+								<br> <label style="color: blue;">추가할 직급 : &nbsp; </label><input type="text" class="form-control" name="jobName"> 
+								<br> <br> 
+							<br> <br>
+							  <label style="color: blue;">상태 : </label> 
+								 <label><input type="radio" name="jobStatus" value="Y">Y</label> 
+								 <label><input type="radio" name="jobStatus" value="N">N</label>
+							</div>
+							<div class="modal-footer">
+								<button type="submit" class="btn btn-primary">신규직급추가</button>
+							</div>
+						</div>
+					</div>
+				</div>
+				</form>
+				<!-- 직급 수정 모달 -->
+				<form action="jobmodify" method="post">
+				<div class="modal fade" id="jobModify" tabindex="-1" role="dialog"
+					aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+					<div class="modal-dialog" role="document">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h5 class="modal-title" id="exampleModalLongTitle"
+									style="color: blue;">직급관리</h5>
+								<button type="button" class="close" data-dismiss="modal"
+									aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								</button>
+							</div>
+							<div class="modal-body">
+							<label style="color: blue;">직급 코드 : </label>&nbsp;<input type="text" class="form-control" name="jobCode"  readonly>&nbsp; 
+							<label style="color: blue;">상위직급선택 :</label> 
+								<br>
+								<br> <label style="color: blue;">직급명 : </label>&nbsp;
+								<input type="text" name="jobName"> <br>
+								<br>
+								<br>
+								<br> <label style="color: blue;">상태 : &nbsp;</label>
+										 <label><input type="radio" name="jobStatus" value="Y">Y</label> 
+								 		 <label><input type="radio" name="jobStatus" value="N">N</label>
+									<br>
+								<div class="modal-footer">
+									<button type="submit" class="btn btn-primary" >신규직급추가</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				</form>
 			</div>
 		</div>
-	</div>
 
 
-	<!-- Script -->
-	<th:block th:replace="@{/common/script} :: script"></th:block>
+		<!-- Script -->
+		<th:block th:replace="@{/common/script} :: script"></th:block>
 </body>
 
 </html>

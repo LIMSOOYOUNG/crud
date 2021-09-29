@@ -28,11 +28,11 @@ public interface OrganizationMapper {
 	/* 직급 수정 */
 	int jobModify(JobDTO jobDTO);
 
-	/* 부서 비활성화 */
-	int departmentDisabled(DepartmentDTO deptDTO);
-
-	/* 직급 비활성화 */
-	int jobDisabled(JobDTO jobDTO);
+//	/* 부서 비활성화 */
+//	int departmentDisabled(DepartmentDTO deptDTO);
+//
+//	/* 직급 비활성화 */
+//	int jobDisabled(JobDTO jobDTO);
 
 
 

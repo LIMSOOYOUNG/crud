@@ -5,17 +5,17 @@ public class DepartmentDTO implements java.io.Serializable{
 	private String deptCode;
 	private String deptName;
 	private String deptFax;
-	private String depttel;
+	private String deptTel;
 	private String deptStatus;
 	
 	public DepartmentDTO() {}
 
-	public DepartmentDTO(String deptCode, String deptName, String deptFax, String depttel, String deptStatus) {
+	public DepartmentDTO(String deptCode, String deptName, String deptFax, String deptTel, String deptStatus) {
 		super();
 		this.deptCode = deptCode;
 		this.deptName = deptName;
 		this.deptFax = deptFax;
-		this.depttel = depttel;
+		this.deptTel = deptTel;
 		this.deptStatus = deptStatus;
 	}
 
@@ -43,12 +43,12 @@ public class DepartmentDTO implements java.io.Serializable{
 		this.deptFax = deptFax;
 	}
 
-	public String getDepttel() {
-		return depttel;
+	public String getDeptTel() {
+		return deptTel;
 	}
 
-	public void setDepttel(String depttel) {
-		this.depttel = depttel;
+	public void setDeptTel(String deptTel) {
+		this.deptTel = deptTel;
 	}
 
 	public String getDeptStatus() {
@@ -61,9 +61,10 @@ public class DepartmentDTO implements java.io.Serializable{
 
 	@Override
 	public String toString() {
-		return "OrganizationDTO [deptCode=" + deptCode + ", deptName=" + deptName + ", deptFax=" + deptFax
-				+ ", depttel=" + depttel + ", deptStatus=" + deptStatus + "]";
+		return "DepartmentDTO [deptCode=" + deptCode + ", deptName=" + deptName + ", deptFax=" + deptFax + ", deptTel="
+				+ deptTel + ", deptStatus=" + deptStatus + "]";
 	}
+
 	
 	
 }

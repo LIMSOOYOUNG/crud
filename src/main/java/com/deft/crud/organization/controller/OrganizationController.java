@@ -64,7 +64,7 @@ public class OrganizationController {
 		
 		departDTO.setDeptName(deptName);
 		departDTO.setDeptFax(deptFax);
-		departDTO.setDepttel(deptTel);
+		departDTO.setDeptTel(deptTel);
 		departDTO.setDeptStatus(deptStatus);
 		
 		int result = organizationService.departmentInsert(departDTO);
@@ -74,7 +74,7 @@ public class OrganizationController {
 		}else {
 			rttr.addFlashAttribute("flashMessage", "실패!!");
 		}
-		mv.setViewName("redirect:/departmentinsert");
+		mv.setViewName("redirect:/organization/selectdepartment");
 		
 		return mv;
 	}
@@ -91,6 +91,8 @@ public class OrganizationController {
 		jobDTO.setJobName(jobName);
 		jobDTO.setJobStatus(jobStatus);
 		
+		System.out.println(jobDTO);
+		
 		int result = organizationService.jobInsert(jobDTO);
 		
 		if(result > 0) {
@@ -98,7 +100,7 @@ public class OrganizationController {
 		}else {
 			rttr.addFlashAttribute("flashMessage", "실패!!");
 		}
-		mv.setViewName("redirect:/jobinsert");
+		mv.setViewName("redirect:/organization/selectjob");
 		
 		return mv;
 	}
@@ -115,7 +117,7 @@ public class OrganizationController {
 		departmentDTO.setDeptCode(deptCode);
 		departmentDTO.setDeptName(deptName);
 		departmentDTO.setDeptFax(deptFax);
-		departmentDTO.setDepttel(deptTel);
+		departmentDTO.setDeptTel(deptTel);
 		departmentDTO.setDeptStatus(deptStatus);
 		
 		int result = organizationService.departmentModify(departmentDTO);
@@ -125,7 +127,7 @@ public class OrganizationController {
 		}else {
 			rttr.addFlashAttribute("flashMessage", "실패!!");
 		}
-		mv.setViewName("redirect:/departmentmodify");
+		mv.setViewName("redirect:/organization/departmentmodify");
 		
 		return mv;
 	}
@@ -143,6 +145,8 @@ public class OrganizationController {
 		jobDTO.setJobName(jobName);
 		jobDTO.setJobStatus(jobStatus);
 		
+		System.out.println(jobDTO);
+		
 		int result = organizationService.jobModify(jobDTO);
 		
 		if(result > 0) {
@@ -150,56 +154,56 @@ public class OrganizationController {
 		}else {
 			rttr.addFlashAttribute("flashMessage", "실패!!");
 		}
-		mv.setViewName("redirect:/jobmodify");
+		mv.setViewName("redirect:/organization/selectjob");
 		
 		return mv;
 	}
 	
-	/* 부서 비활성화 */
-	@GetMapping("departmentdisabled")
-	public void departDisabled() {}
-	
-	@PostMapping("departmentdisabled")
-	public ModelAndView departDisabled(ModelAndView mv, RedirectAttributes rttr, @RequestParam String deptCode, @RequestParam String deptStatus) {
-		
-		DepartmentDTO deptDTO = new DepartmentDTO();
-		deptDTO.setDeptCode(deptCode);
-		deptDTO.setDeptStatus(deptStatus);
-		
-		int result = organizationService.departmentDisabled(deptDTO);
-		
-		if(result > 0) {
-			rttr.addFlashAttribute("flashMessage", "성공!!");
-		}else {
-			rttr.addFlashAttribute("flashMessage", "실패!!");
-		}
-		mv.setViewName("redirect:/departmentDisabled");
-		
-		return mv;
-	}
-	
-	/* 직급 비활성화 */
-	@GetMapping("jobdisabled")
-	public void jobDisabled() {}
-	
-	@PostMapping("jobdisabled")
-	public ModelAndView jobDisabledForm(ModelAndView mv, RedirectAttributes rttr, @RequestParam String jobCode, @RequestParam String deptStatus) {
-		
-		JobDTO jobDTO = new JobDTO();
-		jobDTO.setJobCode(jobCode);
-		jobDTO.setJobStatus(deptStatus);
-		
-		int result = organizationService.jobDisabled(jobDTO);
-		
-		if(result > 0) {
-			rttr.addFlashAttribute("flashMessage", "성공!!");
-		}else {
-			rttr.addFlashAttribute("flashMessage", "실패!!");
-		}
-		mv.setViewName("redirect:/jobdisabled");
-		
-		
-		return mv;
-	}
+//	/* 부서 비활성화 */
+//	@GetMapping("departmentdisabled")
+//	public void departDisabled() {}
+//	
+//	@PostMapping("departmentdisabled")
+//	public ModelAndView departDisabled(ModelAndView mv, RedirectAttributes rttr, @RequestParam String deptCode, @RequestParam String deptStatus) {
+//		
+//		DepartmentDTO deptDTO = new DepartmentDTO();
+//		deptDTO.setDeptCode(deptCode);
+//		deptDTO.setDeptStatus(deptStatus);
+//		
+//		int result = organizationService.departmentDisabled(deptDTO);
+//		
+//		if(result > 0) {
+//			rttr.addFlashAttribute("flashMessage", "성공!!");
+//		}else {
+//			rttr.addFlashAttribute("flashMessage", "실패!!");
+//		}
+//		mv.setViewName("redirect:/departmentDisabled");
+//		
+//		return mv;
+//	}
+//	
+//	/* 직급 비활성화 */
+//	@GetMapping("jobdisabled")
+//	public void jobDisabled() {}
+//	
+//	@PostMapping("jobdisabled")
+//	public ModelAndView jobDisabledForm(ModelAndView mv, RedirectAttributes rttr, @RequestParam String jobCode, @RequestParam String deptStatus) {
+//		
+//		JobDTO jobDTO = new JobDTO();
+//		jobDTO.setJobCode(jobCode);
+//		jobDTO.setJobStatus(deptStatus);
+//		
+//		int result = organizationService.jobDisabled(jobDTO);
+//		
+//		if(result > 0) {
+//			rttr.addFlashAttribute("flashMessage", "성공!!");
+//		}else {
+//			rttr.addFlashAttribute("flashMessage", "실패!!");
+//		}
+//		mv.setViewName("redirect:/jobdisabled");
+//		
+//		
+//		return mv;
+//	}
 	
 }
