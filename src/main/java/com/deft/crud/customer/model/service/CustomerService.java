@@ -1,11 +1,10 @@
 package com.deft.crud.customer.model.service;
 
 import com.deft.crud.customer.model.dao.CustomerMapper;
-import com.deft.crud.customer.model.dto.BusinessActivityDTO;
-import com.deft.crud.customer.model.dto.CustomerCompanyDTO;
-import com.deft.crud.customer.model.dto.CustomerDTO;
+import com.deft.crud.customer.model.dto.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -53,5 +52,31 @@ public class CustomerService {
     public BusinessActivityDTO selectBusinessActivityByActivityNo(int activityNo) {
 
         return customerMapper.selectBusinessActivityByActivityNo(activityNo);
+    }
+
+    /* 고객 기본 정보 수정 */
+    @Transactional
+    public int modifyBasicInfo(ModifyBasicInfoDTO parameters) {
+
+        return customerMapper.modifyBasicInfo(parameters);
+    }
+
+    /* 고객 상세 정보 수정 */
+    @Transactional
+    public int modifyDetailInfoToCustomer(ModifyDetailInfoForExtDTO parameters) {
+
+        return customerMapper.modifyDetailInfoToCustomer(parameters);
+    }
+    @Transactional
+    public int modifyDetailInfoToCompany(ModifyDetailInfoForExtDTO parameters) {
+
+        return customerMapper.modifyDetailInfoToCompany(parameters);
+    }
+
+    /* 기존, 해지 고객 상태 변경 */
+    @Transactional
+    public int modifyExtCustomerStatus(int customerNo) {
+
+        return customerMapper.modifyExtCustomerStatus(customerNo);
     }
 }

@@ -102,6 +102,50 @@
         <association property="empInfo" resultMap="empInfoResultMap"/>
     </resultMap>
 
+    <!-- 고객 기본 정보 수정 -->
+    <update id="modifyBasicInfo" parameterType="com.deft.crud.customer.model.dto.ModifyBasicInfoDTO">
+        UPDATE /* com.deft.crud.customer.model.dao.CustomerMapper#modifyBasicInfo() */
+               TBL_CUSTOMER C
+           SET C.CUSTOMER_NAME = #{ customerName }
+             , C.CUSTOMER_EMAIL = #{ customerEmail }
+             , C.CUSTOMER_PHONE = #{ customerPhone }
+             , C.CUSTOMER_FAX = #{ customerFax }
+         WHERE C.CUSTOMER_NO = #{ customerNo }
+    </update>
+
+    <!-- 기존 고객 상세 정보 수정 -->
+    <update id="modifyDetailInfoToCustomer" parameterType="com.deft.crud.customer.model.dto.ModifyDetailInfoForExtDTO">
+        UPDATE /* com.deft.crud.customer.model.dao.CustomerMapper#modifyDetailInfoToCustomer() */
+               TBL_CUSTOMER C
+           SET C.CUSTOMER_NAME = #{ customerName }
+             , C.CUSTOMER_EMAIL = #{ customerEmail }
+             , C.CUSTOMER_PHONE = #{ customerPhone }
+             , C.CUSTOMER_FAX = #{ customerFax }
+             , C.CUSTOMER_ADDRESS = #{ customerAddress }
+         WHERE C.CUSTOMER_NO = #{ customerNo }
+    </update>
+    <update id="modifyDetailInfoToCompany" parameterType="com.deft.crud.customer.model.dto.ModifyDetailInfoForExtDTO">
+        UPDATE /* com.deft.crud.customer.model.dao.CustomerMapper#modifyDetailInfoToCompany() */
+               TBL_CUSTOMER_COMPANY CP
+           SET CP.COMPANY_REGIST_NO = #{ companyRegistNo }
+             , CP.BUSINESS_STATUS = #{ businessStatus }
+             , CP.BUSINESS_TYPE = #{ businessType }
+             , CP.NUMBER_OF_EMPLOYEES = #{ numberOfEmployees }
+             , CP.COMPANY_REVENUE = #{ companyRevenue }
+             , CP.HOMEPAGE = #{ homepage }
+         WHERE CP.CUSTOMER_COMPANY_NO = #{ customerCompanyNo }
+    </update>
+
+    <!-- 기존, 해지 고객 상태 변경 -->
+    <update id="modifyExtCustomerStatus" parameterType="_int">
+        UPDATE /* com.deft.crud.customer.model.dao.CustomerMapper#modifyExtCustomerStatus() */
+               TBL_EXT_CUSTOMER_DETAIL E
+           SET E.CUSTOMER_STATUS = CASE
+                                   WHEN (E.CUSTOMER_STATUS = '기존고객') THEN '해지고객'
+                                   ELSE '기존고객'
+                                   END
+         WHERE E.CUSTOMER_NO = #{ customerNo }
+    </update>
 
     <!-- 전체 고객 조회 -->
     <select id="selectAllCustomer" resultMap="customerCompanyResultMap">
@@ -156,6 +200,7 @@
              , NVL(C.CUSTOMER_FAX, ' ') AS CUSTOMER_FAX
              , CP.COMPANY_REVENUE
              , CP.BUSINESS_TYPE
+             , CP.CUSTOMER_COMPANY_NO
              , CP.HOMEPAGE
              , CP.COMPANY_ADDRESS
              , CP.COMPANY_REGIST_NO
@@ -174,6 +219,7 @@
              , C.CUSTOMER_ADDRESS
              , C.CUSTOMER_NO
              , CP.COMPANY_NAME
+             , CP.CUSTOMER_COMPANY_NO
              , C.CUSTOMER_EMAIL
              , CP.BUSINESS_STATUS
              , C.CUSTOMER_PHONE
@@ -199,7 +245,7 @@
          GROUP BY C.CUSTOMER_NAME, C.CUSTOMER_NO, CP.COMPANY_NAME, C.CUSTOMER_EMAIL, CP.BUSINESS_STATUS
              , C.CUSTOMER_PHONE, NVL(C.CUSTOMER_FAX, ' '), AN.CUSTOMIZATION_LEVEL, AN.CUSTOMIZATION_POSIBILLITY, CP.BUSINESS_TYPE
              , CP.COMPANY_REGIST_NO, CP.NUMBER_OF_EMPLOYEES, CP.COMPANY_REVENUE, CP.HOMEPAGE, CP.COMPANY_ADDRESS
-             , E.EMP_NAME, AN.CUSTOMER_STATUS, C.CUSTOMER_ADDRESS
+             , E.EMP_NAME, AN.CUSTOMER_STATUS, C.CUSTOMER_ADDRESS, CP.CUSTOMER_COMPANY_NO
     </select>
 
     <!-- 영업 활동 조회 -->
