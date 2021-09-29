@@ -4,7 +4,7 @@ public class StockDTO {
 
 	private int productNo;			//상품번호
 	private String sellStatus;		//판매상태
-	private String ProductName;		//상품명
+	private String productName;		//상품명
 	private String unit;			//단위
 	private String categoryName;	//카테고리명
 	private String storageSection;	//구역
@@ -18,7 +18,7 @@ public class StockDTO {
 		super();
 		this.productNo = productNo;
 		this.sellStatus = sellStatus;
-		ProductName = productName;
+		this.productName = productName;
 		this.unit = unit;
 		this.categoryName = categoryName;
 		this.storageSection = storageSection;
@@ -43,11 +43,11 @@ public class StockDTO {
 	}
 
 	public String getProductName() {
-		return ProductName;
+		return productName;
 	}
 
 	public void setProductName(String productName) {
-		ProductName = productName;
+		this.productName = productName;
 	}
 
 	public String getUnit() {
@@ -92,11 +92,11 @@ public class StockDTO {
 
 	@Override
 	public String toString() {
-		return "StockDTO [productNo=" + productNo + ", sellStatus=" + sellStatus + ", ProductName=" + ProductName
+		return "StockDTO [productNo=" + productNo + ", sellStatus=" + sellStatus + ", productName=" + productName
 				+ ", unit=" + unit + ", categoryName=" + categoryName + ", storageSection=" + storageSection
 				+ ", storageSpace=" + storageSpace + ", productStock=" + productStock + "]";
 	}
 
-	
+
 	
 }

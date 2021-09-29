@@ -27,9 +27,14 @@ public class StockController {
 	@GetMapping("/selectAll")
 	public ModelAndView selectStockAll(ModelAndView mv) {
 		
-		List<StockDTO> stockList = stockService.selectStockAll();		
+		/* 창고에 보유중인 전체 상품 목록*/
+		List<StockDTO> stockList = stockService.selectStockAll();
+		
+		/* 판매가능 상태인 모든 상품들*/
+		List<StockDTO> sellAbleProductList = stockService.selectSellAbleProductAll();
 		
 		mv.addObject("stockList", stockList);
+		mv.addObject("sellAbleProductList", sellAbleProductList);
 		mv.setViewName("stock/stockList");
 		
 		return mv;

@@ -15,5 +15,7 @@ public interface StockMapper {
 
 	StockDTO selectStockAll(int productNo);
 
+	List<StockDTO> selectSellAbleProductAll();
+
 
 }

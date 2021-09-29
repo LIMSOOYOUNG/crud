@@ -20,6 +20,7 @@ public class StockService {
 		this.mapper = mapper;
 	}
 
+	/* 창고에 보유중인 전체 상품 목록*/
 	public List<StockDTO> selectStockAll() {
 		
 		List<StorageDTO> storageList = mapper.selectStorageAll();
@@ -34,6 +35,14 @@ public class StockService {
 		}
 		
 		return stockList;
+	}
+
+	/* 판매가능 상태인 모든 상품들*/
+	public List<StockDTO> selectSellAbleProductAll() {
+
+		List<StockDTO> sellAbleProductList = mapper.selectSellAbleProductAll();
+		
+		return sellAbleProductList;
 	}
 
 
