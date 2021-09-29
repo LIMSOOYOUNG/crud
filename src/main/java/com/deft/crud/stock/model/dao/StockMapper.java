@@ -11,9 +11,9 @@ import com.deft.crud.stock.model.dto.StorageDTO;
 public interface StockMapper {
 
 
-	List<StorageDTO> storageSelectAll();
+	List<StorageDTO> selectStorageAll();
 
-	StockDTO stockSelectAll(int productNo);
+	StockDTO selectStockAll(int productNo);
 
 
 }
