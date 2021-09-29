@@ -34,7 +34,7 @@
 					<div class="row">
 
 						<!-- DataTable with Hover -->
-						<div class="col-lg-12" th:align="center">
+						<div class="col-lg-1"></div>
 						<div class="col-lg-10">
 							<div class="card mb-4">
 								<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
@@ -42,25 +42,23 @@
 									<div>
 										<a class="btn btn-success btn-icon-split"
 											th:onclick="location.href=''">
-												<span class="icon text-white">
-													<i class="fas fa-arrow-circle-down"></i>
-												</span>
-												<span class="text text-white">입고요청서작성</span>
+											<span class="icon text-white">
+												<i class="fas fa-arrow-circle-down"></i>
+											</span>
+											<span class="text text-white">입고요청서작성</span>
 										</a>
 										&nbsp&nbsp&nbsp&nbsp
 										<a class="btn btn-info btn-icon-split"
 											th:onclick="location.href=''">
-												<span class="icon text-white">
-													<i class="fas fa-arrow-circle-up"></i>
-												</span>
-												<span class="text text-white">출고요청서작성</span>
+											<span class="icon text-white">
+												<i class="fas fa-arrow-circle-up"></i>
+											</span>
+											<span class="text text-white">출고요청서작성</span>
 										</a>
 									</div>
 								</div>
-
 								<div class="table-responsive p-3">
-									<table class="table align-items-center table-flush table-hover"
-										id="dataTableHover">
+									<table id="dataTableHover" class="table align-items-center table-flush table-hover">
 										<thead align="center" class="thead-light">
 											<tr>
 												<th>상품번호</th>
@@ -81,19 +79,19 @@
 												<td th:text="${stock.productName}"></td>
 												<td th:text="${stock.productStock}"></td>
 												<td th:text="${stock.unit}"></td>
-												<td th:if="${stock.sellStatus} == '판매'">
-													<span class="badge badge-success">판매중</span></td>
-												<td th:if="${stock.sellStatus} == '미판매'">
-													<span class="badge badge-danger">미판매</span></td>
+												<td th:switch="${stock.sellStatus}">
+													<span th:case="'판매'" class="badge badge-success" th:text="${stock.sellStatus}"></span>
+													<span th:case="'미판매'" class="badge badge-danger" th:text="${stock.sellStatus}"></span>
+												</td>
 												<td	th:text="${stock.storageSection} + '-' + ${stock.storageSpace}"></td>
 												
 												<!-- 관리자 권한 아이디일경우 재고관리페이지로 이동하는 버튼 -->
 												<!-- <th:if sec:authorize-expr ="hasRole('ROLE_ADMIN')"> -->
 												<td><a class="btn btn-dark btn-icon-split" 
 													th:href="@{/product/productList(productNo=${ stock.productNo })}">
-													<span class="icon text-white-50">
-														<i class="fas fa-clipboard-list"></i>
-													</span>
+														<span class="icon text-white-50">
+															<i class="fas fa-clipboard-list"></i>
+														</span>
 													<span class="text text-white">재고관리</span>
 													</a>
 												</td>
@@ -121,19 +119,18 @@
 								</div>
 							</div>
 							</div>
+							<div class="col-lg-1">
+							</div>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-	</div>
 
 	<!-- Script -->
 	<th:block th:replace="@{/common/script} :: script"></th:block>
 
 	<!-- Page level plugins -->
-	<script src="/vendor/datatables/jquery.dataTables.min.js"></script>
-	<script src="/vendor/datatables/dataTables.bootstrap4.min.js"></script>
 
 	<!-- Page level custom scripts -->
 	<script>

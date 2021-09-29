@@ -13,8 +13,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.deft.crud.configuration.CrudApplication;
+import com.deft.crud.stock.model.dto.StockDTO;
 import com.deft.crud.stock.model.dto.StorageDTO;
-import com.deft.crud.stock.model.service.StockService;
 
 @SpringBootTest
 @RunWith(SpringRunner.class)
@@ -29,12 +29,12 @@ public class StockServiceTests {
 	@Disabled
 	public void testSelectStockAll() {
 		
-		List<StorageDTO> storageList = stockService.storageSelectAll();
+		List<StockDTO> stockList = stockService.selectStockAll();
 		
-		assertNotNull(storageList);
+		assertNotNull(stockList);
 			
-		for(StorageDTO storage : storageList) {
-			System.out.println(storage);
+		for(StockDTO stock : stockList) {
+			System.out.println(stock);
 		}
 	}
 	

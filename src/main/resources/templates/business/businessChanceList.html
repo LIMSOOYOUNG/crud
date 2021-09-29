@@ -43,7 +43,7 @@
 						</div>
 
 						<!-- DataTable with Hover -->
-						<div class="col-lg-9" th:align="center" style="margin-left: 30px;">
+						<div class="col-lg-9" style="margin-left: 30px;">
 							<div class="card mb-4">
 								<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
 									<h6 class="m-0 font-weight-bold text-primary">영업 기회 현황</h6>
@@ -79,19 +79,17 @@
 												<td th:text="${chanceList.businessChanceNo}"></td>
 												<td th:text="${chanceList.businessTitle}"></td>
 												<td th:text="${chanceList.customerName}"></td>
-												<td th:if="${chanceList.progressStatus} == '진행중'">
-													<span class="badge badge-success">진행중</span></td>
-												<td th:if="${chanceList.progressStatus} == '실패'">
-													<span class="badge badge-danger">실패</span></td>
-												<td th:if="${chanceList.progressStatus} == '성공'">
-													<span class="badge badge-info">성공</span></td>
-												<td th:if="${chanceList.progressStatus} == '보류중'">
-													<span class="badge badge-warning">보류중</span></td>		
+												<td th:switch="${chanceList.progressStatus}">
+													<span th:case="'진행중'" class="badge badge-success" th:text="${chanceList.progressStatus}"></span>
+													<span th:case="'실패'" class="badge badge-danger" th:text="${chanceList.progressStatus}"></span>
+													<span th:case="'성공'" class="badge badge-info" th:text="${chanceList.progressStatus}"></span>
+													<span th:case="'보류중'" class="badge badge-warning" th:text="${chanceList.progressStatus}"></span>
+												</td>
 												<td th:text="${chanceList.empName}"></td>
 												<td th:text="${chanceList.salesLevel}"></td>
 												<td th:text="${chanceList.dueDate}"></td>
 												<td><a class="btn btn-dark btn-icon-split" 
-													th:href="@{/business/selectBasicInfo(customerNo=${ chanceList.customerNo }, businessChanceNo=${ chanceList.businessChanceNo })}">
+													th:href="@{/business/chance/selectBasicInfo(customerNo=${ chanceList.customerNo }, businessChanceNo=${ chanceList.businessChanceNo })}">
 													<span class="icon text-white-50">
 														<i class="fas fa-clipboard-list"></i>
 													</span>
@@ -118,8 +116,6 @@
 	<th:block th:replace="@{/common/script} :: script"></th:block>
 
 	<!-- Page level plugins -->
-	<script src="/vendor/datatables/jquery.dataTables.min.js"></script>
-	<script src="/vendor/datatables/dataTables.bootstrap4.min.js"></script>
 
 	<!-- Page level custom scripts -->
 	<script>

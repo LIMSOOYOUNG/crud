@@ -21,7 +21,7 @@
 	</resultMap>
 	
 	<!-- 창고에 보관중인 상품리스트 조회 -->
-	<select id="storageSelectAll" resultMap="storageResultMap">
+	<select id="selectStorageAll" resultMap="storageResultMap">
 	SELECT /* "com.deft.crud.stock.model.dao.StockMapper#selectStockAll" */
 	       A.STORAGE_SECTION
 	     , A.STORAGE_SPACE
@@ -31,7 +31,7 @@
 	</select>
 	
 	<!-- 창고에 보관중인 상품번호로 상품 재고관련 정보 조회 -->
-	<select id="stockSelectAll" resultMap="stockResultMap" parameterType="_int">
+	<select id="selectStockAll" resultMap="stockResultMap" parameterType="_int">
 	SELECT /* "com.deft.crud.stock.model.dao.StockMapper#selectStockAll" */
 	       B.PRODUCT_NO
 	     , B.SELL_STATUS

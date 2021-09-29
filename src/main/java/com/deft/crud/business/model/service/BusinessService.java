@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.deft.crud.business.model.dao.BusinessMapper;
 import com.deft.crud.business.model.dto.BusinessActivityDTO;
 import com.deft.crud.business.model.dto.BusinessChanceDTO;
+import com.deft.crud.business.model.dto.BusinessChanceHistoryDTO;
 import com.deft.crud.customer.model.dao.CustomerMapper;
 
 @Service
@@ -21,31 +22,44 @@ public class BusinessService {
 		this.businessMapper = businessMapper;
 	}
 	
-	public List<BusinessChanceDTO> businessChanceSelectAll() {
-
-		List<BusinessChanceDTO> businessChanceList = businessMapper.businessChanceSelectAll();
+	public List<BusinessChanceDTO> selectBusinessChanceAll() {
 		
+		List<BusinessChanceDTO> businessChanceList = businessMapper.selectBusinessChanceAll();
 		
 		return businessChanceList;
 	}
 
 	/* 선택한 영업기회 내용 변경 이력*/
+	public List<BusinessChanceHistoryDTO> selectChanceHistoryByNo(int businessChanceNo) {
+		
+		List<BusinessChanceHistoryDTO> chanceHistoryList = businessMapper.selectChanceHistoryByNo(businessChanceNo);
+		
+		
+		return chanceHistoryList;
+	}
 	
-	
-	/* 선택한 엽업기회의 기본정보 */
+	/* 선택한 영업기회의 기본정보 */
 	public BusinessChanceDTO selectChanceInfoByNo(int businessChanceNo) {
+		
 		BusinessChanceDTO businessChanceInfo = businessMapper.selectChanceInfoByNo(businessChanceNo);
 		
 		return businessChanceInfo;
 	}
 	
-	
-	/* 영업활동기록 목록조회*/
-	public List<BusinessActivityDTO> selectActivityInfoByNo(int customerNo) {
-		List<BusinessActivityDTO> businessActivityList = businessMapper.selectActivityInfoByNo(customerNo);
+	/* 고객번호에 대한 영업활동기록 목록조회*/
+	public List<BusinessActivityDTO> selectActivityListByNo(int customerNo) {
+		
+		List<BusinessActivityDTO> businessActivityList = businessMapper.selectActivityListByNo(customerNo);
 		
 		return businessActivityList;
 	}
-
+ 
+	/* 전체사원 영업활동 목록조회 (담당자용)*/
+	public List<BusinessActivityDTO> selectActivityAll() {
+		
+		List<BusinessActivityDTO> businessActivityList = businessMapper.selectActivityAll();
+		
+		return businessActivityList;
+	}
 
 }
