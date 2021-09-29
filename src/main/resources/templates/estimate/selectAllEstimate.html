@@ -31,6 +31,12 @@
 							<div class="card mb-4">
 								<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
 									<h6 class="m-0 font-weight-bold text-primary" id="tableTitle">견적서 조회 (전체)</h6>
+									<button type="button" class="btn btn-info btn-icon-split" th:onclick="location.href='/estimate/insert'">
+										<span class="icon text-white">
+											<i class="fas fa-edit"></i>
+										</span>
+										<span class="text text-white">견적서 작성</span>
+									</button>
 								</div>
 								<ul class="nav nav-tabs nav-justfied">
 									<li class="nav-item">
@@ -106,14 +112,14 @@
 				url: '/estimate/select?estimateStatus=' + estimateStatus,
 				type: "get",
 				success: function(data, status, xhr) {
+
 					const estimateList = JSON.parse(data.estimateList);
-					
 					const $table = $("#estimateTable tbody");
 
-					if(estimateStatus != 'all') {
-						$("#tableTitle").html("견적서 조회 (" + estimateList[0].estimateStatus + ")");
-					} else {
+					if(estimateStatus == 'all') {
 						$("#tableTitle").html("견적서 조회 (전체)");
+					} else {
+						$("#tableTitle").html("견적서 조회 (" + estimateList[0].estimateStatus + ")");
 					}
 
 					$table.html("");

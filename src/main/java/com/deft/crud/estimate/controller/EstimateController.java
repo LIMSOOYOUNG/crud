@@ -1,5 +1,6 @@
 package com.deft.crud.estimate.controller;
 
+import java.security.Principal;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
@@ -21,10 +22,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class EstimateController {
 	
 	private final EstimateService estimateService;
+	private final ObjectMapper objectMapper;
 	
 	@Autowired
-	public EstimateController(EstimateService estimateService) {
+	public EstimateController(EstimateService estimateService, ObjectMapper objectMapper) {
 		this.estimateService = estimateService;
+		this.objectMapper = objectMapper;
 	}
 	
 	
@@ -45,13 +48,17 @@ public class EstimateController {
 		
 		response.setContentType("application/json; charset=UTF-8");
 		
-		ObjectMapper mapper = new ObjectMapper();
-		
 		List<EstimateDTO> estimateList = estimateService.selectEstimateListByStatus(estimateStatus);
 		
-		mv.addObject("estimateList", mapper.writeValueAsString(estimateList));
+		mv.addObject("estimateList", objectMapper.writeValueAsString(estimateList));
 		mv.setViewName("jsonView");
 		
 		return mv;
+	}
+	
+	@GetMapping("/insert")
+	public String insertEstimate() {
+		
+		return "estimate/insertEstimate";
 	}
 }
