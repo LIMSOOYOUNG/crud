@@ -55,16 +55,16 @@
 								<div class="row">
 									<div class="form-group col-lg-6 row">
 										<label for="refCategoryName" class="col-sm-3 col-form-label" th:align="center">카테고리 (중)</label>
-										<select class="form-control col-sm-9" id="refCategoryName" name="refCategoryName">
+										<select class="form-control col-sm-9" id="refCategoryCode" name="refCategoryCode" onchange="categoryBox(this.value)">
 											<option th:each="allProduct : ${allProductList}" th:text="${allProduct.category.refCategoryName}" 
-													th:selected="${productDetail.category.refCategoryName == allProduct.category.refCategoryName}"></option>
+													th:selected="${productDetail.category.refCategoryName == allProduct.category.refCategoryName}" th:value="${allProduct.category.refCategoryCode}"></option>
 										</select>
+									<th:block>
 									</div>
 									<div class="form-group col-lg-6 row">
 										<label for="categoryName" class="col-sm-3 col-form-label" th:align="center">카테고리 (소)</label>
 										<select class="form-control col-sm-9" id="categoryName" name="categoryName">
-											
-											<option th:each="allProduct : ${allProductList}" th:text="${allProduct.category.categoryName}" 
+											<option th:each="allProduct : ${allProductList}" th:if="${productDetail.category.refCategoryName == allProduct.category.refCategoryName}" th:text="${allProduct.category.categoryName}" 
 													th:selected="${productDetail.category.categoryName == allProduct.category.categoryName}">
 											</option>
 										</select>
@@ -135,6 +135,7 @@
     <th:block th:replace="@{/common/script} :: script"></th:block>
 </body>
 	<script>
+	
 		function check() {
 			if(!confirm("상품을 수정하시겠습니까?")) {
 			 	return false;
@@ -145,6 +146,31 @@
 			window.history.back();
 		}
 		
+		function categoryBox(categoryCode) {
+							
+			console.log(categoryCode);
+			
+			$.ajax({
+				url: "/product/selectCategoryCode",
+				data: {"categoryCode" : categoryCode},
+				success: function(data, status, xhr) {
+					console.log(data)
+					
+					const $select = $("#categoryName");
+					$select.html("")
+					
+					for(let index in data) {
+						$('select').removeAttr('disabled');
+						$select.append("<option value='" + data[index].categoryCode + "'>" + data[index].categoryName + "</option>");
+					}
+					
+				},
+				
+				error: function(xhr, status, error) {
+					console.log(error)
+				}
+			});
+		}
 	</script>
 
 </html>

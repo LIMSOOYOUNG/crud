@@ -39,4 +39,10 @@ public class ProductService {
 	}
 
 
+	public List<ProductCategoryDTO> findChildrenCategoryList(int categoryCode) {
+		
+		return productMapper.findChildrenCategoryList(categoryCode);
+	}
+
+
 }

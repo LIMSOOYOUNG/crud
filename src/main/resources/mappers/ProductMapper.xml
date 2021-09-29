@@ -50,6 +50,7 @@
      		, P.PRODUCT_NAME
      		, P.SELL_STATUS
      		, B.CATEGORY_NAME "REF_CATEGORY_NAME"
+     		, A.REF_CATEGORY_CODE            
      		, A.CATEGORY_NAME
           FROM TBL_PRODUCT P
 	      LEFT JOIN TBL_PRODUCT_CATEGORY A ON(P.CATEGORY_CODE = A.CATEGORY_CODE)
@@ -66,13 +67,14 @@
 	</select>
 	
 	<select id="productDetail" resultMap="productResultMap">
-		 SELECT
+		 SELECT 
 	          P.PRODUCT_NO
      		, P.PRODUCT_NAME
      		, T.MANUFACTURER_NAME
      		, P.SELL_STATUS
      		, P.SELLING_PRICE
      		, P.PURCHASE_PRICE
+     		, CA.REF_CATEGORY_CODE
      		, CB.CATEGORY_NAME "REF_CATEGORY_NAME"
      		, CA.CATEGORY_NAME
      		, A.COMPANY_NAME
@@ -82,6 +84,15 @@
 	      JOIN TBL_ACCOUNT A ON(P.ACCOUNT_NO = A.ACCOUNT_NO)
 	      JOIN TBL_MANUFACTURER T ON(P.MANUFACTURER_NO = T.MANUFACTURER_NO)
 	      WHERE P.PRODUCT_NO = #{ productNo }
+	</select>
+	
+	<select id="findChildrenCategoryList" resultMap="productCategoryResultMap">
+		SELECT DISTINCT
+			   PC.CATEGORY_CODE
+			 , PC.CATEGORY_NAME
+		  FROM TBL_PRODUCT_CATEGORY PC
+		 WHERE REF_CATEGORY_CODE = #{ categoryCode }
+			   
 	</select>
 	
 </mapper>
