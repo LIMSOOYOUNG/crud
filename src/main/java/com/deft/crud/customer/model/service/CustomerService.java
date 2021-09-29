@@ -48,4 +48,10 @@ public class CustomerService {
 
         return customerMapper.selectBusinessActivity(customerNo);
     }
+
+    /* 영업 활동 선택 조회 */
+    public BusinessActivityDTO selectBusinessActivityByActivityNo(int activityNo) {
+
+        return customerMapper.selectBusinessActivityByActivityNo(activityNo);
+    }
 }
