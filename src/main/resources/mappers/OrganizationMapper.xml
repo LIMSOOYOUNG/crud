@@ -43,7 +43,7 @@
 		     )
 		VALUES
 		     (
-		       SEQ_DEPT_CODE.NEXTVAL
+		        ('D' || TO_CHAR(SEQ_DEPT_CODE.NEXTVAL))
 		     , #{ deptName }  
 		     , #{ deptFax }
 		     , #{ deptTel }
@@ -61,7 +61,7 @@
 		     )
 		VALUES    
 	         (
-	           SEQ_JOB_CODE.NEXTVAL  
+	          ('J' || TO_CHAR(SEQ_JOB_CODE.NEXTVAL))
 	         , #{ jobName }
 	         , #{ jobStatus }
 	         )

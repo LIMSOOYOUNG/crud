@@ -64,7 +64,7 @@ public class OrganizationController {
 		
 		departDTO.setDeptName(deptName);
 		departDTO.setDeptFax(deptFax);
-		departDTO.setDepttel(deptTel);
+		departDTO.setDeptTel(deptTel);
 		departDTO.setDeptStatus(deptStatus);
 		
 		int result = organizationService.departmentInsert(departDTO);
@@ -74,7 +74,7 @@ public class OrganizationController {
 		}else {
 			rttr.addFlashAttribute("flashMessage", "실패!!");
 		}
-		mv.setViewName("redirect:/organization/departmentinsert");
+		mv.setViewName("redirect:/organization/selectdepartment");
 		
 		return mv;
 	}
@@ -117,7 +117,7 @@ public class OrganizationController {
 		departmentDTO.setDeptCode(deptCode);
 		departmentDTO.setDeptName(deptName);
 		departmentDTO.setDeptFax(deptFax);
-		departmentDTO.setDepttel(deptTel);
+		departmentDTO.setDeptTel(deptTel);
 		departmentDTO.setDeptStatus(deptStatus);
 		
 		int result = organizationService.departmentModify(departmentDTO);

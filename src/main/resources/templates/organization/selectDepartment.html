@@ -16,7 +16,8 @@
 
 				<!-- Content -->
 				<div class="container-fluid" id="container-wrapper">
-					<div class="d-sm-flex align-items-center justify-content-between mb-4">
+					<div
+						class="d-sm-flex align-items-center justify-content-between mb-4">
 						<h1 class="h3 mb-0 text-gray-800">부서 관리</h1>
 						<ol class="breadcrumb">
 							<li class="breadcrumb-item"><a href="./">Home</a></li>
@@ -24,7 +25,9 @@
 							<li class="breadcrumb-item active" aria-current="page">부서 관리</li>
 						</ol>
 					</div>
-					
+					<div align="right">
+							<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#deptinsert" id="#deptbtn">부서 추가</button>
+					</div><br>
 
 					<!-- Row -->
 					<div class="row">
@@ -62,7 +65,40 @@
 						</div>
 					</div>
 				</div>
-
+				<!-- 부서 추가 -->
+				<form action="departmentinsert" method="post">
+					<div class="modal fade" id="deptinsert" tabindex="-1" role="dialog"
+						aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+						<div class="modal-dialog" role="document">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title" id="exampleModalLongTitle"
+										style="color: blue;">부서추가</h5>
+									<button type="button" class="close" data-dismiss="modal"
+										aria-label="Close">
+										<span aria-hidden="true">&times;</span>
+									</button>
+								</div>
+								<div class="modal-body">
+									<br> <label style="color: blue;">추가할 부서 : &nbsp; </label><input
+										type="text" class="form-control" name="deptName"> <br>
+									 <br> <label style="color: blue;">부서 펙스번호
+										: &nbsp; </label><input type="text" class="form-control"
+										name="deptFax"> <br> <label style="color: blue;">부서
+										전화번호 : &nbsp; </label><input type="text" class="form-control"
+										name="deptTel"> <br> <br> <label
+										style="color: blue;">상태 : </label> <label><input
+										type="radio" name="deptStatus" value="Y">Y</label> <label><input
+										type="radio" name="deptStatus" value="N">N</label>
+								</div>
+								<div class="modal-footer">
+									<button type="submit" class="btn btn-primary">신규직급추가</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</form>
+				
 			</div>
 		</div>
 	</div>
