@@ -51,14 +51,14 @@ public class BoardController {
 	}
 	
 	/* 자유게시글 등록 */
-	@GetMapping("insertfreeboard")
-	public void insertfreeboard() {}
+	@GetMapping("freeboardinsert")
+	public void insertfreeboard()throws Exception {}
 
-	@PostMapping("insertfreeboard")
+	@PostMapping("freeboardinsert")
 	public ModelAndView insertfreeboardForm(ModelAndView mv, RedirectAttributes rttr,
 			@RequestParam String boardName, @RequestParam String writerName,
 			@RequestParam java.util.Date writerDate, @RequestParam String contents) 
-					throws UnsupportedEncodingException{
+					throws Exception {
 
 		BoardDTO board = new BoardDTO();
 
@@ -74,7 +74,7 @@ public class BoardController {
 		}else {
 			rttr.addFlashAttribute("flashMessage", "실패!!");
 		}
-		mv.setViewName("redirect:/insertfreeboard");
+		mv.setViewName("redirect:/board/selectfreeboard");
 
 		return mv;
 	}

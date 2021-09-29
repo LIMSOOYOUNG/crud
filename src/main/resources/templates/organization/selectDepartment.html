@@ -66,8 +66,8 @@
 					</div>
 				</div>
 				<!-- 부서 추가 -->
-				<form action="departmentinsert" method="post">
-					<div class="modal fade" id="deptinsert" tabindex="-1" role="dialog"
+				<form th:action="departmentinsert" method="post">
+					<div class="modal fade modal-md" id="deptinsert" tabindex="-1" role="dialog"
 						aria-labelledby="exampleModalLongTitle" aria-hidden="true">
 						<div class="modal-dialog" role="document">
 							<div class="modal-content">
@@ -80,19 +80,32 @@
 									</button>
 								</div>
 								<div class="modal-body">
-									<br> <label style="color: blue;">추가할 부서 : &nbsp; </label><input
-										type="text" class="form-control" name="deptName"> <br>
-									 <br> <label style="color: blue;">부서 펙스번호
-										: &nbsp; </label><input type="text" class="form-control"
-										name="deptFax"> <br> <label style="color: blue;">부서
-										전화번호 : &nbsp; </label><input type="text" class="form-control"
-										name="deptTel"> <br> <br> <label
-										style="color: blue;">상태 : </label> <label><input
-										type="radio" name="deptStatus" value="Y">Y</label> <label><input
-										type="radio" name="deptStatus" value="N">N</label>
+									<div class="form-group">
+										<label>추가할 부서</label>
+										<input type="text" class="form-control" name="deptName">
+									</div>
+									<div class="form-group">
+										<label>부서 펙스번호</label>
+										<input type="text" class="form-control" name="deptFax">
+									</div>
+									<div class="form-group">
+										<label>부서 전화번호</label>
+										<input type="text" class="form-control" name="deptTel">
+									</div>
+									<div class="form-group">
+										<label>부서 상태</label>
+											<div class="custom-control custom-radio">
+										 		<input type="radio" id="customRadio3" name="deptStatus" class="custom-control-input" value="Y">
+                        					    <label class="custom-control-label" for="customRadio3">Y</label>
+											</div>
+									 		<div class="custom-control custom-radio">
+												<input type="radio" id="customRadio4" name="deptStatus" class="custom-control-input" value="N">
+                        						<label class="custom-control-label" for="customRadio4">N</label>
+											</div>
+									</div>
 								</div>
 								<div class="modal-footer">
-									<button type="submit" class="btn btn-primary">신규직급추가</button>
+									<button type="submit" class="btn btn-primary">신규부서 추가</button>
 								</div>
 							</div>
 						</div>

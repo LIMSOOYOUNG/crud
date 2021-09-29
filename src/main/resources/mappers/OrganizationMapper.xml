@@ -81,7 +81,7 @@
 		UPDATE 
 		       TBL_JOB J
 	       SET J.JOB_NAME = #{ jobName }
-	         , J.JOB_STATUS = #{ jobStatus}
+	         , J.JOB_STATUS = #{ jobStatus }
 	     WHRER J.JOB_CODE = #{ jobCode }   
 	</update>
 	
