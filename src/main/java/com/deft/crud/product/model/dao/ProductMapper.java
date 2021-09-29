@@ -16,4 +16,6 @@ public interface ProductMapper {
 
 	ProductDTO productDetail(int productNo);
 
+	List<ProductCategoryDTO> findChildrenCategoryList(int categoryCode);
+
 }

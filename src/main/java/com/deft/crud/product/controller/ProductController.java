@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.deft.crud.product.model.dto.ProductCategoryDTO;
@@ -71,9 +72,29 @@ public class ProductController {
 		return mv;
 	}
 	
+	
+	@GetMapping(value = "/selectCategoryCode", produces = "application/json; charset=UTF-8")
+	@ResponseBody
+	public List<ProductCategoryDTO>	findCategoryList(@RequestParam("categoryCode") int categoryCode) {
+		
+		System.out.println("categoryCode : " + categoryCode);
+		
+		System.out.println("==========");
+		System.out.println("==========");
+		System.out.println("==========");
+		System.out.println("==========");
+		System.out.println("==========");
+		System.out.println(productService.findChildrenCategoryList(categoryCode));
+		
+		return productService.findChildrenCategoryList(categoryCode);
+		
+	}
+	
+	
+	
 	@PostMapping("/updateProduct") 
 	public ModelAndView upadateProduct(ModelAndView mv,
-									 	  @RequestParam("refCategoryName") String refCategoryName
+									 	  @RequestParam("refCategoryName") int refCategoryName
 									 	, @RequestParam("categoryName")	String categoryName
 										, @RequestParam("companyName") String companyName
 										, @RequestParam("productNo") int productNo 
@@ -96,11 +117,12 @@ public class ProductController {
 		System.out.println(sellStatus);
 		System.out.println();
 		System.out.println();
-		System.out.println();
 		
 		
 		return null;
 	}
+	
+	
 	
 	
 	@GetMapping("/insertProduct")
