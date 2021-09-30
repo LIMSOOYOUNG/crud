@@ -1,8 +1,6 @@
 package com.deft.crud.customer.model.dao;
 
-import com.deft.crud.customer.model.dto.BusinessActivityDTO;
-import com.deft.crud.customer.model.dto.CustomerCompanyDTO;
-import com.deft.crud.customer.model.dto.CustomerDTO;
+import com.deft.crud.customer.model.dto.*;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -27,4 +25,14 @@ public interface CustomerMapper {
 
     /* 영업 활동 선택 조회 */
     BusinessActivityDTO selectBusinessActivityByActivityNo(int activityNo);
+
+    /* 고객 기본 정보 수정 */
+    int modifyBasicInfo(ModifyBasicInfoDTO parameters);
+
+    /* 고객 상세 정보 수정 */
+    int modifyDetailInfoToCustomer(ModifyDetailInfoForExtDTO parameters);
+    int modifyDetailInfoToCompany(ModifyDetailInfoForExtDTO parameters);
+
+    /* 기존, 해지 고객 상태 변경 */
+    int modifyExtCustomerStatus(int customerNo);
 }
