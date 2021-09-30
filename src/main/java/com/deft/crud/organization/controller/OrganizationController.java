@@ -111,7 +111,7 @@ public class OrganizationController {
 	
 	@PostMapping("departmentmodify")
 	public ModelAndView departmentModifyForm(ModelAndView mv, RedirectAttributes rttr, @RequestParam String deptCode
-		     , @RequestParam String deptName, @RequestParam String deptFax, @RequestParam String deptTel, @RequestParam String deptStatus) {
+		     , @RequestParam String deptName, @RequestParam String deptFax, @RequestParam String deptTel, @RequestParam String deptStatus) throws Exception {
 		
 		DepartmentDTO departmentDTO = new DepartmentDTO();
 		departmentDTO.setDeptCode(deptCode);
@@ -138,7 +138,7 @@ public class OrganizationController {
 	
 	@PostMapping("jobmodify")
 	public ModelAndView jobModifyForm(ModelAndView mv, RedirectAttributes rttr, @RequestParam String jobCode
-            , @RequestParam String jobName, @RequestParam String jobStatus) {
+            , @RequestParam String jobName, @RequestParam String jobStatus)throws Exception {
 		
 		JobDTO jobDTO = new JobDTO();
 		jobDTO.setJobCode(jobCode);
