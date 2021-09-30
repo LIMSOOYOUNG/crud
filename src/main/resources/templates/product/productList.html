@@ -6,7 +6,13 @@
 	<th:block th:replace="@{common/config} :: config"></th:block>
 	<link href="/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
 </head>
-
+<script>
+	const message = '[[${ message }]]';
+	
+	if(message) {
+		alert(message);
+	}
+</script>
 <body id="page-top">
 	<div id="wrapper">
 		<!-- Sidebar -->
@@ -84,6 +90,7 @@
       $('#dataTable').DataTable(); // ID From dataTable 
       $('#dataTableHover').DataTable(); // ID From dataTable with Hover
     });
+    	
     </script>
 </body>
 </html>

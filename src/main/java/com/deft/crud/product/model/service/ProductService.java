@@ -4,8 +4,11 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.deft.crud.product.model.dao.ProductMapper;
+import com.deft.crud.product.model.dto.AccountDTO;
+import com.deft.crud.product.model.dto.ManufacturerDTO;
 import com.deft.crud.product.model.dto.ProductCategoryDTO;
 import com.deft.crud.product.model.dto.ProductDTO;
 
@@ -32,6 +35,20 @@ public class ProductService {
 		return productMapper.allCategoryList();
 	}
 
+	public List<ProductCategoryDTO> refCategoryList() {
+		
+		return productMapper.refCategoryList();
+	} 
+
+	public List<ProductCategoryDTO> childrenCategoryList() {
+		
+		return productMapper.childrenCategoryList();
+	}
+
+	public List<ManufacturerDTO> manufacturerList() {
+
+		return productMapper.manufacturerList();
+	}
 
 	public ProductDTO productDetail(int productNo) {
 
@@ -43,6 +60,24 @@ public class ProductService {
 		
 		return productMapper.findChildrenCategoryList(categoryCode);
 	}
+
+
+	public List<AccountDTO> accountList() {
+
+		return productMapper.accountList();
+	}
+
+	@Transactional
+	public int updateProduct(ProductDTO parameters) {
+
+		return productMapper.updateProduct(parameters);
+	}
+
+
+
+
+
+
 
 
 }
