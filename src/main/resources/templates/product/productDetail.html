@@ -51,35 +51,42 @@
 							<div class="card mb-4">
 								<br>
 								<h3 align="center">상품정보</h3>
-<!-- 								<form > -->
 								<div class="row">
 									<div class="form-group col-lg-6 row">
 										<label for="refCategoryName" class="col-sm-3 col-form-label" th:align="center">카테고리 (중)</label>
 										<select class="form-control col-sm-9" id="refCategoryCode" name="refCategoryCode" onchange="categoryBox(this.value)">
-											<option th:each="allProduct : ${allProductList}" th:text="${allProduct.category.refCategoryName}" 
-													th:selected="${productDetail.category.refCategoryName == allProduct.category.refCategoryName}" th:value="${allProduct.category.refCategoryCode}"></option>
+											<option th:each="refCategory : ${refCategoryList}" th:text="${refCategory.refCategoryName}" 
+													th:selected="${productDetail.category.refCategoryName == refCategory.refCategoryName}" th:value="${refCategory.refCategoryCode}">
+											</option>
 										</select>
 									<th:block>
 									</div>
 									<div class="form-group col-lg-6 row">
 										<label for="categoryName" class="col-sm-3 col-form-label" th:align="center">카테고리 (소)</label>
-										<select class="form-control col-sm-9" id="categoryName" name="categoryName">
-											<option th:each="allProduct : ${allProductList}" th:if="${productDetail.category.refCategoryName == allProduct.category.refCategoryName}" th:text="${allProduct.category.categoryName}" 
-													th:selected="${productDetail.category.categoryName == allProduct.category.categoryName}">
+										<select class="form-control col-sm-9" id="categoryCode" name="categoryCode">
+											<option th:each="childrenCategory : ${childrenCategoryList}" th:if="${productDetail.category.categoryName == childrenCategory.categoryName}" th:text="${childrenCategory.categoryName}" 
+													th:selected="${productDetail.category.categoryName == childrenCategory.categoryName}" th:value="${childrenCategory.categoryCode}">
 											</option>
 										</select>
 									</div>
 								</div>
+								
 								<div class="row">
-                     					<div class="form-group col-lg-6 row">
+                     				<div class="form-group col-lg-6 row">
 										<label for="manufacturerName" class="col-sm-3 col-form-label" th:align="center">제조사</label>
-										<input type="text" class="form-control col-sm-9" th:value="${productDetail.manufacturer.manufacturerName}" 
-												id="manufacturerName" name="manufacturerName">
+										<select class="form-control col-sm-9" id="manufactuerNo" name="manufacturerNo">
+											<option th:each="productManufacturer : ${manufacturerList}" th:text="${productManufacturer.manufacturerName}" 
+													th:selected="${productDetail.manufacturer.manufacturerName == productManufacturer.manufacturerName}" th:value="${productManufacturer.manufacturerNo}">
+											</option>
+										</select>
 									</div>
 									<div class="form-group col-lg-6 row">
-										<label for="companyName" class="col-sm-3 col-form-label" th:align="center">거래처</label>
-										<input type="text" class="form-control col-sm-9" th:value="${productDetail.account.companyName}" 
-												id="companyName" name="companyName">
+										<label for="manufacturerName" class="col-sm-3 col-form-label" th:align="center">거래처</label>
+										<select class="form-control col-sm-9" id="accountNo" name="accountNo">
+											<option th:each="productAccount : ${accountList}" th:text="${productAccount.companyName}" 
+													th:selected="${productDetail.account.companyName == productAccount.companyName}" th:value="${productAccount.accountNo}">
+											</option>
+										</select>
 									</div>
 								</div>
 								
@@ -112,11 +119,12 @@
 									<div class="form-group col-lg-6 row">
 										<label for="productNo" class="col-sm-3 col-form-label" th:align="center">판매상태</label>
 										<select class="form-control col-sm-9" id="sellStatus" name="sellStatus">
-											<option th:each = "allProduct : ${allProductList}" th:text = "${allProduct.sellStatus}" 
-													th:selected="${allProduct.sellStatus == productDetail.sellStatus}"></option>
+											<option th:selected="${productDetail.sellStatus}=='판매'" th:value="판매">판매</option>
+											<option th:selected="${productDetail.sellStatus}=='미판매'" th:value="미판매">미판매</option>
 										</select>
 									</div>
 								</div>
+								
 								<div class="row">
 									<div class="form-group col-lg-12 mt-3" th:align="center">
 										<button type="submit" class="btn btn-primary mb-1 mx-3" id="updateBtn">상품수정</button>
@@ -125,8 +133,7 @@
 								</div>
 							</div>
 						</div>
-						</form>
-<!-- 					</div> -->
+					</form>
 				</div>
 			</div>
 		</div>
@@ -135,13 +142,15 @@
     <th:block th:replace="@{/common/script} :: script"></th:block>
 </body>
 	<script>
-	
+		
+		/* 확인 버튼 */
 		function check() {
 			if(!confirm("상품을 수정하시겠습니까?")) {
 			 	return false;
 			}
 		}
 		
+		/* 뒤로가기 버튼 */
 		function goBack() {
 			window.history.back();
 		}
@@ -156,12 +165,17 @@
 				success: function(data, status, xhr) {
 					console.log(data)
 					
-					const $select = $("#categoryName");
+					const $select = $("#categoryCode");
 					$select.html("")
 					
 					for(let index in data) {
 						$('select').removeAttr('disabled');
+						
+						console.log("categoryCode : " + categoryCode);
+						
 						$select.append("<option value='" + data[index].categoryCode + "'>" + data[index].categoryName + "</option>");
+							
+						console.log($select)
 					}
 					
 				},
@@ -174,4 +188,3 @@
 	</script>
 
 </html>
-

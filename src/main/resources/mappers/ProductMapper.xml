@@ -8,7 +8,9 @@
 		<result property="purchasePrice" column="PURCHASE_PRICE"/>
 		<result property="sellingPrice" column="SELLING_PRICE"/>
 		<result property="unit" column="UNIT"/>
-		<result property="accountNo" column="MANUFACTURER_NO"/>
+		<result property="categoryCode" column="CATEGORY_CODE"/>
+		<result property="accountNo" column="ACCOUNT_NO"/>
+		<result property="manufacturerNo" column="MANUFACTURER_NO"/>
 
 		<association property="category" resultMap="productCategoryResultMap"/>		
 		
@@ -45,7 +47,7 @@
 	</resultMap>
 	
 	<select id="allProductList" resultMap="productResultMap">
-	   SELECT
+	   SELECT /*com.deft.crud.product.model.dao.ProductMapper#allProductList()*/
 	          P.PRODUCT_NO
      		, P.PRODUCT_NAME
      		, P.SELL_STATUS
@@ -58,7 +60,7 @@
 	</select>
 	
 	<select id="allCategoryList" resultMap="productCategoryResultMap">
-		SELECT
+		SELECT /*com.deft.crud.product.model.dao.ProductMapper#allCategoryList()*/
        	       A.CATEGORY_NAME "REF_CATEGORY_NAME"
      		 , B.CATEGORY_NAME 
              , B.REF_CATEGORY_CODE
@@ -66,18 +68,43 @@
            JOIN TBL_PRODUCT_CATEGORY B ON(B.REF_CATEGORY_CODE = A.CATEGORY_CODE)
 	</select>
 	
+	<select id="refCategoryList" resultMap="productCategoryResultMap">
+		 SELECT /*com.deft.crud.product.model.dao.ProductMapper#refCategoryList()*/
+       	        A.CATEGORY_CODE "REF_CATEGORY_CODE"
+     	   	  , A.CATEGORY_NAME "REF_CATEGORY_NAME"
+  	       FROM TBL_PRODUCT_CATEGORY A
+ 		  WHERE REF_CATEGORY_CODE IS NULL
+	
+	</select>
+	
+	<select id="childrenCategoryList" resultMap="productCategoryResultMap">
+		SELECT /*com.deft.crud.product.model.dao.ProductMapper#childrenCategoryList()*/
+        	   A.CATEGORY_CODE 
+             , A.CATEGORY_NAME 
+          FROM TBL_PRODUCT_CATEGORY A
+         WHERE A.REF_CATEGORY_CODE IS NOT NULL
+	</select>
+	
+	<select id="manufacturerList" resultMap="manufacturerResultMap">
+		SELECT /*com.deft.crud.product.model.dao.ProductMapper#manufacturerList()*/
+			   A.MANUFACTURER_NO
+			 , A.MANUFACTURER_NAME
+		  FROM TBL_MANUFACTURER A
+	</select>
+	
+	
 	<select id="productDetail" resultMap="productResultMap">
-		 SELECT 
-	          P.PRODUCT_NO
-     		, P.PRODUCT_NAME
-     		, T.MANUFACTURER_NAME
-     		, P.SELL_STATUS
-     		, P.SELLING_PRICE
-     		, P.PURCHASE_PRICE
-     		, CA.REF_CATEGORY_CODE
-     		, CB.CATEGORY_NAME "REF_CATEGORY_NAME"
-     		, CA.CATEGORY_NAME
-     		, A.COMPANY_NAME
+		 SELECT /*com.deft.crud.product.model.dao.ProductMapper#productDetail()*/
+                P.PRODUCT_NO
+	   		  , P.PRODUCT_NAME
+	   		  , T.MANUFACTURER_NAME
+	   		  , P.SELL_STATUS
+	   	      , P.SELLING_PRICE
+	   	      , P.PURCHASE_PRICE
+	   	      , CA.REF_CATEGORY_CODE
+	   	      , CB.CATEGORY_NAME "REF_CATEGORY_NAME"
+	   	      , CA.CATEGORY_NAME
+	   	      , A.COMPANY_NAME
           FROM TBL_PRODUCT P
 	      LEFT JOIN TBL_PRODUCT_CATEGORY CA ON(P.CATEGORY_CODE = CA.CATEGORY_CODE)
 	      LEFT JOIN TBL_PRODUCT_CATEGORY CB ON(CA.REF_CATEGORY_CODE = CB.CATEGORY_CODE)
@@ -87,12 +114,33 @@
 	</select>
 	
 	<select id="findChildrenCategoryList" resultMap="productCategoryResultMap">
-		SELECT DISTINCT
+		SELECT /*com.deft.crud.product.model.dao.ProductMapper#findChildrenCategoryList()*/
 			   PC.CATEGORY_CODE
 			 , PC.CATEGORY_NAME
+			 , PC.REF_CATEGORY_CODE
 		  FROM TBL_PRODUCT_CATEGORY PC
 		 WHERE REF_CATEGORY_CODE = #{ categoryCode }
 			   
 	</select>
 	
+	<select id="accountList" resultMap="accountResultMap">
+		SELECT /*com.deft.crud.product.model.dao.ProductMapper#accountList()*/
+			   A.ACCOUNT_NO
+			 , A.COMPANY_NAME
+		  FROM TBL_ACCOUNT A
+	
+	</select>
+	
+	<update id="updateProduct" parameterType="com.deft.crud.product.model.dto.ProductDTO">
+		UPDATE /*com.deft.crud.product.model.dao.ProductMapper#updateProduct()*/
+			   TBL_PRODUCT A
+		   SET A.SELL_STATUS = #{ sellStatus }
+		     , A.PRODUCT_NAME = #{ productName }
+		     , A.PURCHASE_PRICE = #{ purchasePrice }
+		     , A.SELLING_PRICE = #{ sellingPrice }
+		     , A.CATEGORY_CODE = #{ categoryCode }
+		     , A.ACCOUNT_NO = #{ accountNo } 
+		     , A.MANUFACTURER_NO = #{ manufacturerNo }
+		 WHERE A.PRODUCT_NO = #{ productNo } 
+	</update>
 </mapper>

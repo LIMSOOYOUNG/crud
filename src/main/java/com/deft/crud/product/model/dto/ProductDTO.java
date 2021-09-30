@@ -8,8 +8,10 @@ public class ProductDTO {
 	private int purchasePrice;
 	private int sellingPrice;
 	private String unit;
+	private int categoryCode;
 	private int accountNo;
 	private int manufacturerNo;
+
 	private ProductCategoryDTO category;
 	private ManufacturerDTO manufacturer;
 	private AccountDTO account;
@@ -17,8 +19,8 @@ public class ProductDTO {
 	public ProductDTO() {}
 
 	public ProductDTO(int productNo, String sellStatus, String productName, int purchasePrice, int sellingPrice,
-			String unit, int accountNo, int manufacturerNo, ProductCategoryDTO category, ManufacturerDTO manufacturer,
-			AccountDTO account) {
+			String unit, int categoryCode, int accountNo, int manufacturerNo, ProductCategoryDTO category,
+			ManufacturerDTO manufacturer, AccountDTO account) {
 		super();
 		this.productNo = productNo;
 		this.sellStatus = sellStatus;
@@ -26,6 +28,7 @@ public class ProductDTO {
 		this.purchasePrice = purchasePrice;
 		this.sellingPrice = sellingPrice;
 		this.unit = unit;
+		this.categoryCode = categoryCode;
 		this.accountNo = accountNo;
 		this.manufacturerNo = manufacturerNo;
 		this.category = category;
@@ -81,6 +84,14 @@ public class ProductDTO {
 		this.unit = unit;
 	}
 
+	public int getCategoryCode() {
+		return categoryCode;
+	}
+
+	public void setCategoryCode(int categoryCode) {
+		this.categoryCode = categoryCode;
+	}
+
 	public int getAccountNo() {
 		return accountNo;
 	}
@@ -125,8 +136,9 @@ public class ProductDTO {
 	public String toString() {
 		return "ProductDTO [productNo=" + productNo + ", sellStatus=" + sellStatus + ", productName=" + productName
 				+ ", purchasePrice=" + purchasePrice + ", sellingPrice=" + sellingPrice + ", unit=" + unit
-				+ ", accountNo=" + accountNo + ", manufacturerNo=" + manufacturerNo + ", category=" + category
-				+ ", manufacturer=" + manufacturer + ", account=" + account + "]";
+				+ ", categoryCode=" + categoryCode + ", accountNo=" + accountNo + ", manufacturerNo=" + manufacturerNo
+				+ ", category=" + category + ", manufacturer=" + manufacturer + ", account=" + account + "]";
 	}
 
+	
 }
