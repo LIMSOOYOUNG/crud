@@ -5,6 +5,8 @@
     <th:block th:replace="@{common/config} :: config"></th:block>
     <link href="/vendor/datatables/dataTables.bootstrap4.min.css"
           rel="stylesheet">
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
 </head>
 
 <body id="page-top">
@@ -52,22 +54,28 @@
                                 </div>
                                 <div class="row">
                                     <div class="form-group col-lg-4 row">
-                                        <label for="customerNo" class="col-lg-4 form-control-plaintext"
-                                               th:align="center" style="padding: 10px 0;">고객번호</label>
+                                        <div class="form-group col-lg-1"><input type="hidden" value="emptyRow"></div>
+                                        <label for="customerNo" class="col-lg-3 form-control-plaintext"
+                                               th:align="center"
+                                               style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">고객번호</label>
                                         <input th:disabled="${customerInfo.customerList[0].customerNo}"
                                                id="customerNo" type="text" class="form-control col-lg-8"
                                                th:value="${customerInfo.customerList[0].customerNo}">
                                     </div>
                                     <div class="form-group col-lg-4 row">
-                                        <label for="customerName" class="col-lg-4 form-control-plaintext"
-                                               th:align="center" style="padding: 10px 0;">고객명</label>
+                                        <div class="form-group col-lg-1"><input type="hidden" value="emptyRow"></div>
+                                        <label for="customerName" class="col-lg-3 form-control-plaintext"
+                                               th:align="center"
+                                               style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">고객명</label>
                                         <input th:disabled="${customerInfo.customerList[0].customerName}"
                                                id="customerName" type="text" class="form-control col-lg-8"
                                                th:value="${customerInfo.customerList[0].customerName}">
                                     </div>
                                     <div class="form-group col-lg-4 row">
-                                        <label for="empName" class="col-lg-4 form-control-plaintext"
-                                               th:align="center" style="padding: 10px 0;">담당사원</label>
+                                        <div class="form-group col-lg-1"><input type="hidden" value="emptyRow"></div>
+                                        <label for="empName" class="col-lg-3 form-control-plaintext"
+                                               th:align="center"
+                                               style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">담당사원</label>
                                         <input th:disabled="${customerInfo.customerList[0].empInfo.empName}"
                                                id="empName" type="text" class="form-control col-lg-8"
                                                th:value="${customerInfo.customerList[0].empInfo.empName}">
@@ -75,22 +83,28 @@
                                 </div>
                                 <div class="row">
                                     <div class="form-group col-lg-4 row">
-                                        <label for="email" class="col-lg-4 form-control-plaintext"
-                                               th:align="center" style="padding: 10px 0;">이메일</label>
+                                        <div class="form-group col-lg-1"><input type="hidden" value="emptyRow"></div>
+                                        <label for="email" class="col-lg-3 form-control-plaintext"
+                                               th:align="center"
+                                               style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">이메일</label>
                                         <input th:disabled="${customerInfo.customerList[0].customerEmail}"
                                                id="email" type="text" class="form-control col-lg-8"
                                                th:value="${customerInfo.customerList[0].customerEmail}">
                                     </div>
                                     <div class="form-group col-lg-4 row">
-                                        <label for="businessStatus" class="col-lg-4 form-control-plaintext"
-                                               th:align="center" style="padding: 10px 0;">업태</label>
+                                        <div class="form-group col-lg-1"><input type="hidden" value="emptyRow"></div>
+                                        <label for="businessStatus" class="col-lg-3 form-control-plaintext"
+                                               th:align="center"
+                                               style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">업태</label>
                                         <input th:disabled="${customerInfo.businessStatus}"
                                                id="businessStatus" type="text" class="form-control col-lg-8"
                                                th:value="${customerInfo.businessStatus}">
                                     </div>
                                     <div class="form-group col-lg-4 row">
-                                        <label for="customerStatus" class="col-lg-4 form-control-plaintext"
-                                               th:align="center" style="padding: 10px 0;">고객상태</label>
+                                        <div class="form-group col-lg-1"><input type="hidden" value="emptyRow"></div>
+                                        <label for="customerStatus" class="col-lg-3 form-control-plaintext"
+                                               th:align="center"
+                                               style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">고객상태</label>
                                         <input th:disabled="${customerInfo.customerList[0].extCustomerDetail.customerStatus}"
                                                id="customerStatus" type="text" class="form-control col-lg-8"
                                                th:value="${customerInfo.customerList[0].extCustomerDetail.customerStatus}">
@@ -98,15 +112,19 @@
                                 </div>
                                 <div class="row">
                                     <div class="form-group col-lg-4 row">
-                                        <label for="phone" class="col-lg-4 form-control-plaintext"
-                                               th:align="center" style="padding: 10px 0;">전화번호</label>
+                                        <div class="form-group col-lg-1"><input type="hidden" value="emptyRow"></div>
+                                        <label for="phone" class="col-lg-3 form-control-plaintext"
+                                               th:align="center"
+                                               style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">전화번호</label>
                                         <input th:disabled="${customerInfo.customerList[0].customerPhone}"
                                                id="phone" type="text" class="form-control col-lg-8"
                                                th:value="${customerInfo.customerList[0].customerPhone}">
                                     </div>
                                     <div class="form-group col-lg-4 row">
-                                        <label for="numberOfEmp" class="col-lg-4 form-control-plaintext"
-                                               th:align="center" style="padding: 10px 0;">직원수</label>
+                                        <div class="form-group col-lg-1"><input type="hidden" value="emptyRow"></div>
+                                        <label for="numberOfEmp" class="col-lg-3 form-control-plaintext"
+                                               th:align="center"
+                                               style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">직원수</label>
                                         <input th:disabled="${customerInfo.numberOfEmployees}"
                                                id="numberOfEmp" type="text" class="form-control col-lg-8"
                                                th:value="${customerInfo.numberOfEmployees}">
@@ -114,7 +132,8 @@
                                     <div class="form-group col-lg-4 row">
                                         <div class="col-lg-1"><input type="hidden"></div>
                                         <a class="btn btn-primary btn-icon-split col-lg-5"
-                                           style="height: 41px; font-size: 19px">
+                                           style="height: 41px; font-size: 19px"
+                                           id="modifyManager">
                                         <span class="text text-white">담당사원변경</span>
                                         </a>
                                         <div class="col-lg-1"><input type="hidden"></div>
@@ -127,15 +146,19 @@
                                 </div>
                                 <div class="row">
                                     <div class="form-group col-lg-4 row">
-                                        <label for="fax" class="col-lg-4 form-control-plaintext"
-                                               th:align="center" style="padding: 10px 0;">팩스</label>
+                                        <div class="form-group col-lg-1"><input type="hidden" value="emptyRow"></div>
+                                        <label for="fax" class="col-lg-3 form-control-plaintext"
+                                               th:align="center"
+                                               style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">팩스</label>
                                         <input th:disabled="${customerInfo.customerList[0].customerFax}"
                                                id="fax" type="text" class="form-control col-lg-8"
                                                th:value="${customerInfo.customerList[0].customerFax}">
                                     </div>
                                     <div class="form-group col-lg-4 row">
-                                        <label for="revenue" class="col-lg-4 form-control-plaintext"
-                                               th:align="center" style="padding: 10px 0;">매출액(만)</label>
+                                        <div class="form-group col-lg-1"><input type="hidden" value="emptyRow"></div>
+                                        <label for="revenue" class="col-lg-3 form-control-plaintext"
+                                               th:align="center"
+                                               style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">매출액(만)</label>
                                         <input th:disabled="${customerInfo.companyRevenue}"
                                                id="revenue" type="text" class="form-control col-lg-8"
                                                th:value="${customerInfo.companyRevenue}">
@@ -396,6 +419,69 @@
                         </div>
                         <div class="modal-footer">
                             <button type="submit" id="successStatusModify" class="btn btn-primary">상태변경</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!------------- Modify Manager Modal --------------->
+        <div class="modal fade" id="modifyManagerModal" role="dialog">
+            <div class="modal-dialog modal-md modal-dialog-centered">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" style="color: #0da8ee">고객 상태 변경</h4>
+                        <button type="button" class="close" data-dismiss="modal"><i class="far fa-times-circle"></i></button>
+                        <div class="row">
+                            <div class="form-group col-lg-12"><input type="hidden" value="emptyRow"></div>
+                        </div>
+                    </div>
+                    <form th:action="@{/customer/ext/manager/modify}" method="post">
+                        <div class="modal-body">
+                            <div class="card mb-auto">
+                                <div class="row">
+                                    <div class="form-group col-lg-12 row">
+                                        <div class="form-group col-lg-12"><input type="hidden" value="emptyRow"></div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-lg-12 row">
+                                        <div class="form-group col-lg-12"><input type="hidden" value="emptyRow"></div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-lg-12 row">
+                                        <div class="form-group col-lg-12"><input type="hidden" value="emptyRow"></div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-lg-12 row">
+                                        <div class="form-group col-lg-1"><input type="hidden" value="emptyRow"></div>
+                                        <label for="presentManager" class="col-lg-3 form-control-plaintext"
+                                               th:align="center"
+                                               style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">현재 담당사원</label>
+                                        <input th:disabled="${customerInfo.customerList[0].empInfo.empName}"
+                                               id="presentManager" type="text" class="form-control col-lg-8"
+                                               th:value="${customerInfo.customerList[0].empInfo.empName}">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-lg-12 row">
+                                        <div class="form-group col-lg-1"><input type="hidden" value="emptyRow"></div>
+                                        <label for="newManager" class="col-lg-3 form-control-plaintext"
+                                               th:align="center"
+                                               style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">새 담당사원</label>
+                                        <input name="empName"
+                                               id="newManager" type="text" class="form-control col-lg-8">
+                                        <input type="hidden" name="customerNo" th:value="${ customerInfo.customerList[0].customerNo }">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" id="successManagerModify" class="btn btn-primary">담당사원변경</button>
                         </div>
                     </form>
                 </div>
@@ -919,6 +1005,10 @@
             $('#modifyStatusModal').modal();
         });
 
+        $('#modifyManager').click(function () {
+            $('#modifyManagerModal').modal();
+        });
+
         $('#btnBack').click(function () {
            window.history.back();
         });
@@ -939,6 +1029,31 @@
                 }
             });
             $('#activityModal').modal();
+        });
+
+        /* 검색 자동 완성 기능 */
+        $(document).ready(function () {
+            $('#newManager').autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: "/customer/auto",
+                        type: "POST",
+                        data: { term : request.term },
+                        dataType: "json",
+                        success: function (data, textStatus, xhr) {
+                            response($.map(data, function (item) {
+                                return {
+                                    label: item.empName,
+                                    value: item.value
+                                };
+                            }));
+                        },
+                        error: function (xhr, status, error) {
+                            console.log(xhr);
+                        }
+                    });
+                },
+            });
         });
     </script>
 </body>

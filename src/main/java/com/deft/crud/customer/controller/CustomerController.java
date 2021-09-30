@@ -9,8 +9,16 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.SimpleTimeZone;
 
 @Controller
 @RequestMapping("/customer")
@@ -59,7 +67,6 @@ public class CustomerController {
             int actNo = businessActivityDTO.getActivityNo();
             System.out.println(actNo);
         }
-
 
         mv.addObject("customerInfo", customerInfo);
         mv.addObject("businessActivityList", businessActivityList);
@@ -169,8 +176,79 @@ public class CustomerController {
 
         int result = customerService.modifyExtCustomerStatus(customerNo);
 
-        if(customerNo > 0) {
+        if(result > 0) {
             mv.setViewName("redirect:/customer/cusinfo?customerNo=" + customerNo);
+        }
+
+        return mv;
+    }
+
+    /* 분석 고객 상태 변경 */
+    @PostMapping("ana/status/modify")
+    public ModelAndView modifyAnaCustomerStatus(ModelAndView mv, @ModelAttribute AnaCustomerDetailDTO parameters) {
+
+        int customerNo = parameters.getCustomerNo();
+
+        int result = customerService.modifyAnaCustomerStatus(parameters);
+
+        if(result > 0) {
+            mv.setViewName("redirect:/customer/anainfo?customerNo=" + customerNo);
+        }
+
+        return mv;
+    }
+
+    /* 분석 고객 고객화 변경 */
+    @PostMapping("/ana/customization/modify")
+    public ModelAndView modifyAnaCustomization(ModelAndView mv, @ModelAttribute AnaCustomerDetailDTO parameters) {
+
+        int customerNo = parameters.getCustomerNo();
+
+        int result = customerService.modifyAnaCustomization(parameters);
+
+        if(result > 0) {
+            mv.setViewName("redirect:/customer/anainfo?customerNo=" + customerNo);
+        }
+
+        return mv;
+    }
+
+    /* 담당사원명 자동 완성 기능 */
+    @PostMapping("/auto")
+    public void getEmpNameList(HttpServletRequest request, HttpServletResponse response, @RequestParam String term) throws IOException {
+
+        response.setContentType("application/json; charset=UTF-8");
+
+        List<EmpInfoDTO> empList = new ArrayList<>();
+
+        if(term != null) {
+
+            empList = customerService.selectEmpName(term);
+
+            ObjectMapper mapper = new ObjectMapper();
+
+            PrintWriter out = response.getWriter();
+
+            out.print(mapper.writeValueAsString(empList));
+
+            out.close();
+        }
+    }
+
+    /* 분석 고객 영업활동 등록 */
+    @PostMapping("/ana/activity/insert")
+    public ModelAndView insertAnaActivity(ModelAndView mv, @ModelAttribute BusinessActivityDTO parameters) {
+
+        int customerNo = parameters.getCustomerNo();
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss[.FFFFFFFF]");
+
+
+
+        int result = customerService.insertActivity(parameters);
+
+        if(result > 0) {
+            mv.setViewName("redirect:/customer/anainfo?customerNo=" + customerNo);
         }
 
         return mv;

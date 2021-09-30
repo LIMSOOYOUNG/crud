@@ -102,6 +102,25 @@
         <association property="empInfo" resultMap="empInfoResultMap"/>
     </resultMap>
 
+    <!-- 영업 활동 등록 -->
+    <insert id="insertActivity" parameterType="com.deft.crud.customer.model.dto.BusinessActivityDTO">
+        INSERT /* com.deft.crud.customer.model.dao.CustomerMapper#insertActivity() */
+          INTO TBL_BUSINESS_ACTIVITY
+        (
+          ACTIVITY_NO, CUSTOMER_NO, BUSINESS_SUBJECT
+        , BUSINESS_TYPE, BUSINESS_LOCATION, BUSINESS_PURPOSE
+        , BUSINESS_CONTENTS, WRITING_TIME, ACTIVITY_START_TIME
+        , ACTIVITY_END_TIME, EMP_NO
+        )
+        VALUES
+        (
+          SEQ_ACTIVITY_NO.NEXTVAL, #{ customerNo }, #{ businessSubject }
+        , #{ businessType }, #{ businessLocation }, #{ businessPurpose }
+        , #{ businessContents }, SYSDATE, #{ activityStartTime }
+        , #{ activityEndTime }, #{ empNo }
+        )
+    </insert>
+
     <!-- 고객 기본 정보 수정 -->
     <update id="modifyBasicInfo" parameterType="com.deft.crud.customer.model.dto.ModifyBasicInfoDTO">
         UPDATE /* com.deft.crud.customer.model.dao.CustomerMapper#modifyBasicInfo() */
@@ -145,6 +164,23 @@
                                    ELSE '기존고객'
                                    END
          WHERE E.CUSTOMER_NO = #{ customerNo }
+    </update>
+
+    <!-- 분석 고객 상태 변경 -->
+    <update id="modifyAnaCustomerStatus" parameterType="com.deft.crud.customer.model.dto.AnaCustomerDetailDTO">
+        UPDATE /* com.deft.crud.customer.model.dao.CustomerMapper#modifyAnaCustomerStatus() */
+               TBL_ANA_CUSTOMER_DETAIL A
+           SET A.CUSTOMER_STATUS = #{ customerStatus }
+         WHERE A.CUSTOMER_NO = #{ customerNo }
+    </update>
+
+    <!-- 분석 고객 고객화 수정 -->
+    <update id="modifyAnaCustomization" parameterType="com.deft.crud.customer.model.dto.AnaCustomerDetailDTO">
+        UPDATE /* com.deft.crud.customer.model.dao.CustomerMapper#modifyAnaCustomization */
+               TBL_ANA_CUSTOMER_DETAIL A
+           SET A.CUSTOMIZATION_LEVEL = #{ customizationLevel }
+             , A.CUSTOMIZATION_POSIBILLITY = #{ customizationPosibillity }
+         WHERE A.CUSTOMER_NO = #{ customerNo }
     </update>
 
     <!-- 전체 고객 조회 -->
@@ -283,5 +319,14 @@
           FROM TBL_BUSINESS_ACTIVITY BA
           LEFT JOIN TBL_EMP_INFO E ON (BA.EMP_NO = E.EMP_NO)
          WHERE BA.ACTIVITY_NO = #{ activityNo }
+    </select>
+
+    <!-- 담당사원명 조회 -->
+    <select id="selectEmpName" resultType="com.deft.crud.customer.model.dto.EmpInfoDTO">
+        SELECT /* com.deft.crud.customer.model.dao.CustomerMapper#selectEmpName() */
+               EMP_NO
+             , EMP_NAME
+          FROM TBL_EMP_INFO
+         WHERE EMP_NAME LIKE '%'||#{ term }||'%'
     </select>
 </mapper>
