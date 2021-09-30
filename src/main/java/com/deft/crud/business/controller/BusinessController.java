@@ -13,16 +13,20 @@ import com.deft.crud.business.model.dto.BusinessActivityDTO;
 import com.deft.crud.business.model.dto.BusinessChanceDTO;
 import com.deft.crud.business.model.dto.BusinessChanceHistoryDTO;
 import com.deft.crud.business.model.service.BusinessService;
+import com.deft.crud.customer.model.dto.CustomerCompanyDTO;
+import com.deft.crud.customer.model.service.CustomerService;
 
 @Controller
 @RequestMapping("/business/*")
 public class BusinessController {
 
 	private final BusinessService businessService;
+	private final CustomerService customerService;
 	
 	@Autowired
-	public BusinessController(BusinessService businessService) {
+	public BusinessController(BusinessService businessService, CustomerService customerService) {
 		this.businessService = businessService;
+		this.customerService = customerService;
 	}
 	
 	/* 전체 영업기회 목록 조회 */
@@ -52,9 +56,15 @@ public class BusinessController {
 		/* 선택한 영업기회의 활동이력*/
 		List<BusinessActivityDTO> businessActivityList = businessService.selectActivityListByNo(customerNo);
 		
-		mv.addObject("chanceHistoryList", chanceHistoryList);
-		mv.addObject("businessChanceInfo", businessChanceInfo);
-		mv.addObject("businessActivityList", businessActivityList);
+		/* 선택한 영업기회 대상 고객의 상세정보 */
+		CustomerCompanyDTO customerInfo = customerService.selectCustomerInfo(customerNo);
+		
+		System.out.println("고객상세정보 : " + customerInfo);
+		
+		mv.addObject("chanceHistoryList", chanceHistoryList);			//영업기회변경이력
+		mv.addObject("businessChanceInfo", businessChanceInfo); 	    //영업기회정보
+		mv.addObject("businessActivityList", businessActivityList);		//영업활동목록
+		mv.addObject("customerInfo", customerInfo);						//고객 상세정보
 		mv.setViewName("business/businessChanceInfo");
 		
 		return mv;

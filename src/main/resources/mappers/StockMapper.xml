@@ -12,7 +12,7 @@
 	<resultMap type="com.deft.crud.stock.model.dto.StockDTO" id="stockResultMap">
 		<id property="productNo" column="PRODUCT_NO"/>
 		<result property="sellStatus" column="SELL_STATUS"/>
-		<result property="ProductName" column="PRODUCT_NAME"/>
+		<result property="productName" column="PRODUCT_NAME"/>
 		<result property="unit" column="UNIT"/>
 		<result property="categoryName" column="CATEGORY_NAME"/>
 		<result property="storageSection" column="STORAGE_SECTION"/>
@@ -47,4 +47,37 @@
 	 WHERE A.PRODUCT_NO = #{ productNo }       
 	</select>
 	
+	<!-- 판매가능 상태인 모든 상품들 -->
+	<select id="selectSellAbleProductAll" resultMap="stockResultMap">
+	SELECT /* "com.deft.crud.stock.model.dao.StockMapper#selectSellAbleProductAll" */
+	       A.PRODUCT_NO
+	     , A.PRODUCT_NAME
+	     , A.UNIT
+	     , C.CATEGORY_NAME
+	     , B.PRODUCT_STOCK
+	  FROM TBL_PRODUCT A
+      LEFT JOIN TBL_STORAGE B ON (A.PRODUCT_NO = B.PRODUCT_NO)
+	  LEFT JOIN TBL_PRODUCT_CATEGORY C ON (A.CATEGORY_CODE = C.CATEGORY_CODE)
+	 WHERE A.SELL_STATUS = '판매'         
+	</select>
+	
 </mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

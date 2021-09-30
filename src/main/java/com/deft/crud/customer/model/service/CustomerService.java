@@ -38,8 +38,9 @@ public class CustomerService {
 
     /* 분석 고객 정보 조회 */
     public CustomerCompanyDTO selectAnalysisCustomerInfo(int customerNo) {
-
-        return customerMapper.selectAnalysisCustomerInfo(customerNo);
+    	CustomerCompanyDTO customer = customerMapper.selectAnalysisCustomerInfo(customerNo);
+    	System.out.println("고객상세정보 : " + customer);
+        return customer;
     }
 
     /* 영업 활동 조회 */

@@ -165,7 +165,7 @@
 													<th>상품명</th>
 													<th>재고수량</th>
 													<th>단위</th>
-													<th></th>
+													<th>관리</th>
 												</tr>
 											</thead>
 
@@ -179,11 +179,11 @@
 
 													<!-- 관리자 권한 아이디일경우 재고관리페이지로 이동하는 버튼 -->
 													<!-- <th:if sec:authorize-expr ="hasRole('ROLE_ADMIN')"> -->
-													<td><a id="addBtn" class="btn btn-white btn-icon-split"
-														th:value="${ sellAbleProduct.productNo }">
-														 <span class="icon text-black" style="color: #66bb6a;">
-															 <i class="fas fa-cart-plus fa-lg"></i>
-														</span> 
+													<td><a class="btn btn-dark btn-icon-split" id="addBtn"
+														th:value="${ sellAbleProduct.productNo }"> <span
+															class="icon text-white-50">
+															 <i class="fas fa-folder-plus"></i>
+														</span> <span class="text text-white">추가</span>
 													</a></td>
 													<!-- </th:if> -->
 
@@ -213,14 +213,14 @@
 							<div class="col-lg-6">
 							<h5 class="m-0 font-weight-bold text-primary" th:align="center">입고요청할 상품</h5>
 							<br>
-								<div class="table-group" style="text-align: center; height: 210px;
+								<div class="table-group" style="text-align: center; height: 200px;
 									overflow-y: scroll;">
-									<table id="orderProduct" border="1" style="width: 100%;">
+									<table border="1" style="width: 100%;">
 										<thead style="background: lightgray;">
 											<tr>
 												<th style="width: 40px;">상품번호</th>
 												<th style="width: 200px;">상품명</th>
-												<th style="width: 60px;">현재창고재고수량</th>
+												<th style="width: 60px;">창고보유재고수량</th>
 												<th style="width: 50px;">추가요청수량</th>
 												<th style="width: 15px;"></th>
 											</tr>
@@ -230,47 +230,47 @@
 												<td>1</td>
 												<td>모나미유성매직8색(1세트)	</td>
 												<td>100</td>
-												<td><input type="number" value="0" style="width: 70px;"></td>
+												<td>50</td>
 												<td><a class="btn btn-white btn-icon-split" id="removeBtn">
 														<i class="fas fa-trash-alt"></i>
 													</a>
 												</td>
 											</tr>
 											<tr>
-												<td>2</td>
+												<td>1</td>
 												<td>모나미유성매직8색(1세트)	</td>
 												<td>100</td>
-												<td><input type="number" value="10" style="width: 70px;"></td>
+												<td>50</td>
 												<td><a class="btn btn-white btn-icon-split" id="removeBtn">
 														<i class="fas fa-trash-alt"></i>
 													</a>
 												</td>
 											</tr>
 											<tr>
-												<td>3</td>
+												<td>1</td>
 												<td>모나미유성매직8색(1세트)	</td>
 												<td>100</td>
-												<td><input type="number" value="0" style="width: 70px;"></td>
+												<td>50</td>
 												<td><a class="btn btn-white btn-icon-split" id="removeBtn">
 														<i class="fas fa-trash-alt"></i>
 													</a>
 												</td>
 											</tr>
 											<tr>
-												<td>4</td>
+												<td>1</td>
 												<td>모나미유성매직8색(1세트)	</td>
 												<td>100</td>
-												<td><input type="number" value="200" style="width: 70px;"></td>
+												<td>50</td>
 												<td><a class="btn btn-white btn-icon-split" id="removeBtn">
 														<i class="fas fa-trash-alt"></i>
 													</a>
 												</td>
 											</tr>
 											<tr>
-												<td>5</td>
+												<td>1</td>
 												<td>모나미유성매직8색(1세트)	</td>
 												<td>100</td>
-												<td><input type="number" value="100" style="width: 70px;"></td>
+												<td>50</td>
 												<td><a class="btn btn-white btn-icon-split" id="removeBtn">
 														<i class="fas fa-trash-alt"></i>
 													</a>
