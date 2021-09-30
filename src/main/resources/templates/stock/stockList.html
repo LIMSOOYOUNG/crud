@@ -124,7 +124,6 @@
 		</div>
 	</div>
 
-
 	<!------------- 입고요청서 Modal --------------->
 	<div class="modal fade" id="stockOrderModal" role="dialog">
 		<div class="modal-dialog modal-center"
@@ -134,7 +133,7 @@
 			<div class="modal-content">
 				<div class="modal-header">
 					<h4 class="modal-title" style="color: #0da8ee">입고요청서 작성</h4>
-					<button type="button" class="close" data-dismiss="modal">
+					<button type="button" id="modalCloseBtn" class="close" data-dismiss="modal">
 						<i class="far fa-times-circle"></i>
 					</button>
 					<div class="row">
@@ -144,16 +143,12 @@
 					</div>
 				</div>
 				<div class="modal-body">
-					<form action="/admin/member/insert" method="post">
 						<div class="row">
 							<div class="col-lg-6">
-
 								<div class="card mb-4">
-									<div
-										class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+									<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
 										<h6 class="m-0 font-weight-bold text-primary">전체상품현황</h6>
 									</div>
-
 									<div class="table-responsive p-3"
 										style="overflow-y: scroll; height: 500px;">
 										<table id="modalDataTableHover"
@@ -168,7 +163,6 @@
 													<th></th>
 												</tr>
 											</thead>
-
 											<tbody align="center">
 												<tr th:each="sellAbleProduct : ${sellAbleProductList}">
 													<td th:text="${sellAbleProduct.productNo}"></td>
@@ -176,35 +170,17 @@
 													<td th:text="${sellAbleProduct.productName}"></td>
 													<td th:text="${sellAbleProduct.productStock}"></td>
 													<td th:text="${sellAbleProduct.unit}"></td>
-
-													<!-- 관리자 권한 아이디일경우 재고관리페이지로 이동하는 버튼 -->
-													<!-- <th:if sec:authorize-expr ="hasRole('ROLE_ADMIN')"> -->
-													<td><a id="addBtn" class="btn btn-white btn-icon-split"
-														th:value="${ sellAbleProduct.productNo }">
+													<td><a class="btn btn-white btn-icon-split addBtn">
+														<!-- th:value="${ sellAbleProduct.productNo }"> -->
 														 <span class="icon text-black" style="color: #66bb6a;">
 															 <i class="fas fa-cart-plus fa-lg"></i>
 														</span> 
-													</a></td>
-													<!-- </th:if> -->
-
-													<!-- 관지자 권한이 없는 아이디인경우 상품정보 페이지로 이동 버튼 -->
-													<!-- 	<th:if sec:authorize-expr ="!hasRole('ROLE_ADMIN')">
-												<td><a class="btn btn-dark btn-icon-split" 
-													th:onclick="location.href=''">
-													<span class="icon text-white-50">
-														<i class="fas fa-clipboard-list"></i>
-													</span>
-													<span class="text text-white">상세정보</span>
-													</a>
-												</td>
-												</th:if> -->
-
+														</a>
+													</td>
 												</tr>
 											</tbody>
-
 											<tfoot align="center">
 											</tfoot>
-
 										</table>
 									</div>
 								</div>
@@ -213,6 +189,7 @@
 							<div class="col-lg-6">
 							<h5 class="m-0 font-weight-bold text-primary" th:align="center">입고요청할 상품</h5>
 							<br>
+							<form action="/stock/productStockOrder/insert" method="post">
 								<div class="table-group" style="text-align: center; height: 210px;
 									overflow-y: scroll;">
 									<table id="orderProduct" border="1" style="width: 100%;">
@@ -221,97 +198,40 @@
 												<th style="width: 40px;">상품번호</th>
 												<th style="width: 200px;">상품명</th>
 												<th style="width: 60px;">현재창고재고수량</th>
-												<th style="width: 50px;">추가요청수량</th>
+												<th style="width: 20px;">단위</th>
+												<th style="width: 60px;">추가요청수량</th>
 												<th style="width: 15px;"></th>
 											</tr>
 										</thead>
 										<tbody style="font-size: 18px;">
-											<tr>
-												<td>1</td>
-												<td>모나미유성매직8색(1세트)	</td>
-												<td>100</td>
-												<td><input type="number" value="0" style="width: 70px;"></td>
-												<td><a class="btn btn-white btn-icon-split" id="removeBtn">
-														<i class="fas fa-trash-alt"></i>
-													</a>
-												</td>
-											</tr>
-											<tr>
-												<td>2</td>
-												<td>모나미유성매직8색(1세트)	</td>
-												<td>100</td>
-												<td><input type="number" value="10" style="width: 70px;"></td>
-												<td><a class="btn btn-white btn-icon-split" id="removeBtn">
-														<i class="fas fa-trash-alt"></i>
-													</a>
-												</td>
-											</tr>
-											<tr>
-												<td>3</td>
-												<td>모나미유성매직8색(1세트)	</td>
-												<td>100</td>
-												<td><input type="number" value="0" style="width: 70px;"></td>
-												<td><a class="btn btn-white btn-icon-split" id="removeBtn">
-														<i class="fas fa-trash-alt"></i>
-													</a>
-												</td>
-											</tr>
-											<tr>
-												<td>4</td>
-												<td>모나미유성매직8색(1세트)	</td>
-												<td>100</td>
-												<td><input type="number" value="200" style="width: 70px;"></td>
-												<td><a class="btn btn-white btn-icon-split" id="removeBtn">
-														<i class="fas fa-trash-alt"></i>
-													</a>
-												</td>
-											</tr>
-											<tr>
-												<td>5</td>
-												<td>모나미유성매직8색(1세트)	</td>
-												<td>100</td>
-												<td><input type="number" value="100" style="width: 70px;"></td>
-												<td><a class="btn btn-white btn-icon-split" id="removeBtn">
-														<i class="fas fa-trash-alt"></i>
-													</a>
-												</td>
-											</tr>
+											
 										</tbody>
 									</table>
-									
 								</div>
 								<div class="row">
 									<div class="form-group col-xl-12"></div>
 								</div>
-								
 								<div class="row">
 									<div class="form-group col-xl-12" >
 									<label>요청사유</label>
-										 <input id="orderContent" type="text" class="form-control"
-											name="orderContent" style="height: 100px;">
+										 <textarea id="orderContent" class="form-control"
+											name="orderContent" style="height: 150px; resize: none;" ></textarea>
 									</div>
-									
 									<div class="form-group col-xl-4"></div>
-									
 									<div class="form-group col-xl-4" th:align="center" style="margin-top: 40px;">
 									<button type="button" id="modifyDetailInfo" class="btn btn-primary">입고요청</button>
 									</div>
-									
 									<div class="form-group col-xl-4"></div>
-										
-									
 								</div>
-							</div>
+							</form>
 						</div>
-					</form>
+					</div>
 				</div>
-				<div class="modal-footer">
-				</div>
+				<div class="modal-footer"></div>
 				<div id="count" value="1"></div>
 			</div>
 		</div>
 	</div>
-
 
 
 	<!-- Script -->
@@ -332,11 +252,11 @@
            $('#stockOrderModal').modal();
         });
 
-        $('#btnBack').click(function () { // 뒤로가기 X 버튼
+    /*    $('#btnBack').click(function () { // 뒤로가기 X 버튼
            window.history.back();
-        });
+        });  */
 
-        $('#addBtn').click(function() {
+       /*  $('#addBtn').click(function() {
             $.ajax({
                url: "stock/order/insert",
                type: "GET",
@@ -352,6 +272,43 @@
                 }
             });
             $('#activityModal').modal();
+        }); */
+        
+        
+        $('.addBtn').click(function() {
+        	var str = ""
+    		var tdArr = new Array();	// 배열 선언
+    		var addBtn = $(this);
+    			
+    		// addBtn.parent() : checkBtn의 부모는 <td>이다.
+    		// addBtn.parent().parent() : <td>의 부모이므로 <tr>이다.
+    		var tr = addBtn.parent().parent();
+    		var td = tr.children();
+    			
+    		var productNo = td.eq(0).text();
+    		var categoryName = td.eq(1).text();
+    		var productName = td.eq(2).text();
+    		var productStock = td.eq(3).text();
+    		var unit = td.eq(4).text();
+    		
+    		$('#orderProduct > tbody:last').append('<tr><td name="productNo">' + productNo + '</td>'
+    										+ '<td nqme="productName">' + productName + '</td>'
+    										+ '<td name="productStock">' + productStock + '</td>'
+    										+ '<td name="unit">' + unit + '</td>'
+    										+ '<td name="requestOrderStock">' + '<input type="number" style="width: 60px;">' + '</td>'
+    										+ '<td>' + '<a class="btn btn-white btn-icon-split removeBtn">' + '<i class="fas fa-trash-alt"></i>' + '</a>' + '</td>'
+    										+ '</tr>');
+        });
+        
+        // 입고요청할 상품 테이블 제거 버튼 클릭시 동작
+        $(document).on('click', '.removeBtn', function() {
+        	$(this).parent().parent().remove();
+        });
+        
+        // 모달창 닫기 X버튼 클릭시 동작 
+        $(document).on('click', '#modalCloseBtn', function() {
+        	$('#orderProduct > tbody').empty();
+        	
         });
     </script>
 
@@ -359,3 +316,4 @@
 </html>
 
 
+d

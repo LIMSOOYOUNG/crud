@@ -1,8 +1,9 @@
 package com.deft.crud.business.model.dto;
 
+import java.io.Serializable;
 import java.sql.Date;
 
-public class BusinessChanceDTO {
+public class BusinessChanceDTO implements Serializable {
 
 	private int businessChanceNo;
 	private String progressStatus;
