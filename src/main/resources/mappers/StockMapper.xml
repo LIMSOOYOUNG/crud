@@ -20,6 +20,23 @@
 		<result property="productStock" column="PRODUCT_STOCK"/>
 	</resultMap>
 	
+	<resultMap type="com.deft.crud.stock.model.dto.ProductStockInfoDTO" id="productStockInfoResultMap">
+	<id property="productNo" column="PRODUCT_NO"/>
+	<result property="refCategoryName" column="REF_CATEGORY_NAME"/>
+	<result property="categoryName" column="CATEGORY_NAME"/>
+	<result property="productName" column="PRODUCT_NAME"/>
+	<result property="manufacturerName" column="MANUFACTURER_NAME"/>
+	<result property="companyName" column="COMPANY_NAME"/>
+	<result property="storageSection" column="STORAGE_SECTION"/>
+	<result property="storageSpace" column="STORAGE_SPACE"/>
+	<result property="sellingPrice" column="SELLING_PRICE"/>
+	<result property="sellStatus" column="SELL_STATUS"/>
+	<result property="productStock" column="PRODUCT_STOCK"/>
+	<result property="unit" column="UNIT"/>
+	
+
+	</resultMap>
+	
 	<!-- 창고에 보관중인 상품리스트 조회 -->
 	<select id="selectStorageAll" resultMap="storageResultMap">
 	SELECT /* "com.deft.crud.stock.model.dao.StockMapper#selectStockAll" */
@@ -59,6 +76,30 @@
       LEFT JOIN TBL_STORAGE B ON (A.PRODUCT_NO = B.PRODUCT_NO)
 	  LEFT JOIN TBL_PRODUCT_CATEGORY C ON (A.CATEGORY_CODE = C.CATEGORY_CODE)
 	 WHERE A.SELL_STATUS = '판매'         
+	</select>
+	
+	<select id="selectOneProductInfoByNo" resultMap="productStockInfoResultMap">
+	SELECT /* "com.deft.crud.stock.model.dao.StockMapper#selectOneProductInfoByNo" */
+	       RC.CATEGORY_NAME "REF_CATEGORY_NAME"
+         , C.CATEGORY_NAME
+	     , A.PRODUCT_NO
+	     , A.PRODUCT_NAME
+	     , A.SELLING_PRICE
+	     , A.SELL_STATUS
+	     , A.UNIT
+	     , B.PRODUCT_STOCK
+	     , B.STORAGE_SECTION
+	     , B.STORAGE_SPACE
+         , T.MANUFACTURER_NAME
+         , D.COMPANY_NAME
+	  FROM TBL_PRODUCT A
+	  LEFT JOIN TBL_PRODUCT_CATEGORY C ON (A.CATEGORY_CODE = C.CATEGORY_CODE)
+      LEFT JOIN TBL_PRODUCT_CATEGORY RC ON (RC.CATEGORY_CODE = C.REF_CATEGORY_CODE)
+	  LEFT JOIN TBL_STORAGE B ON (A.PRODUCT_NO = B.PRODUCT_NO)
+      LEFT JOIN TBL_ACCOUNT D ON(A.ACCOUNT_NO = D.ACCOUNT_NO)
+	  LEFT JOIN TBL_MANUFACTURER T ON(A.MANUFACTURER_NO = T.MANUFACTURER_NO)
+	 WHERE A.PRODUCT_NO = #{ productNo }
+	
 	</select>
 	
 </mapper>

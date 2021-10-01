@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.deft.crud.stock.model.dao.StockMapper;
+import com.deft.crud.stock.model.dto.ProductStockInfoDTO;
 import com.deft.crud.stock.model.dto.StockDTO;
 import com.deft.crud.stock.model.dto.StorageDTO;
 
@@ -43,6 +44,14 @@ public class StockService {
 		List<StockDTO> sellAbleProductList = mapper.selectSellAbleProductAll();
 		
 		return sellAbleProductList;
+	}
+
+	public ProductStockInfoDTO selectOneProductInfoByNo(int productNo) {
+		
+		ProductStockInfoDTO productStockInfo = mapper.selectOneProductInfoByNo(productNo);
+
+		
+		return productStockInfo;
 	}
 
 
