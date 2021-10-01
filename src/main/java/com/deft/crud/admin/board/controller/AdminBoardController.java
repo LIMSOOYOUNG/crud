@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.deft.crud.admin.board.model.dto.AdminBoardDTO;
 import com.deft.crud.admin.board.model.service.AdminBoardService;
 
 public class AdminBoardController {
@@ -40,4 +41,34 @@ public class AdminBoardController {
 		
 		return mv;
 	}
+	
+	/* 공지사항 등록 */
+	@GetMapping("noticeinsert")
+	public void noticeinsert() {}
+	
+	@PostMapping("noticeinsert")
+	public ModelAndView noticeInsertForm(ModelAndView mv, RedirectAttributes rttr, @RequestParam int boardNo, @RequestParam int writeNo,
+			                              @RequestParam String boardName, @RequestParam String writerName, @RequestParam String contents,
+			                              @RequestParam int boardAttatchNo) {
+		
+		AdminBoardDTO adminBoardDTO = new AdminBoardDTO();
+		adminBoardDTO.setBoardNo(boardNo);
+		adminBoardDTO.setWriteNo(writeNo);
+		adminBoardDTO.setBoardName(boardName);
+		adminBoardDTO.setWriterName(writerName);
+		adminBoardDTO.setContents(contents);
+		adminBoardDTO.setBoardAttatchNo(boardAttatchNo);
+		
+		int result = adminBoardService.noticeInsert(adminBoardDTO);
+		
+		if(result>0) {
+			rttr.addFlashAttribute("flashMessage", "성공!!");
+		}else {
+			rttr.addFlashAttribute("flashMessage", "실패!!");
+		}
+		mv.setViewName("redirect:/board/selectnotice");
+		
+		return mv;
+	}
+	
 }

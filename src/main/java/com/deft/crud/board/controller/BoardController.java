@@ -56,17 +56,19 @@ public class BoardController {
 
 	@PostMapping("freeboardinsert")
 	public ModelAndView insertfreeboardForm(ModelAndView mv, RedirectAttributes rttr,
-			@RequestParam String boardName, @RequestParam String writerName,
+			@RequestParam String boardName, @RequestParam int writeNo,@RequestParam String writerName,
 			@RequestParam java.util.Date writerDate, @RequestParam String contents) 
 					throws Exception {
 
 		BoardDTO board = new BoardDTO();
 
+		board.setWriteNo(writeNo);
 		board.setBoardName(boardName);
 		board.setWriterName(writerName);
 		board.setWriteDate(writerDate);
 		board.setContents(contents);
 
+		System.out.println(board);
 		int result = boardService.insertFreeboard(board);
 
 		if(result>0) {
@@ -98,6 +100,8 @@ public class BoardController {
 		
 		return mv;
 	}
+	
+	/* 조회수 증가*/
 	
 
 }

@@ -12,11 +12,12 @@ public class AdminBoardDTO {
 	private String contents;
 	private String type;
 	private int empNo;
+	private int boardAttatchNo;
 	
 	public AdminBoardDTO() {}
 
 	public AdminBoardDTO(int boardNo, int writeNo, String boardName, String writerName, Date writeDate, int views,
-			String contents, String type, int empNo) {
+			String contents, String type, int empNo, int boardAttatchNo) {
 		super();
 		this.boardNo = boardNo;
 		this.writeNo = writeNo;
@@ -27,7 +28,7 @@ public class AdminBoardDTO {
 		this.contents = contents;
 		this.type = type;
 		this.empNo = empNo;
-		
+		this.boardAttatchNo = boardAttatchNo;
 	}
 
 	public int getBoardNo() {
@@ -102,12 +103,18 @@ public class AdminBoardDTO {
 		this.empNo = empNo;
 	}
 
+	public int getBoardAttatchNo() {
+		return boardAttatchNo;
+	}
+
+	public void setBoardAttatchNo(int boardAttatchNo) {
+		this.boardAttatchNo = boardAttatchNo;
+	}
+
 	@Override
 	public String toString() {
-		return "BoardDTO [boardNo=" + boardNo + ", writeNo=" + writeNo + ", boardName=" + boardName + ", writerName="
-				+ writerName + ", writeDate=" + writeDate + ", views=" + views + ", contents=" + contents + ", type="
-				+ type + ", empNo=" + empNo + "]";
+		return "AdminBoardDTO [boardNo=" + boardNo + ", writeNo=" + writeNo + ", boardName=" + boardName
+				+ ", writerName=" + writerName + ", writeDate=" + writeDate + ", views=" + views + ", contents="
+				+ contents + ", type=" + type + ", empNo=" + empNo + ", boardAttatchNo=" + boardAttatchNo + "]";
 	}
-	
-	
 }
