@@ -50,6 +50,9 @@
         <result property="jobCode" column="JOB_CODE"/>
         <result property="deptCode" column="DEPT_CODE"/>
         <result property="managerNo" column="MANAGER_NO"/>
+
+        <association property="dept" resultMap="departmentResultMap"/>
+        <association property="job" resultMap="jobResultMap"/>
     </resultMap>
     
     <resultMap id="customerCompanyResultMap" type="com.deft.crud.customer.model.dto.CustomerCompanyDTO">
@@ -102,6 +105,20 @@
         <association property="empInfo" resultMap="empInfoResultMap"/>
     </resultMap>
 
+    <resultMap id="jobResultMap" type="com.deft.crud.customer.model.dto.JobDTO">
+        <id property="jobCode" column="JOB_CODE"/>
+        <result property="jobName" column="JOB_NAME"/>
+        <result property="jobStatus" column="JOB_STATUS"/>
+    </resultMap>
+
+    <resultMap id="departmentResultMap" type="com.deft.crud.customer.model.dto.DepartmentDTO">
+        <id property="deptCode" column="DEPT_CODE"/>
+        <result property="deptName" column="DEPT_NAME"/>
+        <result property="deptFax" column="DEPT_FAX"/>
+        <result property="deptTel" column="DEPT_TEL"/>
+        <result property="deptStatus" column="DEPT_STATUS"/>
+    </resultMap>
+
     <!-- 영업 활동 등록 -->
     <insert id="insertActivity" parameterType="com.deft.crud.customer.model.dto.BusinessActivityDTO">
         INSERT /* com.deft.crud.customer.model.dao.CustomerMapper#insertActivity() */
@@ -116,8 +133,8 @@
         (
           SEQ_ACTIVITY_NO.NEXTVAL, #{ customerNo }, #{ businessSubject }
         , #{ businessType }, #{ businessLocation }, #{ businessPurpose }
-        , #{ businessContents }, SYSDATE, #{ activityStartTime }
-        , #{ activityEndTime }, #{ empNo }
+        , #{ businessContents }, SYSDATE, TO_DATE(REPLACE(#{ activityStartTime },'T',' '), 'YYYY-MM-DD HH24:MI:SS')
+        , TO_DATE(REPLACE(#{ activityEndTime },'T',' '), 'YYYY-MM-DD HH24:MI:SS'), #{ empNo }
         )
     </insert>
 
@@ -183,6 +200,14 @@
          WHERE A.CUSTOMER_NO = #{ customerNo }
     </update>
 
+    <!-- 담당 사원 변경 -->
+    <update id="modifyManager" parameterType="com.deft.crud.customer.model.dto.CustomerDTO">
+        UPDATE /* com.deft.crud.customer.model.dao.CustomerMapper#modifyManager() */
+               TBL_CUSTOMER
+           SET EMP_NO = #{ empNo }
+         WHERE CUSTOMER_NO = #{ customerNo }
+    </update>
+
     <!-- 전체 고객 조회 -->
     <select id="selectAllCustomer" resultMap="customerCompanyResultMap">
         SELECT /* com.deft.crud.customer.model.dao.CustomerMapper#selectAllCustomer() */
@@ -228,6 +253,7 @@
              , C.CUSTOMER_NO
              , CP.COMPANY_NAME
              , E.EMP_NAME
+             , E.EMP_NO
              , C.CUSTOMER_EMAIL
              , CP.BUSINESS_STATUS
              , EX.CUSTOMER_STATUS
@@ -270,6 +296,7 @@
              , CP.COMPANY_ADDRESS
              , LISTAGG(P.PRODUCT_NAME, ', ') WITHIN GROUP (ORDER BY P.PRODUCT_NO) AS PRODUCT_NAME
              , E.EMP_NAME
+             , E.EMP_NO
              , AN.CUSTOMER_STATUS
           FROM TBL_CUSTOMER C
           LEFT JOIN TBL_CUSTOMER_COMPANY CP ON (C.CUSTOMER_COMPANY_NO = CP.CUSTOMER_COMPANY_NO)
@@ -281,7 +308,7 @@
          GROUP BY C.CUSTOMER_NAME, C.CUSTOMER_NO, CP.COMPANY_NAME, C.CUSTOMER_EMAIL, CP.BUSINESS_STATUS
              , C.CUSTOMER_PHONE, NVL(C.CUSTOMER_FAX, ' '), AN.CUSTOMIZATION_LEVEL, AN.CUSTOMIZATION_POSIBILLITY, CP.BUSINESS_TYPE
              , CP.COMPANY_REGIST_NO, CP.NUMBER_OF_EMPLOYEES, CP.COMPANY_REVENUE, CP.HOMEPAGE, CP.COMPANY_ADDRESS
-             , E.EMP_NAME, AN.CUSTOMER_STATUS, C.CUSTOMER_ADDRESS, CP.CUSTOMER_COMPANY_NO
+             , E.EMP_NAME, AN.CUSTOMER_STATUS, C.CUSTOMER_ADDRESS, CP.CUSTOMER_COMPANY_NO, E.EMP_NO
     </select>
 
     <!-- 영업 활동 조회 -->
@@ -328,5 +355,17 @@
              , EMP_NAME
           FROM TBL_EMP_INFO
          WHERE EMP_NAME LIKE '%'||#{ term }||'%'
+    </select>
+
+    <!-- 사원 정보 조회 -->
+    <select id="selectEmpInfo" resultMap="empInfoResultMap">
+        SELECT /* com.deft.crud.customer.model.dao.CustomerMapper#selectEmpInfo() */
+               E.EMP_NO
+             , E.EMP_NAME
+             , J.JOB_NAME
+             , D.DEPT_NAME
+          FROM TBL_EMP_INFO E
+          LEFT JOIN TBL_JOB J ON (E.JOB_CODE = J.JOB_CODE)
+          LEFT JOIN TBL_DEPARTMENT D ON (E.DEPT_CODE = D.DEPT_CODE)
     </select>
 </mapper>

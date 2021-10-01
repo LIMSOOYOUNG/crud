@@ -9,11 +9,9 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class CustomerProductDTO implements Serializable {
+public class JobDTO implements Serializable {
 
-    private int customerNo;
-    private int productNo;
-
-    private ProductDTO product;
-
+    private String jobCode;
+    private String jobName;
+    private String jobStatus;
 }

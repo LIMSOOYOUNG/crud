@@ -124,7 +124,8 @@
                                     <div class="form-group col-lg-4 row">
                                         <div class="col-lg-1"><input type="hidden"></div>
                                         <a class="btn btn-primary btn-icon-split col-lg-5"
-                                           style="height: 41px; font-size: 19px">
+                                           style="height: 41px; font-size: 19px"
+                                           id="modifyManager">
                                             <span class="text text-white">담당사원변경</span>
                                         </a>
                                         <div class="col-lg-1"><input type="hidden"></div>
@@ -762,7 +763,7 @@
 
         <!------------- Modify Customization Modal --------------->
         <div class="modal fade" id="modifyCustomizationModal" role="dialog">
-            <div class="modal-dialog modal-sm modal-dialog-centered">
+            <div class="modal-dialog modal-md modal-dialog-centered">
 
                 <!-- Modal content-->
                 <div class="modal-content">
@@ -777,7 +778,10 @@
                         <div class="modal-body">
                             <div class="card mb-auto">
                                 <div class="row">
-                                    <select name="customizationLevel">
+                                    <label for="selectStatus" class="col-lg-4 form-control-plaintext"
+                                           th:align="center"
+                                           style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">고객 상태 선택</label>
+                                    <select id="selectStatus" name="customizationLevel" class="col-lg-7">
                                         <option th:value="${ customerInfo.customerList[0].anaCustomerDetail.customizationLevel }"
                                                 th:text="'현재 상태 : ' + ${ customerInfo.customerList[0].anaCustomerDetail.customizationLevel }"
                                                 selected></option>
@@ -825,8 +829,8 @@
                         <div class="modal-body">
                             <div class="row">
                                 <div class="form-group col-lg-12"><input type="hidden" value="emptyRow"></div>
-                                <input type="hidden" name="customerCompanyNo" th:value="${ customerInfo.customerList[0].customerNo }">
-                                <input type="hidden" name="empNo" th:value="${ customerInfo.customerList[0].empNo}">
+                                <input type="hidden" name="customerNo" th:value="${ customerInfo.customerList[0].customerNo }">
+                                <input type="hidden" name="empNo" th:value="${ customerInfo.customerList[0].empNo }">
                             </div>
                             <div class="card mb-auto">
                                 <div class="row">
@@ -901,6 +905,71 @@
         </div>
     </div>
 
+    <!------------- Modify Manager Modal --------------->
+    <div class="modal fade" id="modifyManagerModal" role="dialog">
+        <div class="modal-dialog modal-md modal-dialog-centered">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" style="color: #0da8ee">담당사원 변경</h4>
+                    <button type="button" class="close" data-dismiss="modal"><i class="far fa-times-circle"></i></button>
+                    <div class="row">
+                        <div class="form-group col-lg-12"><input type="hidden" value="emptyRow"></div>
+                    </div>
+                </div>
+                <form th:action="@{/customer/ana/manager/modify}" method="post">
+                    <div class="modal-body">
+                        <div class="card mb-auto">
+                            <div class="row">
+                                <div class="form-group col-lg-12 row">
+                                    <div class="form-group col-lg-12"><input type="hidden" value="emptyRow"></div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-lg-12 row">
+                                    <div class="form-group col-lg-12"><input type="hidden" value="emptyRow"></div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-lg-12 row">
+                                    <div class="form-group col-lg-12"><input type="hidden" value="emptyRow"></div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-lg-12 row">
+                                    <div class="form-group col-lg-1"><input type="hidden" value="emptyRow"></div>
+                                    <label for="presentManager" class="col-lg-3 form-control-plaintext"
+                                           th:align="center"
+                                           style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">현재 담당사원</label>
+                                    <input th:disabled="${customerInfo.customerList[0].empInfo.empName}"
+                                           id="presentManager" type="text" class="form-control col-lg-8"
+                                           th:value="${customerInfo.customerList[0].empInfo.empName}">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-lg-12 row">
+                                    <div class="form-group col-lg-1"><input type="hidden" value="emptyRow"></div>
+                                    <label for="selectEmp" class="col-lg-3 form-control-plaintext"
+                                           th:align="center"
+                                           style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">새 담당사원</label>
+                                    <select id="selectEmp" name="empNo" class="col-lg-8">
+                                        <option th:each=" emp : ${ empInfoList }" th:value="${ emp.empNo }"
+                                                th:text="${ emp.dept.deptName } + ' ' + ${ emp.job.jobName } + ' - ' + ${ emp.empName }"></option>
+                                    </select>
+                                    <input type="hidden" name="customerNo" th:value="${ customerInfo.customerList[0].customerNo }">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" id="successManagerModify" class="btn btn-primary">담당사원변경</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <!-- Script -->
     <th:block th:replace="@{/common/script} :: script"></th:block>
     <script>
@@ -931,6 +1000,10 @@
 
         $('#insertActivity').click(function () {
             $('#insertActivityModal').modal();
+        });
+
+        $('#modifyManager').click(function () {
+            $('#modifyManagerModal').modal();
         });
 
         $('#btnBack').click(function () {
