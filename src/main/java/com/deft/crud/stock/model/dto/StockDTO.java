@@ -1,6 +1,8 @@
 package com.deft.crud.stock.model.dto;
 
-public class StockDTO {
+import java.io.Serializable;
+
+public class StockDTO implements Serializable {
 
 	private int productNo;			//상품번호
 	private String sellStatus;		//판매상태

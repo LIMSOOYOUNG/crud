@@ -1,8 +1,9 @@
 package com.deft.crud.business.model.dto;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
-public class BusinessChanceHistoryDTO {
+public class BusinessChanceHistoryDTO implements Serializable {
 
 	private int businessChanceHisNo;
 	private int businessChanceNo;

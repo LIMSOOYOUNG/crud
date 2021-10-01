@@ -1,6 +1,8 @@
 package com.deft.crud.stock.model.dto;
 
-public class StorageDTO {
+import java.io.Serializable;
+
+public class StorageDTO implements Serializable {
 
 	private String storageSection;
 	private String storageSpace;

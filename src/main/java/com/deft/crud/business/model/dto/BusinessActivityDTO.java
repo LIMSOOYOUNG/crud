@@ -1,8 +1,9 @@
 package com.deft.crud.business.model.dto;
 
+import java.io.Serializable;
 import java.sql.Date;
 
-public class BusinessActivityDTO {
+public class BusinessActivityDTO implements Serializable {
 
 	private int activityNo;
 	private String activityName;
