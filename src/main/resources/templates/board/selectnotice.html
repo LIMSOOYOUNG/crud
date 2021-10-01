@@ -51,9 +51,13 @@
 										</thead>
 										<tbody align="center">
 											<tr th:each="notice: ${noticeList}">
-												<td th:text="${notice.boardNo}"></td>
-												<td th:text="${notice.boardName}"></td>
 												<td th:text="${notice.writeNo}"></td>
+												<td>
+													<a th:href="@{/board/noticedetail(writeNo=${notice.writeNo})}">
+														<span th:text="${notice.boardName}"></span>
+													</a>
+												</td>
+												<td th:text="${notice.empName}"></td>
 												<td th:text="${notice.writeDate}"></td>
 												<td th:text="${notice.views}"></td>
 											</tr>
@@ -72,6 +76,9 @@
 
 	<!-- Script -->
 	<th:block th:replace="@{/common/script} :: script"></th:block>
+	 	<!-- Page level plugins -->
+	<script src="/vendor/datatables/jquery.dataTables.min.js"></script>
+	<script src="/vendor/datatables/dataTables.bootstrap4.min.js"></script>
 </body>
 
 </html>

@@ -54,9 +54,13 @@
 										</thead>
 										<tbody align="center">
 											<tr th:each="freeboard: ${freeboardList}">
-												<td th:text="${freeboard.boardNo}"></td>
-												<td th:text="${freeboard.boardName}"></td>
 												<td th:text="${freeboard.writeNo}"></td>
+												<td>
+													<a th:href="@{/board/freeboarddetail(writeNo=${freeboard.writeNo})}">
+														<span th:text="${freeboard.boardName}"></span>
+													</a>
+												</td>
+												<td th:text="${freeboard.empName}"></td>
 												<td th:text="${freeboard.writeDate}"></td>
 												<td th:text="${freeboard.views}"></td>
 											</tr>
@@ -75,6 +79,9 @@
 
 	<!-- Script -->
 	<th:block th:replace="@{/common/script} :: script"></th:block>
+	 	<!-- Page level plugins -->
+	<script src="/vendor/datatables/jquery.dataTables.min.js"></script>
+	<script src="/vendor/datatables/dataTables.bootstrap4.min.js"></script>
 </body>
 
 </html>

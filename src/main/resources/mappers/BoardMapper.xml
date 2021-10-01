@@ -5,7 +5,7 @@
 	<id property="boardNo" column="BOARD_NO"/>
 	<result property="writeNo" column="WRITE_NO"/>
 	<result property="boardName" column="BOARD_NAME"/>
-	<result property="writerName" column="WRITER_NAME"/>
+	<result property="empName" column="EMP_NAME"/>
 	<result property="writeDate" column="WRITE_DATE"/>
 	<result property="views" column="VIEWS"/>
 	<result property="contents" column="CONTENTS"/>
@@ -14,22 +14,24 @@
 </resultMap>
 	<select id="selectFreeboard" resultMap="boardResultMap">
 		SELECT
-               B.BOARD_NO
+               B.WRITE_NO
              , B.BOARD_NAME
-             , B.WRITER_NAME
+             , E.EMP_NAME
              , B.WRITE_DATE
              , B.VIEWS
           FROM TBL_BOARD B
+          JOIN TBL_EMP_INFO E ON (E.EMP_NO = B.EMP_NO)
          WHERE B.TYPE LIKE '자유게시판'
 	</select>
 	<select id="selectNotice" resultMap="boardResultMap">
 		SELECT
-               B.BOARD_NO
+               B.WRITE_NO
              , B.BOARD_NAME
-             , B.WRITER_NAME
+             , E.EMP_NAME
              , B.WRITE_DATE
              , B.VIEWS
           FROM TBL_BOARD B
+          JOIN TBL_EMP_INFO E ON (E.EMP_NO = B.EMP_NO)
          WHERE B.TYPE LIKE '공지사항'
 	</select>
 	
@@ -37,17 +39,19 @@
 		INSERT
 		  INTO TBL_BOARD B
 		     (
-		       B.BOARD_NO 
+		       B.WRITE_NO
+		     , B.BOARD_NO 
 		     , B.BOARD_NAME
-		     , B.WRITER_NAME
+		     , A.EMP_NAME
 		     , B.WRITE_DATE
 		     , B.CONTENTS
 		     )
 		VALUES
 		     (
-		       SEQ_BOARD_NO.NEXTVAL
+		       SEQ_WRITE_NO.NEXTVAL
+		     , 2  
 		     , #{ boardName }  
-		     , #{ writerName }
+		     , #{ empName }
 		     , SYSDATE
 		     , #{ contents }
 		     )
@@ -64,4 +68,38 @@
 		  FROM TBL_BOARD B
 		 WHERE B.BOARD_NO = #{ boardNo, jdbcType = INTEGER }
 	</delete>
+	
+	<select id="freeboardDetail" parameterType="_int" resultType="com.deft.crud.board.model.dto.BoardDTO">
+		SELECT
+		      
+		       B.BOARD_NO
+		     , B.WRITE_NO
+             , B.BOARD_NAME
+             , E.EMP_NAME
+             , B.CONTENTS
+             , B.WRITE_DATE
+             , B.VIEWS
+          FROM TBL_BOARD B
+          JOIN TBL_EMP_INFO E ON (E.EMP_NO = B.EMP_NO)
+         WHERE B.BOARD_NO = 2
+           AND B.WRITE_NO = #{ writeNo }
+	</select>
+	<select id="noticeDetail" parameterType="_int" resultType="com.deft.crud.board.model.dto.BoardDTO">
+		SELECT
+		      
+		       B.BOARD_NO
+		     , B.WRITE_NO
+             , B.BOARD_NAME
+             , E.EMP_NAME
+             , B.CONTENTS
+             , B.WRITE_DATE
+             , B.VIEWS
+          FROM TBL_BOARD B
+          JOIN TBL_EMP_INFO E ON (E.EMP_NO = B.EMP_NO)
+         WHERE B.BOARD_NO = 1
+           AND B.WRITE_NO = #{ writeNo }
+	
+	
+	</select>
+	
 </mapper>
