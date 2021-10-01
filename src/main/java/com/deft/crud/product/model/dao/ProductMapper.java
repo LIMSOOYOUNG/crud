@@ -30,4 +30,8 @@ public interface ProductMapper {
 
 	int updateProduct(ProductDTO parameters);
 
+	int insertRefCategory(ProductCategoryDTO parameter);
+
+	int insertCategory(ProductCategoryDTO parameters);
+
 }

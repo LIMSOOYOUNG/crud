@@ -61,11 +61,13 @@
 	
 	<select id="allCategoryList" resultMap="productCategoryResultMap">
 		SELECT /*com.deft.crud.product.model.dao.ProductMapper#allCategoryList()*/
-       	       A.CATEGORY_NAME "REF_CATEGORY_NAME"
-     		 , B.CATEGORY_NAME 
-             , B.REF_CATEGORY_CODE
-           FROM TBL_PRODUCT_CATEGORY A
-           JOIN TBL_PRODUCT_CATEGORY B ON(B.REF_CATEGORY_CODE = A.CATEGORY_CODE)
+			   A.CATEGORY_CODE
+			 , A.CATEGORY_NAME
+			 , A.REF_CATEGORY_CODE
+			 , B.CATEGORY_NAME "REF_CATEGORY_NAME"
+		  FROM TBL_PRODUCT_CATEGORY A
+	      LEFT JOIN TBL_PRODUCT_CATEGORY B ON (A.REF_CATEGORY_CODE = B.CATEGORY_CODE)		
+	      		
 	</select>
 	
 	<select id="refCategoryList" resultMap="productCategoryResultMap">
@@ -143,4 +145,29 @@
 		     , A.MANUFACTURER_NO = #{ manufacturerNo }
 		 WHERE A.PRODUCT_NO = #{ productNo } 
 	</update>
+	
+	<insert id="insertRefCategory" parameterType="com.deft.crud.product.model.dto.ProductCategoryDTO">
+		INSERT /*com.deft.crud.product.model.dao.ProductMapper#insertRefCategory()*/
+		  INTO TBL_PRODUCT_CATEGORY T
+		(
+		  T.CATEGORY_CODE, T.CATEGORY_NAME, T.REF_CATEGORY_CODE, T.CATEGORY_STATUS
+		)
+		VALUES
+		(
+		  SEQ_CATEGORY_CODE.NEXTVAL, #{ refCategoryName }, NULL, #{ categoryStatus }
+		)
+	</insert>
+	
+	<insert id="insertCategory" parameterType="com.deft.crud.product.model.dto.ProductCategoryDTO">
+		INSERT /*com.deft.crud.product.model.dao.ProductMapper#insertCategory()*/
+		  INTO TBL_PRODUCT_CATEGORY T
+		(
+		  T.CATEGORY_CODE, T.CATEGORY_NAME, T.REF_CATEGORY_CODE, T.CATEGORY_STATUS
+		)
+		VALUES
+		(
+		  SEQ_CATEGORY_CODE.NEXTVAL, #{ categoryName }, #{ refCategoryCode }, #{ categoryStatus }
+		)
+	
+	</insert>
 </mapper>

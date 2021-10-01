@@ -65,7 +65,7 @@
 												<td th:text = "${productList.category.categoryName}"></td>
 												<td th:text = "${productList.sellStatus}"></td>
 												<td>
-													<a th:href="@{/product/productDetail(productNo=${productList.productNo})}">
+													<a th:href="@{/product/select(productNo=${productList.productNo})}">
 														<input type="button" id="detailButton" class="btn btn-primary" value="상세보기">
 													</a>
 												</td>

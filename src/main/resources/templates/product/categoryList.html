@@ -1,11 +1,18 @@
 <!DOCTYPE html>
 <html lang="ko"
 	xmlns:th="https://www.thymeleaf.org">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <head>
 	<th:block th:replace="@{common/config} :: config"></th:block>
 	<link href="/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
 </head>
-
+<script>
+	const message = '[[${ message }]]';
+	
+	if(message) {
+		alert(message);
+	}
+</script>
 <body id="page-top">
 	<div id="wrapper">
 		<!-- Sidebar -->
@@ -36,16 +43,49 @@
 								<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
 									<h6 class="m-0 font-weight-bold text-primary">전체상품 재고현황</h6>
 									<div>
-									<input type="button" id="insertCategory" name="insertCategory" class="btn btn-primary" value="카테고리(중) 등록" 
-									data-toggle="modal" data-target="#exampleModalLong">
-									<input type="button" id="insertCategory" name="insertCategory" class="btn btn-primary" value="카테고리(소) 등록" 
-									data-toggle="modal" data-target="">
+										<input type="button" class="btn btn-primary" value="카테고리(중) 등록" data-toggle="modal" data-target="#refCategoryModal">
 									</div>
 								</div>
 			
 								<div class="table-responsive p-3">
-									<table class="table align-items-center table-flush table-hover" id="dataTableHover">
-										<thead align="center" class="thead-light">
+									<table class="table align-items-center table-flush table-hover" id="categoryM">
+										<thead th:align="center" class="thead-light">
+											<tr>
+												<th>카테고리(중)</th>
+												<th>카테고리 번호</th>
+												<th>상세보기</th>
+											</tr>
+										</thead>
+										<tbody th:align="center"> 
+											<tr th:each = "categoryList : ${allCategoryList}" th:if="${categoryList.refCategoryCode} == 0">
+												<td th:text = "${categoryList.categoryName}"></td>
+												<td th:text = "${categoryList.categoryCode}"></td>
+												<td>
+												<input type="button" id="detailButton" class="btn btn-primary" value="상세보기">
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</div> 
+							</div> 
+						</div> 
+					</div> 
+					
+					<div class="row">
+			
+						<!-- DataTable with Hover -->
+						<div class="col-lg-12">
+							<div class="card mb-4">
+								<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+									<h6 class="m-0 font-weight-bold text-primary">전체상품 재고현황</h6>
+									<div>
+										 <input type="button" class="btn btn-primary" value="카테고리(소) 등록" data-toggle="modal" data-target="#categoryModal">
+									</div>
+								</div>
+			
+								<div class="table-responsive p-3">
+									<table class="table align-items-center table-flush table-hover" id="categoryS">
+										<thead th:align="center" class="thead-light">
 											<tr>
 												<th>카테고리(중)</th>
 												<th>카테고리(소)</th>
@@ -53,55 +93,120 @@
 												<th>상세보기</th>
 											</tr>
 										</thead>
-										<tbody align="center">
-											<tr th:each = "categoryList : ${allCategoryList}">
+										<tbody th:align="center"> 
+											<tr th:each = "categoryList : ${allCategoryList}" th:if="${categoryList.refCategoryCode} != 0">
 												<td th:text = "${categoryList.refCategoryName}"></td>
 												<td th:text = "${categoryList.categoryName}"></td>
-												<td th:text = "${categoryList.refCategoryCode}"></td>
+												<td th:text = "${categoryList.categoryCode}"></td>
 												<td>
 												<input type="button" id="detailButton" class="btn btn-primary" value="상세보기">
 												</td>
 											</tr>
 										</tbody>
 									</table>
-								</div>
-							</div>
-						</div>
+								</div> 
+							</div> 
+						</div> 
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
 	
-	<div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog"
+	<!-- 카테고리(대) 등록 모달 -->
+	<div class="modal fade" id="refCategoryModal" tabindex="-1" role="dialog"
             aria-labelledby="exampleModalLongTitle" aria-hidden="true">
 		<div class="modal-dialog modal-" role="document">
-			<form class="modal-content" action="/insert/refCategory" method="post" onsubmit="return check()">
+			<form class="modal-content" action="/product/category/medium/insert" method="post" onsubmit="return checkRefCategory()">
 				<div class="modal-header">
 					<h6 class="modal-title" id="exampleModalLongTitle">카테고리(중) 등록</h6>
-					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="goBackRefCategoryModal()">
 					<span aria-hidden="true">&times;</span>
 					</button>
 				</div>
 				<div class="modal-body">
 					<div class="row">
 						<div class="form-group row col-lg-12">
-							<label for="refCategory" class="col-lg-3 col-form-label">카테고리(중)</label>
+							<label for="refCategoryName" class="col-lg-3 col-form-label">카테고리(중)</label>
 							<div class="col-lg-9">
-								<input type="text" class="form-control" id="refCategory" placeholder="카테고리(중)">
+								<input type="text" class="form-control" id="refCategoryName" name="refCategoryName" placeholder="내용을 입력하세요">
+							</div>
+							<small id="emailHelp" class="form-text ml-3" style="color:red;">카테고리(중) 등록을 할 시 카테고리(소)를 등록을 해야합니다.</small>
+						</div>
+					</div>
+					<div class="row">
+						<div class="row col-lg-12 mt-3">
+							<div class="custom-control custom-radio mx-3">
+								<input type="radio" id="refStatusY" name="categoryStatus" class="custom-control-input mb-1" th:value="활성화" checked>
+								<label class="custom-control-label" for="refStatusY">활성화</label>
+							</div>
+							<div class="custom-control custom-radio mx-3">
+								<input type="radio" id="refStatusN" name="categoryStatus" class="custom-control-input mb-1" th:value="비활성화">
+								<label class="custom-control-label" for="refStatusN">비활성화</label>
+							</div>
+						</div>
+					</div> 
+				</div> 
+				<div class="modal-footer">
+					<button type="submit" class="btn btn-primary" id="insertRefCategoryBtn" name="insertRefCategoryBtn">등록</button>
+					<button type="button" class="btn btn-outline-primary" data-dismiss="modal" onclick="goBackRefCategoryModal()">닫기</button>
+				</div>
+			</form>
+		</div>  
+    </div>
+
+	<!-- 카테고리(소) 등록 모달 -->
+	<div class="modal fade" id="categoryModal" tabindex="-1" role="dialog"
+            aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+		<div class="modal-dialog modal-" role="document">
+			<form class="modal-content" action="/product/category/small/insert" method="post" onsubmit="return checkCategory()">
+				<div class="modal-header">
+					<h6 class="modal-title" id="exampleModalLongTitle">카테고리(소) 등록</h6>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="goBackCategoryModal()">
+					<span aria-hidden="true">&times;</span>
+					</button>
+				</div> 
+				<div class="modal-body">
+					<div class="row">
+						<div class="form-group row col-lg-12"> 
+							<label for="refCategory" class="col-lg-3 mt-2">카테고리(중)</label>
+							<div class="col-lg-9">
+								<select class="form-control" id="refCategoryCode" name="refCategoryCode">
+									<option th:each="refCategory : ${refCategoryList}" th:text="${refCategory.refCategoryName}" th:value="${refCategory.refCategoryCode}"></option>
+								</select>
+							</div>	
+					 	</div> 
+					</div>  
+					<div class="row">
+						<div class="form-group row col-lg-12">
+							<label for="categoryName" class="col-lg-3 col-form-label">카테고리(소)</label>
+							<div class="col-lg-9">
+								<input type="text" class="form-control" id="categoryName" name="categoryName" placeholder="내용을 입력하세요">
 							</div>
 						</div>
 					</div>
-				</div>
+					<div class="row">
+						<div class="row col-lg-12 mt-3">
+							<div class="custom-control custom-radio mx-3">
+								<input type="radio" id="statusY" name="categoryStatus" class="custom-control-input mb-1" th:value="활성화" checked>
+								<label class="custom-control-label" for="statusY">활성화</label>
+							</div>
+							<div class="custom-control custom-radio mx-3">
+								<input type="radio" id="statusN" name="categoryStatus" class="custom-control-input mb-1" th:value="비활성화">
+								<label class="custom-control-label" for="statusN">비활성화</label>
+							</div> 
+						</div>
+					</div>     
+				</div> 
 				<div class="modal-footer">
-					<button type="submit" class="btn btn-primary" id="refCategoryName" name="catgoryName">등록</button>
-					<button type="button" class="btn btn-outline-primary" data-dismiss="modal">닫기</button>
+					<button type="submit" class="btn btn-primary" id="insertCategoryBtn" name="insertCategoryBtn">등록</button>
+					<button type="button" class="btn btn-outline-primary" data-dismiss="modal" onclick="goBackCategoryModal()">닫기</button>
 				</div>
 			</form>
-		</div>
+		</div>  
     </div>
 	
-	<!-- Script -->
+	<!-- Script -->  
     <th:block th:replace="@{/common/script} :: script"></th:block>
     	<!-- Page level plugins -->
 	<script src="/vendor/datatables/jquery.dataTables.min.js"></script>
@@ -110,9 +215,58 @@
 	<!-- Page level custom scripts -->
 	<script>
     $(document).ready(function () {
-      $('#dataTable').DataTable(); // ID From dataTable 
-      $('#dataTableHover').DataTable(); // ID From dataTable with Hover
+      $('#categoryM').DataTable(); // ID From dataTable with Hover
+      $('#categoryS').DataTable(); // ID From dataTable with Hover
     });
-    </script>
+
+	function checkRefCategory() {
+		
+		if($("#refCategoryName").val() == "") {
+			alert("등록할 카테고리를 입력해주세요!");
+			$("#refCategoryName").val("");
+			return false;
+		} 
+		
+		if(!/^[가-힣|[a-z]|[A-Z]{3,20}$/.test($("#refCategoryName").val())) {
+			alert("형식에 맞지 않습니다.");
+			$("#refCategoryName").val("");
+			return false;
+		} else {
+			if(!confirm("카테고리를 등록하시겠습니까?")) {
+				return false;
+			}
+		}
+	} 
+
+	function goBackRefCategoryModal() {
+		$("#refCategoryName").val("");
+		$("#categoryName").val("");
+		$("#refStatusY").prop("checked", true); 
+	} 
+
+	function checkCategory() {
+		
+		if($("#categoryName").val() == "") {
+			alert("등록할 카테고리를 입력해주세요!");
+			$("#categoryName").val("");
+			return false;
+		} 
+		
+		if(!/^[가-힣]{3,20}$/.test($("#categoryName").val())) {
+			alert("형식에 맞지 않습니다.");
+			$("#categoryName").val("");
+			return false;
+		} else if(!confirm("카테고리를 등록하시겠습니까?")) {
+			return false; 
+		}
+	}
+
+	function goBackCategoryModal() {
+		$("#refCategoryName").val("");
+		$("#categoryName").val("");
+		$("#statusY").prop("checked", true); 
+	}
+
+	</script>
 </body>
 </html>

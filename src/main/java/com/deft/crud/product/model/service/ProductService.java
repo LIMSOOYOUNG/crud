@@ -73,6 +73,19 @@ public class ProductService {
 		return productMapper.updateProduct(parameters);
 	}
 
+	
+	@Transactional
+	public int insertRefCategory(ProductCategoryDTO parameter) {
+
+		return productMapper.insertRefCategory(parameter);
+	}
+
+
+	public int insertCategory(ProductCategoryDTO parameters) {
+
+		return productMapper.insertCategory(parameters);
+	}
+
 
 
 
