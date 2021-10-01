@@ -11,8 +11,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.deft.crud.customer.model.dto.CustomerCompanyDTO;
+import com.deft.crud.customer.model.service.CustomerService;
 import com.deft.crud.estimate.model.dto.EstimateDTO;
 import com.deft.crud.estimate.model.service.EstimateService;
+import com.deft.crud.stock.model.service.StockService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -21,11 +24,16 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class EstimateController {
 	
 	private final EstimateService estimateService;
+	private final CustomerService customerService;
+	private final StockService stockService;
 	private final ObjectMapper objectMapper;
 	
 	@Autowired
-	public EstimateController(EstimateService estimateService, ObjectMapper objectMapper) {
+	public EstimateController(EstimateService estimateService, CustomerService customerService,
+			StockService stockService, ObjectMapper objectMapper) {
 		this.estimateService = estimateService;
+		this.customerService = customerService;
+		this.stockService = stockService;
 		this.objectMapper = objectMapper;
 	}
 	
@@ -59,5 +67,21 @@ public class EstimateController {
 	public String insertEstimate() {
 		
 		return "estimate/insertEstimate";
+	}
+	
+	@GetMapping("/customer/selectAll")
+	public ModelAndView selectCustomerList(ModelAndView mv, HttpServletResponse response)
+			throws JsonProcessingException {
+		
+		response.setContentType("application/json; charset=UTF-8");
+		
+		List<CustomerCompanyDTO> customerList = customerService.selectAllCustomer();
+		
+		System.out.println(customerList);
+		
+		mv.addObject("customerList", objectMapper.writeValueAsString(customerList));
+		mv.setViewName("jsonView");
+		
+		return mv;
 	}
 }

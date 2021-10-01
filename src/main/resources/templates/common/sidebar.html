@@ -1,7 +1,7 @@
 <html lang="ko"
 	xmlns:th="https://www.thymeleaf.org">
 
-	<!-- Start Sidebar -->
+	<!-- Sidebar -->
 	<th:block th:fragment="sidebar">
 		<ul class="navbar-nav sidebar sidebar-light accordion" id="accordionSidebar">
 			<a class="sidebar-brand d-flex align-items-center justify-content-center" th:href="@{/}">
@@ -20,9 +20,7 @@
 			<hr class="sidebar-divider">
 
 			<!-- Start EmpSidebar -->
-			<div class="sidebar-heading">
-				MAIN
-			</div>
+			<div class="sidebar-heading">MAIN</div>
 			<li class="nav-item">
 				<a class="nav-link collapsed" th:href="@{#}" data-toggle="collapse" data-target="#collapseEmp" aria-expanded="true"
 						aria-controls="collapseEmp">
@@ -134,9 +132,7 @@
 
 			<!-- Start AdminSidebar -->
 			<hr class="sidebar-divider">
-			<div class="sidebar-heading">
-				ADMIN
-			</div>
+			<div class="sidebar-heading">ADMIN</div>
 			<li class="nav-item">
 				<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseEmpMng" aria-expanded="true"
 				aria-controls="collapseEmpMng">
@@ -176,7 +172,7 @@
 					</div>
 				</div>
 			</li>	<!-- End AdminSidebar -->
-		</ul>	<!-- End Sidebar -->
+		</ul>
 	</th:block>
 
 </html>

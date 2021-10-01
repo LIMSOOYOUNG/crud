@@ -74,14 +74,19 @@
 												<td th:text="${estimate.customer.customerName}"></td>
 												<td th:text="${estimate.estimateTitle}"></td>
 												<td th:switch="${estimate.estimateStatus}">
-													<span th:case="'진행중'" class="badge badge-success" th:text="${estimate.estimateStatus}"></span>
-													<span th:case="'완료'" class="badge badge-info" th:text="${estimate.estimateStatus}"></span>
-													<span th:case="'보류'" class="badge badge-warning" th:text="${estimate.estimateStatus}"></span>
-													<span th:case="'실패'" class="badge badge-danger" th:text="${estimate.estimateStatus}"></span>
+													<h5><span th:case="'진행중'" class="badge badge-success" th:text="${estimate.estimateStatus}"></span></h5>
+													<h5><span th:case="'완료'" class="badge badge-info" th:text="${estimate.estimateStatus}"></span></h5>
+													<h5><span th:case="'보류'" class="badge badge-warning" th:text="${estimate.estimateStatus}"></span></h5>
+													<h5><span th:case="'실패'" class="badge badge-danger" th:text="${estimate.estimateStatus}"></span></h5>
 												</td>
 												<td th:text="${estimate.customer.empInfo.empName}"></td>
 												<td th:text="${estimate.estimateDate}"></td>
-												<td><a href="#" class="btn btn-sm btn-primary">detail</a></td>
+												<td>
+													<a href="#" class="btn btn-sm btn-dark btn-icon-split">
+														<span class="icon text-white-50"><i class="fas fa-clipboard-list"></i></span>
+														<span class="text text-white">상세정보</span>
+													</a>
+												</td>
 											</tr>
 										</tbody>
 									</table>
@@ -141,7 +146,8 @@
 						$estimateStatusTd = $("<td>").append($badgeSpan);
 						$empNameTd = $("<td>").text(estimate.customer.empInfo.empName);
 						$estimateDateTd = $("<td>").text(estimate.estimateDate);
-						$detailTd = $("<td>").append("<a href='#' class='btn btn-sm btn-primary'>detail</a>");
+						$detailBtn = $("<button>").addClass("btn btn-sm btn-primary").text("상세정보");
+						$detailTd = $("<td>").append($detailBtn);
 						
 						$tr.append($estimateNoTd);
 						$tr.append($customerNameTd);
@@ -159,7 +165,7 @@
 				}
 			});
 		});
-		</script>
+	</script>
 </body>
 
 </html>
