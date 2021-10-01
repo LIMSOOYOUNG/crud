@@ -35,4 +35,15 @@ public interface CustomerMapper {
 
     /* 기존, 해지 고객 상태 변경 */
     int modifyExtCustomerStatus(int customerNo);
+
+    /* 분석 고객 상태 변경 */
+    int modifyAnaCustomerStatus(AnaCustomerDetailDTO parameters);
+
+    /* 분석 고객 고객화 수정 */
+    int modifyAnaCustomization(AnaCustomerDetailDTO parameters);
+
+    List<EmpInfoDTO> selectEmpName(String term);
+
+    /* 분석 고객 영업활동 등록 */
+    int insertActivity(BusinessActivityDTO parameters);
 }

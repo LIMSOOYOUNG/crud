@@ -11,9 +11,9 @@ public class BusinessActivityDTO implements Serializable {
     private String businessLocation;
     private String businessPurpose;
     private String businessContents;
-    private java.sql.Timestamp writingDate;
-    private java.sql.Timestamp activityStartTime;
-    private java.sql.Timestamp activityEndTime;
+    private Timestamp writingDate;
+    private Timestamp activityStartTime;
+    private Timestamp activityEndTime;
     private int customerNo;
     private int empNo;
 

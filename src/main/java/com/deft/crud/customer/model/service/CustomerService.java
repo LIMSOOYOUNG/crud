@@ -80,4 +80,30 @@ public class CustomerService {
 
         return customerMapper.modifyExtCustomerStatus(customerNo);
     }
+
+    /* 분석 고객 상태 변경 */
+    @Transactional
+    public int modifyAnaCustomerStatus(AnaCustomerDetailDTO parameters) {
+
+        return customerMapper.modifyAnaCustomerStatus(parameters);
+    }
+
+    /* 분석 고객 고객화 수정 */
+    @Transactional
+    public int modifyAnaCustomization(AnaCustomerDetailDTO parameters) {
+
+        return customerMapper.modifyAnaCustomization(parameters);
+    }
+
+    public List<EmpInfoDTO> selectEmpName(String term) {
+
+        return customerMapper.selectEmpName(term);
+    }
+
+    /* 분석 고객 영업활동 등록 */
+    @Transactional
+    public int insertActivity(BusinessActivityDTO parameters) {
+
+        return customerMapper.insertActivity(parameters);
+    }
 }

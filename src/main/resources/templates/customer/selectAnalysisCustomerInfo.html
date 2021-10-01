@@ -20,7 +20,7 @@
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="col-lg-11">
-                                <button type="button" id="btnBack" class="close">×</button>
+                                <button type="button" id="btnBack" class="close"><i class="far fa-times-circle"></i></button>
                                 <h1 style="color: #2e2f37">분석 고객 조회</h1>
                             </div>
                             <hr>
@@ -46,22 +46,28 @@
                                 </div>
                                 <div class="row">
                                     <div class="form-group col-lg-4 row">
-                                        <label for="customerNo" class="col-lg-4 form-control-plaintext"
-                                               th:align="center" style="padding: 10px 0;">고객번호</label>
+                                        <div class="form-group col-lg-1"><input type="hidden" value="emptyRow"></div>
+                                        <label for="customerNo" class="col-lg-3 form-control-plaintext"
+                                               th:align="center"
+                                               style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">고객번호</label>
                                         <input th:disabled="${customerInfo.customerList[0].customerNo}"
                                                id="customerNo" type="text" class="form-control col-lg-8"
                                                th:value="${customerInfo.customerList[0].customerNo}">
                                     </div>
                                     <div class="form-group col-lg-4 row">
-                                        <label for="customerName" class="col-lg-4 form-control-plaintext"
-                                               th:align="center" style="padding: 10px 0;">고객명</label>
+                                        <div class="form-group col-lg-1"><input type="hidden" value="emptyRow"></div>
+                                        <label for="customerName" class="col-lg-3 form-control-plaintext"
+                                               th:align="center"
+                                               style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">고객명</label>
                                         <input th:disabled="${customerInfo.customerList[0].customerName}"
                                                id="customerName" type="text" class="form-control col-lg-8"
                                                th:value="${customerInfo.customerList[0].customerName}">
                                     </div>
                                     <div class="form-group col-lg-4 row">
-                                        <label for="empName" class="col-lg-4 form-control-plaintext"
-                                               th:align="center" style="padding: 10px 0;">담당사원</label>
+                                        <div class="form-group col-lg-1"><input type="hidden" value="emptyRow"></div>
+                                        <label for="empName" class="col-lg-3 form-control-plaintext"
+                                               th:align="center"
+                                               style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">담당사원</label>
                                         <input th:disabled="${customerInfo.customerList[0].empInfo.empName}"
                                                id="empName" type="text" class="form-control col-lg-8"
                                                th:value="${customerInfo.customerList[0].empInfo.empName}">
@@ -69,22 +75,28 @@
                                 </div>
                                 <div class="row">
                                     <div class="form-group col-lg-4 row">
-                                        <label for="email" class="col-lg-4 form-control-plaintext"
-                                               th:align="center" style="padding: 10px 0;">이메일</label>
+                                        <div class="form-group col-lg-1"><input type="hidden" value="emptyRow"></div>
+                                        <label for="email" class="col-lg-3 form-control-plaintext"
+                                               th:align="center"
+                                               style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">이메일</label>
                                         <input th:disabled="${customerInfo.customerList[0].customerEmail}"
                                                id="email" type="text" class="form-control col-lg-8"
                                                th:value="${customerInfo.customerList[0].customerEmail}">
                                     </div>
                                     <div class="form-group col-lg-4 row">
-                                        <label for="businessStatus" class="col-lg-4 form-control-plaintext"
-                                               th:align="center" style="padding: 10px 0;">업태</label>
+                                        <div class="form-group col-lg-1"><input type="hidden" value="emptyRow"></div>
+                                        <label for="businessStatus" class="col-lg-3 form-control-plaintext"
+                                               th:align="center"
+                                               style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">업태</label>
                                         <input th:disabled="${customerInfo.businessStatus}"
                                                id="businessStatus" type="text" class="form-control col-lg-8"
                                                th:value="${customerInfo.businessStatus}">
                                     </div>
                                     <div class="form-group col-lg-4 row">
-                                        <label for="customerStatus" class="col-lg-4 form-control-plaintext"
-                                               th:align="center" style="padding: 10px 0;">고객상태</label>
+                                        <div class="form-group col-lg-1"><input type="hidden" value="emptyRow"></div>
+                                        <label for="customerStatus" class="col-lg-3 form-control-plaintext"
+                                               th:align="center"
+                                               style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">고객상태</label>
                                         <input th:disabled="${customerInfo.customerList[0].anaCustomerDetail.customerStatus}"
                                                id="customerStatus" type="text" class="form-control col-lg-8"
                                                th:value="${customerInfo.customerList[0].anaCustomerDetail.customerStatus}">
@@ -92,15 +104,19 @@
                                 </div>
                                 <div class="row">
                                     <div class="form-group col-lg-4 row">
-                                        <label for="phone" class="col-lg-4 form-control-plaintext"
-                                               th:align="center" style="padding: 10px 0;">전화번호</label>
+                                        <div class="form-group col-lg-1"><input type="hidden" value="emptyRow"></div>
+                                        <label for="phone" class="col-lg-3 form-control-plaintext"
+                                               th:align="center"
+                                               style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">전화번호</label>
                                         <input th:disabled="${customerInfo.customerList[0].customerPhone}"
                                                id="phone" type="text" class="form-control col-lg-8"
                                                th:value="${customerInfo.customerList[0].customerPhone}">
                                     </div>
                                     <div class="form-group col-lg-4 row">
-                                        <label for="posibillity" class="col-lg-4 form-control-plaintext"
-                                               th:align="center" style="padding: 10px 0;">가능성(%)</label>
+                                        <div class="form-group col-lg-1"><input type="hidden" value="emptyRow"></div>
+                                        <label for="posibillity" class="col-lg-3 form-control-plaintext"
+                                               th:align="center"
+                                               style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">가능성(%)</label>
                                         <input th:disabled="${customerInfo.customerList[0].anaCustomerDetail.customizationPosibillity}"
                                                id="posibillity" type="text" class="form-control col-lg-8"
                                                th:value="${customerInfo.customerList[0].anaCustomerDetail.customizationPosibillity}">
@@ -113,22 +129,27 @@
                                         </a>
                                         <div class="col-lg-1"><input type="hidden"></div>
                                         <a class="btn btn-primary btn-icon-split col-lg-5"
-                                           style="height: 41px; font-size: 19px">
-                                            <span class="text text-white">고객상태변경</span>
+                                           style="height: 41px; font-size: 19px"
+                                           id="modifyCustomization">
+                                            <span class="text text-white">고객화변경</span>
                                         </a>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="form-group col-lg-4 row">
-                                        <label for="fax" class="col-lg-4 form-control-plaintext"
-                                               th:align="center" style="padding: 10px 0;">팩스</label>
+                                        <div class="form-group col-lg-1"><input type="hidden" value="emptyRow"></div>
+                                        <label for="fax" class="col-lg-3 form-control-plaintext"
+                                               th:align="center"
+                                               style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">팩스</label>
                                         <input th:disabled="${customerInfo.customerList[0].customerFax}"
                                                id="fax" type="text" class="form-control col-lg-8"
                                                th:value="${customerInfo.customerList[0].customerFax}">
                                     </div>
                                     <div class="form-group col-lg-4 row">
-                                        <label for="revenue" class="col-lg-4 form-control-plaintext"
-                                               th:align="center" style="padding: 10px 0;">매출액(만)</label>
+                                        <div class="form-group col-lg-1"><input type="hidden" value="emptyRow"></div>
+                                        <label for="revenue" class="col-lg-3 form-control-plaintext"
+                                               th:align="center"
+                                               style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">매출액(만)</label>
                                         <input th:disabled="${customerInfo.companyRevenue}"
                                                id="revenue" type="text" class="form-control col-lg-8"
                                                th:value="${customerInfo.companyRevenue}">
@@ -151,9 +172,21 @@
                             </div>
                             <div class="form-group col-lg-12"><input type="hidden" value="emptyRow"></div>
                             <br>
-                            <h3>활동 이력</h3>
-                            <div class="form-group col-lg-12" style="overflow-y: scroll; height: 200px;">
+                            <div class="row">
+                                <div class="form-group col-lg-12 row">
+                                    <div class="form-group col-lg-9"><h3>활동 이력</h3></div>
 
+                                    <div class="form-group col-lg-3">
+                                        <a class="btn btn-info btn-icon-split"
+                                           id="insertActivity">
+                                            <span class="icon text-white">
+                                                <i class="fas fa-edit"></i>
+                                            </span>
+                                        <span class="text text-white">영업활동등록</span>
+                                    </a></div>
+                                </div>
+                            </div>
+                            <div class="form-group col-lg-12" style="overflow-y: scroll; height: 200px;">
                                 <table id="table_activity" class="table align-items-center table-flush table-hover">
                                     <thead class="thead-light" th:align="center">
                                     <tr>
@@ -196,7 +229,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h4 class="modal-title" style="color: #0da8ee">상세정보</h4>
-                        <button type="button" class="close" data-dismiss="modal">×</button>
+                        <button type="button" class="close" data-dismiss="modal"><i class="far fa-times-circle"></i></button>
                         <div class="row">
                             <div class="form-group col-lg-12"><input type="hidden" value="emptyRow"></div>
                         </div>
@@ -382,7 +415,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h4 class="modal-title" style="color: #0da8ee">상세정보 수정</h4>
-                        <button type="button" class="close" data-dismiss="modal">×</button>
+                        <button type="button" class="close" data-dismiss="modal"><i class="far fa-times-circle"></i></button>
                         <div class="row">
                             <div class="form-group col-lg-12"><input type="hidden" value="emptyRow"></div>
                         </div>
@@ -682,7 +715,184 @@
                             </div>
                         </div>
                         <div class="modal-footer">
+                            <button type="button" id="modifyStatus" class="btn btn-outline-primary">고객상태수정</button>
                             <button type="submit" id="modalModifyBasicInfo" class="btn btn-primary">수정완료</button>
+                        </div>
+                    </form>
+                    <div id="count" value="1"></div>
+                </div>
+            </div>
+        </div>
+
+        <!------------- Modify Status Modal --------------->
+        <div class="modal fade" id="modifyStatusModal" role="dialog">
+            <div class="modal-dialog modal-sm modal-dialog-centered">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" style="color: #0da8ee">고객 상태 변경</h4>
+                        <button type="button" class="close" data-dismiss="modal"><i class="far fa-times-circle"></i></button>
+                        <div class="row">
+                            <div class="form-group col-lg-12"><input type="hidden" value="emptyRow"></div>
+                        </div>
+                    </div>
+                    <form th:action="@{/customer/ana/status/modify}" method="post">
+                        <div class="modal-body">
+                            <div class="card mb-auto">
+                                <select name="customerStatus" class="select2-container">
+                                    <option th:value="${ customerInfo.customerList[0].anaCustomerDetail.customerStatus }"
+                                            th:text="'현재 상태 : ' + ${ customerInfo.customerList[0].anaCustomerDetail.customerStatus }"
+                                            selected></option>
+                                    <option value="잠재고객">잠재고객</option>
+                                    <option value="보류고객">보류고객</option>
+                                    <option value="실패고객">실패고객</option>
+                                    <option value="성공고객">성공고객</option>
+                                </select>
+                                <input type="hidden" name="customerNo" th:value="${ customerInfo.customerList[0].customerNo }">
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" id="successStatusModify" class="btn btn-primary">상태변경</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!------------- Modify Customization Modal --------------->
+        <div class="modal fade" id="modifyCustomizationModal" role="dialog">
+            <div class="modal-dialog modal-sm modal-dialog-centered">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" style="color: #0da8ee">고객화 변경</h4>
+                        <button type="button" class="close" data-dismiss="modal"><i class="far fa-times-circle"></i></button>
+                        <div class="row">
+                            <div class="form-group col-lg-12"><input type="hidden" value="emptyRow"></div>
+                        </div>
+                    </div>
+                    <form th:action="@{/customer/ana/customization/modify}" method="post">
+                        <div class="modal-body">
+                            <div class="card mb-auto">
+                                <div class="row">
+                                    <select name="customizationLevel">
+                                        <option th:value="${ customerInfo.customerList[0].anaCustomerDetail.customizationLevel }"
+                                                th:text="'현재 상태 : ' + ${ customerInfo.customerList[0].anaCustomerDetail.customizationLevel }"
+                                                selected></option>
+                                        <option value="요구 분석">요구 분석</option>
+                                        <option value="거래 제의">거래 제의</option>
+                                        <option value="가격 견적서 제안">가격 견적서 제안</option>
+                                        <option value="고객측 검토 중">고객측 검토 중</option>
+                                        <option value="의사 결정자 확인">의사 결정자 확인</option>
+                                        <option value="대표 결재 대기중">대표 결재 대기중</option>
+                                    </select>
+                                </div>
+                                <div class="row">
+                                    <label for="modalModifyPosibillity" class="col-lg-4 form-control-plaintext"
+                                           th:align="center"
+                                           style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">고객화 가능성(%)</label>
+                                    <input id="modalModifyPosibillity" type="text" class="form-control col-lg-7"
+                                           name="customizationPosibillity"
+                                           th:value="${customerInfo.customerList[0].anaCustomerDetail.customizationPosibillity}">
+                                </div>
+                                <input type="hidden" name="customerNo" th:value="${ customerInfo.customerList[0].customerNo }">
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" id="successCustomizationModify" class="btn btn-primary">상태변경</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!------------- Insert Activity Modal --------------->
+        <div class="modal fade" id="insertActivityModal" role="dialog">
+            <div class="modal-dialog modal-xl">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" style="color: #0da8ee">영업활동 등록</h4>
+                        <button type="button" class="close" data-dismiss="modal"><i class="far fa-times-circle"></i></button>
+                        <div class="row">
+                            <div class="form-group col-lg-12"><input type="hidden" value="emptyRow"></div>
+                        </div>
+                    </div>
+                    <form th:action="@{/customer/ana/activity/insert}" method="post">
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="form-group col-lg-12"><input type="hidden" value="emptyRow"></div>
+                                <input type="hidden" name="customerCompanyNo" th:value="${ customerInfo.customerList[0].customerNo }">
+                                <input type="hidden" name="empNo" th:value="${ customerInfo.customerList[0].empNo}">
+                            </div>
+                            <div class="card mb-auto">
+                                <div class="row">
+                                    <div class="form-group col-lg-12"><input type="hidden" value="emptyRow"></div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-lg-12 row">
+                                        <div class="form-group col-lg-1"><input type="hidden" value="emptyRow"></div>
+                                        <label for="insertBusinessSubject" class="col-lg-1 form-control-plaintext"
+                                               th:align="center"
+                                               style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">활동주제</label>
+                                        <input id="insertBusinessSubject" type="text" class="form-control col-lg-9"
+                                               name="businessSubject">
+                                    </div>
+                                    <div class="form-group col-lg-12 row">
+                                        <div class="form-group col-lg-1"><input type="hidden" value="emptyRow"></div>
+                                        <label for="insertBusinessType" class="col-lg-1 form-control-plaintext"
+                                               th:align="center"
+                                               style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">유형</label>
+                                        <input name="businessType"
+                                               id="insertBusinessType" type="text" class="form-control col-lg-9">
+                                    </div>
+                                    <div class="form-group col-lg-12 row">
+                                        <div class="form-group col-lg-1"><input type="hidden" value="emptyRow"></div>
+                                        <label for="insertBusinessLocation" class="col-lg-1 form-control-plaintext"
+                                               th:align="center"
+                                               style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">장소</label>
+                                        <input name="businessLocation"
+                                               id="insertBusinessLocation" type="text" class="form-control col-lg-9">
+                                    </div>
+                                    <div class="form-group col-lg-12 row">
+                                        <div class="form-group col-lg-1"><input type="hidden" value="emptyRow"></div>
+                                        <label for="insertBusinessPurpose" class="col-lg-1 form-control-plaintext"
+                                               th:align="center"
+                                               style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">목적</label>
+                                        <input name="businessPurpose"
+                                               id="insertBusinessPurpose" type="text" class="form-control col-lg-9">
+                                    </div>
+                                    <div class="form-group col-lg-12 row">
+                                        <div class="form-group col-lg-1"><input type="hidden" value="emptyRow"></div>
+                                        <label for="insertBusinessContents" class="col-lg-1 form-control-plaintext"
+                                               th:align="center"
+                                               style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">활동내용</label>
+                                        <textarea name="businessContents" style="resize: none; height: 200px;"
+                                                  id="insertBusinessContents" type="text" class="form-control col-lg-9"></textarea>
+                                    </div>
+                                    <div class="form-group col-lg-12 row">
+                                        <div class="form-group col-lg-1"><input type="hidden" value="emptyRow"></div>
+                                        <label for="insertActivityStartTime" class="col-lg-1 form-control-plaintext"
+                                               th:align="center"
+                                               style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">시작시간</label>
+                                        <input name="activityStartTime"
+                                               id="insertActivityStartTime" type="datetime-local" class="form-control col-lg-9">
+                                    </div>
+                                    <div class="form-group col-lg-12 row">
+                                        <div class="form-group col-lg-1"><input type="hidden" value="emptyRow"></div>
+                                        <label for="insertActivityEndTime" class="col-lg-1 form-control-plaintext"
+                                               th:align="center"
+                                               style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">종료시간</label>
+                                        <input name="activityEndTime"
+                                               id="insertActivityEndTime" type="datetime-local" class="form-control col-lg-9">
+                                    </div>
+                                </div>
+                            </div>
+                        <div class="modal-footer">
+                            <button type="submit" id="successInsert" class="btn btn-primary">영업활동 등록</button>
                         </div>
                     </form>
                     <div id="count" value="1"></div>
@@ -711,9 +921,22 @@
             $('#modifyDetailInfoModal').modal();
         });
 
+        $('#modifyStatus').click(function () {
+            $('#modifyStatusModal').modal();
+        });
+
+        $('#modifyCustomization').click(function () {
+            $("#modifyCustomizationModal").modal();
+        });
+
+        $('#insertActivity').click(function () {
+            $('#insertActivityModal').modal();
+        });
+
         $('#btnBack').click(function () {
             window.history.back();
         });
+
     </script>
 </body>
 
