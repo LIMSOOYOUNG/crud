@@ -19,10 +19,8 @@ public class ProductService {
 	
 	@Autowired
 	public ProductService(ProductMapper productMapper) {
-		
 		this.productMapper = productMapper;
 	}
-	
 	
 	public List<ProductDTO> allProductList() {
 
@@ -40,9 +38,9 @@ public class ProductService {
 		return productMapper.refCategoryList();
 	} 
 
-	public List<ProductCategoryDTO> childrenCategoryList() {
+	public List<ProductCategoryDTO> categoryList() {
 		
-		return productMapper.childrenCategoryList();
+		return productMapper.categoryList();
 	}
 
 	public List<ManufacturerDTO> manufacturerList() {
@@ -72,7 +70,6 @@ public class ProductService {
 
 		return productMapper.updateProduct(parameters);
 	}
-
 	
 	@Transactional
 	public int insertRefCategory(ProductCategoryDTO parameter) {
@@ -80,17 +77,17 @@ public class ProductService {
 		return productMapper.insertRefCategory(parameter);
 	}
 
-
+	@Transactional
 	public int insertCategory(ProductCategoryDTO parameters) {
 
 		return productMapper.insertCategory(parameters);
 	}
+	
+	@Transactional
+	public int updateRefCategory(ProductCategoryDTO parameters) {
 
-
-
-
-
-
+		return productMapper.updateRefCategory(parameters);
+	}
 
 
 }

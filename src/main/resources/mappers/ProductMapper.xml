@@ -64,6 +64,7 @@
 			   A.CATEGORY_CODE
 			 , A.CATEGORY_NAME
 			 , A.REF_CATEGORY_CODE
+			 , A.CATEGORY_STATUS
 			 , B.CATEGORY_NAME "REF_CATEGORY_NAME"
 		  FROM TBL_PRODUCT_CATEGORY A
 	      LEFT JOIN TBL_PRODUCT_CATEGORY B ON (A.REF_CATEGORY_CODE = B.CATEGORY_CODE)		
@@ -74,15 +75,18 @@
 		 SELECT /*com.deft.crud.product.model.dao.ProductMapper#refCategoryList()*/
        	        A.CATEGORY_CODE "REF_CATEGORY_CODE"
      	   	  , A.CATEGORY_NAME "REF_CATEGORY_NAME"
+     	   	  , A.CATEGORY_STATUS
   	       FROM TBL_PRODUCT_CATEGORY A
  		  WHERE REF_CATEGORY_CODE IS NULL
 	
 	</select>
 	
-	<select id="childrenCategoryList" resultMap="productCategoryResultMap">
-		SELECT /*com.deft.crud.product.model.dao.ProductMapper#childrenCategoryList()*/
+	<select id="categoryList" resultMap="productCategoryResultMap">
+		SELECT /*com.deft.crud.product.model.dao.ProductMapper#categoryList()*/
         	   A.CATEGORY_CODE 
-             , A.CATEGORY_NAME 
+             , A.CATEGORY_NAME
+             , A.REF_CATEGORY_CODE
+             , A.CATEGORY_STATUS
           FROM TBL_PRODUCT_CATEGORY A
          WHERE A.REF_CATEGORY_CODE IS NOT NULL
 	</select>
@@ -170,4 +174,22 @@
 		)
 	
 	</insert>
+	
+	<update id="updateRefCategory" parameterType="com.deft.crud.product.model.dto.ProductCategoryDTO">
+		UPDATE /*com.deft.crud.product.model.dao.ProductMapper#updateRefCategory()*/
+			   TBL_PRODUCT_CATEGORY P
+		   SET P.CATEGORY_NAME = #{ refCategoryName }
+		     , P.CATEGORY_STATUS = #{ categoryStatus }
+		 WHERE P.CATEGORY_CODE = #{ refCategoryCode } 
+	</update>
+	
+<!-- 	<select id="selectRefCategoryForUpdate" resultMap="productCategoryResultMap"> -->
+<!-- 		SELECT /*com.deft.crud.product.model.dao.ProductMapper#selectRefCategoryForUpdate()*/ -->
+<!--        		   C.CATEGORY_CODE "REF_CATEGORY_CODE" -->
+<!-- 		     , C.CATEGORY_NAME "REF_CATEGORY_NAME" -->
+<!-- 		     , C.CATEGORY_STATUS -->
+<!-- 		  FROM TBL_PRODUCT_CATEGORY C -->
+<!-- 		 WHERE C.REF_CATEGORY_CODE IS NULL -->
+<!-- 		   AND C.CATEGORY_CODE = #{ refCategoryCode } -->
+<!-- 	</select> -->
 </mapper>
