@@ -3,8 +3,6 @@ package com.deft.crud.stock.model.dto;
 import java.io.Serializable;
 import java.util.List;
 
-import org.springframework.boot.context.properties.ConstructorBinding;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
