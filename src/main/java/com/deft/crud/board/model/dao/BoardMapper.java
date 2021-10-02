@@ -22,5 +22,11 @@ public interface BoardMapper {
 	/* 자유게시글 삭제 */
 	int deleteFreeboard(int boardNo);
 
+	/* 자유게시글 보기*/
+	BoardDTO freeboardDetail(int writeNo);
+
+	/* 공지사항 보기 */
+	BoardDTO noticeDetail(int writeNo);
+
 
 }

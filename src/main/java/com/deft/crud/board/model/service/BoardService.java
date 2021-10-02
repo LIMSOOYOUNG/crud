@@ -55,5 +55,23 @@ public class BoardService {
 		return result;
 	}
 
+	/* 자유게시글 보기*/
+	public BoardDTO freeboardDetail(int writeNo) {
+		
+	    BoardDTO freeboardDTO = boardMapper.freeboardDetail(writeNo);
+		
+	    System.out.println(freeboardDTO);
+	    
+		return freeboardDTO;
+	}
+
+	/* 공지사항 보기*/
+	public BoardDTO noticeDetail(int writeNo) {
+		
+		BoardDTO noticeboardDTO = boardMapper.noticeDetail(writeNo);
+		
+		return noticeboardDTO;
+	}
+
 
 }

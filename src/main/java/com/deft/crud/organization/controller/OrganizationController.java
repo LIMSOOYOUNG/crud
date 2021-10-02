@@ -106,12 +106,9 @@ public class OrganizationController {
 	}
 	
 	/* 부서 수정 */
-	@GetMapping("departmentmodify")
-	public void departmentModify() {}
-	
 	@PostMapping("departmentmodify")
-	public ModelAndView departmentModifyForm(ModelAndView mv, RedirectAttributes rttr, @RequestParam String deptCode
-		     , @RequestParam String deptName, @RequestParam String deptFax, @RequestParam String deptTel, @RequestParam String deptStatus) throws Exception {
+	public ModelAndView departmentModifyForm(ModelAndView mv, @RequestParam String deptCode
+		     , @RequestParam String deptName, @RequestParam String deptFax, @RequestParam String deptTel, @RequestParam String deptStatus){
 		
 		DepartmentDTO departmentDTO = new DepartmentDTO();
 		departmentDTO.setDeptCode(deptCode);
@@ -123,22 +120,17 @@ public class OrganizationController {
 		int result = organizationService.departmentModify(departmentDTO);
 		
 		if(result > 0) {
-			rttr.addFlashAttribute("flashMessage", "성공!!");
-		}else {
-			rttr.addFlashAttribute("flashMessage", "실패!!");
+			
+			mv.setViewName("redirect:/organization/departmentmodify?deptCode=" + deptCode);
 		}
-		mv.setViewName("redirect:/organization/departmentmodify");
 		
 		return mv;
 	}
 	
 	/* 직급 수정 */
-	@GetMapping("jobmodify")
-	public void jobModify() {}
-	
 	@PostMapping("jobmodify")
-	public ModelAndView jobModifyForm(ModelAndView mv, RedirectAttributes rttr, @RequestParam String jobCode
-            , @RequestParam String jobName, @RequestParam String jobStatus)throws Exception {
+	public ModelAndView jobModifyForm(ModelAndView mv, @RequestParam String jobCode
+            , @RequestParam String jobName, @RequestParam String jobStatus){
 		
 		JobDTO jobDTO = new JobDTO();
 		jobDTO.setJobCode(jobCode);
@@ -150,11 +142,9 @@ public class OrganizationController {
 		int result = organizationService.jobModify(jobDTO);
 		
 		if(result > 0) {
-			rttr.addFlashAttribute("flashMessage", "성공!!");
-		}else {
-			rttr.addFlashAttribute("flashMessage", "실패!!");
+			mv.setViewName("redirect:/organization/selectjob?jobCode=" + jobCode);
 		}
-		mv.setViewName("redirect:/organization/selectjob");
+		
 		
 		return mv;
 	}

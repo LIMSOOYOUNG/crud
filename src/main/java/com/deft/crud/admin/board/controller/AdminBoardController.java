@@ -48,14 +48,14 @@ public class AdminBoardController {
 	
 	@PostMapping("noticeinsert")
 	public ModelAndView noticeInsertForm(ModelAndView mv, RedirectAttributes rttr, @RequestParam int boardNo, @RequestParam int writeNo,
-			                              @RequestParam String boardName, @RequestParam String writerName, @RequestParam String contents,
+			                              @RequestParam String boardName, @RequestParam String empName, @RequestParam String contents,
 			                              @RequestParam int boardAttatchNo) {
 		
 		AdminBoardDTO adminBoardDTO = new AdminBoardDTO();
 		adminBoardDTO.setBoardNo(boardNo);
 		adminBoardDTO.setWriteNo(writeNo);
 		adminBoardDTO.setBoardName(boardName);
-		adminBoardDTO.setWriterName(writerName);
+		adminBoardDTO.setEmpName(empName);
 		adminBoardDTO.setContents(contents);
 		adminBoardDTO.setBoardAttatchNo(boardAttatchNo);
 		

@@ -18,46 +18,45 @@
 				<div class="container-fluid" id="container-wrapper">
 					<div
 						class="d-sm-flex align-items-center justify-content-between mb-4">
-						<h1 class="h3 mb-0 text-gray-800">공지사항 등록</h1>
-						<ol class="breadcrumb">
-							<li class="breadcrumb-item"><a href="./">Home</a></li>
-							<li class="breadcrumb-item">Tables</li>
-							<li class="breadcrumb-item active" aria-current="page">공지사항 등록</li>
-						</ol>
+						<h1 class="h3 mb-0 text-gray-800">자유게시판상세 조회</h1>
 					</div>
 
-
+					<div align="right">
+						<button class="btn btn-primary" >삭제</button>
+					</div>
+					<br>
 					<!-- Row -->
 					<div class="row">
                         
                         <!-- 게시판 폼 -->
-                                <form action="noticeinsert" method="post">
+                        <div class="col-lg-12">
                                 <input type="hidden" name="writeNo">
                                 <div class="input-group-md mb-3">
                             		<div class="input-group-prepend">
                             			<span class="input-group-text col-lg-1" id="basic-addon3" >제목</span>
-                            			<input type="text" class="form-control" id="basic-url" aria-describedby="basic-addon3" name="boardName">
+                            			<input type="text" class="form-control" id="basic-url" aria-describedby="basic-addon3" th:value="${boardDTO.boardName}" th:readonly="readonly">
                             		</div>
                             	</div>
                             	  <div class="form-group mb-3">
                             		<div class="input-group-prepend">
                             			<span class="input-group-text col-lg-1" id="basic-addon3" >작성자</span>
-                            			<input type="text" class="form-control" id="basic-url" aria-describedby="basic-addon3" name="empName">
+                            			<input type="text" class="form-control" id="basic-url" aria-describedby="basic-addon3" th:value="${boardDTO.empName}" th:readonly="readonly">
                             		</div>
                             	</div>
                             	  <div class="form-group mb-3">
                             		<div class="input-group-prepend">
                             			<span class="input-group-text col-lg-1" id="basic-addon3" th:align="center">첨부파일</span>
-                            			<input type="text" class="form-control" id="basic-url" aria-describedby="basic-addon3" name="">
+                            			<input type="text" class="form-control" id="basic-url" aria-describedby="basic-addon3" name="" th:readonly="readonly">
                             		</div>
                             	</div>
                             	<div class="form-group">
-                            		<textarea rows="20" cols="150" class="form-control" id="exampleFormControlTextarea1" name="contents"></textarea>
+                            		<textarea rows="20" cols="150" class="form-control" id="exampleFormControlTextarea1" th:text="${boardDTO.contents}" th:readonly="readonly"></textarea>
                             	</div>
                             	<div align="right">
-                            		<button type="submit" class="btn btn-primary">등록하기</button>
+                            		<button type="submit" class="btn btn-primary">수정</button>
+                            		<button type="submit" class="btn btn-primary">취소</button>
                             	</div>
-                                </form>
+                            	</div>
 						</div>
 				</div>
 			</div>
