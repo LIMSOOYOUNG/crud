@@ -12,4 +12,6 @@ public interface EstimateMapper {
 	List<EstimateDTO> selectEstimateList();
 
 	List<EstimateDTO> selectEstimateListByStatus(String estimateStatus);
+
+	String selectLastEstimateNo();
 }

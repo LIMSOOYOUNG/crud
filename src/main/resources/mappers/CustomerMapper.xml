@@ -24,6 +24,22 @@
 
         <collection property="customerProductList" resultMap="customerProductResultMap"/>
     </resultMap>
+    
+    <resultMap id="extCustomerResultMap" type="com.deft.crud.customer.model.dto.ExtCustomerDTO">
+    	<id property="customerNo" column="CUSTOMER_NO"/>
+        <result property="customerCompanyNo" column="CUSTOMER_COMPANY_NO"/>
+        <result property="empNo" column="EMP_NO"/>
+        <result property="customerName" column="CUSTOMER_NAME"/>
+        <result property="customerEmail" column="CUSTOMER_EMAIL"/>
+        <result property="customerAddress" column="CUSTOMER_ADDRESS"/>
+        <result property="customerPhone" column="CUSTOMER_PHONE"/>
+        <result property="customerFax" column="CUSTOMER_FAX"/>
+        
+        <association property="company" resultMap="customerCompanyResultMap"/>
+        <association property="extCustomerDetail" resultMap="extCustomerDetailResultMap"/>
+        <association property="anaCustomerDetail" resultMap="anaCustomerDetailResultMap"/>
+        <association property="empInfo" resultMap="empInfoResultMap"/>
+    </resultMap>
 
     <resultMap id="anaCustomerDetailResultMap" type="com.deft.crud.customer.model.dto.AnaCustomerDetailDTO">
         <id property="customerNo" column="CUSTOMER_NO"/>
@@ -224,6 +240,22 @@
           LEFT JOIN TBL_EXT_CUSTOMER_DETAIL EX ON (C.CUSTOMER_NO = EX.CUSTOMER_NO)
          WHERE EX.CUSTOMER_STATUS IS NOT NULL
     </select>
+    
+	<!-- 기존 고객 조회(해지 고객 제외) -->
+	<select id="selectExtCustomerList" resultMap="extCustomerResultMap">
+        SELECT /* com.deft.crud.customer.model.dao.CustomerMapper#selectCustomerList() */
+               C.CUSTOMER_NO
+             , C.CUSTOMER_NAME
+             , CP.COMPANY_NAME
+             , CP.BUSINESS_STATUS
+             , E.EMP_NAME
+             , EX.CUSTOMER_STATUS
+          FROM TBL_CUSTOMER C
+          LEFT JOIN TBL_CUSTOMER_COMPANY CP ON (C.CUSTOMER_COMPANY_NO = CP.CUSTOMER_COMPANY_NO)
+          LEFT JOIN TBL_EMP_INFO E ON (C.EMP_NO = E.EMP_NO)
+          JOIN TBL_EXT_CUSTOMER_DETAIL EX ON (C.CUSTOMER_NO = EX.CUSTOMER_NO)
+         WHERE EX.CUSTOMER_STATUS = '기존고객'
+	</select>
 
     <!-- 분석 고객 조회 -->
     <select id="selectAllAnalysisCustomer" resultMap="customerCompanyResultMap">
