@@ -12,7 +12,7 @@
 		<th:block th:replace="@{/common/sidebar} :: sidebar"></th:block>
 
 		<div id="content-wrapper" class="d-flex flex-column">
-			<div id="content">
+			<div id="content"> 
 				<!-- Header -->
 				<th:block th:replace="@{/common/header} :: header"></th:block>
 
@@ -36,7 +36,7 @@
 								</div>
 								<div class="card-body">
 									<div class="form-group">
-										<img alt="noImage" src="" weight=200px; height=250px;> 
+										<img alt="noImage" src="" width=200px; height=250px;> 
 									</div>
 									<div class="form-group">
 										<div class="custom-file">
@@ -64,8 +64,8 @@
 									<div class="form-group col-lg-6 row">
 										<label for="categoryName" class="col-sm-3 col-form-label" th:align="center">카테고리 (소)</label>
 										<select class="form-control col-sm-9" id="categoryCode" name="categoryCode">
-											<option th:each="childrenCategory : ${childrenCategoryList}" th:if="${productDetail.category.categoryName == childrenCategory.categoryName}" th:text="${childrenCategory.categoryName}" 
-													th:selected="${productDetail.category.categoryName == childrenCategory.categoryName}" th:value="${childrenCategory.categoryCode}">
+											<option th:each="category : ${categoryList}" th:if="${productDetail.category.categoryName == category.categoryName}" th:text="${category.categoryName}" 
+													th:selected="${productDetail.category.categoryName == category.categoryName}" th:value="${category.categoryCode}">
 											</option>
 										</select>
 									</div>

@@ -22,7 +22,7 @@ public interface ProductMapper {
 
 	List<ProductCategoryDTO> refCategoryList();
 
-	List<ProductCategoryDTO> childrenCategoryList();
+	List<ProductCategoryDTO> categoryList();
 
 	List<ManufacturerDTO> manufacturerList();
 
@@ -33,5 +33,9 @@ public interface ProductMapper {
 	int insertRefCategory(ProductCategoryDTO parameter);
 
 	int insertCategory(ProductCategoryDTO parameters);
+
+	int updateRefCategory(ProductCategoryDTO parameters);
+
+//	ProductCategoryDTO selectRefCategoryForUpdate(int refCategoryCode);
 
 }
