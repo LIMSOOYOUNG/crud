@@ -28,4 +28,9 @@ public class EstimateService {
 		
 		return estimateMapper.selectEstimateListByStatus(estimateStatus);
 	}
+
+	public String selectLastEstimateNo() {
+		
+		return estimateMapper.selectLastEstimateNo();
+	}
 }

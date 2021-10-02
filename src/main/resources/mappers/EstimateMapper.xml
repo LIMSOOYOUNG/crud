@@ -40,7 +40,7 @@
 	</select>
 	
 	<select id="selectEstimateListByStatus" resultMap="estimateSelectResultMap">
-        SELECT /* com.deft.crud.estimate.model.dao.EstimateMapper#selectEstimateList() */
+        SELECT /* com.deft.crud.estimate.model.dao.EstimateMapper#selectEstimateListByStatus() */
                A.ESTIMATE_NO
              , B.CUSTOMER_NAME
              , A.ESTIMATE_TITLE
@@ -65,5 +65,9 @@
          	</when>
          </choose>
          ORDER BY A.ESTIMATE_NO DESC
+	</select>
+	
+	<select id="selectLastEstimateNo" resultType="java.lang.String">
+        SELECT SYSDATE
 	</select>
 </mapper>

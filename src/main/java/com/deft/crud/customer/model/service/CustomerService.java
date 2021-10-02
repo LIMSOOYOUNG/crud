@@ -23,6 +23,12 @@ public class CustomerService {
 
         return customerMapper.selectAllCustomer();
     }
+    
+    /* 기존 고객 조회 (해지 고객 제외) */
+    public List<ExtCustomerDTO> selectExtCustomerList() {
+    	
+    	return customerMapper.selectExtCustomerList();
+    }
 
     /* 분석 고객 조회 */
     public List<CustomerCompanyDTO> selectAllAnalysisCustomer() {

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.deft.crud.customer.model.dto.CustomerCompanyDTO;
+import com.deft.crud.customer.model.dto.ExtCustomerDTO;
 import com.deft.crud.customer.model.service.CustomerService;
 import com.deft.crud.estimate.model.dto.EstimateDTO;
 import com.deft.crud.estimate.model.service.EstimateService;
@@ -36,7 +37,6 @@ public class EstimateController {
 		this.stockService = stockService;
 		this.objectMapper = objectMapper;
 	}
-	
 	
 	@GetMapping("/selectAll")
 	public ModelAndView selectEstimateList(ModelAndView mv) {
@@ -64,23 +64,13 @@ public class EstimateController {
 	}
 	
 	@GetMapping("/insert")
-	public String insertEstimate() {
+	public ModelAndView insertEstimate(ModelAndView mv) {
 		
-		return "estimate/insertEstimate";
-	}
-	
-	@GetMapping("/customer/selectAll")
-	public ModelAndView selectCustomerList(ModelAndView mv, HttpServletResponse response)
-			throws JsonProcessingException {
+		String estimate = estimateService.selectLastEstimateNo();
+		List<ExtCustomerDTO> extCustomerList = customerService.selectExtCustomerList();
 		
-		response.setContentType("application/json; charset=UTF-8");
-		
-		List<CustomerCompanyDTO> customerList = customerService.selectAllCustomer();
-		
-		System.out.println(customerList);
-		
-		mv.addObject("customerList", objectMapper.writeValueAsString(customerList));
-		mv.setViewName("jsonView");
+		mv.addObject("customerList", extCustomerList);
+		mv.setViewName("estimate/insertEstimate");
 		
 		return mv;
 	}
