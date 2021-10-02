@@ -23,7 +23,7 @@
                         <h6 class="m-0 font-weight-bold text-primary">분석 고객 현황</h6>
                         <div>
                             <a class="btn btn-info btn-icon-split"
-                               th:onclick="location.href='#'">
+                               id="insertAnalysis">
                                                         <span class="icon text-white">
                                                             <i class="fas fa-edit"></i>
                                                         </span>
@@ -74,6 +74,119 @@
         </div>
     </div>
 
+    <!------------- Insert Basic Info Modal --------------->
+    <div class="modal fade" id="insertAnalysisModal" role="dialog">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="row col-sm-12">
+                        <h4 class="modal-title" style="color: #0da8ee; padding: 10px">분석 고객 등록</h4>
+                        <button type="button" class="close" data-dismiss="modal"><i class="far fa-times-circle"></i></button>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-sm-12"><input type="hidden" value="emptyRow"></div>
+                    </div>
+
+                    <div class="row">
+                        <div class="form-group col-sm-12"><input type="hidden" value="emptyRow"></div>
+                    </div>
+
+                </div>
+                <form th:action="@{/customer/ana/insert}" method="post">
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="form-group col-lg-12"><input type="hidden" value="emptyRow"></div>
+                        </div>
+                        <div class="card mb-auto">
+
+                            <div class="row">
+                                <div class="form-group col-lg-12"><input type="hidden" value="emptyRow"></div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-lg-6 row">
+                                    <div class="form-group col-lg-1"><input type="hidden" value="emptyRow"></div>
+                                    <label for="modalModifyCustomerNo" class="col-lg-4 form-control-plaintext"
+                                           th:align="center"
+                                           style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">고객번호</label>
+                                    <input id="modalModifyCustomerNo" type="text" class="form-control col-lg-7"
+                                           name="customerNo">
+                                </div>
+                                <div class="form-group col-lg-6 row">
+                                    <div class="form-group col-lg-1"><input type="hidden" value="emptyRow"></div>
+                                    <label for="modalModifyCustomerName" class="col-lg-4 form-control-plaintext"
+                                           th:align="center"
+                                           style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">담당자</label>
+                                    <input id="modalModifyCustomerName" type="text" class="form-control col-lg-7"
+                                           name="customerName">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-lg-6 row">
+                                    <div class="form-group col-lg-1"><input type="hidden" value="emptyRow"></div>
+                                    <label for="modalModifyCustomerEmail" class="col-lg-4 form-control-plaintext"
+                                           th:align="center"
+                                           style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">담당자 이메일</label>
+                                    <input id="modalModifyCustomerEmail" type="text" class="form-control col-lg-7"
+                                           name="customerEmail">
+                                </div>
+                                <div class="form-group col-lg-6 row">
+                                    <div class="form-group col-lg-1"><input type="hidden" value="emptyRow"></div>
+                                    <label for="modalModifyCustomerPhone" class="col-lg-4 form-control-plaintext"
+                                           th:align="center"
+                                           style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">담당자 전화번호</label>
+                                    <input id="modalModifyCustomerPhone" type="text" class="form-control col-lg-7"
+                                           name="customerPhone">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-lg-6 row">
+                                    <div class="form-group col-lg-1"><input type="hidden" value="emptyRow"></div>
+                                    <label for="modalModifyBusinessStatus" class="col-lg-4 form-control-plaintext"
+                                           th:align="center"
+                                           style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">업태</label>
+                                    <input id="modalModifyBusinessStatus" type="text" class="form-control col-lg-7"
+                                           name="businessStatus">
+                                </div>
+                                <div class="form-group col-lg-6 row">
+                                    <div class="form-group col-lg-1"><input type="hidden" value="emptyRow"></div>
+                                    <label for="modalModifyNumberOfEmp" class="col-lg-4 form-control-plaintext"
+                                           th:align="center"
+                                           style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">직원수(명)</label>
+                                    <input id="modalModifyNumberOfEmp" type="text" class="form-control col-lg-7"
+                                           name="numberOfEmployees">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-lg-6 row">
+                                    <div class="form-group col-lg-1"><input type="hidden" value="emptyRow"></div>
+                                    <label for="modalModifyFax" class="col-lg-4 form-control-plaintext"
+                                           th:align="center"
+                                           style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">팩스</label>
+                                    <input id="modalModifyFax" type="text" class="form-control col-lg-7"
+                                           name="customerFax">
+                                </div>
+                                <div class="form-group col-lg-6 row">
+                                    <div class="form-group col-lg-1"><input type="hidden" value="emptyRow"></div>
+                                    <label for="modalModifyRevenue" class="col-lg-4 form-control-plaintext"
+                                           th:align="center"
+                                           style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">연매출액(만원)</label>
+                                    <input id="modalModifyRevenue" type="text" class="form-control col-lg-7"
+                                           name="companyRevenue">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" id="modalInsertAnalysis" class="btn btn-primary">등록하기</button>
+                    </div>
+                </form>
+                <div id="count" value="1"></div>
+            </div>
+        </div>
+    </div>
+
 <!-- Script -->
     <th:block th:replace="@{/common/script} :: script"></th:block>
     <script src="/vendor/datatables/jquery.dataTables.min.js"></script>
@@ -83,6 +196,10 @@
         $(document).ready(function () {
             $('#dataTable').DataTable(); // ID From dataTable
             $('#table_customer').DataTable(); // ID From dataTable with Hover
+        });
+
+        $('#insertAnalysis').click(function () {
+            $('#insertAnalysisModal').modal();
         });
     </script>
 </body>

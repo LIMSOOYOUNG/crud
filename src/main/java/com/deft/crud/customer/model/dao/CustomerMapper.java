@@ -46,4 +46,10 @@ public interface CustomerMapper {
 
     /* 분석 고객 영업활동 등록 */
     int insertActivity(BusinessActivityDTO parameters);
+
+    /* 사원 정보 조회 */
+    List<EmpInfoDTO> selectEmpInfo();
+
+    /* 담당 사원 변경 */
+    int modifyManager(CustomerDTO parameters);
 }

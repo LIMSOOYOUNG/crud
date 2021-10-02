@@ -63,13 +63,15 @@ public class CustomerController {
 
         List<BusinessActivityDTO> businessActivityList = customerService.selectBusinessActivity(customerNo);
 
+        List<EmpInfoDTO> empInfoList = customerService.selectEmpInfo();
+
         for(BusinessActivityDTO businessActivityDTO : businessActivityList) {
             int actNo = businessActivityDTO.getActivityNo();
-            System.out.println(actNo);
         }
 
         mv.addObject("customerInfo", customerInfo);
         mv.addObject("businessActivityList", businessActivityList);
+        mv.addObject("empInfoList", empInfoList);
         mv.setViewName("customer/selectCustomerInfo");
 
         return mv;
@@ -83,8 +85,11 @@ public class CustomerController {
 
         List<BusinessActivityDTO> businessActivityList = customerService.selectBusinessActivity(customerNo);
 
+        List<EmpInfoDTO> empInfoList = customerService.selectEmpInfo();
+
         mv.addObject("businessActivityList", businessActivityList);
         mv.addObject("customerInfo", customerInfo);
+        mv.addObject("empInfoList", empInfoList);
         mv.setViewName("customer/selectAnalysisCustomerInfo");
 
         return mv;
@@ -103,7 +108,7 @@ public class CustomerController {
         BusinessActivityDTO businessActivity = customerService.selectBusinessActivityByActivityNo(activityNo);
 
         mv.addObject("activityOne", mapper.writeValueAsString(businessActivity));
-        mv.setViewName("jsonView");
+//        mv.setViewName("jsonView");
 
         return mv;
     }
@@ -241,11 +246,52 @@ public class CustomerController {
 
         int customerNo = parameters.getCustomerNo();
 
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss[.FFFFFFFF]");
+        int result = customerService.insertActivity(parameters);
 
+        if(result > 0) {
+            mv.setViewName("redirect:/customer/anainfo?customerNo=" + customerNo);
+        }
 
+        return mv;
+    }
+
+    /* 기존 고객 영업활동 등록 */
+    @PostMapping("/ext/activity/insert")
+    public ModelAndView insertExtActivity(ModelAndView mv, @ModelAttribute BusinessActivityDTO parameters) {
+
+        int customerNo = parameters.getCustomerNo();
 
         int result = customerService.insertActivity(parameters);
+
+        if(result > 0) {
+            mv.setViewName("redirect:/customer/cusinfo?customerNo=" + customerNo);
+        }
+
+        return mv;
+    }
+
+    /* 기존 고객 담당사원 변경 */
+    @PostMapping("/ext/manager/modify")
+    public ModelAndView modifyExtManager(ModelAndView mv, @ModelAttribute CustomerDTO parameters) {
+
+        int customerNo = parameters.getCustomerNo();
+
+        int result = customerService.modifyManager(parameters);
+
+        if(result > 0) {
+            mv.setViewName("redirect:/customer/cusinfo?customerNo=" + customerNo);
+        }
+
+        return mv;
+    }
+
+    /* 기존 고객 담당사원 변경 */
+    @PostMapping("/ana/manager/modify")
+    public ModelAndView modifyAnaManager(ModelAndView mv, @ModelAttribute CustomerDTO parameters) {
+
+        int customerNo = parameters.getCustomerNo();
+
+        int result = customerService.modifyManager(parameters);
 
         if(result > 0) {
             mv.setViewName("redirect:/customer/anainfo?customerNo=" + customerNo);

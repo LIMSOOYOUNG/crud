@@ -106,4 +106,16 @@ public class CustomerService {
 
         return customerMapper.insertActivity(parameters);
     }
+
+    /* 사원 정보 조회 */
+    public List<EmpInfoDTO> selectEmpInfo() {
+
+        return customerMapper.selectEmpInfo();
+    }
+
+    /* 담당사원 변경 */
+    public int modifyManager(CustomerDTO parameters) {
+
+        return customerMapper.modifyManager(parameters);
+    }
 }
