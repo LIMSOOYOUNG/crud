@@ -21,7 +21,7 @@
              , B.VIEWS
           FROM TBL_BOARD B
           JOIN TBL_EMP_INFO E ON (E.EMP_NO = B.EMP_NO)
-         WHERE B.TYPE LIKE '자유게시판'
+         WHERE B.BOARD_NO LIKE 2
 	</select>
 	<select id="selectNotice" resultMap="boardResultMap">
 		SELECT
@@ -32,7 +32,7 @@
              , B.VIEWS
           FROM TBL_BOARD B
           JOIN TBL_EMP_INFO E ON (E.EMP_NO = B.EMP_NO)
-         WHERE B.TYPE LIKE '공지사항'
+         WHERE B.BOARD_NO LIKE 1
 	</select>
 	
 	<insert id="insertFreeboard" parameterType="com.deft.crud.board.model.dto.BoardDTO">
@@ -42,18 +42,20 @@
 		       B.WRITE_NO
 		     , B.BOARD_NO 
 		     , B.BOARD_NAME
-		     , A.EMP_NAME
+		     , B.EMP_NO
 		     , B.WRITE_DATE
 		     , B.CONTENTS
+		     , B.TYPE
 		     )
 		VALUES
 		     (
 		       SEQ_WRITE_NO.NEXTVAL
 		     , 2  
 		     , #{ boardName }  
-		     , #{ empName }
+		     , #{ empNo }
 		     , SYSDATE
 		     , #{ contents }
+		     , '자유게시판'
 		     )
 	</insert>
 	
@@ -98,8 +100,18 @@
           JOIN TBL_EMP_INFO E ON (E.EMP_NO = B.EMP_NO)
          WHERE B.BOARD_NO = 1
            AND B.WRITE_NO = #{ writeNo }
-	
-	
 	</select>
 	
+	<update id="freeboardviewCount" parameterType="_int">
+		UPDATE TBL_BOARD B
+		   SET B.VIEWS = VIEWS + 1
+	     WHERE B.WRITE_NO = #{ writeNo }
+	</update>
+	
+	<update id="noticeviewCount" parameterType="_int">
+		UPDATE TBL_BOARD B
+		   SET B.VIEWS = VIEWS + 1
+	     WHERE B.WRITE_NO = #{ writeNo }
+	
+	</update>
 </mapper>

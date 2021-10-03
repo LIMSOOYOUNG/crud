@@ -3,7 +3,10 @@ package com.deft.crud.board.controller;
 import java.time.LocalDate;
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -52,31 +55,27 @@ public class BoardController {
 	
 	/* 자유게시글 등록 */
 	@GetMapping("/freeboardinsert")
-	public void insertfreeboard()throws Exception {}
-
+	public void freeboardInsert() {}
+	
+	
 	@PostMapping("/freeboardinsert")
-	public ModelAndView insertfreeboardForm(ModelAndView mv, RedirectAttributes rttr,
-			@RequestParam String boardName, @RequestParam int writeNo,@RequestParam String empName,
-			@RequestParam LocalDate writerDate, @RequestParam String contents) 
+	public ModelAndView insertfreeboardForm(ModelAndView mv, HttpSession session,
+			@RequestParam String boardName) 
 					throws Exception {
 
+	    String writer = (String) session.getAttribute("emp_id");
+		
 		BoardDTO board = new BoardDTO();
-
-		board.setWriteNo(writeNo);
-		board.setBoardName(boardName);
-		board.setEmpName(empName);
-		board.setWriteDate(writerDate);
-		board.setContents(contents);
-
+		board.setEmpName(writer);
+	
+		System.out.println(board);
+		
 		System.out.println(board);
 		int result = boardService.insertFreeboard(board);
 
 		if(result>0) {
-			rttr.addFlashAttribute("flashMessage", "성공!!");
-		}else {
-			rttr.addFlashAttribute("flashMessage", "실패!!");
+			mv.setViewName("redirect:/board/selectfreeboard?writer=" + writer);
 		}
-		mv.setViewName("redirect:/board/selectfreeboard");
 
 		return mv;
 	}
@@ -92,11 +91,8 @@ public class BoardController {
 		int result = boardService.deleteFreeboard(BoardNo);
 		
 		if(result > 0) {
-			rttr.addAttribute("flashMessage", "자유게시글 삭제성공!!");
-		}else {
-			rttr.addFlashAttribute("flashMessage", "자유게시글 삭제실패!!");
+			mv.setViewName("board/selectfreeboard");
 		}
-		mv.setViewName("board/selectfreeboard");
 		
 		return mv;
 	}
@@ -108,7 +104,7 @@ public class BoardController {
 		
 		BoardDTO boardDTO = boardService.freeboardDetail(writeNo); 
 		
-		System.out.println("BoardDTO : " + boardDTO);
+		boardService.freeboardviewCount(writeNo);
 		
 		mv.setViewName("board/freeboarddetail");
 		mv.addObject("boardDTO", boardDTO);
@@ -124,9 +120,13 @@ public class BoardController {
 		
 		BoardDTO boardDTO = boardService.noticeDetail(writeNo);
 		
+		boardService.noticeviewCount(writeNo);
+		
 		mv.setViewName("board/noticedetail");
 		mv.addObject("boardDTO", boardDTO);
 		
 		return mv;
 	}
+	
+	
 }
