@@ -16,6 +16,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.deft.crud.product.model.dto.AccountDTO;
+import com.deft.crud.product.model.dto.InsertProductDTO;
 import com.deft.crud.product.model.dto.ManufacturerDTO;
 import com.deft.crud.product.model.dto.ProductCategoryDTO;
 import com.deft.crud.product.model.dto.ProductDTO;
@@ -84,22 +85,22 @@ public class ProductController {
 	/* 다중 셀렉트박스를 구현하기 위해 선택한 상위 카테고리의 번호를 인자값으로 넘겨 카테고리(소) 조회 */
 	@GetMapping(value = "/selectCategoryCode", produces = "application/json; charset=UTF-8")
 	@ResponseBody
-	public List<ProductCategoryDTO>	selectCategoryList(@RequestParam("categoryCode") int categoryCode) {
+	public List<ProductCategoryDTO>	selectCategoryList(@RequestParam("refCategoryCode") int refCategoryCode) {
 		
-		return productService.findChildrenCategoryList(categoryCode);
+		return productService.selectSmallCategoryList(refCategoryCode);
 		
 	}
 	
 	
 	/* 상품 업데이트 */
-	@PostMapping("/update") 
-	public ModelAndView upadateProduct(ModelAndView mv, @ModelAttribute ProductDTO parameters, 
+	@PostMapping("/modify") 
+	public ModelAndView modifyProduct(ModelAndView mv, @ModelAttribute ProductDTO parameters, 
 			RedirectAttributes rttr) {
 		
 		System.out.println("parameters : " + parameters);
 		
 		
-		int result = productService.updateProduct(parameters);
+		int result = productService.modifyProduct(parameters);
 		
 		String message = "";
 		
@@ -116,7 +117,50 @@ public class ProductController {
 	
 	 
 	@GetMapping("/insert")
-	public void insertProductPage() {}
+	public ModelAndView insertProductPage(ModelAndView mv) {
+		
+		List<ProductCategoryDTO> refCategoryList = productService.refCategoryList();
+		
+
+		/* 카테고리(소) 리스트 조회 */
+		List<ProductCategoryDTO> categoryList = productService.categoryList();
+		
+		/* 제조사 정보 조회 */
+		List<ManufacturerDTO> manufacturerList = productService.manufacturerList();
+		
+		/* 거래처 정보 조회*/
+		List<AccountDTO> accountList = productService.accountList();
+		
+		mv.addObject("categoryList", categoryList);
+		mv.addObject("refCategoryList", refCategoryList);
+		mv.addObject("manufacturerList", manufacturerList);
+		mv.addObject("accountList", accountList);
+		mv.setViewName("product/insertProduct");
+		
+		return mv;
+	}
+	
+	/* 상품 등록 */
+	@PostMapping("/insert")
+	public ModelAndView insertProduct(ModelAndView mv, InsertProductDTO parameters
+			, RedirectAttributes rttr) {
+		
+		System.out.println("parameters : " + parameters );
+		
+		int result = productService.insertProduct(parameters);
+		
+		String message = "";
+		
+		if(result > 0) {
+			message = "상품 등록에 성공하셨습니다.";
+		} else {
+			message = "상품 등록에 실패하셨습니다.";
+		}
+		
+		rttr.addFlashAttribute("message", message);
+		mv.setViewName("redirect:/product/selectAll");
+		return mv;
+	}
 	
 	
 	/* 카테고리 조회 */
@@ -133,8 +177,6 @@ public class ProductController {
 		List<ProductCategoryDTO> categoryList = productService.categoryList();
 		
 		System.out.println("allCategoryList : " + allCategoryList);
-		
-		
 		
 		mv.addObject("refCategoryList", refCategoryList);
 		mv.addObject("categoryList", categoryList);
@@ -189,7 +231,7 @@ public class ProductController {
 		return mv;
 	}
 	
-	@PostMapping("/category/medium/update")
+	@PostMapping("/category/medium/modify")
 	public ModelAndView updateMediumCategory(ModelAndView mv, @ModelAttribute ProductCategoryDTO parameters,
 			RedirectAttributes rttr) {
 		

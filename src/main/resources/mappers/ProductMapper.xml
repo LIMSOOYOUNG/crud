@@ -119,13 +119,13 @@
 	      WHERE P.PRODUCT_NO = #{ productNo }
 	</select>
 	
-	<select id="findChildrenCategoryList" resultMap="productCategoryResultMap">
-		SELECT /*com.deft.crud.product.model.dao.ProductMapper#findChildrenCategoryList()*/
+	<select id="selectSmallCategoryList" resultMap="productCategoryResultMap">
+		SELECT /*com.deft.crud.product.model.dao.ProductMapper#selectSmallCategoryList()*/
 			   PC.CATEGORY_CODE
 			 , PC.CATEGORY_NAME
 			 , PC.REF_CATEGORY_CODE
 		  FROM TBL_PRODUCT_CATEGORY PC
-		 WHERE REF_CATEGORY_CODE = #{ categoryCode }
+		 WHERE REF_CATEGORY_CODE = #{ refCategoryCode }
 			   
 	</select>
 	
@@ -137,8 +137,8 @@
 	
 	</select>
 	
-	<update id="updateProduct" parameterType="com.deft.crud.product.model.dto.ProductDTO">
-		UPDATE /*com.deft.crud.product.model.dao.ProductMapper#updateProduct()*/
+	<update id="modifyProduct" parameterType="com.deft.crud.product.model.dto.ProductDTO">
+		UPDATE /*com.deft.crud.product.model.dao.ProductMapper#modifyProduct()*/
 			   TBL_PRODUCT A
 		   SET A.SELL_STATUS = #{ sellStatus }
 		     , A.PRODUCT_NAME = #{ productName }
@@ -182,6 +182,22 @@
 		     , P.CATEGORY_STATUS = #{ categoryStatus }
 		 WHERE P.CATEGORY_CODE = #{ refCategoryCode } 
 	</update>
+	
+	<insert id="insertProduct" parameterType="com.deft.crud.product.model.dto.InsertProductDTO">
+		INSERT /*com.deft.crud.product.model.dao.ProductMapper#insertProduct()*/
+		  INTO TBL_PRODUCT P
+		 (
+	     	P.PRODUCT_NO, P.SELL_STATUS, P.PRODUCT_NAME, P.PURCHASE_PRICE
+	     ,  P.SELLING_PRICE, P.UNIT, P.CATEGORY_CODE, P.ACCOUNT_NO, P.MANUFACTURER_NO
+		 )
+		 VALUES
+		 (
+		   SEQ_PRODUCT_NO.NEXTVAL, #{ sellStatus }, #{ productName }, #{ purchasePrice }, 
+		   #{ sellingPrice }, #{ unit }, #{ categoryCode }, #{ accountNo }, #{ manufacturerNo }
+		 )
+	</insert>
+	
+	
 	
 <!-- 	<select id="selectRefCategoryForUpdate" resultMap="productCategoryResultMap"> -->
 <!-- 		SELECT /*com.deft.crud.product.model.dao.ProductMapper#selectRefCategoryForUpdate()*/ -->
