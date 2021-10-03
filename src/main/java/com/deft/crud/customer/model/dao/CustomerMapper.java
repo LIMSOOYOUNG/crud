@@ -55,4 +55,7 @@ public interface CustomerMapper {
 
     /* 담당 사원 변경 */
     int modifyManager(CustomerDTO parameters);
+
+    /* 영업 활동 수정 */
+    int modifyActivity(BusinessActivityDTO parameters);
 }

@@ -209,7 +209,7 @@
                                         </tr>
                                     </thead>
                                     <tbody th:align="center">
-                                        <tr th:each="activity : ${ businessActivityList }">
+                                        <tr th:each="activity, index : ${ businessActivityList }">
                                             <td th:text="${ activity.activityNo }"></td>
                                             <td th:text="${ activity.businessSubject }"></td>
                                             <td th:text="${ activity.empInfo.empName }"></td>
@@ -217,9 +217,9 @@
                                             <td th:text="${ activity.activityStartTime}"></td>
                                             <td>
                                                 <a class="btn btn-primary btn-icon-split"
-                                                   id="activityDetail"
-                                                   th:value="${ activity.activityNo }"
+                                                   th:id="'activityDetail' + index"
                                                    style="font-size: 12px; height: 30px;">
+                                                    <input id="actNo" type="hidden" th:value="${ activity.activityNo }">
                                                     <span class="text text-white">상세정보</span>
                                                 </a>
                                             </td>
@@ -683,11 +683,11 @@
 
 
         <!------------- Activity Detail Modal --------------->
-<!--        <div class="modal fade" id="activityModal" role="dialog">-->
-<!--            <div class="modal-dialog modal-xl modal-dialog-centered">-->
+        <div class="modal fade" id="activityModal" role="dialog">
+            <div class="modal-dialog modal-xl modal-dialog-centered">
 
-<!--                &lt;!&ndash; Modal content&ndash;&gt;-->
-<!--                <div class="modal-content">-->
+                <!-- Modal content-->
+                <div class="modal-content">
 <!--                    <div class="modal-header">-->
 <!--                        <div class="row col-sm-12">-->
 <!--                            <h4 class="modal-title" style="color: #0da8ee; padding: 10px">영업활동 상세정보</h4>-->
@@ -862,9 +862,9 @@
 <!--                        <button type="button" id="modifyActivity" class="btn btn-primary">상세정보수정</button>-->
 <!--                    </div>-->
 <!--                    <div id="count" value="1"></div>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
+                </div>
+            </div>
+        </div>
 
         <!------------- Modify Basic Info Modal --------------->
         <div class="modal fade" id="modifyBasicInfoModal" role="dialog">
@@ -1078,6 +1078,7 @@
                             <div class="modal-footer">
                                 <button type="submit" id="successInsert" class="btn btn-primary">영업활동 등록</button>
                             </div>
+                        </div>
                     </form>
                     <div id="count" value="1"></div>
                 </div>
@@ -1085,7 +1086,7 @@
         </div>
     </div>
 
-<!-- Script -->
+    <!-- Script -->
     <th:block th:replace="@{/common/script} :: script"></th:block>
     <script src="/vendor/datatables/jquery.dataTables.min.js"></script>
     <script src="/vendor/datatables/dataTables.bootstrap4.min.js"></script>
@@ -1124,23 +1125,17 @@
            window.history.back();
         });
 
-        $('#activityDetail').click(function() {
-            $.ajax({
-               url: "customer/activity/select",
-               type: "GET",
-               data: { activityNo : $("#activityDetail").val() },
-                success: function (data, status, xhr) {
+        $('#table_activity tbody tr td a').click(function () {
 
-                   const activity = JSON.parse(data.activityOne);
+            const actNo = $('#actNo').val();
 
-                   console.log(activity);
-                },
-                error: function (xhr, status, error) {
-                   console.log(error);
-                }
-            });
+            console.log(actNo);
+
+            $('.modal-content').load('activity/detail?activityNo=' + actNo);
             $('#activityModal').modal();
         });
+
+
 
         /* 검색 자동 완성 기능 */
         $(document).ready(function () {

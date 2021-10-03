@@ -224,6 +224,21 @@
          WHERE CUSTOMER_NO = #{ customerNo }
     </update>
 
+    <!-- 영업 활동 수정 -->
+    <update id="modifyActivity" parameterType="com.deft.crud.customer.model.dto.BusinessActivityDTO">
+        UPDATE /* com.deft.crud.customer.model.dao.CustomerMapper#modifyActivity() */
+               TBL_BUSINESS_ACTIVITY
+           SET BUSINESS_SUBJECT = #{ businessSubject }
+             , BUSINESS_TYPE = #{ businessType }
+             , BUSINESS_LOCATION = #{ businessLocation }
+             , BUSINESS_PURPOSE = #{ businessPurpose }
+             , BUSINESS_CONTENTS = #{ businessContents }
+             , WRITING_TIME = SYSDATE
+             , ACTIVITY_START_TIME = #{ activityStartTime }
+             , ACTIVITY_END_TIME = #{ activityEndTime }
+         WHERE ACTIVITY_NO = #{ activityNo }
+    </update>
+
     <!-- 전체 고객 조회 -->
     <select id="selectAllCustomer" resultMap="customerCompanyResultMap">
         SELECT /* com.deft.crud.customer.model.dao.CustomerMapper#selectAllCustomer() */
