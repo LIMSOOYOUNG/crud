@@ -21,10 +21,10 @@
 	</resultMap>
 	
 	<resultMap type="com.deft.crud.stock.model.dto.ProductStockInfoDTO" id="productStockInfoResultMap">
-	<id property="productNo" column="PRODUCT_NO"/>
-	<result property="refCategoryName" column="REF_CATEGORY_NAME"/>
-	<result property="categoryName" column="CATEGORY_NAME"/>
-	<result property="productName" column="PRODUCT_NAME"/>
+	<id property="stockProductNo" column="PRODUCT_NO"/>
+	<result property="stockRefCategoryName" column="REF_CATEGORY_NAME"/>
+	<result property="stockCategoryName" column="CATEGORY_NAME"/>
+	<result property="stockProductName" column="PRODUCT_NAME"/>
 	<result property="manufacturerName" column="MANUFACTURER_NAME"/>
 	<result property="companyName" column="COMPANY_NAME"/>
 	<result property="storageSection" column="STORAGE_SECTION"/>
@@ -33,8 +33,14 @@
 	<result property="sellStatus" column="SELL_STATUS"/>
 	<result property="productStock" column="PRODUCT_STOCK"/>
 	<result property="unit" column="UNIT"/>
+	</resultMap>
 	
-
+	<resultMap type="com.deft.crud.stock.model.dto.ResponseStockDTO" id="responseProductStockInfoResultMap">
+	<id property="stockProductNo" column="PRODUCT_NO"/>
+	<result property="stockProductName" column="PRODUCT_NAME"/>
+	<result property="storageSection" column="STORAGE_SECTION"/>
+	<result property="storageSpace" column="STORAGE_SPACE"/>
+	<result property="productStock" column="PRODUCT_STOCK"/>
 	</resultMap>
 	
 	<!-- 창고에 보관중인 상품리스트 조회 -->
@@ -99,9 +105,16 @@
       LEFT JOIN TBL_ACCOUNT D ON(A.ACCOUNT_NO = D.ACCOUNT_NO)
 	  LEFT JOIN TBL_MANUFACTURER T ON(A.MANUFACTURER_NO = T.MANUFACTURER_NO)
 	 WHERE A.PRODUCT_NO = #{ productNo }
-	
 	</select>
 	
+	<update id="modifyStockCondition" parameterType="com.deft.crud.stock.model.dto.ResponseStockDTO">
+	UPDATE /* "com.deft.crud.stock.model.dao.StockMapper#modifyStockCondition" */
+	       TBL_STORAGE A
+	   SET A.STORAGE_SECTION = #{ storageSection }
+	     , A.STORAGE_SPACE = #{ storageSpace }
+	     , A.PRODUCT_STOCK = A.PRODUCT_STOCK + #{ orderStockAmount }
+	 WHERE PRODUCT_NO = #{ stockProductNo }    
+	</update>
 </mapper>
 
 

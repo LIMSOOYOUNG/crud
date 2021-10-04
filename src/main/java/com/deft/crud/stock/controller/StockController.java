@@ -12,8 +12,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.deft.crud.stock.model.dto.ProductStockInfoDTO;
+import com.deft.crud.stock.model.dto.ResponseStockDTO;
 import com.deft.crud.stock.model.dto.StockDTO;
 import com.deft.crud.stock.model.service.StockService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -66,10 +68,26 @@ public class StockController {
 		return mv;
 	}
 	
-	@PostMapping("/orderStockAmount/modify")
-	public ModelAndView modifyStockAmount(ModelAndView mv, HttpServletResponse response
-										, @ModelAttribute ProductStockInfoDTO parameters) {
+	@PostMapping("/orderStockCondition/modify")
+	public ModelAndView modifyStockCondition(ModelAndView mv, RedirectAttributes rttr
+											, @ModelAttribute ResponseStockDTO parameters) {
 		
+		System.out.println(parameters);
+		
+		boolean result = stockService.modifyStockCondition(parameters);
+		
+		
+		String message = "";
+		
+		if(result) {
+			message = "상품 재고상태를 변경하였습니다.";
+		} else {
+			message = "재고상태 변경 실패!";
+		}
+		
+		rttr.addFlashAttribute("message", message);
+		
+		mv.setViewName("redirect:/stock/selectAll");
 		return mv;
 	}
 	
