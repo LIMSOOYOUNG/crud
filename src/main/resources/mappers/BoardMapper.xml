@@ -3,7 +3,7 @@
 <mapper namespace="com.deft.crud.board.model.dao.BoardMapper">
 <resultMap type="com.deft.crud.board.model.dto.BoardDTO" id="boardResultMap">
 	<id property="boardNo" column="BOARD_NO"/>
-	<result property="writeNo" column="WRITE_NO"/>
+	<id property="writeNo" column="WRITE_NO"/>
 	<result property="boardName" column="BOARD_NAME"/>
 	<result property="empName" column="EMP_NAME"/>
 	<result property="writeDate" column="WRITE_DATE"/>
@@ -13,7 +13,7 @@
 	<result property="empNo" column="EMP_NO"/>
 </resultMap>
 	<select id="selectFreeboard" resultMap="boardResultMap">
-		SELECT
+		SELECT /*com.deft.crud.board.model.dto.BoardDTO*/
                B.WRITE_NO
              , B.BOARD_NAME
              , E.EMP_NAME
@@ -24,7 +24,7 @@
          WHERE B.TYPE LIKE '자유게시판'
 	</select>
 	<select id="selectNotice" resultMap="boardResultMap">
-		SELECT
+		SELECT /*com.deft.crud.board.model.dto.BoardDTO*/ 
                B.WRITE_NO
              , B.BOARD_NAME
              , E.EMP_NAME
@@ -36,42 +36,43 @@
 	</select>
 	
 	<insert id="insertFreeboard" parameterType="com.deft.crud.board.model.dto.BoardDTO">
-		INSERT
+		INSERT /*com.deft.crud.board.model.dto.BoardDTO*/
 		  INTO TBL_BOARD B
 		     (
 		       B.WRITE_NO
 		     , B.BOARD_NO 
 		     , B.BOARD_NAME
-		     , A.EMP_NAME
+		     , B.EMP_NO
 		     , B.WRITE_DATE
 		     , B.CONTENTS
+		     , B.TYPE
 		     )
 		VALUES
 		     (
 		       SEQ_WRITE_NO.NEXTVAL
 		     , 2  
 		     , #{ boardName }  
-		     , #{ empName }
+		     , #{ empNo }
 		     , SYSDATE
-		     , #{ contents }
+		     , #{ contents }	
+		     , '자유게시판'
 		     )
 	</insert>
 	
 	<delete id="deleteFreeboard" parameterType="com.deft.crud.board.model.dto.BoardDTO">
-		DELETE
+		DELETE /*com.deft.crud.board.model.dto.BoardDTO*/
 		  FROM TBL_BOARD B
 		 WHERE B.BOARD_NO = #{ boardNo, jdbcType = INTEGER }
 	</delete>
 	
 	<delete id="deleteNotice" parameterType="com.deft.crud.board.model.dto.BoardDTO">
-		DELETE
+		DELETE /*com.deft.crud.board.model.dto.BoardDTO*/
 		  FROM TBL_BOARD B
 		 WHERE B.BOARD_NO = #{ boardNo, jdbcType = INTEGER }
 	</delete>
 	
 	<select id="freeboardDetail" parameterType="_int" resultType="com.deft.crud.board.model.dto.BoardDTO">
-		SELECT
-		      
+		SELECT /*com.deft.crud.board.model.dto.BoardDTO*/
 		       B.BOARD_NO
 		     , B.WRITE_NO
              , B.BOARD_NAME
@@ -85,8 +86,7 @@
            AND B.WRITE_NO = #{ writeNo }
 	</select>
 	<select id="noticeDetail" parameterType="_int" resultType="com.deft.crud.board.model.dto.BoardDTO">
-		SELECT
-		      
+		SELECT /*com.deft.crud.board.model.dto.BoardDTO*/
 		       B.BOARD_NO
 		     , B.WRITE_NO
              , B.BOARD_NAME
@@ -98,8 +98,30 @@
           JOIN TBL_EMP_INFO E ON (E.EMP_NO = B.EMP_NO)
          WHERE B.BOARD_NO = 1
            AND B.WRITE_NO = #{ writeNo }
+	</select>
+	<update id="freeboardviewCount">
+		UPDATE TBL_BOARD B /*com.deft.crud.board.model.dto.BoardDTO*/
+	   	   SET B.VIEWS = VIEWS + 1
+	     WHERE B.WRITE_NO = #{ writeNo } 
+	</update>
+	<update id="noticeviewCount" parameterType="_int">
+		UPDATE TBL_BOARD B /*com.deft.crud.board.model.dto.BoardDTO*/
+	   	   SET B.VIEWS = VIEWS + 1
+	     WHERE B.WRITE_NO = #{ writeNo } 
+	</update>
 	
-	
+	<select id="selectSeqFreeboardNo" resultType="_int">
+		SELECT /*com.deft.crud.board.model.dto.BoardDTO*/
+		       LAST_NUMBER
+		  FROM USER_SEQUENCES
+	     WHERE SEQUENCE_NAME = 'SEQ_WRITE_NO'
 	</select>
 	
+	<update id="freeboardModify" parameterType="com.deft.crud.board.model.dto.BoardDTO">
+		UPDATE /*com.deft.crud.board.model.dto.BoardDTO*/
+	           TBL_BOARD B
+	       SET B.BOARD_NAME = #{ boardName }
+	         , B.CONTENTS = #{ contents }
+	     WHERE B.WRITE_NO = #{ writeNo }    
+	</update>
 </mapper>

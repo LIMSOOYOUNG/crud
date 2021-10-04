@@ -1,15 +1,23 @@
 package com.deft.crud.admin.board.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.deft.crud.admin.board.model.dto.AdminBoardDTO;
 import com.deft.crud.admin.board.model.service.AdminBoardService;
+import com.deft.crud.board.model.dto.BoardDTO;
+import com.deft.crud.member.model.service.UserImpl;
 
+@Controller
+@RequestMapping("admin")
 public class AdminBoardController {
 	
 	private AdminBoardService adminBoardService;
@@ -44,31 +52,32 @@ public class AdminBoardController {
 	
 	/* 공지사항 등록 */
 	@GetMapping("noticeinsert")
-	public void noticeinsert() {}
-	
-	@PostMapping("noticeinsert")
-	public ModelAndView noticeInsertForm(ModelAndView mv, RedirectAttributes rttr, @RequestParam int boardNo, @RequestParam int writeNo,
-			                              @RequestParam String boardName, @RequestParam String empName, @RequestParam String contents,
-			                              @RequestParam int boardAttatchNo) {
+	public ModelAndView noticeinsert(ModelAndView mv) {
 		
-		AdminBoardDTO adminBoardDTO = new AdminBoardDTO();
-		adminBoardDTO.setBoardNo(boardNo);
-		adminBoardDTO.setWriteNo(writeNo);
-		adminBoardDTO.setBoardName(boardName);
-		adminBoardDTO.setEmpName(empName);
-		adminBoardDTO.setContents(contents);
-		adminBoardDTO.setBoardAttatchNo(boardAttatchNo);
+		int writeNo = adminBoardService.selectSeqNoticeNo();
 		
-		int result = adminBoardService.noticeInsert(adminBoardDTO);
-		
-		if(result>0) {
-			rttr.addFlashAttribute("flashMessage", "성공!!");
-		}else {
-			rttr.addFlashAttribute("flashMessage", "실패!!");
-		}
-		mv.setViewName("redirect:/board/selectnotice");
+		mv.addObject("writeNo", writeNo);
 		
 		return mv;
 	}
+	
+	@PostMapping("noticeinsert")
+	public ModelAndView noticeInsertForm(ModelAndView mv, @ModelAttribute BoardDTO parameters,
+			@AuthenticationPrincipal UserImpl loginInfo) 
+					throws Exception{
+		
+		int loginEmpNo = loginInfo.getEmpNo();
+		parameters.setEmpNo(loginEmpNo);
+		
+		int result = adminBoardService.noticeInsert(parameters);
+		
+		if(result > 0) {
+			mv.setViewName("redirect:/board/selectnotice");
+		}
+		
+		return mv;
+	}
+	
+	
 	
 }

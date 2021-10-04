@@ -24,6 +24,6 @@ public class BoardDTO implements java.io.Serializable{
 	private String contents;
 	private String type;
 	private int empNo;
+	private String empId;
 	
-
 }

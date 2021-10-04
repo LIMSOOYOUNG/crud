@@ -25,7 +25,7 @@
 						</ol>
 					</div>
 					<div align="right">
-						<button type="button" class="btn btn-primary">자유게시글 등록</button>
+						<button type="button" class="btn btn-primary" th:onclick="|location.href='@{/board/freeboardinsert}'|">자유게시글 등록</button>
 					</div>
 					<br>
 
@@ -79,7 +79,7 @@
 
 	<!-- Script -->
 	<th:block th:replace="@{/common/script} :: script"></th:block>
-	 	<!-- Page level plugins -->
+		 	<!-- Page level plugins -->
 	<script src="/vendor/datatables/jquery.dataTables.min.js"></script>
 	<script src="/vendor/datatables/dataTables.bootstrap4.min.js"></script>
 </body>

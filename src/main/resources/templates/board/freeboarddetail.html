@@ -21,10 +21,6 @@
 						<h1 class="h3 mb-0 text-gray-800">자유게시판상세 조회</h1>
 					</div>
 
-					<div align="right">
-						<button class="btn btn-primary" >삭제</button>
-					</div>
-					<br>
 					<!-- Row -->
 					<div class="row">
                         
@@ -41,6 +37,10 @@
                             		<div class="input-group-prepend">
                             			<span class="input-group-text col-lg-1" id="basic-addon3" >작성자</span>
                             			<input type="text" class="form-control" id="basic-url" aria-describedby="basic-addon3" th:value="${boardDTO.empName}" th:readonly="readonly">
+                            			<span class="input-group-text col-lg-1" id="basic-addon3" >작성일</span>
+                            			<input type="text" class="form-control" id="basic-url" aria-describedby="basic-addon3" th:value="${boardDTO.writeDate}" th:readonly="readonly">
+                            			<span class="input-group-text col-lg-1" id="basic-addon3" >조회수</span>
+                            			<input type="text" class="form-control" id="basic-url" aria-describedby="basic-addon3" th:value="${boardDTO.views}" th:readonly="readonly">
                             		</div>
                             	</div>
                             	  <div class="form-group mb-3">
@@ -53,8 +53,8 @@
                             		<textarea rows="20" cols="150" class="form-control" id="exampleFormControlTextarea1" th:text="${boardDTO.contents}" th:readonly="readonly"></textarea>
                             	</div>
                             	<div align="right">
-                            		<button type="submit" class="btn btn-primary">수정</button>
-                            		<button type="submit" class="btn btn-primary">취소</button>
+                            		<button type="button" class="btn btn-primary" th:onclick="|location.href='@{/board/freeboardmodify}'|">수정</button>
+                            		<button type="submit" class="btn btn-primary">삭제</button>
                             	</div>
                             	</div>
 						</div>

@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.deft.crud.board.model.dao.BoardMapper;
 import com.deft.crud.board.model.dto.BoardDTO;
@@ -35,6 +37,7 @@ public class BoardService {
 	}
 
 	/* 자유게시글 등록 */
+	@Transactional
 	public int insertFreeboard(BoardDTO board) {
 		
 		int result = boardMapper.insertFreeboard(board);
@@ -42,18 +45,8 @@ public class BoardService {
 		return result;
 	}
 	
-	/* 공지사항 등록 */
 
-	/* 자유게시글 수정 */
-	/* 공지사항 수정*/
 
-	/* 자유게시글 삭제*/
-	public int deleteFreeboard(int boardNo) {
-
-		int result = boardMapper.deleteFreeboard(boardNo);
-
-		return result;
-	}
 
 	/* 자유게시글 보기*/
 	public BoardDTO freeboardDetail(int writeNo) {
@@ -72,6 +65,33 @@ public class BoardService {
 		
 		return noticeboardDTO;
 	}
+
+	public void freeboardviewCount(int writeNo) {
+		
+		boardMapper.freeboardviewCount(writeNo);
+	}
+
+	public void noticeviewCount(int writeNo) {
+		
+		boardMapper.noticeviewCount(writeNo);
+		
+	}
+
+	public int selectSeqFreeboardNo() {
+		
+		return boardMapper.selectSeqFreeboardNo();
+
+	}
+
+	/* 자유게시글 수정 서비스*/
+	public int freeboardModify(BoardDTO parameters) {
+		
+		int result = boardMapper.freeboardModify(parameters);
+		
+		return result;
+	}
+
+
 
 
 }

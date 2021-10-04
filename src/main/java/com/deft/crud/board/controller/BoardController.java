@@ -1,11 +1,16 @@
 package com.deft.crud.board.controller;
 
+import java.security.Principal;
 import java.time.LocalDate;
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -14,6 +19,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.deft.crud.board.model.dto.BoardDTO;
 import com.deft.crud.board.model.service.BoardService;
+import com.deft.crud.member.model.service.UserImpl;
 
 @Controller
 @RequestMapping("/board")
@@ -52,51 +58,57 @@ public class BoardController {
 	
 	/* 자유게시글 등록 */
 	@GetMapping("/freeboardinsert")
-	public void insertfreeboard()throws Exception {}
-
+	public ModelAndView freeboardInsert(ModelAndView mv) {
+		
+		int writeNo = boardService.selectSeqFreeboardNo();
+		
+		mv.addObject("writeNo", writeNo);
+		
+		System.out.println(writeNo);
+		
+		return mv;
+	}
+	
+	
 	@PostMapping("/freeboardinsert")
-	public ModelAndView insertfreeboardForm(ModelAndView mv, RedirectAttributes rttr,
-			@RequestParam String boardName, @RequestParam int writeNo,@RequestParam String empName,
-			@RequestParam LocalDate writerDate, @RequestParam String contents) 
+	public ModelAndView insertfreeboardForm(ModelAndView mv, @ModelAttribute BoardDTO parameters,
+			@AuthenticationPrincipal UserImpl loginInfo) 
 					throws Exception {
-
-		BoardDTO board = new BoardDTO();
-
-		board.setWriteNo(writeNo);
-		board.setBoardName(boardName);
-		board.setEmpName(empName);
-		board.setWriteDate(writerDate);
-		board.setContents(contents);
-
-		System.out.println(board);
-		int result = boardService.insertFreeboard(board);
-
+		
+	    int loginEmpNo = loginInfo.getEmpNo();
+	    parameters.setEmpNo(loginEmpNo);
+	    
+		int result = boardService.insertFreeboard(parameters);
+		
 		if(result>0) {
-			rttr.addFlashAttribute("flashMessage", "성공!!");
-		}else {
-			rttr.addFlashAttribute("flashMessage", "실패!!");
+			
+			mv.setViewName("redirect:/board/selectfreeboard");
 		}
-		mv.setViewName("redirect:/board/selectfreeboard");
 
 		return mv;
 	}
 	
 	/* 자유게시글 삭제 */
 	@GetMapping("/deletefreeboard")
-	public void deletefreeboard() {}
+	public ModelAndView deletefreeboard(ModelAndView mv) {
+		
+		int writeNo = boardService.selectSeqFreeboardNo();
+		
+		mv.addObject("writeNo", writeNo);
+		
+		System.out.println(writeNo);
+		
+		return mv;
+	}
 	
 	@PostMapping("/deletefreeboard")
-	public ModelAndView deletefreeboardform(ModelAndView mv, RedirectAttributes rttr
-											, @RequestParam(defaultValue = "0")int BoardNo) {
+	public ModelAndView deletefreeboardform(ModelAndView mv) {
 		
-		int result = boardService.deleteFreeboard(BoardNo);
+//		int result = boardService.deleteFreeboard();
 		
-		if(result > 0) {
-			rttr.addAttribute("flashMessage", "자유게시글 삭제성공!!");
-		}else {
-			rttr.addFlashAttribute("flashMessage", "자유게시글 삭제실패!!");
-		}
-		mv.setViewName("board/selectfreeboard");
+//		if(result > 0) {
+//			mv.setViewName("board/selectfreeboard");
+//		}
 		
 		return mv;
 	}
@@ -108,7 +120,7 @@ public class BoardController {
 		
 		BoardDTO boardDTO = boardService.freeboardDetail(writeNo); 
 		
-		System.out.println("BoardDTO : " + boardDTO);
+		boardService.freeboardviewCount(writeNo);
 		
 		mv.setViewName("board/freeboarddetail");
 		mv.addObject("boardDTO", boardDTO);
@@ -124,9 +136,37 @@ public class BoardController {
 		
 		BoardDTO boardDTO = boardService.noticeDetail(writeNo);
 		
+		boardService.noticeviewCount(writeNo);
+		
 		mv.setViewName("board/noticedetail");
 		mv.addObject("boardDTO", boardDTO);
 		
 		return mv;
 	}
+	
+	/* 자유게시글 수정*/
+	@GetMapping("freeboardmodify")
+	public void freeboardModify() {}
+	
+	@PostMapping("freeboardmodify")
+	public ModelAndView freeboardForm(ModelAndView mv, @ModelAttribute BoardDTO parameters,@AuthenticationPrincipal UserImpl loginInfo) {
+		
+		int loginEmpNo = loginInfo.getEmpNo();
+		
+		parameters.setEmpNo(loginEmpNo);
+		
+		int result = boardService.freeboardModify(parameters);
+		
+		
+		if(result > 0) {
+			
+			mv.setViewName("redirect:/board/selectfreeboard");
+			
+		}
+		
+		mv.addObject("parameters", parameters);
+		
+		return mv;
+	}
+	
 }
