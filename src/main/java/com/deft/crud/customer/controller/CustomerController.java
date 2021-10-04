@@ -313,20 +313,22 @@ public class CustomerController {
     }
 
     /* 영업 활동 수정 */
-    @GetMapping("/activity/modify")
-    public ModelAndView modifyDetailActivity(ModelAndView mv, @RequestParam int activityNo) {
-
-        BusinessActivityDTO businessActivity = customerService.selectBusinessActivityByActivityNo(activityNo);
-
-        mv.addObject("activity", businessActivity);
-        mv.setViewName("customer/activityModal");
-
-        return mv;
-    }
+//    @GetMapping("/activity/modify")
+//    public ModelAndView modifyDetailActivity(ModelAndView mv, @RequestParam int activityNo) {
+//
+//        BusinessActivityDTO businessActivity = customerService.selectBusinessActivityByActivityNo(activityNo);
+//
+//        mv.addObject("activity", businessActivity);
+//        mv.setViewName("customer/activityModal");
+//
+//        return mv;
+//    }
 
     /* 영업 활동 수정 처리 메소드 */
     @PostMapping("/activity/modify")
     public ModelAndView modifyDetailActivity(ModelAndView mv, @ModelAttribute BusinessActivityDTO parameters) {
+
+        System.out.println("처리 메소드 진입");
 
         int customerNo = parameters.getCustomerNo();
 
