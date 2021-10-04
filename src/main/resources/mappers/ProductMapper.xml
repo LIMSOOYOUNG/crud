@@ -47,16 +47,16 @@
 	</resultMap>
 	
 	<select id="allProductList" resultMap="productResultMap">
-	   SELECT /*com.deft.crud.product.model.dao.ProductMapper#allProductList()*/
-	          P.PRODUCT_NO
-     		, P.PRODUCT_NAME
-     		, P.SELL_STATUS
-     		, B.CATEGORY_NAME "REF_CATEGORY_NAME"
-     		, A.REF_CATEGORY_CODE            
-     		, A.CATEGORY_NAME
-          FROM TBL_PRODUCT P
-	      LEFT JOIN TBL_PRODUCT_CATEGORY A ON(P.CATEGORY_CODE = A.CATEGORY_CODE)
-	      LEFT JOIN TBL_PRODUCT_CATEGORY B ON(A.REF_CATEGORY_CODE = B.CATEGORY_CODE)
+	    SELECT /*com.deft.crud.product.model.dao.ProductMapper#allProductList()*/
+	           P.PRODUCT_NO
+     	 	 , P.PRODUCT_NAME
+     		 , P.SELL_STATUS
+     		 , B.CATEGORY_NAME "REF_CATEGORY_NAME"
+     		 , A.REF_CATEGORY_CODE            
+     		 , A.CATEGORY_NAME
+           FROM TBL_PRODUCT P
+	       LEFT JOIN TBL_PRODUCT_CATEGORY A ON(P.CATEGORY_CODE = A.CATEGORY_CODE)
+	       LEFT JOIN TBL_PRODUCT_CATEGORY B ON(A.REF_CATEGORY_CODE = B.CATEGORY_CODE)
 	</select>
 	
 	<select id="allCategoryList" resultMap="productCategoryResultMap">

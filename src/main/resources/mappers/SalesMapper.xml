@@ -1,3 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.deft.crud.sales.model.dao..SalesMapper"></mapper>
+<mapper namespace="com.deft.crud.sales.model.dao.SalesMapper">
+	<resultMap type="com.deft.crud.sales.model.dto.TargetPerfomDTO" id="targetPerformResultMap">
+		<id property="targetNo" column="TARGET_NO"/>
+		<result property="empNo" column="EMP_NO"/>
+		<result property="targetSales" column="TARGET_SALES"/>
+		<result property="targetContract" column="TARGET_CONTRACT"/>
+		<result property="performYear" column="PERFORM_YEAR"/>
+		<result property="performMonth" column="PERFORM_MONTH"/>
+
+	</resultMap>
+	
+	<select id="empPerformList" resultMap="targetPerformResultMap">
+		SELECT /*com.deft.crud.product.model.dao.SalesMapper#empPerformList()*/
+	    	   T.TARGET_NO
+	    	 , T.EMP_NO
+	    	 , T.TARGET_SALES
+	    	 , T.TARGET_CONTRACT
+	    	 , T.PERFORM_YEAR
+	    	 , T.PERFORM_MONTH
+		   FROM TBL_EMP_TARGET_PERFOM T
+		  WHERE T.EMP_NO = #{ loginEmpNo }
+		  ORDER BY T.PERFORM_YEAR ASC, T.PERFORM_MONTH DESC
+	</select>
+
+	<insert id="insertTargetSales" parameterType="com.deft.crud.sales.model.dto.TargetPerfomDTO">
+		INSERT /*com.deft.crud.product.model.dao.SalesMapper#insertTargetSales()*/
+		  INTO TBL_EMP_TARGET_PERFOM T
+	    (
+		  T.TARGET_NO, T.EMP_NO, T.TARGET_SALES, T.TARGET_CONTRACT, 
+		  T.PERFORM_YEAR, PERFORM_MONTH 
+		)	
+		VALUES
+		(
+		  SEQ_TARGET_NO.NEXTVAL, #{ empNo }, #{ targetSales }, #{ targetContract }
+		, #{ performYear }, #{ performMonth }
+		)
+	</insert>
+
+
+</mapper>

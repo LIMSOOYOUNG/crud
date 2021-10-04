@@ -42,6 +42,7 @@ public class ProductController {
 	@GetMapping("/selectAll")
 	public ModelAndView productList(ModelAndView mv) {
 		
+		
 		List<ProductDTO> allProductList = productService.allProductList();
 		
 		mv.addObject("allProductList", allProductList);
@@ -115,10 +116,12 @@ public class ProductController {
 		return mv;
 	}
 	
-	 
+	
+	/* 상품 등록을 위해 필요한 데이터를 가지고 와 조회를 한다. */
 	@GetMapping("/insert")
 	public ModelAndView insertProductPage(ModelAndView mv) {
 		
+		/* 카테고리(중) 리스트 조회*/
 		List<ProductCategoryDTO> refCategoryList = productService.refCategoryList();
 		
 
