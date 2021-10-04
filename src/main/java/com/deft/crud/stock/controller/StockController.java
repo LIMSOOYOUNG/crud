@@ -5,18 +5,23 @@ import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.deft.crud.member.model.service.UserImpl;
 import com.deft.crud.stock.model.dto.ProductStockInfoDTO;
-import com.deft.crud.stock.model.dto.ResponseStockDTO;
-import com.deft.crud.stock.model.dto.StockDTO;
+import com.deft.crud.stock.model.dto.RequestStockDTO;
+import com.deft.crud.stock.model.dto.StorageDTO;
+import com.deft.crud.stock.model.dto.approval.ApprovalDocumentDTO;
+import com.deft.crud.stock.model.dto.approval.ReceivingReqDTO;
 import com.deft.crud.stock.model.service.StockService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -40,10 +45,10 @@ public class StockController {
 	public ModelAndView selectStockAll(ModelAndView mv) {
 		
 		/* 창고에 보유중인 전체 상품 목록*/
-		List<StockDTO> stockList = stockService.selectStockAll();
+		List<StorageDTO> stockList = stockService.selectStockAll();
 		
 		/* 판매가능 상태인 모든 상품들*/
-		List<StockDTO> sellAbleProductList = stockService.selectSellAbleProductAll();
+		List<StorageDTO> sellAbleProductList = stockService.selectSellAbleProductAll();
 		
 		mv.addObject("stockList", stockList);
 		mv.addObject("sellAbleProductList", sellAbleProductList);
@@ -52,6 +57,7 @@ public class StockController {
 		return mv;
 	}
 	
+	/*  */
 	@GetMapping("/productInfo/selectOne")
 	public ModelAndView selectProductInfoByNo(ModelAndView mv, HttpServletResponse response
 											, @RequestParam("productNo") int productNo) throws JsonProcessingException {
@@ -68,9 +74,9 @@ public class StockController {
 		return mv;
 	}
 	
-	@PostMapping("/orderStockCondition/modify")
+	@PostMapping("/stockCondition/modify")
 	public ModelAndView modifyStockCondition(ModelAndView mv, RedirectAttributes rttr
-											, @ModelAttribute ResponseStockDTO parameters) {
+											, @ModelAttribute RequestStockDTO parameters) {
 		
 		System.out.println(parameters);
 		
@@ -91,6 +97,31 @@ public class StockController {
 		return mv;
 	}
 	
-	
-	
+	/* 입고요청서 작성 */
+	@PostMapping("receivingProduct/insert")
+	public ModelAndView insertStockReceivingProduct(ModelAndView mv, HttpServletResponse response
+													, @AuthenticationPrincipal UserImpl userInfo
+													, @RequestBody List<RequestStockDTO> request
+													) {
+		
+		response.setContentType("application/json; charset=UTF-8");
+		
+		System.out.println(request);
+		
+		
+		
+		
+		boolean result = stockService.insertStockReceivingProduct(request, userInfo);
+		
+		mv.setViewName("jsonView");
+		
+		return mv;
+	}
 }
+
+
+
+
+
+
+

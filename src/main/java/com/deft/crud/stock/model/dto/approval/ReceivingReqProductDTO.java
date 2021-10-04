@@ -1,6 +1,4 @@
-package com.deft.crud.stock.model.dto;
-
-import java.io.Serializable;
+package com.deft.crud.stock.model.dto.approval;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -13,13 +11,9 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class ResponseStockDTO implements Serializable {
+public class ReceivingReqProductDTO {
 
+	private int receivingReqNo;
+	private int productAmount;
 	private int productNo;
-	private String productName;
-	private String unit;
-	private int requestOrderStock;
-
-	
-	
 }

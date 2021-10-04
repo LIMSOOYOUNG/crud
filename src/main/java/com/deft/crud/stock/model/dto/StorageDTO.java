@@ -2,6 +2,8 @@ package com.deft.crud.stock.model.dto;
 
 import java.io.Serializable;
 
+import com.deft.crud.product.model.dto.ProductDTO;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,6 +22,7 @@ public class StorageDTO implements Serializable {
 	private int productStock;
 	private int productNo;
 	
+	private ProductDTO product;
 }
 
 
