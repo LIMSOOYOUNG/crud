@@ -61,8 +61,8 @@
 												<td th:text = "${categoryList.categoryName}"></td>
 												<td th:text = "${categoryList.categoryCode}"></td>
 												<td>
-													<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#updateRefCategoryModal"
-													id="#updateRefCategoryModal" th:value= "${categoryList.categoryCode}" onclick="getCategoryCode(this.value)">수정하기</button>
+													<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modifyRefCategoryModal"
+													id="#modifyRefCategoryModal" th:value= "${categoryList.categoryCode}" onclick="getCategoryCode(this.value)">수정하기</button>
 												</td>
 											</tr>
 										</tbody>
@@ -216,12 +216,12 @@
 	<!-- 카테고리(소) 등록 모달 끝 -->
 	
 	<!-- 카테고리(중) 수정 -->
-	<div class="modal fade" id="updateRefCategoryModal" tabindex="-1" role="dialog"
-            aria-labelledby="updateRefCategoryModalCenterTitle" aria-hidden="true">
+	<div class="modal fade" id="modifyRefCategoryModal" tabindex="-1" role="dialog"
+            aria-labelledby="modifyRefCategoryModalCenterTitle" aria-hidden="true">
 		<div class="modal-dialog modal-dialog-centered" role="document">
-        	<form class="modal-content" action="/product/category/medium/update" method="post" onsubmit="return checkUpdateRefCategory()"> 
+        	<form class="modal-content" action="/product/category/medium/modify" method="post" onsubmit="return checkModifyRefCategory()"> 
             	<div class="modal-header">
-                	<h5 class="modal-title" id="updateRefCategoryModalCenterTitle">카테고리(중) 수정</h5>
+                	<h5 class="modal-title" id="modifyRefCategoryModalCenterTitle">카테고리(중) 수정</h5>
                   	<button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                   	</button>
@@ -231,8 +231,8 @@
 						<div class="form-group row col-lg-12">
 							<label for="refCategoryName" class="col-lg-3 col-form-label">카테고리(중)</label>
 							<div class="col-lg-9">
-								<input type="text" class="form-control" id="refCategoryNameForUpdate" name="refCategoryName" placeholder="수정할 내용을 입력하세요">
-								<input type="hidden" id="refCategoryCodeForUpdate" name="refCategoryCode" th:value="refCategoryCode">
+								<input type="text" class="form-control" id="refCategoryNameForModify" name="refCategoryName" placeholder="수정할 내용을 입력하세요">
+								<input type="hidden" id="refCategoryCodeForModify" name="refCategoryCode" th:value="refCategoryCode">
 							</div>
 						</div>
 					</div>
@@ -240,12 +240,12 @@
 					<div class="row"> 
 						<div class="row col-lg-12 mt-3">
 							<div class="custom-control custom-radio mx-3">
-								<input type="radio" id="updateStatusY" name="categoryStatus" class="custom-control-input mb-1" th:value="활성화" checked>
-								<label class="custom-control-label" for="updateStatusY">활성화</label>
+								<input type="radio" id="modifyStatusY" name="categoryStatus" class="custom-control-input mb-1" th:value="활성화" checked>
+								<label class="custom-control-label" for="modifyStatusY">활성화</label>
 							</div>
 							<div class="custom-control custom-radio mx-3">
-								<input type="radio" id="updateStatusN" name="categoryStatus" class="custom-control-input mb-1" th:value="비활성화">
-								<label class="custom-control-label" for="updateStatusN">비활성화</label>
+								<input type="radio" id="modifyStatusN" name="categoryStatus" class="custom-control-input mb-1" th:value="비활성화">
+								<label class="custom-control-label" for="modifyStatusN">비활성화</label>
 							</div> 
 						</div>
 					</div>     	
@@ -403,7 +403,7 @@
 	function getRefCategoryCode(refCategoryCode) {
 		
 		console.log(refCategoryCode);
-		const $hidden = $("#refCategoryCodeForUpdate");
+		const $hidden = $("#refCategoryCodeForModify");
 		$hidden.val("");
 		$hidden.val(refCategoryCode);
 		console.log($hidden);
@@ -411,17 +411,17 @@
 		
 	}
 	
-	function checkUpdateRefCategory() {
+	function checkModifyRefCategory() {
 		
-		if($("#refCategoryNameForUpdate").val() == "") {
+		if($("#refCategoryNameForModify").val() == "") {
 			alert("등록할 카테고리를 입력해주세요!");
-			$("#refCategoryNameForUpdate").val("");
+			$("#refCategoryNameForModify").val("");
 			return false;
 		} 
 		
-		if(!/^[가-힣|[a-z]|[A-Z]{3,20}$/.test($("#refCategoryNameForUpdate").val())) {
+		if(!/^[가-힣|[a-z]|[A-Z]{3,20}$/.test($("#refCategoryNameForModify").val())) {
 			alert("형식에 맞지 않습니다.");
-			$("#refCategoryNameForUpdate").val("");
+			$("#refCategoryNameForModify").val("");
 			return false;
 		} else {
 			if(!confirm("카테고리를 등록하시겠습니까?")) {

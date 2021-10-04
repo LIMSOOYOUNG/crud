@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.deft.crud.product.model.dao.ProductMapper;
 import com.deft.crud.product.model.dto.AccountDTO;
+import com.deft.crud.product.model.dto.InsertProductDTO;
 import com.deft.crud.product.model.dto.ManufacturerDTO;
 import com.deft.crud.product.model.dto.ProductCategoryDTO;
 import com.deft.crud.product.model.dto.ProductDTO;
@@ -47,16 +48,16 @@ public class ProductService {
 
 		return productMapper.manufacturerList();
 	}
-
+	
 	public ProductDTO productDetail(int productNo) {
 
 		return productMapper.productDetail(productNo);
 	}
 
 
-	public List<ProductCategoryDTO> findChildrenCategoryList(int categoryCode) {
+	public List<ProductCategoryDTO> selectSmallCategoryList(int refCategoryCode) {
 		
-		return productMapper.findChildrenCategoryList(categoryCode);
+		return productMapper.selectSmallCategoryList(refCategoryCode);
 	}
 
 
@@ -66,9 +67,9 @@ public class ProductService {
 	}
 
 	@Transactional
-	public int updateProduct(ProductDTO parameters) {
+	public int modifyProduct(ProductDTO parameters) {
 
-		return productMapper.updateProduct(parameters);
+		return productMapper.modifyProduct(parameters);
 	}
 	
 	@Transactional
@@ -88,6 +89,12 @@ public class ProductService {
 
 		return productMapper.updateRefCategory(parameters);
 	}
-
+	
+	/* 상품 등록 메소드*/
+	@Transactional
+	public int insertProduct(InsertProductDTO parameters) {
+		
+		return productMapper.insertProduct(parameters);
+	}
 
 }

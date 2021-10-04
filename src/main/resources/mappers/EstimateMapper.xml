@@ -68,6 +68,6 @@
 	</select>
 	
 	<select id="selectLastEstimateNo" resultType="java.lang.String">
-        SELECT SYSDATE
+        SELECT SYSDATE FROM DUAL
 	</select>
 </mapper>

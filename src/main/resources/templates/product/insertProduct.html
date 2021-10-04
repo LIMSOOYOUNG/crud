@@ -1,10 +1,181 @@
 <!DOCTYPE html>
-<html>
+<html lang="ko"
+	xmlns:th="https://www.thymeleaf.org">
 <head>
-<meta charset="UTF-8">
-<title>카테고리 등록</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+	<th:block th:replace="@{common/config} :: config"></th:block>
 </head>
-<body>
-	<h2>팝업창 테스트</h2>
-</body>
+<body id="page-top">
+	<div id="wrapper">
+		<!-- Sidebar -->
+		<th:block th:replace="@{/common/sidebar} :: sidebar"></th:block>
+
+		<div id="content-wrapper" class="d-flex flex-column">
+			<div id="content"> 
+				<!-- Header -->
+				<th:block th:replace="@{/common/header} :: header"></th:block>
+
+				<!-- Content -->
+				<div class="container-fluid" id="container-wrapper">
+					<div class="d-sm-flex align-items-center justify-content-between mb-4">
+						<h1 class="h3 mb-0 text-gray-800">상품관리</h1>
+						<ol class="breadcrumb">
+							<li class="breadcrumb-item"><a href="./">Home</a></li>
+							<li class="breadcrumb-item">상품조회</li>
+							<li class="breadcrumb-item active" aria-current="page">상품등록</li>
+						</ol>
+					</div>
+					<form class="row" action="/product/insert" method="post" onsubmit="return check()">
+						<div class="col-lg-3">
+							<div class="card mb-4">
+								<div
+									class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+									<h6 class="m-0 font-weight-bold text-primary">Form Basic</h6>
+								</div>
+								<div class="card-body">
+									<div class="form-group">
+									</div>
+									<div class="form-group">
+										<div class="custom-file">
+											<input type="file" class="custom-file-input" id="customFile" name="singleFile">
+											<label class="custom-file-label" for="customFile"></label>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-lg-9"> 
+							<div class="card mb-4"> 
+								<br> 
+								<h3 th:align="center">상품등록</h3>
+								<div class="row">
+									<div class="form-group col-lg-6 row">
+										<label for="refCategoryName" class="col-sm-3 col-form-label" th:align="center">카테고리 (중)</label>
+										<select class="form-control col-sm-9" id="refCategoryCode" name="refCategoryCode" onchange="categoryBox(this.value)">
+											<option id="refCategoryDefault" value="">카테고리(중)</option>
+											<option th:each="refCategory : ${refCategoryList}" th:text="${refCategory.refCategoryName}" th:value="${refCategory.refCategoryCode}">
+											</option>
+										</select>
+									<th:block>
+									</div>
+									<div class="form-group col-lg-6 row">
+										<label for="categoryName" class="col-sm-3 col-form-label" th:align="center">카테고리 (소)</label>
+										<select class="form-control col-sm-9" id="categoryCode" name="categoryCode" th:value="categoryCode" disabled>
+											<option>
+											</option>
+										</select>
+									</div>
+								</div>
+								
+								<div class="row">
+                     				<div class="form-group col-lg-6 row">
+										<label for="manufacturerName" class="col-sm-3 col-form-label" th:align="center">제조사</label>
+										<select class="form-control col-sm-9" id="manufactuerNo" name="manufacturerNo">
+											<option th:each="productManufacturer : ${manufacturerList}" th:text="${productManufacturer.manufacturerName}" 
+													th:value="${productManufacturer.manufacturerNo}">
+											</option>
+										</select>
+									</div>
+									<div class="form-group col-lg-6 row">
+										<label for="manufacturerName" class="col-sm-3 col-form-label" th:align="center">거래처</label>
+										<select class="form-control col-sm-9" id="accountNo" name="accountNo">
+											<option th:each="productAccount : ${accountList}" th:text="${productAccount.companyName}" 
+													th:value="${productAccount.accountNo}">
+											</option>
+										</select>
+									</div>
+								</div>
+								
+								<div class="row">
+									<div class="form-group col-lg-6 row">
+										<label for="productName" class="col-sm-3 col-form-label" th:align="center">상품명</label>
+										<input type="text" class="form-control col-sm-9" 
+												id="productName" name="productName">
+									</div>
+									<div class="form-group col-lg-6 row">
+										<label for="unit" class="col-sm-3 col-form-label" th:align="center">단위</label>
+										<input type="text" class="form-control col-sm-9" id="unit" name="unit">
+									</div>
+									
+								</div>
+								<div class="row">
+									<div class="form-group col-lg-6 row">
+										<label for="purchasePrice" class="col-sm-3 col-form-label" th:align="center">원가</label>
+										<input type="number" class="form-control col-sm-9" 
+												id="purchasePrice" name="purchasePrice" min=1>
+									</div>	
+									<div class="form-group col-lg-6 row">
+										<label for="sellingPrice" class="col-sm-3 col-form-label" th:align="center">판매가</label>
+										<input type="number" class="form-control col-sm-9" 
+												id="sellingPrice" name="sellingPrice" min=1>
+									</div>	
+								</div>
+								
+								<div class="row">
+									<div class="form-group col-lg-6 row">
+										<label for="productNo" class="col-sm-3 col-form-label" th:align="center">판매상태</label>
+										<select class="form-control col-sm-9" id="sellStatus" name="sellStatus">
+											<option th:value="판매">판매</option>
+											<option th:value="미판매">미판매</option>
+										</select>
+									</div>
+								</div>
+								
+								<div class="row">
+									<div class="form-group col-lg-12 mt-3" th:align="center">
+										<button type="submit" class="btn btn-primary mb-1 mx-3" id="modifyBtn">상품등록</button>
+	                  					<button type="button" class="btn btn-outline-danger mb-1 mx-3" id="backBtn">뒤로가기</button>
+                  					</div>
+								</div>
+							</div>
+						</div>
+					</form>
+				</div>				
+			</div>
+		</div>
+	</div>
+	<th:block th:replace="@{/common/script} :: script"></th:block>
+
+	<script>
+		
+		function check() {
+			if(!confirm("상품을 등록하시겠습니까?")) {
+				return false;
+			}
+		}
+
+		function categoryBox(refCategoryCode) {
+
+			console.log(refCategoryCode);
+
+			$.ajax({
+				url: "/product/selectCategoryCode",
+				data: {"refCategoryCode" : refCategoryCode},
+				success: function(data, status, xhr) {
+					console.log(data);
+					
+					const $select = $("#categoryCode");
+					$select.html("");
+					$("#refCategoryDefault" ).attr('hidden', 'hidden');
+						
+					for(let index in data) {
+						$('select').removeAttr('disabled');		
+
+						$select.append("<option value='" + data[index].categoryCode + "'>" + data[index].categoryName + "</option>");
+								
+						console.log($select);
+					}
+				},
+
+				error:function(xhr, status, error) {
+					console.log(error);
+				}
+			});
+		}
+
+
+	</script>
+</body>	
 </html>
+
+
