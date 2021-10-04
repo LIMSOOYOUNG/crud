@@ -1,5 +1,7 @@
 package com.deft.crud.estimate.controller;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
@@ -11,11 +13,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.deft.crud.customer.model.dto.CustomerCompanyDTO;
 import com.deft.crud.customer.model.dto.ExtCustomerDTO;
 import com.deft.crud.customer.model.service.CustomerService;
 import com.deft.crud.estimate.model.dto.EstimateDTO;
 import com.deft.crud.estimate.model.service.EstimateService;
+import com.deft.crud.stock.model.dto.StockDTO;
 import com.deft.crud.stock.model.service.StockService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -66,10 +68,25 @@ public class EstimateController {
 	@GetMapping("/insert")
 	public ModelAndView insertEstimate(ModelAndView mv) {
 		
-		String estimate = estimateService.selectLastEstimateNo();
+		/* 새로운 견적번호 및 일자 입력 */
+		EstimateDTO newEstimate = new EstimateDTO();
+		LocalDate newEstimateDate = LocalDate.now(); 
+		String stringNewEstimateDate= newEstimateDate.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+		
+		String newEstimateNo = estimateService.selectEstimateNo(stringNewEstimateDate);
+		
+		newEstimate.setEstimateNo(newEstimateNo);
+		newEstimate.setEstimateDate(newEstimateDate);
+		
+		/* 고객 목록 조회 */
 		List<ExtCustomerDTO> extCustomerList = customerService.selectExtCustomerList();
 		
+		/* 상품 목록 조회 */
+		List<StockDTO> stockList = stockService.selectSellAbleProductAll();
+		
+		mv.addObject("newEstimate", newEstimate);
 		mv.addObject("customerList", extCustomerList);
+		mv.addObject("stockList", stockList);
 		mv.setViewName("estimate/insertEstimate");
 		
 		return mv;

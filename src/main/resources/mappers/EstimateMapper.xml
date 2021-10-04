@@ -27,47 +27,50 @@
 	
 	<select id="selectEstimateList" resultMap="estimateSelectResultMap">
         SELECT /* com.deft.crud.estimate.model.dao.EstimateMapper#selectEstimateList() */
-               A.ESTIMATE_NO
-             , B.CUSTOMER_NAME
-             , A.ESTIMATE_TITLE
-             , A.ESTIMATE_STATUS
-             , C.EMP_NAME
-             , A.ESTIMATE_DATE
-          FROM TBL_ESTIMATE A
-          LEFT JOIN TBL_CUSTOMER B ON (A.CUSTOMER_NO = B.CUSTOMER_NO)
-          LEFT JOIN TBL_EMP_INFO C ON (B.EMP_NO = C.EMP_NO)
-         ORDER BY A.ESTIMATE_NO DESC
+               E.ESTIMATE_NO
+             , C.CUSTOMER_NAME
+             , E.ESTIMATE_TITLE
+             , E.ESTIMATE_STATUS
+             , EI.EMP_NAME
+             , E.ESTIMATE_DATE
+          FROM TBL_ESTIMATE E
+          LEFT JOIN TBL_CUSTOMER C ON (E.CUSTOMER_NO = C.CUSTOMER_NO)
+          LEFT JOIN TBL_EMP_INFO EI ON (C.EMP_NO = EI.EMP_NO)
+         ORDER BY E.ESTIMATE_NO DESC
 	</select>
 	
 	<select id="selectEstimateListByStatus" resultMap="estimateSelectResultMap">
         SELECT /* com.deft.crud.estimate.model.dao.EstimateMapper#selectEstimateListByStatus() */
-               A.ESTIMATE_NO
-             , B.CUSTOMER_NAME
-             , A.ESTIMATE_TITLE
-             , A.ESTIMATE_STATUS
-             , C.EMP_NAME
-             , A.ESTIMATE_DATE
-          FROM TBL_ESTIMATE A
-          LEFT JOIN TBL_CUSTOMER B ON (A.CUSTOMER_NO = B.CUSTOMER_NO)
-          LEFT JOIN TBL_EMP_INFO C ON (B.EMP_NO = C.EMP_NO)
+               E.ESTIMATE_NO
+             , C.CUSTOMER_NAME
+             , E.ESTIMATE_TITLE
+             , E.ESTIMATE_STATUS
+             , EI.EMP_NAME
+             , E.ESTIMATE_DATE
+          FROM TBL_ESTIMATE E
+          LEFT JOIN TBL_CUSTOMER C ON (E.CUSTOMER_NO = C.CUSTOMER_NO)
+          LEFT JOIN TBL_EMP_INFO EI ON (C.EMP_NO = EI.EMP_NO)
 		<choose>
 			<when test="estimateStatus == 'progress'">
-                WHERE A.ESTIMATE_STATUS = '진행중'
+                WHERE E.ESTIMATE_STATUS = '진행중'
          	</when>
          	<when test="estimateStatus == 'success'">
-                WHERE A.ESTIMATE_STATUS = '완료'
+                WHERE E.ESTIMATE_STATUS = '완료'
          	</when>
          	<when test="estimateStatus == 'postpone'">
-                WHERE A.ESTIMATE_STATUS = '보류'
+                WHERE E.ESTIMATE_STATUS = '보류'
          	</when>
          	<when test="estimateStatus == 'failed'">
-                WHERE A.ESTIMATE_STATUS = '실패'
+                WHERE E.ESTIMATE_STATUS = '실패'
          	</when>
          </choose>
-         ORDER BY A.ESTIMATE_NO DESC
+         ORDER BY E.ESTIMATE_NO DESC
 	</select>
 	
-	<select id="selectLastEstimateNo" resultType="java.lang.String">
-        SELECT SYSDATE FROM DUAL
+	<select id="selectLastEstimateSeq" resultType="java.lang.String">
+        SELECT /* com.deft.crud.estimate.model.dao.EstimateMapper#selectLastEstimateSeq() */
+               LPAD(LAST_NUMBER, 3, 0)
+          FROM USER_SEQUENCES
+         WHERE SEQUENCE_NAME = 'SEQ_ESTIMATE_NO'
 	</select>
 </mapper>

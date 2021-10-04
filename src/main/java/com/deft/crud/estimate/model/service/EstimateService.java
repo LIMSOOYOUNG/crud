@@ -29,8 +29,11 @@ public class EstimateService {
 		return estimateMapper.selectEstimateListByStatus(estimateStatus);
 	}
 
-	public String selectLastEstimateNo() {
+	public String selectEstimateNo(String stringNewEstimateDate) {
 		
-		return estimateMapper.selectLastEstimateNo();
+		String newEstimateSeq = estimateMapper.selectLastEstimateSeq();
+		String newEstimateNo = "E" + stringNewEstimateDate + "-" + newEstimateSeq;
+		
+		return newEstimateNo;
 	}
 }

@@ -41,9 +41,11 @@
 										</div>
 										<div class="form-group row mb-2" th:align="right">
 											<label for="estimateNo" class="col-lg-1 col-form-label">견적번호</label>
-											<input type="text" class="form-control col-lg-4" id="estimateNo" name="estimateNo" readonly>
+											<input type="text" class="form-control col-lg-4" id="estimateNo" name="estimateNo"
+													th:value="${ newEstimate.estimateNo }" readonly>
 											<label for="estimateDate" class="col-lg-2 col-form-label">견적일자</label>
-											<input type="text" class="form-control col-lg-4" id="estimateDate" name="estimateDate" readonly>
+											<input type="text" class="form-control col-lg-4" id="estimateDate" name="estimateDate"
+													th:value="${ newEstimate.estimateDate }" readonly>
 										</div>
 										<div class="form-group row mb-2" th:align="right">
 											<label for="customerCompany" class="col-lg-1 col-form-label">고객사</label>
@@ -113,10 +115,11 @@
 											<tbody>
 												<tr>
 													<td colspan="10" th:align="center">
-														<a href="#" class="btn btn-sm btn-dark btn-icon-split">
+														<button type="button" class="btn btn-sm btn-dark btn-icon-split" id="addStock"
+																data-toggle="modal" data-target="#stockModal">
 															<span class="icon text-white-50"><i class="fas fa-search-plus"></i></span>
 															<span class="text text-white">상품 추가</span>
-														</a>
+														</button>
 													</td>
 												</tr>
 											</tbody>
@@ -184,6 +187,65 @@
 							</div>
 						</div>
 					</div>		<!-- End CustomerModal -->
+
+					<!-- StockModal -->
+					<div class="modal fade" id="stockModal" tabindex="-1" role="dialog" aria-labelledby="stockModalLabel"
+							aria-hidden="true">
+						<div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title font-weight-bold" id="stockModalLabel">상품 추가</h5>
+									<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+										<span aria-hidden="true"><i class="far fa-times-circle"></i></span>
+									</button>
+								</div>
+								<div class="modal-body">
+									<div class="row">
+										<div class="col-lg-12">
+											<div class="card mb-4">
+												<div class="table-responsive p-3" style="height:500px; overflow:auto;">
+													<table class="table align-items-center table-flush table-hover" id="stockTable">
+														<thead class="thead-light" th:align="center">
+															<tr>
+																<th>상품번호</th>
+																<th>카테고리(중)</th>
+																<th>카테고리(소)</th>
+																<th>상품명</th>
+																<th>제조사</th>
+																<th>공급가</th>
+																<th>단위</th>
+																<th>재고수량</th>
+																<th></th>
+															</tr>
+														</thead>
+														<tbody th:align="center">
+															<tr th:each="stock : ${ stockList }">
+																<td th:text="${ stock.productNo }"></td>
+																<td th:text="${ stock.categoryName }"></td>
+																<td th:text="${ stock.categoryName }"></td>
+																<td th:text="${ stock.productName }"></td>
+																<td th:text="${ stock.productNo }"></td>
+																<td th:text="${ stock.productNo }"></td>
+																<td th:text="${ stock.unit }"></td>
+																<td th:text="${ stock.productStock }"></td>
+																<td>
+																	<button class="btn btn-sm btn-dark" name="selectStock"
+																	th:text="'선택'" data-dismiss="modal"></button>
+																</td>
+															</tr>
+														</tbody>
+													</table>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="modal-footer mb-6">
+									<button type="button" class="btn btn-outline-primary" data-dismiss="modal">닫기</button>
+								</div>
+							</div>
+						</div>
+					</div>		<!-- End StockModal -->
 				</div>
 			</div>
 		</div>
@@ -227,6 +289,8 @@
 				$("#customerNo").val(customerNo);
 				$("#resEmp").val(empName);
 			});
+
+			
 		});
 	</script>
 </body>
