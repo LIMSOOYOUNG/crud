@@ -7,6 +7,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +18,7 @@ import com.deft.crud.customer.model.dto.ExtCustomerDTO;
 import com.deft.crud.customer.model.service.CustomerService;
 import com.deft.crud.estimate.model.dto.EstimateDTO;
 import com.deft.crud.estimate.model.service.EstimateService;
+import com.deft.crud.member.model.service.UserImpl;
 import com.deft.crud.stock.model.dto.StockDTO;
 import com.deft.crud.stock.model.service.StockService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -66,7 +68,9 @@ public class EstimateController {
 	}
 	
 	@GetMapping("/insert")
-	public ModelAndView insertEstimate(ModelAndView mv) {
+	public ModelAndView insertEstimate(ModelAndView mv, @AuthenticationPrincipal UserImpl empUser) {
+		
+		System.out.println("empNo : " + empUser.getEmpNo());
 		
 		/* 새로운 견적번호 및 일자 입력 */
 		EstimateDTO newEstimate = new EstimateDTO();

@@ -104,7 +104,9 @@
 
 	<script>
 		$(document).ready(function () {
-        	$('#estimateTable').DataTable(); // ID From dataTable with Hover
+        	$('#estimateTable').DataTable({
+				order:[]
+			});
         });
 	</script>
 
