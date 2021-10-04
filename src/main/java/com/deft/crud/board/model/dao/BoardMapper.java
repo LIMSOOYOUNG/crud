@@ -28,5 +28,15 @@ public interface BoardMapper {
 	/* 공지사항 보기 */
 	BoardDTO noticeDetail(int writeNo);
 
+	/* 자유게시글 조회수 증가 */
+	void freeboardviewCount(int writeNo);
+	
+	/* 공지사항 조회수 증가*/
+	void noticeviewCount(int writeNo);
+
+
+
+	
+
 
 }
