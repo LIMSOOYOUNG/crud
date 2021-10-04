@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.deft.crud.stock.model.dto.ProductStockInfoDTO;
+import com.deft.crud.stock.model.dto.ResponseStockDTO;
 import com.deft.crud.stock.model.dto.StockDTO;
 import com.deft.crud.stock.model.dto.StorageDTO;
 
@@ -19,6 +20,8 @@ public interface StockMapper {
 	List<StockDTO> selectSellAbleProductAll();
 
 	ProductStockInfoDTO selectOneProductInfoByNo(int productNo);
+
+	int modifyStockCondition(ResponseStockDTO parameters);
 
 
 }

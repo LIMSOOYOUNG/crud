@@ -3,11 +3,11 @@
 
 <head>
 <th:block th:replace="@{common/config} :: config"></th:block>
+
 <style>
 input {
 	text-align: center;
 }
-
 </style>
 
 </head>
@@ -27,8 +27,7 @@ input {
 
 				<!-- Content -->
 				<div class="container-fluid" id="container-wrapper">
-					<div
-						class="d-sm-flex align-items-center justify-content-between mb-4">
+					<div class="d-sm-flex align-items-center justify-content-between mb-4">
 						<h1 class="h3 mb-0 text-gray-800">재고관리</h1>
 						<ol class="breadcrumb">
 							<li class="breadcrumb-item"><a th:href="@{/dashboard}">Home</a></li>
@@ -44,18 +43,20 @@ input {
 						<div class="col-lg-1"></div>
 						<div class="col-lg-10">
 							<div class="card mb-4">
-								<div
-									class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+								<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
 									<h6 class="m-0 font-weight-bold text-primary">창고 재고현황</h6>
 									<div>
 										<a class="btn btn-success btn-icon-split" id="stockOrderBtn">
-											<span class="icon text-white"> <i
-												class="fas fa-arrow-circle-down"></i>
-										</span> <span class="text text-white">입고요청서작성</span>
-										</a> &nbsp&nbsp&nbsp&nbsp <a class="btn btn-info btn-icon-split"
-											id="stockOrder"> <span class="icon text-white"> <i
-												class="fas fa-arrow-circle-up"></i>
-										</span> <span class="text text-white">출고요청서작성</span>
+											<span class="icon text-white">
+												<i class="fas fa-arrow-circle-down"></i>
+											</span>
+											<span class="text text-white">입고요청서작성</span>
+										</a> &nbsp&nbsp&nbsp&nbsp
+										 <a id="stockOrder" class="btn btn-info btn-icon-split">
+											<span class="icon text-white">
+												<i class="fas fa-arrow-circle-up"></i>
+											</span>
+											<span class="text text-white">출고요청서작성</span>
 										</a>
 									</div>
 								</div>
@@ -83,30 +84,31 @@ input {
 												<td id="productName" th:text="${stock.productName}"></td>
 												<td th:text="${stock.productStock}"></td>
 												<td th:text="${stock.unit}"></td>
-												<td th:switch="${stock.sellStatus}"><span
-													th:case="'판매'" class="badge badge-success"
-													th:text="${stock.sellStatus}"></span> <span th:case="'미판매'"
-													class="badge badge-danger" th:text="${stock.sellStatus}">
-												</span></td>
-												<td
-													th:text="${stock.storageSection} + '-' + ${stock.storageSpace}"></td>
+												<td th:switch="${stock.sellStatus}">
+												<span th:case="'판매'" class="badge badge-success"
+													  th:text="${stock.sellStatus}">
+												</span>
+												<span th:case="'미판매'" class="badge badge-danger"
+													  th:text="${stock.sellStatus}">
+												</span>
+												</td>
+												<td	th:text="|${stock.storageSection} - ${stock.storageSpace}|"></td>
 
 												<!-- 관리자 권한이 있는 아이디일경우 재고관리페이지로 이동하는 버튼 -->
 												<!-- <th:if sec:authorize-expr ="hasRole('ROLE_ADMIN')"> -->
 												<td>
 													<button class="btn btn-dark btn-icon-split"
-														name="stockManagerBtn" data-toggle="modal"
-														data-target="#stockManagerModal"
-														th:data-product-no="${stock.productNo}">
-														<span class="icon text-white-50"> <i
-															class="fas fa-clipboard-list"></i>
-														</span> <span class="text text-white">재고관리</span>
+															name="stockManagerBtn" data-toggle="modal"
+															data-target="#stockManagerModal"
+															th:data-product-no="${stock.productNo}">
+														<span class="icon text-white-50">
+															<i class="fas fa-clipboard-list"></i>
+														</span>
+														<span class="text text-white">재고관리</span>
 													</button>
 												</td>
 
-
 												<!-- 관지자 권한이 없는 아이디인경우 상품정보 페이지로 이동 버튼 -->
-
 
 											</tr>
 										</tbody>
@@ -130,14 +132,13 @@ input {
 	<!------------- 입고요청서 Modal --------------->
 	<div class="modal fade" id="stockOrderModal" role="dialog">
 		<div class="modal-dialog modal-center"
-			style="font-size: 13px; max-height: 100%; height: 300px; max-width: 100%; width: 85%; display: table;">
+			 style="font-size: 13px; max-height: 100%; height: 300px; max-width: 100%; width: 85%; display: table;">
 
 			<!-- Modal content-->
 			<div class="modal-content">
 				<div class="modal-header">
 					<h4 class="modal-title" style="color: #0da8ee">입고요청서 작성</h4>
-					<button type="button" id="modalCloseBtn" class="close"
-						data-dismiss="modal">
+					<button type="button" id="modalCloseBtn" class="close" data-dismiss="modal">
 						<i class="far fa-times-circle"></i>
 					</button>
 					<div class="row">
@@ -150,14 +151,11 @@ input {
 					<div class="row">
 						<div class="col-lg-6">
 							<div class="card mb-4">
-								<div
-									class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+								<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
 									<h6 class="m-0 font-weight-bold text-primary">전체상품현황</h6>
 								</div>
-								<div class="table-responsive p-3"
-									style="overflow-y: scroll; height: 500px;">
-									<table id="modalDataTableHover"
-										class="table align-items-center table-flush table-hover">
+								<div class="table-responsive p-3" style="overflow-y: scroll; height: 500px;">
+									<table id="modalDataTableHover" class="table align-items-center table-flush table-hover">
 										<thead align="center" class="thead-light">
 											<tr>
 												<th>상품번호</th>
@@ -175,12 +173,13 @@ input {
 												<td th:text="${sellAbleProduct.productName}"></td>
 												<td th:text="${sellAbleProduct.productStock}"></td>
 												<td th:text="${sellAbleProduct.unit}"></td>
-												<td><a class="btn btn-white btn-icon-split addBtn">
-														<!-- th:value="${ sellAbleProduct.productNo }"> --> <span
-														class="icon text-black" style="color: #66bb6a;"> <i
-															class="fas fa-cart-plus fa-lg"></i>
-													</span>
-												</a></td>
+												<td>
+													<a class="btn btn-white btn-icon-split addBtn">
+														<span class="icon text-black" style="color: #66bb6a;">
+															<i class="fas fa-cart-plus fa-lg"></i>
+														</span>
+													</a>
+												</td>
 											</tr>
 										</tbody>
 										<tfoot align="center">
@@ -191,12 +190,10 @@ input {
 						</div>
 
 						<div class="col-lg-6">
-							<h5 class="m-0 font-weight-bold text-primary" th:align="center">입고요청할
-								상품</h5>
+							<h5 class="m-0 font-weight-bold text-primary" th:align="center">입고요청할 상품</h5>
 							<br>
 							<form action="/stock/productStockOrder/insert" method="post">
-								<div class="table-group"
-									style="text-align: center; height: 210px; overflow-y: scroll;">
+								<div class="table-group" style="text-align: center; height: 210px; overflow-y: scroll;">
 									<table id="orderProduct" border="1" style="width: 100%;">
 										<thead style="background: lightgray;">
 											<tr>
@@ -220,18 +217,18 @@ input {
 									<div class="form-group col-xl-12">
 										<label>요청사유</label>
 										<textarea id="orderContent" class="form-control"
-											name="orderContent" style="height: 150px; resize: none;"></textarea>
+												  name="orderContent" style="height: 150px; resize: none;">
+										</textarea>
 									</div>
 									<div class="form-group col-xl-4"></div>
-									<div class="form-group col-xl-4" th:align="center"
-										style="margin-top: 40px;">
-										<button type="button" id="modifyDetailInfo"
-											class="btn btn-primary">입고요청</button>
+									<div class="form-group col-xl-4" th:align="center" style="margin-top: 40px;">
+										<button type="button" id="modifyDetailInfo" class="btn btn-primary">입고요청</button>
 									</div>
 									<div class="form-group col-xl-4"></div>
 								</div>
 							</form>
 						</div>
+						
 					</div>
 				</div>
 				<div class="modal-footer"></div>
@@ -240,18 +237,15 @@ input {
 		</div>
 	</div>
 
-
 	<!------------- 재고관리 Modal --------------->
 	<div class="modal fade" id="stockManagerModal" role="dialog">
 		<div class="modal-dialog modal-xl centered">
-
 
 			<!-- Modal content-->
 			<div class="modal-content">
 				<div class="modal-header">
 					<h4 class="modal-title" style="color: #0da8ee">상품재고 관리</h4>
-					<button type="button" id="stockManagerModalCloseBtn" class="close"
-						data-dismiss="modal">
+					<button type="button" id="stockManagerModalCloseBtn" class="close" data-dismiss="modal">
 						<i class="far fa-times-circle"></i>
 					</button>
 					<div class="row">
@@ -262,17 +256,17 @@ input {
 				</div>
 
 				<div class="modal-body">
-					<form action="/stock/orderStockAmount/modify" method="post">
+					<form id="stockConditionForm"
+						th:action="@{/stock/orderStockCondition/modify}" method="post">
 						<div class="row" th:align="center">
-							<div class="col-lg-4" style="margin-top: 60px;">
+							<div class="col-lg-4" style="margin-top: 30px;">
 								<div class="card mb-4">
-									<div
-										class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+									<div class="card-header flex-row align-items-center justify-content-between">
 										<h6 class="m-0 font-weight-bold text-primary">상품이미지</h6>
 									</div>
-									<div class="card-body" style="width: 90%; height: 300px;">
-										<div class="form-group">
-											<img alt="noImage" src="" width=90%; height=90%;>
+									<div align="center" class="card-body" style="width: 90%; height: 300px;">
+										<div align="center" class="form-group">
+											<img alt="noImage" src="" width=80%; height=80%;>
 										</div>
 									</div>
 								</div>
@@ -280,31 +274,31 @@ input {
 							<div class="col-lg-4">
 								<div class="form-group">
 									<label>카테고리(중)</label>
-									<input type="text" id="refCategoryName" class="form-control" readonly>
-										
+									<input type="text" id="stockRefCategoryName" class="form-control"
+										   name="stockRefCategoryName" readonly>
 								</div>
 								<div class="form-group">
 									<label>상품번호</label>
-									 <input type="text" id="productNo1" class="form-control" readonly>
-									 	 
+									<input type="text" id="stockProductNo"
+									       name="stockProductNo" class="form-control" readonly>
 								</div>
 								<div class="form-group">
 									<label>제조사</label>
-									<input type="text" id="companyName" class="form-control" readonly>
-										
+									<input type="text" id="companyName"
+										   name="companyName" class="form-control" readonly>
+
 								</div>
 								<div class="form-group">
 									<label>판매가</label>
-									<input type="text" id="sellingPrice" class="form-control" readonly>
-										
+									<input type="text" id="sellingPrice"
+										   name="sellingPrice" class="form-control" readonly>
 								</div>
 								<div class="row form-group">
 									<div class="col-xl-5">
 										<label>상품위치</label>
 										<div class="row ">
-											<select id="storageSection"
+											<select id="storageSection" name="storageSection"
 													class="ui search dropdown form-control col-xl-6">
-													
 												<option id="A" value="A">A</option>
 												<option id="B" value="B">B</option>
 												<option id="C" value="C">C</option>
@@ -318,8 +312,8 @@ input {
 												<option id="K" value="K">K</option>
 											</select>
 											
-											<select id="storageSpace"
-													class="ui search dropdown form-control col-xl-6">
+											 <select id="storageSpace" name="storageSpace"
+													 class="ui search dropdown form-control col-xl-6">
 												<option id="01" value="01">01</option>
 												<option id="02" value="02">02</option>
 												<option id="03" value="03">03</option>
@@ -330,18 +324,17 @@ input {
 												<option id="08" value="08">08</option>
 												<option id="09" value="09">09</option>
 											</select>
-
 										</div>
 									</div>
 									<div class="col-xl-4">
 										<label>재고수량</label>
 										<input type="text" class="form-control"
-											   id="productStock" disabled>
+											id="productStock" name="productStock" disabled>
 									</div>
 									<div class="col-xl-3">
 										<label>단위</label>
 										<input type="text" class="form-control"
-											   id="unit" disabled>
+											id="unit" name="unit" disabled>
 									</div>
 								</div>
 							</div>
@@ -349,68 +342,71 @@ input {
 								<div class="form-group">
 									<label>카테고리(소)</label>
 									<input type="text" class="form-control"
-									 	   id="categoryName1"  readonly>
-										
+										id="stockCategoryName" name="stockCategoryName" readonly>
 								</div>
 								<div class="form-group">
 									<label>상품명</label>
 									<input type="text" class="form-control"
-									       id="productName1" disabled>
+										id="stockProductName" name="stockProductName" disabled>
 								</div>
 								<div class="form-group">
 									<label>거래처</label>
 									<input type="text" class="form-control"
-										   id="manufacturerName" disabled>
+										id="manufacturerName" name="manufacturerName" disabled>
 								</div>
 								<div class="form-group">
 									<label>판매상태</label>
-									<input type="text" class="form-control"
-										   id="sellStatus" disabled>
+									<div class="form-control" style="border: 0;">
+									<h4><span id="sellStatus"></span></h4>
+									</div>
 								</div>
 								<div class="row">
 									<div class="form-group col-xl-3"></div>
 									<div class="form-group col-xl-6" th:align="center">
 										<label>추가 or 삭제할 수량</label>
 										<input type="number" class="form-control"
-											   id="orderStockAmount" value=0>
+											   id="orderStockAmount" name="orderStockAmount" min="-10" value=0>
 									</div>
 									<div class="form-group col-xl-3"></div>
 								</div>
 							</div>
-
-
 						</div>
 						<div class="row">
 							<div class="form-group col-xl-4"></div>
 							<div class="form-group col-xl-4"></div>
 							<div class="form-group col-xl-4">
 								<br>
-								<button type="submit" class="btn btn-primary btn-block">변경완료</button>
+								<button id="modifyStockBtn" onclick="check()" class="btn btn-primary btn-block"
+										type="button">재고상태변경</button>
 							</div>
 						</div>
 					</form>
 				</div>
-
 			</div>
-
 		</div>
 		<div class="modal-footer"></div>
 		<div id="count" value="1"></div>
 	</div>
 
-
 	<!-- Script -->
-	<th:block th:replace="@{/common/script} :: script"></th:block>
+<th:block th:replace="@{/common/script} :: script"></th:block>
 
 	<!-- Page level custom scripts -->
-	<script>
-		$(document).ready(function() {
-			$('#dataTableHover').DataTable(); // 창고 재고 현황 테이블
-			$('#modalDataTableHover').DataTable(); // [Modal]입고요청서작성시 입고요청할 판매가능상태의 상품목록
-			$('#table_activity').DataTable(); // ID From dataTable with Hover
-			$('#stockManagerModal').on('show.bs.modal', function(event) {
+<script>
 
-				const productNo = $(event.relatedTarget).data('product-no');
+	const message = '[[${ message }]]';
+
+		if(message) {
+			alert(message);
+		}
+	
+	$(document).ready(function() {
+		$('#dataTableHover').DataTable(); 								// 창고 재고 현황 테이블
+		$('#modalDataTableHover').DataTable(); 							// [Modal]입고요청서작성시 입고요청할 판매가능상태의 상품목록
+		$('#table_activity').DataTable(); 								// ID From dataTable with Hover
+		$('#stockManagerModal').on('show.bs.modal', function(event) {   //영업활동 모달창이 보여질때 동작
+
+			const productNo = $(event.relatedTarget).data('product-no');
 
 			 	$.ajax({
 					url : "/stock/productInfo/selectOne",
@@ -418,24 +414,27 @@ input {
 					data : { productNo : productNo },
 					success : function(data, status, xhr) {
 
-						 const productInfo = JSON.parse(data.productStockInfo);
+						const productInfo = JSON.parse(data.productStockInfo);
+						let minOrderStockAmount = (-1 * productInfo.productStock);
 						
-						console.table(productInfo);
-
-						$('#refCategoryName').val(productInfo.refCategoryName);
-						$('#productNo1').val(productInfo.productNo);
+						$('#stockRefCategoryName').val(productInfo.stockRefCategoryName);
+						$('#stockProductNo').val(productInfo.stockProductNo);
 						$('#companyName').val(productInfo.companyName);
 						$('#sellingPrice').val(productInfo.sellingPrice);
 						$('#productStock').val(productInfo.productStock);
 						$('#unit').val(productInfo.unit);
-						$('#categoryName1').val(productInfo.categoryName);
-						$('#productName1').val(productInfo.productName);
+						$('#stockCategoryName').val(productInfo.stockCategoryName);
+						$('#stockProductName').val(productInfo.stockProductName);
 						$('#manufacturerName').val(productInfo.manufacturerName);
-						$('#sellStatus').val(productInfo.sellStatus);
+						$('#sellStatus').text(productInfo.sellStatus);
+						$('#sellStatus').removeClass();		//클래스 제거
+						switch(productInfo.sellStatus) {
+							case "판매" : $('#sellStatus').addClass("badge badge-success"); break;
+							case "미판매" : $('#sellStatus').addClass("badge badge-danger"); break;
+						}
 						$('#storageSection').val(productInfo.storageSection).attr("selected", "selected");
 						$('#storageSpace').val(productInfo.storageSpace).attr("selected", "selected");
-						
-						
+						$('#orderStockAmount').attr('min', minOrderStockAmount);
 					},
 					error : function(xhr, status, error) {
 						console.log(error);
@@ -446,54 +445,40 @@ input {
 
 		});
 
-		$('#stockOrderBtn').click(function() { //입고요청서작성 버튼
+		$('#stockOrderBtn').click(function() { 		//입고요청서작성 버튼
 
 			$('#stockOrderModal').modal();
 		});
 
-	
+		$('.addBtn').click(function() {
+				var str = ""
+				var tdArr = new Array(); 			// 배열 선언
+				var addBtn = $(this);
+							
+				var tr = addBtn.parent().parent();	// addBtn.parent().parent() : <td>의 부모이므로 <tr>이다.
+				var td = tr.children();				
 
-		$('.addBtn')
-				.click(
-						function() {
-							var str = ""
-							var tdArr = new Array(); // 배열 선언
-							var addBtn = $(this);
+				var productNo = td.eq(0).text();
+				var categoryName = td.eq(1).text();
+				var productName = td.eq(2).text();
+				var productStock = td.eq(3).text();
+				var unit = td.eq(4).text();
 
-							// addBtn.parent() : checkBtn의 부모는 <td>이다.
-							// addBtn.parent().parent() : <td>의 부모이므로 <tr>이다.
-							var tr = addBtn.parent().parent();
-							var td = tr.children();
-
-							var productNo = td.eq(0).text();
-							var categoryName = td.eq(1).text();
-							var productName = td.eq(2).text();
-							var productStock = td.eq(3).text();
-							var unit = td.eq(4).text();
-
-							$('#orderProduct > tbody:last')
-									.append(
-											'<tr><td name="productNo">'
-													+ productNo
-													+ '</td>'
-													+ '<td nqme="productName">'
-													+ productName
-													+ '</td>'
-													+ '<td name="productStock">'
-													+ productStock
-													+ '</td>'
-													+ '<td name="unit">'
-													+ unit
-													+ '</td>'
-													+ '<td name="requestOrderStock">'
-													+ '<input type="number" style="width: 60px;">'
-													+ '</td>'
-													+ '<td>'
-													+ '<a class="btn btn-white btn-icon-split removeBtn">'
-													+ '<i class="fas fa-trash-alt"></i>'
-													+ '</a>' + '</td>'
-													+ '</tr>');
-						});
+					$('#orderProduct > tbody:last').append(
+							'<tr><td name="productNo">'	+ productNo	+ '</td>'
+							+ '<td nqme="productName">' + productName + '</td>'
+							+ '<td name="productStock">' + productStock + '</td>'
+							+ '<td name="unit">' + unit	+ '</td>'
+							+ '<td name="requestOrderStock">'
+							+ '<input type="number" style="width: 60px;">'
+							+ '</td>'
+							+ '<td>'
+							+ '<a class="btn btn-white btn-icon-split removeBtn">'
+							+ '<i class="fas fa-trash-alt"></i>'
+							+ '</a>'
+							+ '</td>'
+							+ '</tr>');
+		});
 
 		// 입고요청할 상품 테이블 제거 버튼 클릭시 동작
 		$(document).on('click', '.removeBtn', function() {
@@ -505,6 +490,62 @@ input {
 			$('#orderProduct > tbody').empty();
 
 		});
+		
+		/* 재고관리버튼 눌렀을경우 이전값 현재값 비교 */
+		function check() {
+			
+			const productNo = $('#stockProductNo').val();
+			
+			let valueStatus = true;
+			
+			$.ajax({
+				url : "/stock/productInfo/selectOne",
+				type : "GET",
+				data : { productNo : productNo },
+				success : function(data, status, xhr) {
+
+					const productInfo = JSON.parse(data.productStockInfo);
+					
+					const beforeSection = productInfo.storageSection;
+					const beforeSpace = productInfo.storageSpace;
+					const beforeStock = parseInt(productInfo.productStock);
+					
+					const afterSection = $('#storageSection').val();
+					const afterSpace = $('#storageSpace').val();		//const는 final같은 개념이라 값 변경이 안된다.
+					const afterStock = parseInt($('#orderStockAmount').val());
+					
+					console.log("요청재고량 : " + afterStock);
+					
+					const checkStock =  beforeStock + afterStock; 
+					console.log("창고재고량 + 요청 재고량 : " + checkStock);
+					
+					if(beforeSection == afterSection &&	beforeSpace == afterSpace &&
+						$('#orderStockAmount').val() == 0) {
+						
+						alert("변경할 내용이 없습니다."); 
+						
+						valueStatus = false;
+						
+					} else if(checkStock < 0) {
+						
+						alert("요청재고수량이 창고재고수량보다 많습니다.");
+						
+						valueStatus = false;
+						
+					} else if(confirm("재고상태를 변경하시겠습니까?")) {
+						
+						$('#stockConditionForm').submit();
+					}
+					
+				},
+				error : function(xhr, status, error) {
+					console.log(error);
+				}
+			}); 
+			
+			return valueStatus;
+
+		}
 	</script>
 
 </body>

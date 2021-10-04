@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.deft.crud.stock.model.dao.StockMapper;
 import com.deft.crud.stock.model.dto.ProductStockInfoDTO;
+import com.deft.crud.stock.model.dto.ResponseStockDTO;
 import com.deft.crud.stock.model.dto.StockDTO;
 import com.deft.crud.stock.model.dto.StorageDTO;
 
@@ -52,6 +53,14 @@ public class StockService {
 
 		
 		return productStockInfo;
+	}
+
+	/* 재고관리 상품 재고상태 변경 요청*/
+	public boolean modifyStockCondition(ResponseStockDTO parameters) {
+
+		int modifyResult = mapper.modifyStockCondition(parameters);
+		
+		return modifyResult > 0? true: false;
 	}
 
 
