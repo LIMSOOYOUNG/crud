@@ -124,4 +124,10 @@ public class CustomerService {
 
         return customerMapper.modifyManager(parameters);
     }
+
+    /* 영업 활동 수정 */
+    public int modifyActivity(BusinessActivityDTO parameters) {
+
+        return customerMapper.modifyActivity(parameters);
+    }
 }

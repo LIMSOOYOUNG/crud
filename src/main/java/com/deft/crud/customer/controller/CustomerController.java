@@ -300,4 +300,45 @@ public class CustomerController {
         return mv;
     }
 
+    /* 영업 활동 상세 조회 */
+    @GetMapping("/activity/detail")
+    public ModelAndView selectDetailActivity(ModelAndView mv, @RequestParam int activityNo) {
+
+        BusinessActivityDTO businessActivity = customerService.selectBusinessActivityByActivityNo(activityNo);
+
+        mv.addObject("activity", businessActivity);
+        mv.setViewName("customer/activityModal");
+
+        return mv;
+    }
+
+    /* 영업 활동 수정 */
+    @GetMapping("/activity/modify")
+    public ModelAndView modifyDetailActivity(ModelAndView mv, @RequestParam int activityNo) {
+
+        BusinessActivityDTO businessActivity = customerService.selectBusinessActivityByActivityNo(activityNo);
+
+        mv.addObject("activity", businessActivity);
+        mv.setViewName("customer/activityModal");
+
+        return mv;
+    }
+
+    /* 영업 활동 수정 처리 메소드 */
+    @PostMapping("/activity/modify")
+    public ModelAndView modifyDetailActivity(ModelAndView mv, @ModelAttribute BusinessActivityDTO parameters) {
+
+        int customerNo = parameters.getCustomerNo();
+
+        int result = customerService.modifyActivity(parameters);
+
+        if(result > 0) {
+            mv.setViewName("redirect:/customer/cusinfo?customerNo=" + customerNo);
+        }
+
+        return mv;
+    }
+
+
+
 }

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="https://www.thymeleaf.org">
+<head>
+    <th:block th:replace="@{common/config} :: config"></th:block>
+</head>
+    <body>
+    <div class="modal-header">
+        <div class="row col-sm-12">
+            <h4 class="modal-title" style="color: #0da8ee; padding: 10px">영업활동 상세정보</h4>
+            <button type="button" class="close" data-dismiss="modal"><i class="far fa-times-circle"></i></button>
+        </div>
+        <div class="row">
+            <div class="form-group col-sm-12"><input type="hidden" value="emptyRow"></div>
+        </div>
+
+        <div class="row">
+            <div class="form-group col-sm-12"><input type="hidden" value="emptyRow"></div>
+        </div>
+
+    </div>
+    <div class="modal-body">
+            <span style="font-size: x-large; color: #2e2f37; padding: 20px"
+                  th:text="${ activity.businessSubject }"></span>
+        <span style="padding: 330px;"></span>
+        <span th:text="|등록일자 : ${ activity.writingDate }|"></span>
+        <div class="row">
+            <div class="form-group col-lg-12"><input type="hidden" value="emptyRow"></div>
+        </div>
+        <div class="card mb-auto">
+            <div class="row">
+                <div class="form-group col-lg-12"><input type="hidden" value="emptyRow"></div>
+            </div>
+            <div class="row">
+                <div class="form-group col-lg-12 row">
+                    <div class="form-group col-lg-1"><input type="hidden" value="emptyRow"></div>
+                    <label for="insertBusinessSubject" class="col-lg-1 form-control-plaintext"
+                           th:align="center"
+                           style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">활동주제</label>
+                    <input th:readonly="${ activity.businessSubject }"
+                           id="insertBusinessSubject" type="text" class="form-control col-lg-9"
+                           name="businessSubject"
+                           th:value="${ activity.businessSubject }">
+                </div>
+                <div class="form-group col-lg-12 row">
+                    <div class="form-group col-lg-1"><input type="hidden" value="emptyRow"></div>
+                    <label for="insertBusinessType" class="col-lg-1 form-control-plaintext"
+                           th:align="center"
+                           style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">유형</label>
+                    <input th:readonly="${ activity.businessType }"
+                           name="businessType"
+                           id="insertBusinessType" type="text" class="form-control col-lg-9"
+                           th:value="${ activity.businessType }">
+                </div>
+                <div class="form-group col-lg-12 row">
+                    <div class="form-group col-lg-1"><input type="hidden" value="emptyRow"></div>
+                    <label for="insertBusinessLocation" class="col-lg-1 form-control-plaintext"
+                           th:align="center"
+                           style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">장소</label>
+                    <input th:readonly="${ activity.businessLocation }"
+                           name="businessLocation"
+                           th:value="${ activity.businessLocation }"
+                           id="insertBusinessLocation" type="text" class="form-control col-lg-9">
+                </div>
+                <div class="form-group col-lg-12 row">
+                    <div class="form-group col-lg-1"><input type="hidden" value="emptyRow"></div>
+                    <label for="insertBusinessPurpose" class="col-lg-1 form-control-plaintext"
+                           th:align="center"
+                           style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">목적</label>
+                    <input th:readonly="${ activity.businessPurpose }"
+                           name="businessPurpose"
+                           th:value="${ activity.businessPurpose }"
+                           id="insertBusinessPurpose" type="text" class="form-control col-lg-9">
+                </div>
+                <div class="form-group col-lg-12 row">
+                    <div class="form-group col-lg-1"><input type="hidden" value="emptyRow"></div>
+                    <label for="insertBusinessContents" class="col-lg-1 form-control-plaintext"
+                           th:align="center"
+                           style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">활동내용</label>
+                    <textarea th:readonly="${ activity.businessContents }"
+                              name="businessContents" style="resize: none; height: 200px;"
+                              th:value="${ activity.businessContents }"
+                              id="insertBusinessContents" type="text" class="form-control col-lg-9"></textarea>
+                </div>
+                <div class="form-group col-lg-12 row">
+                    <div class="form-group col-lg-1"><input type="hidden" value="emptyRow"></div>
+                    <label for="insertActivityStartTime" class="col-lg-1 form-control-plaintext"
+                           th:align="center"
+                           style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">시작시간</label>
+                    <input th:readonly="${ activity.activityStartTime }"
+                           name="activityStartTime"
+                           th:value="${ activity.activityStartTime }"
+                           id="insertActivityStartTime" type="datetime-local" class="form-control col-lg-9">
+                </div>
+                <div class="form-group col-lg-12 row">
+                    <div class="form-group col-lg-1"><input type="hidden" value="emptyRow"></div>
+                    <label for="insertActivityEndTime" class="col-lg-1 form-control-plaintext"
+                           th:align="center"
+                           style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">종료시간</label>
+                    <input th:readonly="${ activity.activityEndTime }"
+                           name="activityEndTime"
+                           th:value="${ activity.activityEndTime }"
+                           id="insertActivityEndTime" type="datetime-local" class="form-control col-lg-9">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-footer">
+        <button type="button" id="modifyActivity" class="btn btn-primary">영업활동 수정</button>
+        <button type="button" id="deleteActivity" class="btn btn-danger">영업활동 삭제</button>
+    </div>
+    <div id="count" value="1"></div>
+
+    <!-- Script -->
+    <th:block th:replace="@{/common/script} :: script"></th:block>
+    <script src="/vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+    </body>
+</html>
