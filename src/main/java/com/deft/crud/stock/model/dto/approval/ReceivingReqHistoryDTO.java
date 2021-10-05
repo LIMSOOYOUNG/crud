@@ -1,7 +1,5 @@
 package com.deft.crud.stock.model.dto.approval;
 
-import java.time.LocalDate;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,7 +15,7 @@ public class ReceivingReqHistoryDTO {
 
 	private int receivingReqHisNo;
 	private int productNo;
-	private LocalDate documentProcessDate;
+	private String documentProcessDate;
 	private String approvalStatus;
 	private int receivingReqNo;
 }

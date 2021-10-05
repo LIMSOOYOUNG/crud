@@ -154,7 +154,7 @@ input {
 								<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
 									<h6 class="m-0 font-weight-bold text-primary">전체상품현황</h6>
 								</div>
-								<div class="table-responsive p-3" style="overflow-y: scroll; height: 500px;">
+								<div class="table-responsive p-3" style="overflow-y: scroll; height: 650px;">
 									<table id="modalDataTableHover" class="table align-items-center table-flush table-hover">
 										<thead align="center" class="thead-light">
 											<tr>
@@ -216,13 +216,23 @@ input {
 									<div class="form-group col-xl-12" >
 										<label>요청서제목</label>
 										<input type="text" id="orderTitle" 
-									       name="orderTitle" class="form-control" style="text-align: left;">
+									       name="orderTitle" class="form-control" style="text-align: left;" required>
 									</div>
 								</div>
+								<div class="form-group row mb-12" th:align="right">
+									<div class="col-lg-6 col-form-label"></div>
+											<label for="customerName" class="col-lg-2 col-form-label">결재 담당자</label>
+											<input class="form-control col-lg-3" id="ManagerName" name="ManagerName" readonly required>
+											<input class="form-control" id="managerNo" name="managerNo" hidden="hidden">
+											<div class="input-group-append">
+												<button type="button" class="btn btn-primary" id="searchCustomer"
+														data-toggle="modal" data-target="#managerModal">검색</button>
+											</div>
+										</div>
 								<div class="row">
 									<div class="form-group col-xl-12">
 										<label>요청사유</label>
-										<textarea id="orderContent" class="form-control" name="orderContent" style="height: 150px; resize: none;"></textarea>
+										<textarea id="orderContent" class="form-control" name="orderContent" style="height: 150px; resize: none;" required></textarea>
 									</div>
 									<div class="form-group col-xl-4"></div>
 									<div class="form-group col-xl-4" th:align="center" style="margin-top: 40px;">
@@ -368,7 +378,7 @@ input {
 									<div class="form-group col-xl-6" th:align="center">
 										<label>추가 or 삭제할 수량</label>
 										<input type="number" class="form-control"
-											   id="orderStockAmount" name="orderStockAmount" min="-${ '#prodcutStock' }.val()" value=0>
+											   id="orderStockAmount" name="orderStockAmount" min="-${ '#prodcutStock' }.val()" required>
 									</div>
 									<div class="form-group col-xl-3"></div>
 								</div>
@@ -527,18 +537,31 @@ input {
 			
 			console.log(request)
 			
+			if(confirm("입고요청을 하시겠습니까?")) {
+			
 		 	$.ajax({
 				url : "/stock/receivingProduct/insert",
 				type : "POST",
 				data : JSON.stringify(request),
 				contentType:"application/json;charset=UTF-8",
 				success : function(data, status, xhr) {
+					if(data) {
+						alert("입고요청이 완료되었습니다.")
+						location.reload();
+					} else {
+						alert("오류가 발생하였습니다.")
+						location.reload();
+					}
 				},
 				error : function(xhr, status, error) {
 					console.log(error);
+					alert("입고요청 실패!")
 				}
 			}); 
+		} else {
+			return false
 		}
+	}
 		
 		function productNoCheck(productNo) {
 			const trLength = $('#orderProduct > tbody > tr').length;
