@@ -17,7 +17,7 @@ import com.deft.crud.customer.model.dto.ExtCustomerDTO;
 import com.deft.crud.customer.model.service.CustomerService;
 import com.deft.crud.estimate.model.dto.EstimateDTO;
 import com.deft.crud.estimate.model.service.EstimateService;
-import com.deft.crud.stock.model.dto.StockDTO;
+import com.deft.crud.stock.model.dto.StorageDTO;
 import com.deft.crud.stock.model.service.StockService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -82,7 +82,7 @@ public class EstimateController {
 		List<ExtCustomerDTO> extCustomerList = customerService.selectExtCustomerList();
 		
 		/* 상품 목록 조회 */
-		List<StockDTO> stockList = stockService.selectSellAbleProductAll();
+		List<StorageDTO> stockList = stockService.selectSellAbleProductAll();
 		
 		mv.addObject("newEstimate", newEstimate);
 		mv.addObject("customerList", extCustomerList);

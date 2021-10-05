@@ -80,16 +80,16 @@ input {
 											<tr th:each="stock : ${stockList}">
 												<td id="productNo" th:value="${stock.productNo}"
 													th:text="${stock.productNo}"></td>
-												<td id="categoryName" th:text="${stock.categoryName}"></td>
-												<td id="productName" th:text="${stock.productName}"></td>
+												<td id="categoryName" th:text="${stock.product.category.categoryName}"></td>
+												<td id="productName" th:text="${stock.product.productName}"></td>
 												<td th:text="${stock.productStock}"></td>
-												<td th:text="${stock.unit}"></td>
-												<td th:switch="${stock.sellStatus}">
+												<td th:text="${stock.product.unit}"></td>
+												<td th:switch="${stock.product.sellStatus}">
 												<span th:case="'판매'" class="badge badge-success"
-													  th:text="${stock.sellStatus}">
+													  th:text="${stock.product.sellStatus}">
 												</span>
 												<span th:case="'미판매'" class="badge badge-danger"
-													  th:text="${stock.sellStatus}">
+													  th:text="${stock.product.sellStatus}">
 												</span>
 												</td>
 												<td	th:text="|${stock.storageSection} - ${stock.storageSpace}|"></td>
@@ -169,10 +169,10 @@ input {
 										<tbody align="center">
 											<tr th:each="sellAbleProduct : ${sellAbleProductList}">
 												<td th:text="${sellAbleProduct.productNo}"></td>
-												<td th:text="${sellAbleProduct.categoryName}"></td>
-												<td th:text="${sellAbleProduct.productName}"></td>
+												<td th:text="${sellAbleProduct.product.category.categoryName}"></td>
+												<td th:text="${sellAbleProduct.product.productName}"></td>
 												<td th:text="${sellAbleProduct.productStock}"></td>
-												<td th:text="${sellAbleProduct.unit}"></td>
+												<td th:text="${sellAbleProduct.product.unit}"></td>
 												<td>
 													<a class="btn btn-white btn-icon-split addBtn">
 														<span class="icon text-black" style="color: #66bb6a;">
@@ -192,7 +192,6 @@ input {
 						<div class="col-lg-6">
 							<h5 class="m-0 font-weight-bold text-primary" th:align="center">입고요청할 상품</h5>
 							<br>
-							<form action="/stock/productStockOrder/insert" method="post">
 								<div class="table-group" style="text-align: center; height: 210px; overflow-y: scroll;">
 									<table id="orderProduct" border="1" style="width: 100%;">
 										<thead style="background: lightgray;">
@@ -214,23 +213,27 @@ input {
 									<div class="form-group col-xl-12"></div>
 								</div>
 								<div class="row">
+									<div class="form-group col-xl-12" >
+										<label>요청서제목</label>
+										<input type="text" id="orderTitle" 
+									       name="orderTitle" class="form-control" style="text-align: left;">
+									</div>
+								</div>
+								<div class="row">
 									<div class="form-group col-xl-12">
 										<label>요청사유</label>
-										<textarea id="orderContent" class="form-control"
-												  name="orderContent" style="height: 150px; resize: none;">
-										</textarea>
+										<textarea id="orderContent" class="form-control" name="orderContent" style="height: 150px; resize: none;"></textarea>
 									</div>
 									<div class="form-group col-xl-4"></div>
 									<div class="form-group col-xl-4" th:align="center" style="margin-top: 40px;">
-										<button type="button" id="modifyDetailInfo" class="btn btn-primary">입고요청</button>
+										<button id="receivingProductBtn" onclick="receivingProduct()"
+												type="button" class="btn btn-primary">입고요청</button>
 									</div>
 									<div class="form-group col-xl-4"></div>
 								</div>
-							</form>
+							</div>
 						</div>
-						
 					</div>
-				</div>
 				<div class="modal-footer"></div>
 				<div id="count" value="1"></div>
 			</div>
@@ -257,7 +260,7 @@ input {
 
 				<div class="modal-body">
 					<form id="stockConditionForm"
-						th:action="@{/stock/orderStockCondition/modify}" method="post">
+						th:action="@{/stock/stockCondition/modify}" method="post">
 						<div class="row" th:align="center">
 							<div class="col-lg-4" style="margin-top: 30px;">
 								<div class="card mb-4">
@@ -365,7 +368,7 @@ input {
 									<div class="form-group col-xl-6" th:align="center">
 										<label>추가 or 삭제할 수량</label>
 										<input type="number" class="form-control"
-											   id="orderStockAmount" name="orderStockAmount" min="-10" value=0>
+											   id="orderStockAmount" name="orderStockAmount" min="-${ '#prodcutStock' }.val()" value=0>
 									</div>
 									<div class="form-group col-xl-3"></div>
 								</div>
@@ -415,6 +418,9 @@ input {
 					success : function(data, status, xhr) {
 
 						const productInfo = JSON.parse(data.productStockInfo);
+						
+						console.table(productInfo);
+						
 						let minOrderStockAmount = (-1 * productInfo.productStock);
 						
 						$('#stockRefCategoryName').val(productInfo.stockRefCategoryName);
@@ -446,31 +452,38 @@ input {
 		});
 
 		$('#stockOrderBtn').click(function() { 		//입고요청서작성 버튼
-
+		
 			$('#stockOrderModal').modal();
+		
 		});
 
+		
+		/* 입고요청서 작성 왼쪽 테이블에서 오른쪽 입고요청할 목록으로 추가 버튼 클릭시 동작 */
 		$('.addBtn').click(function() {
-				var str = ""
-				var tdArr = new Array(); 			// 배열 선언
-				var addBtn = $(this);
+			var str = ""
+			var tdArr = new Array(); 			// 배열 선언
+			var addBtn = $(this);
 							
-				var tr = addBtn.parent().parent();	// addBtn.parent().parent() : <td>의 부모이므로 <tr>이다.
-				var td = tr.children();				
+			var tr = addBtn.parent().parent();	// addBtn.parent().parent() : <td>의 부모이므로 <tr>이다.
+			var td = tr.children();				
 
-				var productNo = td.eq(0).text();
-				var categoryName = td.eq(1).text();
-				var productName = td.eq(2).text();
-				var productStock = td.eq(3).text();
-				var unit = td.eq(4).text();
+			var productNo = td.eq(0).text();
+			var categoryName = td.eq(1).text();
+			var productName = td.eq(2).text();
+			var productStock = td.eq(3).text();
+			var unit = td.eq(4).text();
+				
+			/* 중복된 상품을 우측 요청목록에 담은 경우 */
+			if(!productNoCheck(productNo))
+				return alert("중복된 상품은 담을 수 없습니다.")
 
-					$('#orderProduct > tbody:last').append(
-							'<tr><td name="productNo">'	+ productNo	+ '</td>'
-							+ '<td nqme="productName">' + productName + '</td>'
-							+ '<td name="productStock">' + productStock + '</td>'
+				$('#orderProduct > tbody:last').append(
+							'<tr><td id="productNo" class="productTest" name="productNo">'	+ productNo	+ '</td>'
+							+ '<td name="productName">' + productName + '</td>'
+							+ '<td id="productStock" name="productStock">' + productStock + '</td>'
 							+ '<td name="unit">' + unit	+ '</td>'
 							+ '<td name="requestOrderStock">'
-							+ '<input type="number" style="width: 60px;">'
+							+ '<input type="number" style="width: 60px;" value=0 min=0>'
 							+ '</td>'
 							+ '<td>'
 							+ '<a class="btn btn-white btn-icon-split removeBtn">'
@@ -488,8 +501,58 @@ input {
 		// 모달창 닫기 X버튼 클릭시 동작 
 		$(document).on('click', '#modalCloseBtn', function() {
 			$('#orderProduct > tbody').empty();
-
+			$('#orderTitle').val().empty();
+			$('#orderContent').val().empty();
+			
 		});
+		
+		/* 입고요청 버튼 눌렀을경우 동작 */
+		function receivingProduct() {
+			const trLength = $('#orderProduct > tbody > tr').length;
+			let request = [];
+			
+			for(let i = 0; i < trLength; i++) {
+				const orderContent = $('#orderContent').val();
+				const orderCount = $('#orderProduct').find('tbody').find('input').eq(i).val();
+				const existProductNo = $('#orderProduct').find('tbody').find('#productNo').eq(i).text();
+				const orderTitle = $('#orderTitle').val();
+				
+				if(orderCount <= 0)
+					return alert("요청 수량을 확인해주세요.")
+				
+					
+				const data = {stockProductNo: existProductNo, productStock: orderCount, orderContent: orderContent, orderTitle: orderTitle};	
+				request.push(data);
+			}
+			
+			console.log(request)
+			
+		 	$.ajax({
+				url : "/stock/receivingProduct/insert",
+				type : "POST",
+				data : JSON.stringify(request),
+				contentType:"application/json;charset=UTF-8",
+				success : function(data, status, xhr) {
+				},
+				error : function(xhr, status, error) {
+					console.log(error);
+				}
+			}); 
+		}
+		
+		function productNoCheck(productNo) {
+			const trLength = $('#orderProduct > tbody > tr').length;
+			
+			for(let i = 0; i < trLength; i++) {
+				const existProductNo = $('#orderProduct').find('tbody').find('#productNo').eq(i).text()
+				
+				if(existProductNo == productNo)
+					return false
+			}
+			
+			return true
+		}
+		
 		
 		/* 재고관리버튼 눌렀을경우 이전값 현재값 비교 */
 		function check() {

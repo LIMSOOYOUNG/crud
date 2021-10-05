@@ -7,41 +7,110 @@
 		<result property="storageSection" column="STORAGE_SECTION"/>
 		<result property="storageSpace" column="STORAGE_SPACE"/>
 		<result property="productStock" column="PRODUCT_STOCK"/>
+		
+		<association property="product" resultMap="productResultMap"/>	
 	</resultMap>
 	
-	<resultMap type="com.deft.crud.stock.model.dto.StockDTO" id="stockResultMap">
+	<resultMap type="com.deft.crud.product.model.dto.ProductDTO" id="productResultMap">
 		<id property="productNo" column="PRODUCT_NO"/>
 		<result property="sellStatus" column="SELL_STATUS"/>
 		<result property="productName" column="PRODUCT_NAME"/>
+		<result property="purchasePrice" column="PURCHASE_PRICE"/>
+		<result property="sellingPrice" column="SELLING_PRICE"/>
 		<result property="unit" column="UNIT"/>
+		<result property="categoryCode" column="CATEGORY_CODE"/>
+		<result property="accountNo" column="ACCOUNT_NO"/>
+		<result property="manufacturerNo" column="MANUFACTURER_NO"/>
+
+		<association property="category" resultMap="productCategoryResultMap"/>		
+		
+		<association property="manufacturer" resultMap="manufacturerResultMap"/>
+
+		<association property="account" resultMap="accountResultMap"/>
+		
+	</resultMap>
+	
+	
+	<resultMap type="com.deft.crud.product.model.dto.ProductCategoryDTO" id="productCategoryResultMap">
+		<id property="categoryCode" column="CATEGORY_CODE"/>
+		<result property="refCategoryName" column="REF_CATEGORY_NAME"/>
 		<result property="categoryName" column="CATEGORY_NAME"/>
-		<result property="storageSection" column="STORAGE_SECTION"/>
-		<result property="storageSpace" column="STORAGE_SPACE"/>
-		<result property="productStock" column="PRODUCT_STOCK"/>
+		<result property="refCategoryCode" column="REF_CATEGORY_CODE"/>
+		<result property="categoryStatus" column="CATEGORY_STATUS"/>
 	</resultMap>
 	
-	<resultMap type="com.deft.crud.stock.model.dto.ProductStockInfoDTO" id="productStockInfoResultMap">
-	<id property="stockProductNo" column="PRODUCT_NO"/>
-	<result property="stockRefCategoryName" column="REF_CATEGORY_NAME"/>
-	<result property="stockCategoryName" column="CATEGORY_NAME"/>
-	<result property="stockProductName" column="PRODUCT_NAME"/>
-	<result property="manufacturerName" column="MANUFACTURER_NAME"/>
-	<result property="companyName" column="COMPANY_NAME"/>
-	<result property="storageSection" column="STORAGE_SECTION"/>
-	<result property="storageSpace" column="STORAGE_SPACE"/>
-	<result property="sellingPrice" column="SELLING_PRICE"/>
-	<result property="sellStatus" column="SELL_STATUS"/>
-	<result property="productStock" column="PRODUCT_STOCK"/>
-	<result property="unit" column="UNIT"/>
+	<resultMap type="com.deft.crud.product.model.dto.ManufacturerDTO" id="manufacturerResultMap">
+		<id property="manufacturerNo" column="MANUFACTURER_NO"/>
+		<result property="manufacturerName" column="MANUFACTURER_NAME"/>
 	</resultMap>
 	
-	<resultMap type="com.deft.crud.stock.model.dto.ResponseStockDTO" id="responseProductStockInfoResultMap">
-	<id property="stockProductNo" column="PRODUCT_NO"/>
-	<result property="stockProductName" column="PRODUCT_NAME"/>
-	<result property="storageSection" column="STORAGE_SECTION"/>
-	<result property="storageSpace" column="STORAGE_SPACE"/>
-	<result property="productStock" column="PRODUCT_STOCK"/>
+	<resultMap type="com.deft.crud.product.model.dto.AccountDTO" id="accountResultMap">
+		<id property="accountNo" column="ACCOUNT_NO"/>
+		<result property="companyName" column="COMPANY_NAME"/>
+		<result property="accountCeo" column="ACCOUNT_CEO"/>
+		<result property="accountAddress" column="ACCOUNT_ADDRESS"/>
+		<result property="accountStatus" column="ACCOUNT_STATUS"/>
+		<result property="accountBusinessItem" column="ACCOUNT_BUSINESS_ITEM"/>
+		<result property="resName" column="RES_NAME"/>
+		<result property="resPhone" column="RES_PHONE"/>
+		<result property="resEmail" column="RES_EMAIL"/>
 	</resultMap>
+	
+   	<resultMap type="com.deft.crud.stock.model.dto.ProductStockInfoDTO" id="productStockInfoResultMap">
+   		<id property="stockProductNo" column="PRODUCT_NO"/>
+   		<result property="stockRefCategoryName" column="REF_CATEGORY_NAME"/>
+  		<result property="stockCategoryName" column="CATEGORY_NAME"/>
+  		<result property="stockProductName" column="PRODUCT_NAME"/>
+  		<result property="manufacturerName" column="MANUFACTURER_NAME"/>
+  		<result property="companyName" column="COMPANY_NAME"/>
+  		<result property="storageSection" column="STORAGE_SECTION"/>
+   		<result property="storageSpace" column="STORAGE_SPACE"/>
+   		<result property="sellingPrice" column="SELLING_PRICE"/>
+   		<result property="sellStatus" column="SELL_STATUS"/>
+   		<result property="productStock" column="PRODUCT_STOCK"/>
+  		<result property="unit" column="UNIT"/>
+  	</resultMap>
+  	
+  <!-- 입고요청서 DTO  -->
+  	<!-- <resultMap type="com.deft.crud.stock.model.dto.approval.ReceivingReqDTO" id="receivingReqResultMap">
+  		<id property="receivingReqNo" column="RECEVING_REQ_NO"/>
+  		<result property="approvalDocumentNo" column="approvalDocumentNo"/>
+  		
+		<result property="approvalDocumentDTO" column="approvalDocumentDTO"/>
+	    <result property="receivingReqHistoryDTO" column="receivingReqHistoryDTO"/>
+	    <result property="receivingReqProductList" column="receivingReqProductList"/>
+
+		<association property="approvalDocumentDTO" resultMap="aoorovalDocumentResultMap"/>
+		<association property="ReceivingReqHistoryDTO" resultMap="receivingReqHistoryResultMap"/>	
+  		<association property="receivingReqProductList" resultMap="receivingReqProductListResultMap"/>	
+  		
+  	</resultMap> -->
+	
+	<!-- 결재문서 DTO -->
+  <!-- 	<resultMap type="com.deft.crud.stock.model.dto.approval.ApprovalDocumentDTO" id="aoorovalDocumentResultMap">
+  		<id property="approvalDocumentNo" column="APPROVAL_DOCUMENT_NO"/>
+  		<result property="approvalDocumentType" column="APPROVAL_DOCUMENT_TYPE" />
+		<result property="approvalDocumentName" column="APPROVAL_DOCUMENT_NAME" />
+		<result property="reqReason" column="REQ_REASON" />
+		<result property="empNo" column="EMP_NO" />
+		<result property="managerNo" column="MANAGER_NO" />
+  	</resultMap> -->
+  	
+  	<!-- 입고요청 결재 이력 -->
+  	<!-- <resultMap type="com.deft.crud.stock.model.dto.approval.ReceivingReqHistoryDTO" id="receivingReqHistoryResultMap">
+  		<id property="receivingReqHisNo" column="RECEIVING_REQ_HIS_NO"/>
+  		<result property="productNo" column="PRODUCT_NO" />
+		<result property="documentProcessDate" column="DOCUMENT_PROCESS_DATE" />
+		<result property="approvalStatus" column="APPROVAL_STATUS" />
+		<result property="receivingReqNo" column="RECEIVNG_REQ_NO" />
+  	</resultMap> -->
+  	
+  	<!-- 입고요청 상품 리스트 -->
+  	<!-- <resultMap type="com.deft.crud.stock.model.dto.approval.ReceivingReqProductDTO" id="receivingReqProductListResultMap">
+  		<id property="receivingReqNo" column="RECEVING_REQ_NO"/>
+  		<result property="productAmount" column="PRODUCT_AMOUNT" />
+		<result property="productNo" column="PRODUCT_NO" />
+  	</resultMap>  -->
 	
 	<!-- 창고에 보관중인 상품리스트 조회 -->
 	<select id="selectStorageAll" resultMap="storageResultMap">
@@ -54,7 +123,7 @@
 	</select>
 	
 	<!-- 창고에 보관중인 상품번호로 상품 재고관련 정보 조회 -->
-	<select id="selectStockAll" resultMap="stockResultMap" parameterType="_int">
+	<select id="selectStockAll" resultMap="storageResultMap" parameterType="_int">
 	SELECT /* "com.deft.crud.stock.model.dao.StockMapper#selectStockAll" */
 	       B.PRODUCT_NO
 	     , B.SELL_STATUS
@@ -71,7 +140,7 @@
 	</select>
 	
 	<!-- 판매가능 상태인 모든 상품들 -->
-	<select id="selectSellAbleProductAll" resultMap="stockResultMap">
+	<select id="selectSellAbleProductAll" resultMap="storageResultMap">
 	SELECT /* "com.deft.crud.stock.model.dao.StockMapper#selectSellAbleProductAll" */
 	       A.PRODUCT_NO
 	     , A.PRODUCT_NAME
@@ -107,7 +176,7 @@
 	 WHERE A.PRODUCT_NO = #{ productNo }
 	</select>
 	
-	<update id="modifyStockCondition" parameterType="com.deft.crud.stock.model.dto.ResponseStockDTO">
+	<update id="modifyStockCondition" parameterType="com.deft.crud.stock.model.dto.RequestStockDTO">
 	UPDATE /* "com.deft.crud.stock.model.dao.StockMapper#modifyStockCondition" */
 	       TBL_STORAGE A
 	   SET A.STORAGE_SECTION = #{ storageSection }
@@ -115,6 +184,60 @@
 	     , A.PRODUCT_STOCK = A.PRODUCT_STOCK + #{ orderStockAmount }
 	 WHERE PRODUCT_NO = #{ stockProductNo }    
 	</update>
+	
+	<update id="insertStockReceivingProduct" parameterType="java.util.List"> 
+		<foreach collection="list" item="item" open="INSERT ALL" close="SELECT * FROM DUAL" separator=" "> 
+			INTO TBL_RECEIVING_REQ_PRODUCT
+	        (
+	           RECEVING_REQ_NO
+	         , PRODUCT_AMOUNT
+	         , PRODUCT_NO
+	        )
+	        VALUES
+	       (
+	         SEQ_RECEIVING_REQ_NO.CURRVAL
+	         , #{item.productStock}
+	         , #{item.stockProductNo}
+	       )
+		</foreach>
+	</update>
+	
+	<insert id="insertReceivingReq">
+		INSERT
+		  INTO TBL_RECEIVING_REQ 
+		VALUES
+		(  
+		   SEQ_RECEIVING_REQ_NO.NEXTVAL
+		 , SEQ_APPROVAL_DOCUMENT_NO.CURRVAL
+		)
+	</insert>
+
+	<insert id="insertApprovalDocument" parameterType="com.deft.crud.stock.model.dto.approval.ApprovalDocumentDTO">
+			
+			INSERT 
+			  INTO TBL_APPROVAL_DOCUMENT
+			  (
+			    APPROVAL_DOCUMENT_NO
+			  , APPROVAL_DOCUMENT_NAME  
+			  , APPROVAL_DOCUMENT_TYPE
+			  , REQ_REASON
+			  , EMP_NO
+			  , MANAGER_NO
+			  )
+			  VALUES
+			  (
+			     SEQ_APPROVAL_DOCUMENT_NO.NEXTVAL
+			   , #{ approvalDocumentName }
+			   , '입고요청'
+			   , #{ reqReason }
+			   , #{ empNo }   
+			   , 201          
+			     
+			  )
+				
+	
+	</insert>
+	
 </mapper>
 
 
