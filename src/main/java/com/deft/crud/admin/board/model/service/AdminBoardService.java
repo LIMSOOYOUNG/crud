@@ -1,8 +1,12 @@
 package com.deft.crud.admin.board.model.service;
 
+import org.springframework.stereotype.Service;
+
 import com.deft.crud.admin.board.model.dao.AdminBoardMapper;
 import com.deft.crud.admin.board.model.dto.AdminBoardDTO;
+import com.deft.crud.board.model.dto.BoardDTO;
 
+@Service
 public class AdminBoardService {
 
 	private AdminBoardMapper adminBoardMapper;
@@ -11,6 +15,13 @@ public class AdminBoardService {
 		this.adminBoardMapper = adminBoardMapper;
 	}
 	
+	/* 공지사항 등록*/
+	public int noticeInsert(BoardDTO parameters) {
+		
+		int result = adminBoardMapper.noticeInsert(parameters);
+		
+		return result;
+	}
 	
 	
 	/* 공지사항 삭제 */
@@ -21,13 +32,10 @@ public class AdminBoardService {
 		return result;
 	}
 
-
-
-	public int noticeInsert(AdminBoardDTO adminBoardDTO) {
+	public int selectSeqNoticeNo() {
 		
-		int result = adminBoardMapper.noticeInsert(adminBoardDTO);
-		
-		return result;
+		return adminBoardMapper.selectSeqNoticeNo();
 	}
+
 
 }

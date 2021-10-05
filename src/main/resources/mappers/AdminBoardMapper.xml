@@ -1,9 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.deft.crud.admin.board.model.dao.AdminBoardMapper">
-
-
-
+<resultMap type="com.deft.crud.admin.board.model.dto.AdminBoardDTO" id="boardResultMap">
+	<id property="boardNo" column="BOARD_NO"/>
+	<id property="writeNo" column="WRITE_NO"/>
+	<result property="boardName" column="BOARD_NAME"/>
+	<result property="empName" column="EMP_NAME"/>
+	<result property="writeDate" column="WRITE_DATE"/>
+	<result property="views" column="VIEWS"/>
+	<result property="contents" column="CONTENTS"/>
+	<result property="type" column="TYPE"/>
+	<result property="empNo" column="EMP_NO"/>
+</resultMap>
+	<insert id="noticeInsert" parameterType="com.deft.crud.admin.board.model.dto.AdminBoardDTO">
+		INSERT /*com.deft.crud.admin.board.model.dto.AdminBoardDTO*/
+		  INTO TBL_BOARD B
+		     (
+		       B.WRITE_NO
+		     , B.BOARD_NO 
+		     , B.BOARD_NAME
+		     , B.EMP_NO
+		     , B.WRITE_DATE
+		     , B.CONTENTS
+		     , B.TYPE
+		     )
+		VALUES
+		     (
+		       SEQ_WRITE_NO.NEXTVAL
+		     , 1  
+		     , #{ boardName }  
+		     , #{ empNo }
+		     , SYSDATE
+		     , #{ contents }	
+		     , '공지사항'
+		     )
+	</insert>
+	<select id="selectSeqNoticeNo" resultType="_int">
+		SELECT /*com.deft.crud.board.model.dto.BoardDTO*/
+		       LAST_NUMBER
+		  FROM USER_SEQUENCES
+	     WHERE SEQUENCE_NAME = 'SEQ_WRITE_NO'
+	</select>
 
 
 
