@@ -208,7 +208,8 @@
                                         <td th:text="${ activity.activityStartTime}"></td>
                                         <td>
                                             <a class="btn btn-primary btn-icon-split"
-                                               th:onclick="location.href='#'">
+                                               style="font-size: 12px; height: 30px;">
+                                                <input type="hidden" th:value="${ activity.activityNo }">
                                                 <span class="text text-white">상세정보</span>
                                             </a>
                                         </td>
@@ -970,6 +971,16 @@
         </div>
     </div>
 
+    <!------------- Activity Detail Modal --------------->
+    <div class="modal fade" id="activityModal" role="dialog">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+
+            <!-- Modal content-->
+            <div class="modal-content" id="actContent">
+            </div>
+        </div>
+    </div>
+
     <!-- Script -->
     <th:block th:replace="@{/common/script} :: script"></th:block>
     <script>
@@ -1008,6 +1019,66 @@
 
         $('#btnBack').click(function () {
             window.history.back();
+        });
+
+        $('#table_activity tbody tr td a').on('click', function () {
+
+            const actNo = $(this).children(0).val();
+
+            $(document).ready(function () {
+                $('#actContent').load('activity/detail?activityNo=' + actNo, function () {
+                    $('#activityModal').modal();
+                });
+
+            });
+        });
+
+        $(document).on('click', '#deleteActivity', function () {
+            $('#modifyForm').attr('action', '/customer/ana/activity/delete');
+            $('#modifyForm').attr('method', 'post');
+            $('#modifyForm').submit();
+        });
+
+        $(document).on('click', '#modifyActivity', function () {
+
+            $('input').attr('readonly', false);
+            $('textarea').attr('disabled', false);
+
+            var text = $('#modifyActivity').text();
+            if(text == '영업활동 수정') {
+
+                $('#modifyActivity').text('수정 완료');
+                $('#modifyActivity').attr('id', 'successModifyActivity');
+
+                $('#deleteActivity').text('돌아가기');
+                $('#deleteActivity').attr('id', 'backToDetail');
+
+                var startTime = $('#insertActivityStartTime').val().replace(' ', 'T');
+                var endTime = $('#insertActivityEndTime').val().replace(' ', 'T');
+
+                $('#insertActivityStartTime').attr('value', startTime);
+                $('#insertActivityStartTime').attr('type', 'datetime-local');
+
+                $('#insertActivityEndTime').attr('value', endTime);
+                $('#insertActivityEndTime').attr('type', 'datetime-local');
+
+            }
+
+            $(document).on('click', '#successModifyActivity', function () {
+                $('#modifyForm').attr('action', '/customer/ana/activity/modify');
+                $('#modifyForm').attr('method', 'post');
+                $('#modifyForm').submit();
+            });
+
+            $(document).on('click', '#backToDetail', function () {
+
+                const actNo = $(this).prev().val();
+
+                $('#actContent').load('activity/detail?activityNo=' + actNo, function () {
+                    $('#activityModal').modal();
+                });
+            });
+
         });
 
     </script>

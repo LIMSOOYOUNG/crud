@@ -120,14 +120,69 @@ public class CustomerService {
     }
 
     /* 담당사원 변경 */
+    @Transactional
     public int modifyManager(CustomerDTO parameters) {
 
         return customerMapper.modifyManager(parameters);
     }
 
     /* 영업 활동 수정 */
+    @Transactional
     public int modifyActivity(BusinessActivityDTO parameters) {
 
         return customerMapper.modifyActivity(parameters);
+    }
+
+    /* 영업 활동 삭제 */
+    @Transactional
+    public int deleteActivity(BusinessActivityDTO parameters) {
+
+        return customerMapper.deleteActivity(parameters);
+    }
+
+    /* 고객사 전체 조회 */
+    public List<CustomerCompanyDTO> selectAllCustomerCompany() {
+
+        return customerMapper.selectAllCustomerCompany();
+    }
+
+    /* 고객사 상세 조회 */
+    public CustomerCompanyDTO selectCustomerCompanyInfo(int companyNo) {
+
+        return customerMapper.selectCustomerCompanyInfo(companyNo);
+    }
+
+    /* 고객사 정보 수정 */
+    @Transactional
+    public int modifyDetailInfoToCustomerCompany(CustomerCompanyDTO parameters) {
+
+        return customerMapper.modifyDetailInfoToCustomerCompany(parameters);
+    }
+
+    /* 고객사 삭제 */
+    @Transactional
+    public int deleteCustomerCompany(CustomerCompanyDTO parameters) {
+
+        return customerMapper.deleteCustomerCompany(parameters);
+    }
+
+    /* 고객사 등록 */
+    @Transactional
+    public int insertCustomerCompany(CustomerCompanyDTO parameters) {
+
+        return customerMapper.insertCustomerCompany(parameters);
+    }
+
+    /* 상품 조회 */
+    public List<ProductDTO> selectProduct() {
+
+        return customerMapper.selectProduct();
+    }
+
+    /* 고객 기본정보 등록 */
+    @Transactional
+    public int insertCustomer(InsertCustomerDTO parameters) {
+
+        return customerMapper.insertCustomer(parameters);
     }
 }

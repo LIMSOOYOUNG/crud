@@ -2,9 +2,12 @@ package com.deft.crud.customer.controller;
 
 import com.deft.crud.customer.model.dto.*;
 import com.deft.crud.customer.model.service.CustomerService;
+import com.deft.crud.member.model.dto.MemberDTO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -48,8 +51,14 @@ public class CustomerController {
     public ModelAndView selectAllAnalysisCustomer(ModelAndView mv) {
 
         List<CustomerCompanyDTO> customerList = customerService.selectAllAnalysisCustomer();
+        List<ProductDTO> productList = customerService.selectProduct();
+        List<EmpInfoDTO> empInfoList = customerService.selectEmpInfo();
+        List<CustomerCompanyDTO> companyList = customerService.selectAllCustomerCompany();
 
         mv.addObject("customerCompanyList", customerList);
+        mv.addObject("productList", productList);
+        mv.addObject("empInfoList", empInfoList);
+        mv.addObject("companyList", companyList);
         mv.setViewName("customer/selectAllAnalysisCustomer");
 
         return mv;
@@ -65,9 +74,9 @@ public class CustomerController {
 
         List<EmpInfoDTO> empInfoList = customerService.selectEmpInfo();
 
-        for(BusinessActivityDTO businessActivityDTO : businessActivityList) {
-            int actNo = businessActivityDTO.getActivityNo();
-        }
+//        for(BusinessActivityDTO businessActivityDTO : businessActivityList) {
+//            int actNo = businessActivityDTO.getActivityNo();
+//        }
 
         mv.addObject("customerInfo", customerInfo);
         mv.addObject("businessActivityList", businessActivityList);
@@ -108,7 +117,6 @@ public class CustomerController {
         BusinessActivityDTO businessActivity = customerService.selectBusinessActivityByActivityNo(activityNo);
 
         mv.addObject("activityOne", mapper.writeValueAsString(businessActivity));
-//        mv.setViewName("jsonView");
 
         return mv;
     }
@@ -312,18 +320,6 @@ public class CustomerController {
         return mv;
     }
 
-    /* 영업 활동 수정 */
-//    @GetMapping("/activity/modify")
-//    public ModelAndView modifyDetailActivity(ModelAndView mv, @RequestParam int activityNo) {
-//
-//        BusinessActivityDTO businessActivity = customerService.selectBusinessActivityByActivityNo(activityNo);
-//
-//        mv.addObject("activity", businessActivity);
-//        mv.setViewName("customer/activityModal");
-//
-//        return mv;
-//    }
-
     /* 영업 활동 수정 처리 메소드 */
     @PostMapping("/activity/modify")
     public ModelAndView modifyDetailActivity(ModelAndView mv, @ModelAttribute BusinessActivityDTO parameters) {
@@ -341,6 +337,130 @@ public class CustomerController {
         return mv;
     }
 
+    /* 영업 활동 삭제 */
+    @PostMapping("activity/delete")
+    public ModelAndView deleteDetailActivity(ModelAndView mv, @ModelAttribute BusinessActivityDTO parameters) {
 
+        int customerNo = parameters.getCustomerNo();
 
+        int result = customerService.deleteActivity(parameters);
+
+        if(result > 0) {
+            mv.setViewName("redirect:/customer/cusinfo?customerNo=" + customerNo);
+        }
+
+        return mv;
+    }
+
+    /* 분석 고객 영업 활동 수정 처리 */
+    @PostMapping("/ana/activity/modify")
+    public ModelAndView modifyAnaDetailActivity(ModelAndView mv, @ModelAttribute BusinessActivityDTO parameters) {
+
+        int customerNo = parameters.getCustomerNo();
+
+        int result = customerService.modifyActivity(parameters);
+
+        if(result > 0) {
+            mv.setViewName("redirect:/customer/anainfo?customerNo=" + customerNo);
+        }
+
+        return mv;
+    }
+
+    /* 분석 고객 영업 활동 삭제 */
+    @PostMapping("ana/activity/delete")
+    public ModelAndView deleteAnaDetailActivity(ModelAndView mv, @ModelAttribute BusinessActivityDTO parameters) {
+
+        int customerNo = parameters.getCustomerNo();
+
+        int result = customerService.deleteActivity(parameters);
+
+        if(result > 0) {
+            mv.setViewName("redirect:/customer/anainfo?customerNo=" + customerNo);
+        }
+
+        return mv;
+    }
+
+    /* 고객사 전체 조회 */
+    @GetMapping("/company")
+    public ModelAndView selectAllCustomerCompany(ModelAndView mv) {
+
+        List<CustomerCompanyDTO> customerCompanyList = customerService.selectAllCustomerCompany();
+
+        mv.addObject("companyList", customerCompanyList);
+        mv.setViewName("/customer/selectAllCustomerCompany");
+
+        return mv;
+    }
+
+    /* 고객사 상세 조회 */
+    @GetMapping("/company/detail")
+    public ModelAndView selectDetailCustomerCompany(ModelAndView mv, @RequestParam int companyNo) {
+
+        CustomerCompanyDTO customerCompany = customerService.selectCustomerCompanyInfo(companyNo);
+
+        mv.addObject("company", customerCompany);
+        mv.setViewName("/customer/customerCompanyInfoModal");
+
+        return mv;
+    }
+
+    /* 고객사 정보 수정 */
+    @PostMapping("/company/modify")
+    public ModelAndView modifyDetailInfoToCustomerCompany(ModelAndView mv, @ModelAttribute CustomerCompanyDTO parameters) {
+
+        int result = customerService.modifyDetailInfoToCustomerCompany(parameters);
+
+        if(result > 0) {
+            mv.setViewName("redirect:/customer/company");
+        }
+
+        return mv;
+    }
+
+    /* 고객사 정보 삭제 */
+    @PostMapping("/company/delete")
+    public ModelAndView deleteCustomerCompany(ModelAndView mv, @ModelAttribute CustomerCompanyDTO parameters) {
+
+        int result = customerService.deleteCustomerCompany(parameters);
+
+        if(result > 0) {
+            mv.setViewName("redirect:/customer/company");
+        }
+
+        return mv;
+    }
+
+    /* 고객사 등록 */
+    @PostMapping("/company/insert")
+    public ModelAndView insertCustomerCompany(ModelAndView mv, @ModelAttribute CustomerCompanyDTO parameters) {
+
+        int result = customerService.insertCustomerCompany(parameters);
+
+        if(result > 0) {
+            mv.setViewName("redirect:/customer/company");
+        }
+
+        return mv;
+    }
+
+    /* 고객 등록 */
+    @PostMapping("/ana/insert")
+    public ModelAndView insertCustomer(ModelAndView mv,
+                                       @ModelAttribute InsertCustomerDTO parameters,
+                                       @AuthenticationPrincipal MemberDTO member) {
+
+        parameters.setEmpNo(member.getEmpNo());
+
+        int customerResult = customerService.insertCustomer(parameters);
+//        int detailResult = customerService.insertDetail(parameters);
+//        int productResult = customerService.insertProduct(parameters);
+
+//        if(customerResult > 0 && detailResult > 0 && productResult > 0) {
+//        }
+
+            mv.setViewName("redirect:/customer/ana");
+        return mv;
+    }
 }
