@@ -48,10 +48,10 @@ public class StockController {
 		List<StorageDTO> stockList = stockService.selectStockAll();
 		
 		/* 판매가능 상태인 모든 상품들*/
-		List<StorageDTO> sellAbleProductList = stockService.selectSellAbleProductAll();
+		List<StorageDTO> sellableProductList = stockService.selectSellableProductAll();
 		
 		mv.addObject("stockList", stockList);
-		mv.addObject("sellAbleProductList", sellAbleProductList);
+		mv.addObject("sellableProductList", sellableProductList);
 		mv.setViewName("stock/stockList");
 		
 		return mv;

@@ -20,12 +20,41 @@
 		<result property="jobCode" column="JOB_CODE"/>
 		<result property="deptCode" column="DEPT_CODE"/>
 		<result property="managerNo" column="MANAGER_NO"/>
+		
+		<association property="job" resultMap="jobResultMap"/>
+		<association property="dept" resultMap="deptResultMap"/>
+		<association property="manager" resultMap="managerResultMap"/>
+	</resultMap>
+	
+	<resultMap type="com.deft.crud.organization.model.dto.JobDTO" id="jobResultMap">
+		<id property="jobCode" column="JOB_CODE"/>
+		<result property="jobName" column="JOB_NAME"/>
+		<result property="jobStatus" column="JOB_STATUS"/>
+	</resultMap>
+	
+	<resultMap type="com.deft.crud.organization.model.dto.DepartmentDTO" id="deptResultMap">
+		<id property="deptCode" column="DEPT_CODE"/>
+		<result property="deptName" column="DEPT_NAME"/>
+		<result property="deptTel" column="DEPT_TEL"/>
+		<result property="deptFax" column="DEPT_FAX"/>
+		<result property="deptStatus" column="DEPT_STATUS"/>
+	</resultMap>
+	
+	<resultMap type="com.deft.crud.member.model.dto.MemberDTO" id="managerResultMap">
+		<id property="empNo" column="EMP_NO"/>
+		<result property="empName" column="EMP_NAME"/>
 	</resultMap>
 	
 	<select id="findMemberById" resultMap="loginMemberResultMap">
-        SELECT
-               A.*
-          FROM TBL_EMP_INFO A
-         WHERE A.EMP_ID = #{ id }
+        SELECT /* com.deft.crud.member.model.dao.MemberMapper#findMemberById() */
+               E.*
+             , J.*
+             , D.*
+             , M.EMP_NAME
+          FROM TBL_EMP_INFO E
+          LEFT JOIN TBL_JOB J ON (E.JOB_CODE = J.JOB_CODE)
+          LEFT JOIN TBL_DEPARTMENT D ON (E.DEPT_CODE = D.DEPT_CODE)
+          LEFT JOIN TBL_EMP_INFO M ON (E.MANAGER_NO = M.EMP_NO)
+         WHERE E.EMP_ID = #{ id }
 	</select>
 </mapper>

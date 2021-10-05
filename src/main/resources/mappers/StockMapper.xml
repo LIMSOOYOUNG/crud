@@ -23,19 +23,15 @@
 		<result property="manufacturerNo" column="MANUFACTURER_NO"/>
 
 		<association property="category" resultMap="productCategoryResultMap"/>		
-		
 		<association property="manufacturer" resultMap="manufacturerResultMap"/>
-
 		<association property="account" resultMap="accountResultMap"/>
-		
 	</resultMap>
-	
 	
 	<resultMap type="com.deft.crud.product.model.dto.ProductCategoryDTO" id="productCategoryResultMap">
 		<id property="categoryCode" column="CATEGORY_CODE"/>
-		<result property="refCategoryName" column="REF_CATEGORY_NAME"/>
 		<result property="categoryName" column="CATEGORY_NAME"/>
 		<result property="refCategoryCode" column="REF_CATEGORY_CODE"/>
+		<result property="refCategoryName" column="REF_CATEGORY_NAME"/>
 		<result property="categoryStatus" column="CATEGORY_STATUS"/>
 	</resultMap>
 	
@@ -140,17 +136,22 @@
 	</select>
 	
 	<!-- 판매가능 상태인 모든 상품들 -->
-	<select id="selectSellAbleProductAll" resultMap="storageResultMap">
-	SELECT /* "com.deft.crud.stock.model.dao.StockMapper#selectSellAbleProductAll" */
-	       A.PRODUCT_NO
-	     , A.PRODUCT_NAME
-	     , A.UNIT
+	<select id="selectSellableProductAll" resultMap="storageResultMap">
+	SELECT /* "com.deft.crud.stock.model.dao.StockMapper#selectSellableProductAll" */
+	       P.PRODUCT_NO
+	     , P.PRODUCT_NAME
+	     , P.SELLING_PRICE
+	     , P.UNIT
+	     , S.PRODUCT_STOCK
 	     , C.CATEGORY_NAME
-	     , B.PRODUCT_STOCK
-	  FROM TBL_PRODUCT A
-      LEFT JOIN TBL_STORAGE B ON (A.PRODUCT_NO = B.PRODUCT_NO)
-	  LEFT JOIN TBL_PRODUCT_CATEGORY C ON (A.CATEGORY_CODE = C.CATEGORY_CODE)
-	 WHERE A.SELL_STATUS = '판매'         
+	     , RC.CATEGORY_NAME "REF_CATEGORY_NAME"
+	     , M.MANUFACTURER_NAME
+	  FROM TBL_PRODUCT P
+      LEFT JOIN TBL_STORAGE S ON (P.PRODUCT_NO = S.PRODUCT_NO)
+	  LEFT JOIN TBL_PRODUCT_CATEGORY C ON (P.CATEGORY_CODE = C.CATEGORY_CODE)
+	  LEFT JOIN TBL_PRODUCT_CATEGORY RC ON (C.REF_CATEGORY_CODE = RC.CATEGORY_CODE)
+	  LEFT JOIN TBL_MANUFACTURER M ON (P.MANUFACTURER_NO = M.MANUFACTURER_NO)
+	 WHERE P.SELL_STATUS = '판매'         
 	</select>
 	
 	<select id="selectOneProductInfoByNo" resultMap="productStockInfoResultMap">

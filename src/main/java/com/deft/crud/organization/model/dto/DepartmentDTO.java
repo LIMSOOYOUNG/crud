@@ -15,8 +15,8 @@ public class DepartmentDTO implements java.io.Serializable{
 
 	private String deptCode;
 	private String deptName;
-	private String deptFax;
 	private String deptTel;
+	private String deptFax;
 	private String deptStatus;
 	
 	
