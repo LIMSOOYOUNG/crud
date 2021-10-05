@@ -1,9 +1,5 @@
 package com.deft.crud.stock.model.service;
 
-import static org.junit.Assert.assertNotNull;
-
-import java.util.List;
-
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -13,8 +9,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.deft.crud.configuration.CrudApplication;
-import com.deft.crud.stock.model.dto.StockDTO;
-import com.deft.crud.stock.model.dto.StorageDTO;
 
 @SpringBootTest
 @RunWith(SpringRunner.class)
@@ -29,13 +23,13 @@ public class StockServiceTests {
 	@Disabled
 	public void testSelectStockAll() {
 		
-		List<StockDTO> stockList = stockService.selectStockAll();
-		
-		assertNotNull(stockList);
-			
-		for(StockDTO stock : stockList) {
-			System.out.println(stock);
-		}
+//		List<StockDTO> stockList = stockService.selectStockAll();
+//		
+//		assertNotNull(stockList);
+//			
+//		for(StockDTO stock : stockList) {
+//			System.out.println(stock);
+//		}
 	}
 	
 	
