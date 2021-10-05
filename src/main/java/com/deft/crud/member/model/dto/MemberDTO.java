@@ -1,7 +1,19 @@
 package com.deft.crud.member.model.dto;
 
-import java.sql.Date;
+import com.deft.crud.organization.model.dto.DepartmentDTO;
+import com.deft.crud.organization.model.dto.JobDTO;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
+@ToString
 public class MemberDTO {
 	
 	private int empNo;
@@ -22,173 +34,7 @@ public class MemberDTO {
 	private String deptCode;
 	private int managerNo;
 	
-	public MemberDTO() {}
-
-	public MemberDTO(int empNo, String empName, String empId, String empPwd, String empEmail, String empGender,
-			String empBirth, String empAddress, String empPhone, String empTel, Date hireDate, Date entDate,
-			String entYn, String authority, String jobCode, String deptCode, int managerNo) {
-		super();
-		this.empNo = empNo;
-		this.empName = empName;
-		this.empId = empId;
-		this.empPwd = empPwd;
-		this.empEmail = empEmail;
-		this.empGender = empGender;
-		this.empBirth = empBirth;
-		this.empAddress = empAddress;
-		this.empPhone = empPhone;
-		this.empTel = empTel;
-		this.hireDate = hireDate;
-		this.entDate = entDate;
-		this.entYn = entYn;
-		this.authority = authority;
-		this.jobCode = jobCode;
-		this.deptCode = deptCode;
-		this.managerNo = managerNo;
-	}
-
-	public int getEmpNo() {
-		return empNo;
-	}
-
-	public void setEmpNo(int empNo) {
-		this.empNo = empNo;
-	}
-
-	public String getEmpName() {
-		return empName;
-	}
-
-	public void setEmpName(String empName) {
-		this.empName = empName;
-	}
-
-	public String getEmpId() {
-		return empId;
-	}
-
-	public void setEmpId(String empId) {
-		this.empId = empId;
-	}
-
-	public String getEmpPwd() {
-		return empPwd;
-	}
-
-	public void setEmpPwd(String empPwd) {
-		this.empPwd = empPwd;
-	}
-
-	public String getEmpEmail() {
-		return empEmail;
-	}
-
-	public void setEmpEmail(String empEmail) {
-		this.empEmail = empEmail;
-	}
-
-	public String getEmpGender() {
-		return empGender;
-	}
-
-	public void setEmpGender(String empGender) {
-		this.empGender = empGender;
-	}
-
-	public String getEmpBirth() {
-		return empBirth;
-	}
-
-	public void setEmpBirth(String empBirth) {
-		this.empBirth = empBirth;
-	}
-
-	public String getEmpAddress() {
-		return empAddress;
-	}
-
-	public void setEmpAddress(String empAddress) {
-		this.empAddress = empAddress;
-	}
-
-	public String getEmpPhone() {
-		return empPhone;
-	}
-
-	public void setEmpPhone(String empPhone) {
-		this.empPhone = empPhone;
-	}
-
-	public String getEmpTel() {
-		return empTel;
-	}
-
-	public void setEmpTel(String empTel) {
-		this.empTel = empTel;
-	}
-
-	public java.sql.Date getHireDate() {
-		return hireDate;
-	}
-
-	public void setHireDate(java.sql.Date hireDate) {
-		this.hireDate = hireDate;
-	}
-
-	public java.sql.Date getEntDate() {
-		return entDate;
-	}
-
-	public void setEntDate(java.sql.Date entDate) {
-		this.entDate = entDate;
-	}
-
-	public String getEntYn() {
-		return entYn;
-	}
-
-	public void setEntYn(String entYn) {
-		this.entYn = entYn;
-	}
-
-	public String getAuthority() {
-		return authority;
-	}
-
-	public void setAuthority(String authority) {
-		this.authority = authority;
-	}
-
-	public String getJobCode() {
-		return jobCode;
-	}
-
-	public void setJobCode(String jobCode) {
-		this.jobCode = jobCode;
-	}
-
-	public String getDeptCode() {
-		return deptCode;
-	}
-
-	public void setDeptCode(String deptCode) {
-		this.deptCode = deptCode;
-	}
-
-	public int getManagerNo() {
-		return managerNo;
-	}
-
-	public void setManagerNo(int managerNo) {
-		this.managerNo = managerNo;
-	}
-
-	@Override
-	public String toString() {
-		return "MemberDTO [empNo=" + empNo + ", empName=" + empName + ", empId=" + empId + ", empPwd=" + empPwd
-				+ ", empEmail=" + empEmail + ", empGender=" + empGender + ", empBirth=" + empBirth + ", empAddress="
-				+ empAddress + ", empPhone=" + empPhone + ", empTel=" + empTel + ", hireDate=" + hireDate + ", entDate="
-				+ entDate + ", entYn=" + entYn + ", authority=" + authority + ", jobCode=" + jobCode + ", deptCode="
-				+ deptCode + ", managerNo=" + managerNo + "]";
-	}
+	private JobDTO job;
+	private DepartmentDTO dept;
+	private MemberDTO manager;
 }
