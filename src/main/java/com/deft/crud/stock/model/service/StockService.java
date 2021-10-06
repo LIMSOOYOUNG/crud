@@ -44,11 +44,11 @@ public class StockService {
 	}
 
 	/* 판매가능 상태인 모든 상품들*/
-	public List<StorageDTO> selectSellAbleProductAll() {
+	public List<StorageDTO> selectSellableProductAll() {
 
-		List<StorageDTO> sellAbleProductList = mapper.selectSellAbleProductAll();
+		List<StorageDTO> sellableProductList = mapper.selectSellableProductAll();
 		
-		return sellAbleProductList;
+		return sellableProductList;
 	}
 
 	/* 선택한 상품의 재고 정보 조회*/

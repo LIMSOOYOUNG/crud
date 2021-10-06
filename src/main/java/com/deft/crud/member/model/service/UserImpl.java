@@ -7,6 +7,9 @@ import org.springframework.security.core.userdetails.User;
 
 import com.deft.crud.member.model.dto.MemberDTO;
 
+import lombok.Getter;
+
+@Getter
 public class UserImpl extends User {
 	
 	private int empNo;
@@ -26,6 +29,10 @@ public class UserImpl extends User {
 	private String jobCode;
 	private String deptCode;
 	private int managerNo;
+	
+	private String jobName;
+	private String deptName;
+	private String managerName;
 
 	public UserImpl(String username, String password, Collection<? extends GrantedAuthority> authorities) {
 		super(username, password, authorities);
@@ -49,73 +56,9 @@ public class UserImpl extends User {
 		this.jobCode = member.getJobCode();
 		this.deptCode = member.getDeptCode();
 		this.managerNo = member.getManagerNo();
-	}
-
-	public int getEmpNo() {
-		return empNo;
-	}
-
-	public String getEmpName() {
-		return empName;
-	}
-
-	public String getEmpId() {
-		return empId;
-	}
-
-	public String getEmpPwd() {
-		return empPwd;
-	}
-
-	public String getEmpEmail() {
-		return empEmail;
-	}
-
-	public String getEmpGender() {
-		return empGender;
-	}
-
-	public String getEmpBirth() {
-		return empBirth;
-	}
-
-	public String getEmpAddress() {
-		return empAddress;
-	}
-
-	public String getEmpPhone() {
-		return empPhone;
-	}
-
-	public String getEmpTel() {
-		return empTel;
-	}
-
-	public java.sql.Date getHireDate() {
-		return hireDate;
-	}
-
-	public java.sql.Date getEntDate() {
-		return entDate;
-	}
-
-	public String getEntYn() {
-		return entYn;
-	}
-
-	public String getAuthority() {
-		return authority;
-	}
-
-	public String getJobCode() {
-		return jobCode;
-	}
-
-	public String getDeptCode() {
-		return deptCode;
-	}
-
-	public int getManagerNo() {
-		return managerNo;
+		
+		this.jobName = member.getJob().getJobName();
+		this.deptName = member.getDept().getDeptName();
+		this.managerName = member.getManager().getEmpName();
 	}
 }

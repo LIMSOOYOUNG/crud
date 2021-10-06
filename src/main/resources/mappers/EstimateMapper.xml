@@ -10,19 +10,50 @@
 		<result property="estimateStatus" column="ESTIMATE_STATUS"/>
 		<result property="providerRegistNo" column="PROVIDER_REGIST_NO"/>
 		
-		<association property="customer" javaType="com.deft.crud.customer.model.dto.CustomerDTO">
-			<id property="customerNo" column="CUSTOMER_NO"/>
-			<result property="customerName" column="CUSTOMER_NAME"/>
-
-			<association property="empInfo" javaType="com.deft.crud.customer.model.dto.EmpInfoDTO">
-				<id property="empNo" column="EMP_NO"/>
-				<result property="empName" column="EMP_NAME"/>
-			</association>
-		</association>
+		<association property="customer" resultMap="customerResultMap"/>
+		<association property="provider" resultMap="providerResultMap"/>
+	</resultMap>
 		
-		<association property="provider" javaType="com.deft.crud.estimate.model.dto.ProviderDTO">
-			<id property="providerRegistNo" column="PROVIDER_REGIST_NO"/>
-		</association>
+	<resultMap type="com.deft.crud.customer.model.dto.CustomerDTO" id="customerResultMap">
+		<id property="customerNo" column="CUSTOMER_NO"/>
+        <result property="customerCompanyNo" column="CUSTOMER_COMPANY_NO"/>
+        <result property="empNo" column="EMP_NO"/>
+        <result property="customerName" column="CUSTOMER_NAME"/>
+        <result property="customerEmail" column="CUSTOMER_EMAIL"/>
+        <result property="customerAddress" column="CUSTOMER_ADDRESS"/>
+        <result property="customerPhone" column="CUSTOMER_PHONE"/>
+        <result property="customerFax" column="CUSTOMER_FAX"/>
+		
+		<association property="empInfo" resultMap="empInfoResultMap"/>
+	</resultMap>
+
+	<resultMap type="com.deft.crud.customer.model.dto.EmpInfoDTO" id="empInfoResultMap">
+		<id property="empNo" column="EMP_NO"/>
+        <result property="empName" column="EMP_NAME"/>
+        <result property="empId" column="EMP_ID"/>
+        <result property="empPwd" column="EMP_PWD"/>
+        <result property="empEmail" column="EMP_EMAIL"/>
+        <result property="empGender" column="EMP_GENDER"/>
+        <result property="empBirth" column="EMP_BIRTH"/>
+        <result property="empAddress" column="EMP_ADDRESS"/>
+        <result property="empPhone" column="EMP_PHONE"/>
+        <result property="empTel" column="EMP_TEL"/>
+        <result property="hireDate" column="HIRE_DATE"/>
+        <result property="entDate" column="ENT_DATE"/>
+        <result property="entYn" column="ENT_YN"/>
+        <result property="authority" column="AUTHORITY"/>
+        <result property="jobCode" column="JOB_CODE"/>
+        <result property="deptCode" column="DEPT_CODE"/>
+        <result property="managerNo" column="MANAGER_NO"/>
+	</resultMap>
+	
+	<resultMap type="com.deft.crud.estimate.model.dto.ProviderDTO" id="providerResultMap">
+		<id property="providerRegistNo" column="PROVIDER_REGIST_NO"/>
+		<result property="providerName" column="PROVIDER_NAME"/>
+		<result property="providerCeo" column="PROVIDER_CEO"/>
+		<result property="providerAddress" column="PROVIDER_ADDRESS"/>
+		<result property="providerBusinessStatus" column="PROVIDER_BUSINESS_STATUS"/>
+		<result property="providerBusinessType" column="PROVIDER_BUSINESS_TYPE"/>
 	</resultMap>
 	
 	<select id="selectEstimateList" resultMap="estimateSelectResultMap">

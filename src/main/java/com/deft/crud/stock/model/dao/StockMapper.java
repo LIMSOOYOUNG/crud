@@ -21,7 +21,7 @@ public interface StockMapper {
 
 	StorageDTO selectStockAll(int productNo);
 
-	List<StorageDTO> selectSellAbleProductAll();
+	List<StorageDTO> selectSellableProductAll();
 
 	ProductStockInfoDTO selectOneProductInfoByNo(int productNo);
 

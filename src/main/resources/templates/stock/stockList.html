@@ -167,12 +167,12 @@ input {
 											</tr>
 										</thead>
 										<tbody align="center">
-											<tr th:each="sellAbleProduct : ${sellAbleProductList}">
-												<td th:text="${sellAbleProduct.productNo}"></td>
-												<td th:text="${sellAbleProduct.product.category.categoryName}"></td>
-												<td th:text="${sellAbleProduct.product.productName}"></td>
-												<td th:text="${sellAbleProduct.productStock}"></td>
-												<td th:text="${sellAbleProduct.product.unit}"></td>
+											<tr th:each="sellableProduct : ${sellableProductList}">
+												<td th:text="${sellableProduct.productNo}"></td>
+												<td th:text="${sellableProduct.product.category.categoryName}"></td>
+												<td th:text="${sellableProduct.product.productName}"></td>
+												<td th:text="${sellableProduct.productStock}"></td>
+												<td th:text="${sellableProduct.product.unit}"></td>
 												<td>
 													<a class="btn btn-white btn-icon-split addBtn">
 														<span class="icon text-black" style="color: #66bb6a;">
