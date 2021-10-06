@@ -10,6 +10,8 @@ import com.deft.crud.stock.model.dto.RequestStockDTO;
 import com.deft.crud.stock.model.dto.ResponseStockDTO;
 import com.deft.crud.stock.model.dto.StorageDTO;
 import com.deft.crud.stock.model.dto.approval.ApprovalDocumentDTO;
+import com.deft.crud.stock.model.dto.approval.ReceivingReqDTO;
+import com.deft.crud.stock.model.dto.approval.ReceivingReqProductDTO;
 
 @Mapper
 public interface StockMapper {
@@ -25,15 +27,23 @@ public interface StockMapper {
 
 	int modifyStockCondition(RequestStockDTO parameters);
 
-	int insertStockReceivingProduct(List<RequestStockDTO> list);
+	boolean insertStockReceivingProduct(List<RequestStockDTO> list);
 
 	int insertApprovalDocument(List<RequestStockDTO> request, int empNo);
 
 	void insertOrderProductInfo(int productNo, int orderAmount);
 
-	void insertReceivingReq();
+	boolean insertReceivingReq();
 
-	void insertApprovalDocument(ApprovalDocumentDTO approvalDocument);
+	boolean insertApprovalDocument(ApprovalDocumentDTO approvalDocument);
+
+	boolean insertReleaseReqHistory();
+
+	List<ReceivingReqDTO> selectReceivingReqAll();
+
+	ReceivingReqDTO selectReceivingReqByNo(int reqNo);
+
+	List<ReceivingReqDTO> receivingReqProductByReqNo(int reqNo);
 
 
 }

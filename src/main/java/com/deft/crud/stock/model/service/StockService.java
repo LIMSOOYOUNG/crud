@@ -14,6 +14,7 @@ import com.deft.crud.stock.model.dto.RequestStockDTO;
 import com.deft.crud.stock.model.dto.StorageDTO;
 import com.deft.crud.stock.model.dto.approval.ApprovalDocumentDTO;
 import com.deft.crud.stock.model.dto.approval.ReceivingReqDTO;
+import com.deft.crud.stock.model.dto.approval.ReceivingReqProductDTO;
 
 @Service
 public class StockService {
@@ -70,30 +71,67 @@ public class StockService {
 	public boolean insertStockReceivingProduct(List<RequestStockDTO> request, UserImpl userInfo) {
 		ApprovalDocumentDTO approvalDocument = new ApprovalDocumentDTO();
 		
+		boolean result = true;
+		
 		int empNo = userInfo.getEmpNo();
-	
+		int managerNo = userInfo.getManagerNo();
 		
 		for(RequestStockDTO requestOrder : request) {
 			approvalDocument.setApprovalDocumentName(requestOrder.getOrderTitle());
 			approvalDocument.setReqReason(requestOrder.getOrderContent());
 		}
 			approvalDocument.setEmpNo(empNo);
-		
-		//결제문서정보
-		mapper.insertApprovalDocument(approvalDocument);
-		
-		//요청번호와 결재번호
-		mapper.insertReceivingReq();
-		
-		//재고 요청수량
-		mapper.insertStockReceivingProduct(request);
-		
-	
+			approvalDocument.setManagerNo(managerNo);
 		
 		
+		if(true) {	
+			
+			//결재문서정보 생성
+			if(!mapper.insertApprovalDocument(approvalDocument)) {
+				result = false;
+			}
 		
+			//입고요청번호와 결재번호 
+			if(!mapper.insertReceivingReq()) {
+				result = false;
+			}
 		
-		return true;
+			//재고 요청수량 추가
+			if(!mapper.insertStockReceivingProduct(request)) {
+				result = false;
+			}
+		
+			//입고요청번호에 대한 결재 이력생성
+			if(!mapper.insertReleaseReqHistory()) {
+				result = false;
+			}
+		
+		}
+		
+		return result;
+	}
+
+	public List<ReceivingReqDTO> selectReceivingReqAll() {
+
+		List<ReceivingReqDTO> receivingReqList = mapper.selectReceivingReqAll();
+		
+		return receivingReqList;
+	}
+
+	public ReceivingReqDTO selectReceivingReqByNo(int reqNo) {
+		
+		System.out.println("serivce에서 전달받은 요청번호 :" + reqNo);
+		
+		ReceivingReqDTO receivingReqInfo = mapper.selectReceivingReqByNo(reqNo);
+		
+		return receivingReqInfo;
+	}
+
+	public List<ReceivingReqDTO> receivingReqProductByReqNo(int reqNo) {
+		
+		List<ReceivingReqDTO> receivingReqProductList = mapper.receivingReqProductByReqNo(reqNo);
+		
+		return receivingReqProductList;
 	}
 
 

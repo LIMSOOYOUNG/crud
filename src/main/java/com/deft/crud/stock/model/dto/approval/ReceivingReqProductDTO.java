@@ -16,4 +16,8 @@ public class ReceivingReqProductDTO {
 	private int receivingReqNo;
 	private int productAmount;
 	private int productNo;
+	private int productStock;
+	private String unit;
+	private String productName;
+	
 }

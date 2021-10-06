@@ -18,7 +18,9 @@ public class ApprovalDocumentDTO {
 	private String approvalDocumentName;
 	private String reqReason;
 	private int empNo;
+	private String empName;
 	private int managerNo;
+	private String managerName;
 	
 	
 }
