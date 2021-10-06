@@ -204,6 +204,10 @@ public class CustomerController {
 
         int result = customerService.modifyAnaCustomerStatus(parameters);
 
+        if(parameters.getCustomerStatus().equals("성공고객")) {
+            int insertResult = customerService.insertExtCustomer(parameters);
+        }
+
         if(result > 0) {
             mv.setViewName("redirect:/customer/anainfo?customerNo=" + customerNo);
         }
@@ -224,28 +228,6 @@ public class CustomerController {
         }
 
         return mv;
-    }
-
-    /* 담당사원명 자동 완성 기능 */
-    @PostMapping("/auto")
-    public void getEmpNameList(HttpServletRequest request, HttpServletResponse response, @RequestParam String term) throws IOException {
-
-        response.setContentType("application/json; charset=UTF-8");
-
-        List<EmpInfoDTO> empList = new ArrayList<>();
-
-        if(term != null) {
-
-            empList = customerService.selectEmpName(term);
-
-            ObjectMapper mapper = new ObjectMapper();
-
-            PrintWriter out = response.getWriter();
-
-            out.print(mapper.writeValueAsString(empList));
-
-            out.close();
-        }
     }
 
     /* 분석 고객 영업활동 등록 */
@@ -293,7 +275,7 @@ public class CustomerController {
         return mv;
     }
 
-    /* 기존 고객 담당사원 변경 */
+    /* 분석 고객 담당사원 변경 */
     @PostMapping("/ana/manager/modify")
     public ModelAndView modifyAnaManager(ModelAndView mv, @ModelAttribute CustomerDTO parameters) {
 
@@ -447,20 +429,31 @@ public class CustomerController {
 
     /* 고객 등록 */
     @PostMapping("/ana/insert")
-    public ModelAndView insertCustomer(ModelAndView mv,
-                                       @ModelAttribute InsertCustomerDTO parameters,
-                                       @AuthenticationPrincipal MemberDTO member) {
+    public ModelAndView insertCustomer(ModelAndView mv, @ModelAttribute InsertCustomerDTO parameters, @RequestParam List<Integer> productNo) {
 
-        parameters.setEmpNo(member.getEmpNo());
 
         int customerResult = customerService.insertCustomer(parameters);
-//        int detailResult = customerService.insertDetail(parameters);
-//        int productResult = customerService.insertProduct(parameters);
 
-//        if(customerResult > 0 && detailResult > 0 && productResult > 0) {
-//        }
+        for (int value : productNo) {
 
+            System.out.println(value);
+        }
+
+        List<CustomerProductDTO> products = new ArrayList<>();
+
+        for (int integer : productNo) {
+            products.add(new CustomerProductDTO(parameters.getCustomerNo(), integer, null));
+        }
+
+
+
+        int detailResult = customerService.insertDetail(parameters);
+        int productResult = customerService.insertProduct(products);
+
+        if(customerResult > 0 && detailResult > 0 && productResult > 0) {
             mv.setViewName("redirect:/customer/ana");
+        }
+
         return mv;
     }
 }
