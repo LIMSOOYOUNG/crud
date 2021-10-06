@@ -14,6 +14,11 @@ public class AdminBoardService {
 	public AdminBoardService(AdminBoardMapper adminBoardMapper) {
 		this.adminBoardMapper = adminBoardMapper;
 	}
+	/* 공지사항 등록 writeNo 전달 */
+	public int selectSeqNoticeNo() {
+		
+		return adminBoardMapper.selectSeqNoticeNo();
+	}
 	
 	/* 공지사항 등록*/
 	public int noticeInsert(BoardDTO parameters) {
@@ -23,19 +28,31 @@ public class AdminBoardService {
 		return result;
 	}
 	
-	
-	/* 공지사항 삭제 */
-	public int deleteNotice(int boardNo) {
 
-		int result = adminBoardMapper.deleteNotice(boardNo);
+	/* 공지사항 페이지 값 전달*/
+	public AdminBoardDTO noticeModifyform(int writeNo) {
+		
+		AdminBoardDTO adminBoardDTO = adminBoardMapper.noticeModifyform(writeNo);
+		
+		return adminBoardDTO;
+	}
 
+	public int noticeModify(BoardDTO parameters) {
+		
+		int result = adminBoardMapper.noticeModify(parameters);
+		
 		return result;
 	}
 
-	public int selectSeqNoticeNo() {
+	public int deleteNotice(int writeNo) {
 		
-		return adminBoardMapper.selectSeqNoticeNo();
+		int result = adminBoardMapper.deleteNotice(writeNo);
+		
+		return result;
 	}
+
+
+	
 
 
 }

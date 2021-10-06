@@ -19,9 +19,6 @@ public interface BoardMapper {
 	/* 자유게시글 등록*/
 	int insertFreeboard(BoardDTO board);
 
-	/* 자유게시글 삭제 */
-	int deleteFreeboard(int boardNo);
-
 	/* 자유게시글 보기*/
 	BoardDTO freeboardDetail(int writeNo);
 
@@ -33,6 +30,19 @@ public interface BoardMapper {
 	
 	/* 공지사항 조회수 증가*/
 	void noticeviewCount(int writeNo);
+
+	/* writeNo값을 보내주는 mapper*/
+	int selectSeqFreeboardNo();
+
+	/* 자유게시글 수정 페이지 전달 */
+	BoardDTO freeboardModifyForm(int writeNo);
+	
+	/* 자유게시글 수정*/
+	int freeboardModify(BoardDTO parameters);
+
+	/* 자유게시글 삭제 */
+	int deleteFreeboard(int writeNo);
+
 
 
 

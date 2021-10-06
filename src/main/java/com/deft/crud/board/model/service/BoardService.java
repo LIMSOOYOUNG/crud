@@ -37,6 +37,7 @@ public class BoardService {
 	}
 
 	/* 자유게시글 등록 */
+	@Transactional
 	public int insertFreeboard(BoardDTO board) {
 		
 		int result = boardMapper.insertFreeboard(board);
@@ -44,18 +45,8 @@ public class BoardService {
 		return result;
 	}
 	
-	/* 공지사항 등록 */
 
-	/* 자유게시글 수정 */
-	/* 공지사항 수정*/
 
-	/* 자유게시글 삭제*/
-	public int deleteFreeboard(int boardNo) {
-
-		int result = boardMapper.deleteFreeboard(boardNo);
-
-		return result;
-	}
 
 	/* 자유게시글 보기*/
 	public BoardDTO freeboardDetail(int writeNo) {
@@ -85,6 +76,46 @@ public class BoardService {
 		boardMapper.noticeviewCount(writeNo);
 		
 	}
+
+	public int selectSeqFreeboardNo() {
+		
+		return boardMapper.selectSeqFreeboardNo();
+
+	}
+	/* 수정페이지에 값전달 */
+	public BoardDTO freeboardModifyForm(int writeNo) {
+		 
+		BoardDTO boardDTO = boardMapper.freeboardModifyForm(writeNo);
+		
+		return boardDTO;
+	}
+
+	/* 자유게시글 수정 서비스*/
+	public int freeboardModify(BoardDTO parameters) {
+		
+		System.out.println("서비스 쪽의 DTO 입니다:" + parameters);
+		
+		int result = boardMapper.freeboardModify(parameters);
+		
+		
+		return result;
+	}
+
+	/* 자유게시글 삭제 */
+	public int deleteFreeboard(int writeNo) {
+		
+		int result = boardMapper.deleteFreeboard(writeNo);
+		
+		return result;
+	}
+
+
+
+	
+
+
+
+
 
 
 
