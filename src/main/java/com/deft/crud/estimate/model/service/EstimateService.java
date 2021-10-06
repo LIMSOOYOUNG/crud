@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.deft.crud.estimate.model.dao.EstimateMapper;
 import com.deft.crud.estimate.model.dto.EstimateDTO;
@@ -29,11 +30,17 @@ public class EstimateService {
 		return estimateMapper.selectEstimateListByStatus(estimateStatus);
 	}
 
-	public String selectEstimateNo(String stringNewEstimateDate) {
+	public String selectEstimateNo(String newEstimateDate) {
 		
 		String newEstimateSeq = estimateMapper.selectLastEstimateSeq();
-		String newEstimateNo = "E" + stringNewEstimateDate + "-" + newEstimateSeq;
+		String newEstimateNo = "E" + newEstimateDate.replace("-", "") + "-" + newEstimateSeq;
 		
 		return newEstimateNo;
+	}
+
+	@Transactional
+	public int insertEstimate(EstimateDTO estimateInfo) {
+		
+		return estimateMapper.insertEstimate(estimateInfo);
 	}
 }

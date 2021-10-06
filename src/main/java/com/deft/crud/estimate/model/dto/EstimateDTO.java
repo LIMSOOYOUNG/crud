@@ -1,7 +1,7 @@
 package com.deft.crud.estimate.model.dto;
 
 import java.io.Serializable;
-import java.time.LocalDate;
+import java.util.List;
 
 import com.deft.crud.customer.model.dto.CustomerDTO;
 
@@ -20,7 +20,7 @@ public class EstimateDTO implements Serializable {
 	
 	private String estimateNo;
 	private String estimateTitle;
-	private LocalDate estimateDate;
+	private String estimateDate;
 	private int customerNo;
 	private double discountRate;
 	private String estimateStatus;
@@ -28,4 +28,5 @@ public class EstimateDTO implements Serializable {
 	
 	private CustomerDTO customer;
 	private ProviderDTO provider;
+	private List<EstimateProductDTO> estimateProduct;
 }
