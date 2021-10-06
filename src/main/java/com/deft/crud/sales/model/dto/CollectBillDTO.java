@@ -20,5 +20,7 @@ public class CollectBillDTO {
 	private int collectBillAmount;
 	private String collectBillStatus;
 	private Date collectBillDate;
+	private String collectBillYear;
+	private String collectBillMonth;
 	
 }

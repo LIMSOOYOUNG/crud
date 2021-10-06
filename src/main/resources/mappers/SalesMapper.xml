@@ -11,8 +11,29 @@
 
 	</resultMap>
 	
-	<select id="empPerformList" resultMap="targetPerformResultMap">
-		SELECT /*com.deft.crud.product.model.dao.SalesMapper#empPerformList()*/
+	<resultMap type="com.deft.crud.sales.model.dto.PerformanceDTO" id="performResultMap">
+		
+		<id property="performanceNo" column="PERFORMANCE_NO"/>
+		<result property="empNo" column="EMP_NO"/>
+		<result property="chargeNo" column="CHARGE_NO"/>
+		<result property="performanceCount" column="PERFORMANCE_COUNT"/>
+
+		<association property="collect" resultMap="collectBillResultMap"/>
+	</resultMap>
+	
+	<resultMap type="com.deft.crud.sales.model.dto.CollectBillDTO" id="collectBillResultMap">
+		<result property="collectBillNo" column="COLLECT_BILL_NO"/>
+		<result property="chargeNo" column="CHARGE_NO"/>
+		<result property="collectBillAmount" column="COLLECT_BILL_AMOUNT"/>
+		<result property="collectBillStatus" column="COLLECT_BILL_STATUS"/>
+		<result property="collectBillDate" column="COLLECT_BILL_DATE"/>
+		<result property="collectBillYear" column="COLLECT_BILL_YEAR"/>
+		<result property="collectBillMonth" column="COLLECT_BILL_MONTH"/>
+		
+	</resultMap>
+	
+	<select id="empTargetPerformList" resultMap="targetPerformResultMap">
+		SELECT /*com.deft.crud.product.model.dao.SalesMapper#empTargetPerformList()*/
 	    	   T.TARGET_NO
 	    	 , T.EMP_NO
 	    	 , T.TARGET_SALES
@@ -20,8 +41,26 @@
 	    	 , T.PERFORM_YEAR
 	    	 , T.PERFORM_MONTH
 		   FROM TBL_EMP_TARGET_PERFOM T
-		  WHERE T.EMP_NO = #{ loginEmpNo }
+		  WHERE T.EMP_NO = #{ empNo }
 		  ORDER BY T.PERFORM_YEAR ASC, T.PERFORM_MONTH DESC
+	</select>
+	
+	<select id="empPerformList" resultMap="performResultMap">
+		SELECT /*com.deft.crud.product.model.dao.SalesMapper#empPerformList()*/
+			   EXTRACT(YEAR FROM C.COLLECT_BILL_DATE) "COLLECT_BILL_YEAR"
+    		 , EXTRACT(MONTH FROM C.COLLECT_BILL_DATE) "COLLECT_BILL_MONTH"
+     	     , SUM(C.COLLECT_BILL_AMOUNT) "COLLECT_BILL_AMOUNT"
+     	     , COUNT(P.PERFORMANCE_NO) "PERFORMANCE_COUNT"
+  		  FROM TBL_PERFORMANCE P
+          JOIN TBL_COLLECT_BILL C ON (P.COLLECT_BILL_NO = C.COLLECT_BILL_NO)
+  		  JOIN TBL_EMP_INFO E ON (P.EMP_NO = E.EMP_NO)
+ 		 WHERE C.COLLECT_BILL_STATUS = '수금'
+ 	     GROUP BY EXTRACT(YEAR FROM C.COLLECT_BILL_DATE)
+                , EXTRACT(MONTH FROM C.COLLECT_BILL_DATE)
+                , P.EMP_NO
+        HAVING P.EMP_NO = #{ empNo } 
+        ORDER BY EXTRACT(YEAR FROM C.COLLECT_BILL_DATE) DESC, EXTRACT(MONTH FROM C.COLLECT_BILL_DATE) DESC
+		
 	</select>
 
 	<insert id="insertTargetSales" parameterType="com.deft.crud.sales.model.dto.TargetPerfomDTO">
