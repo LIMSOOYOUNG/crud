@@ -23,13 +23,10 @@
 		<result property="manufacturerNo" column="MANUFACTURER_NO"/>
 
 		<association property="category" resultMap="productCategoryResultMap"/>		
-		
 		<association property="manufacturer" resultMap="manufacturerResultMap"/>
-
 		<association property="account" resultMap="accountResultMap"/>
 		
 	</resultMap>
-	
 	
 	<resultMap type="com.deft.crud.product.model.dto.ProductCategoryDTO" id="productCategoryResultMap">
 		<id property="categoryCode" column="CATEGORY_CODE"/>
@@ -92,13 +89,17 @@
 		<result property="empName" column="EMP_NAME" />
 		<result property="managerNo" column="MANAGER_NO" />
 		<result property="managerName" column="MANAGER_NAME" />
+		<result property="documentStatus" column="DOCUMENT_STATUS" />
+		<result property="documentProcessDate" column="DOCUMENT_PROCESS_DATE" />
+		<result property="documentWriteDate" column="DOCUMENT_WRITE_DATE" />
+
+
 
   	</resultMap>
   	
   	<!-- 입고요청 결재 이력 -->
   	<resultMap type="com.deft.crud.stock.model.dto.approval.ReceivingReqHistoryDTO" id="receivingReqHistoryResultMap">
   		<id property="receivingReqHisNo" column="RECEIVING_REQ_HIS_NO"/>
-  		<result property="productNo" column="PRODUCT_NO" />
 		<result property="documentProcessDate" column="DOCUMENT_PROCESS_DATE" />
 		<result property="approvalStatus" column="APPROVAL_STATUS" />
 		<result property="receivingReqNo" column="RECEIVING_REQ_NO" />
@@ -112,10 +113,9 @@
 		<result property="productStock" column="PRODUCT_STOCK" />
 		<result property="unit" column="UNIT" />
 		<result property="productName" column="PRODUCT_NAME" />
-		
-
-
   	</resultMap> 
+  	
+
 	
 	<!-- 창고에 보관중인 상품리스트 조회 -->
 	<select id="selectStorageAll" resultMap="storageResultMap">
@@ -158,6 +158,7 @@
 	 WHERE A.SELL_STATUS = '판매'         
 	</select>
 	
+	<!-- 상품 재고관련 상세정보 -->
 	<select id="selectOneProductInfoByNo" resultMap="productStockInfoResultMap">
 	SELECT /* com.deft.crud.stock.model.dao.StockMapper#selectOneProductInfoByNo() */
 	       RC.CATEGORY_NAME "REF_CATEGORY_NAME"
@@ -181,6 +182,7 @@
 	 WHERE A.PRODUCT_NO = #{ productNo }
 	</select>
 	
+	<!-- 재고관리(상품 재고수량 및 창고위치 변경) -->
 	<update id="modifyStockCondition" parameterType="com.deft.crud.stock.model.dto.RequestStockDTO">
 	UPDATE /* com.deft.crud.stock.model.dao.StockMapper#modifyStockCondition() */
 	       TBL_STORAGE A
@@ -190,6 +192,7 @@
 	 WHERE PRODUCT_NO = #{ stockProductNo }    
 	</update>
 	
+	<!-- 입고요청서에 요청한 상품목록 -->
 	<update id="insertStockReceivingProduct" parameterType="java.util.List"> 
 		<foreach collection="list" item="item" open="INSERT ALL" close="SELECT * FROM DUAL" separator=" "> 
 			/* com.deft.crud.stock.model.dao.StockMapper#insertStockReceivingProduct() */
@@ -208,8 +211,9 @@
 		</foreach>
 	</update>
 	
+	<!-- 입고요청번호 생성 -->
 	<insert id="insertReceivingReq">
-		INSERT
+		INSERT /* com.deft.crud.stock.model.dao.StockMapper#insertReceivingReq() */
 		  INTO TBL_RECEIVING_REQ 
 		VALUES
 		(  
@@ -229,6 +233,8 @@
 			  , REQ_REASON
 			  , EMP_NO
 			  , MANAGER_NO
+			  , DOCUMENT_STATUS
+			  , DOCUMENT_PROCESS_DATE
 			  )
 			  VALUES
 			  (
@@ -237,7 +243,9 @@
 			   , '입고요청'
 			   , #{ reqReason }
 			   , #{ empNo }   
-			   , #{ managerNo }          
+			   , #{ managerNo }  
+			   , '대기중' 
+			   , SYSDATE       
 			  )
 	</insert>
 	
@@ -260,6 +268,7 @@
 		  )	
 	</insert>
 	
+	<!-- 요청목록 전체 조회(담당자용) -->
 	<select id="selectReceivingReqAll" resultMap="receivingReqResultMap">
 		SELECT /* com.deft.crud.stock.model.dao.StockMapper#selectReceivingReqAll() */
 			   A.APPROVAL_DOCUMENT_NO
@@ -270,16 +279,15 @@
 			 , E.EMP_NAME
 			 , A.MANAGER_NO
 			 , B.RECEIVING_REQ_NO  
-			 , D.RECEIVING_REQ_HIS_NO
-			 , D.DOCUMENT_PROCESS_DATE
-			 , D.APPROVAL_STATUS
+			 , A.DOCUMENT_WRITE_DATE
+			 , A.DOCUMENT_STATUS
 	      FROM TBL_APPROVAL_DOCUMENT A
 	      LEFT JOIN TBL_EMP_INFO E ON (A.EMP_NO = E.EMP_NO)
           LEFT JOIN TBL_RECEIVING_REQ B ON (A.APPROVAL_DOCUMENT_NO = B.APPROVAL_DOCUMENT_NO)
-	      LEFT JOIN TBL_RECEIVING_REQ_HIS D ON (B.RECEIVING_REQ_NO = D.RECEIVING_REQ_NO) 
-	      ORDER BY  D.DOCUMENT_PROCESS_DATE DESC
+          ORDER BY A.DOCUMENT_WRITE_DATE DESC
 	</select>
 	
+	<!-- 선택한 요청서 상세정보 -->
 	<select id="selectReceivingReqByNo" resultMap="receivingReqResultMap" parameterType="_int">
 		SELECT /* com.deft.crud.stock.model.dao.StockMapper#selectReceivingReqByNo() */
 			   A.APPROVAL_DOCUMENT_NO
@@ -289,17 +297,19 @@
 			 , A.EMP_NO
 			 , E.EMP_NAME
 			 , A.MANAGER_NO
+			 , M.EMP_NAME "MANAGER_NAME"
 			 , B.RECEIVING_REQ_NO  
-			 , D.RECEIVING_REQ_HIS_NO
-			 , D.DOCUMENT_PROCESS_DATE
-			 , D.APPROVAL_STATUS
+			 , A.DOCUMENT_WRITE_DATE
+			 , A.DOCUMENT_PROCESS_DATE
+			 , A.DOCUMENT_STATUS
 	      FROM TBL_APPROVAL_DOCUMENT A
 	      LEFT JOIN TBL_EMP_INFO E ON (A.EMP_NO = E.EMP_NO)
+	      LEFT JOIN TBL_EMP_INFO M ON (A.MANAGER_NO = M.EMP_NO)
           LEFT JOIN TBL_RECEIVING_REQ B ON (A.APPROVAL_DOCUMENT_NO = B.APPROVAL_DOCUMENT_NO)
-	      LEFT JOIN TBL_RECEIVING_REQ_HIS D ON (B.RECEIVING_REQ_NO = D.RECEIVING_REQ_NO) 
 	      WHERE B.RECEIVING_REQ_NO = #{ reqNo } 
 	</select>
 	
+	<!-- 요청서 상세내용 중 입고요청상품 목록 -->
 	<select id="receivingReqProductByReqNo" resultMap="receivingReqResultMap" parameterType="_int">
 		SELECT /* com.deft.crud.stock.model.dao.StockMapper#receivingReqProductByReqNo() */
 		       A.PRODUCT_NO
@@ -312,6 +322,34 @@
 		  LEFT JOIN TBL_STORAGE S ON (A.PRODUCT_NO = S.PRODUCT_NO)     
          WHERE A.RECEIVING_REQ_NO = #{ reqNo }	
 	</select>
+	
+	<!-- 결재문서 상태 변경(결재처리) -->
+	<update id="modifyApprovalStatus" parameterType="com.deft.crud.stock.model.dto.approval.ApprovalModifyDTO">
+		UPDATE /* com.deft.crud.stock.model.dao.StockMapper#modifyApprovalStatus() */
+		       TBL_APPROVAL_DOCUMENT A
+		   SET A.DOCUMENT_STATUS = #{ approvalStatus }
+		     , A.DOCUMENT_PROCESS_DATE = TO_DATE(#{ documentProcessDate }, 'YYYY-MM-DD HH24:MI:SS')
+		 WHERE APPROVAL_DOCUMENT_NO = #{ approvalDocumentNo }   
+	</update>
+	
+	<!-- 결재처리 후 결재이력 생성 -->
+	<insert id="insertReceivingReqHistory" parameterType="com.deft.crud.stock.model.dto.approval.ApprovalModifyDTO">
+		INSERT /* com.deft.crud.stock.model.dao.StockMapper#insertReceivingReqHistory() */
+		  INTO TBL_RECEIVING_REQ_HIS A
+		  (
+		    A.RECEIVING_REQ_HIS_NO
+		  , A.DOCUMENT_PROCESS_DATE 
+		  , A.APPROVAL_STATUS 
+		  , A.RECEIVING_REQ_NO 
+		  )
+		  VALUES
+		  (
+		    SEQ_RECEIVING_REQ_HIS_NO.NEXTVAL
+		  , TO_DATE(#{ documentProcessDate }, 'YYYY-MM-DD HH24:MI:SS')
+		  , #{ approvalStatus } 
+		  , #{ receivingReqNo }  
+		  )
+	</insert>
 	
 </mapper>
 

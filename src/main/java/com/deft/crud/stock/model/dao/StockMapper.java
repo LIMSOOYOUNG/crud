@@ -10,6 +10,7 @@ import com.deft.crud.stock.model.dto.RequestStockDTO;
 import com.deft.crud.stock.model.dto.ResponseStockDTO;
 import com.deft.crud.stock.model.dto.StorageDTO;
 import com.deft.crud.stock.model.dto.approval.ApprovalDocumentDTO;
+import com.deft.crud.stock.model.dto.approval.ApprovalModifyDTO;
 import com.deft.crud.stock.model.dto.approval.ReceivingReqDTO;
 import com.deft.crud.stock.model.dto.approval.ReceivingReqProductDTO;
 
@@ -44,6 +45,10 @@ public interface StockMapper {
 	ReceivingReqDTO selectReceivingReqByNo(int reqNo);
 
 	List<ReceivingReqDTO> receivingReqProductByReqNo(int reqNo);
+
+	int modifyApprovalStatus(ApprovalModifyDTO parameters);
+
+	int insertReceivingReqHistory(ApprovalModifyDTO parameters);
 
 
 }

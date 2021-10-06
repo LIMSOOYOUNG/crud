@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="https://www.thymeleaf.org">
+<html lang="ko"
+	xmlns:th="https://www.thymeleaf.org"
+	xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-spingsecurity5">
 
 <head>
 <th:block th:replace="@{common/config} :: config"></th:block>
@@ -222,12 +224,12 @@ input {
 								<div class="form-group row mb-12" th:align="right">
 									<div class="col-lg-6 col-form-label"></div>
 											<label for="customerName" class="col-lg-2 col-form-label">결재 담당자</label>
-											<input class="form-control col-lg-3" id="ManagerName" name="ManagerName" readonly required>
+											<span class="form-control col-lg-3" id="ManagerName">
+												<span sec:authentication='principal.managerNo'></span>
+												<span sec:authentication='principal.managerName'></span>
+											</span>
 											<input class="form-control" id="managerNo" name="managerNo" hidden="hidden">
-											<div class="input-group-append">
-												<button type="button" class="btn btn-primary" id="searchCustomer"
-														data-toggle="modal" data-target="#managerModal">검색</button>
-											</div>
+											
 										</div>
 								<div class="row">
 									<div class="form-group col-xl-12">
