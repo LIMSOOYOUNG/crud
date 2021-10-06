@@ -958,6 +958,10 @@
             });
         });
 
+        $(document).on('click', '#deleteActivity', function () {
+            $('#modifyForm').submit();
+        });
+
         $(document).on('click', '#modifyActivity', function () {
 
             $('input').attr('readonly', false);
@@ -966,13 +970,8 @@
             var text = $('#modifyActivity').text();
             if(text == '영업활동 수정') {
 
-                $('#modifyForm').attr('th:action', '@{/customer/activity/modify}');
-
                 $('#modifyActivity').text('수정 완료');
                 $('#modifyActivity').attr('id', 'successModifyActivity');
-                // $('#successModifyActivity').attr('th:', '@{/customer/activity/modify}');
-                // $('#successModifyActivity').attr('type', 'submit');
-
 
                 $('#deleteActivity').text('돌아가기');
                 $('#deleteActivity').attr('id', 'backToDetail');
@@ -989,6 +988,7 @@
             }
 
             $(document).on('click', '#successModifyActivity', function () {
+                $('#modifyForm').attr('action', '/customer/activity/modify');
                 $('#modifyForm').attr('method', 'post');
                 $('#modifyForm').submit();
             });

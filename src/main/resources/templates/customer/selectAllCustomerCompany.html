@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="https://www.thymeleaf.org">
+<head>
+    <th:block th:replace="@{common/config} :: config"></th:block>
+    <link href="/vendor/datatables/dataTables.bootstrap4.min.css"
+          rel="stylesheet">
+</head>
+
+<body id="page-top">
+    <div id="wrapper">
+        <!-- Sidebar -->
+        <th:block th:replace="@{/common/sidebar} :: sidebar"></th:block>
+
+        <div id="content-wrapper" class="d-flex flex-column">
+            <div id="content">
+                <!-- Header -->
+                <th:block th:replace="@{/common/header} :: header"></th:block>
+
+                <!-- Content -->
+                <div class="card mb-4">
+                    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                        <h6 class="m-0 font-weight-bold text-primary">고객사 현황</h6>
+                        <div>
+                            <a class="btn btn-info btn-icon-split"
+                               id="insertCompany">
+                                <span class="icon text-white">
+                                    <i class="fas fa-edit"></i>
+                                </span>
+                                <span class="text text-white">고객사 등록</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="container-fluid" id="container-wrapper">
+                        <table id="table_customer" class="table align-items-center table-flush table-hover">
+                            <thead class="thead-light" th:align="center">
+                            <tr>
+                                <th>고객사명</th>
+                                <th>업태</th>
+                                <th>종목</th>
+                                <th>대표자명</th>
+                                <th>상세보기</th>
+                            </tr>
+                            </thead>
+                            <tbody th:align="center">
+                            <tr th:each="company : ${ companyList }" >
+                                <td th:text="${ company.companyName }"></td>
+                                <td th:text="${ company.businessStatus }"></td>
+                                <td th:text="${ company.businessType }"></td>
+                                <td th:text="${ company.ceoName }"></td>
+                                <td>
+                                    <a class="btn btn-dark btn-icon-split">
+                                        <input type="hidden" th:value="${ company.customerCompanyNo }">
+                                        <span class="icon text-white-50">
+                                            <i class="fas fa-clipboard-list"></i>
+                                        </span>
+                                        <span class="text text-white">상세정보</span>
+                                    </a>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!------------- Detail Info Modal --------------->
+    <div class="modal fade" id="detailModal" role="dialog">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+
+            <!-- Modal content-->
+            <div class="modal-content" id="detailInfo">
+            </div>
+        </div>
+    </div>
+
+    <!------------- Insert Info Modal --------------->
+    <div class="modal fade" id="insertModal" role="dialog">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+
+            <!-- Modal content-->
+            <div class="modal-content" id="insertInfo">
+                <form id="insertForm" method="post" action="/customer/company/insert">
+                    <div class="modal-header">
+                        <h4 class="modal-title" style="color: #0da8ee">상세정보</h4>
+                        <button type="button" class="close" data-dismiss="modal"><i class="far fa-times-circle"></i></button>
+                        <div class="row">
+                            <div class="form-group col-lg-12"><input type="hidden" value="emptyRow"></div>
+                        </div>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="form-group col-lg-12"><input type="hidden" value="emptyRow"></div>
+                        </div>
+                        <div class="card mb-auto">
+                            <div class="row">
+                                <div class="form-group col-lg-12"><input type="hidden" value="emptyRow"></div>
+                            </div>
+                            <div class="row">
+
+                                <div class="form-group col-lg-12 row">
+                                    <div class="form-group col-lg-1"><input type="hidden" value="emptyRow"></div>
+                                    <label for="modalCompanyName" class="col-lg-1 form-control-plaintext"
+                                           th:align="center"
+                                           style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">고객사명</label>
+                                    <input id="modalCompanyName" type="text" class="form-control col-lg-9"
+                                           name="companyName">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-lg-6 row">
+                                    <div class="form-group col-lg-1"><input type="hidden" value="emptyRow"></div>
+                                    <label for="modalRegistNo" class="col-lg-4 form-control-plaintext"
+                                           th:align="center"
+                                           style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">사업자등록번호</label>
+                                    <input id="modalRegistNo" type="text" class="form-control col-lg-7"
+                                           name="companyRegistNo">
+                                </div>
+                                <div class="form-group col-lg-6 row">
+                                    <div class="form-group col-lg-1"><input type="hidden" value="emptyRow"></div>
+                                    <label for="modalCeoName" class="col-lg-4 form-control-plaintext"
+                                           th:align="center"
+                                           style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">대표자명</label>
+                                    <input id="modalCeoName" type="text" class="form-control col-lg-7"
+                                           name="ceoName">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-lg-6 row">
+                                    <div class="form-group col-lg-1"><input type="hidden" value="emptyRow"></div>
+                                    <label for="modalBusinessStatus" class="col-lg-4 form-control-plaintext"
+                                           th:align="center"
+                                           style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">업태</label>
+                                    <input id="modalBusinessStatus" type="text" class="form-control col-lg-7"
+                                           name="businessStatus">
+                                </div>
+                                <div class="form-group col-lg-6 row">
+                                    <div class="form-group col-lg-1"><input type="hidden" value="emptyRow"></div>
+                                    <label for="modalBusinessType" class="col-lg-4 form-control-plaintext"
+                                           th:align="center"
+                                           style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">종목</label>
+                                    <input id="modalBusinessType" type="text" class="form-control col-lg-7"
+                                           name="businessType">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-lg-6 row">
+                                    <div class="form-group col-lg-1"><input type="hidden" value="emptyRow"></div>
+                                    <label for="modalRevenue" class="col-lg-4 form-control-plaintext"
+                                           th:align="center"
+                                           style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">연매출액(만원)</label>
+                                    <input id="modalRevenue" type="text" class="form-control col-lg-7"
+                                           name="companyRevenue">
+                                </div>
+                                <div class="form-group col-lg-6 row">
+                                    <div class="form-group col-lg-1"><input type="hidden" value="emptyRow"></div>
+                                    <label for="modalNumberOfEmp" class="col-lg-4 form-control-plaintext"
+                                           th:align="center"
+                                           style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">직원수(명)</label>
+                                    <input id="modalNumberOfEmp" type="text" class="form-control col-lg-7"
+                                           name="numberOfEmployees">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-lg-6 row">
+                                    <div class="form-group col-lg-1"><input type="hidden" value="emptyRow"></div>
+                                    <label for="modalHomepage" class="col-lg-4 form-control-plaintext"
+                                           th:align="center"
+                                           style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">홈페이지</label>
+                                    <input id="modalHomepage" type="text" class="form-control col-lg-7"
+                                           name="homepage">
+                                </div>
+                                <div class="form-group col-lg-6 row">
+                                    <div class="form-group col-lg-1"><input type="hidden" value="emptyRow"></div>
+                                    <label for="modalCompanyAddress" class="col-lg-4 form-control-plaintext"
+                                           th:align="center"
+                                           style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">사업장주소</label>
+                                    <input id="modalCompanyAddress" type="text" class="form-control col-lg-7"
+                                           name="companyAddress">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">고객사 등록</button>
+                    </div>
+                    <div id="count" value="1"></div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script -->
+    <th:block th:replace="@{/common/script} :: script"></th:block>
+    <script src="/vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#dataTable').DataTable(); // ID From dataTable
+            $('#table_customer').DataTable(); // ID From dataTable with Hover
+        });
+
+        $('#insertCompany').click(function () {
+            $('#insertModal').modal();
+        });
+
+        $('#table_customer tbody tr td a').on('click', function () {
+
+            const companyNo = $(this).children(0).val();
+
+            $(document).ready(function () {
+                $('#detailInfo').load('company/detail?companyNo=' + companyNo, function () {
+                    $('#detailModal').modal();
+                });
+
+            });
+        });
+
+        $(document).on('click', '#deleteDetailInfo', function () {
+            $('#modifyForm').submit();
+        });
+
+        $(document).on('click', '#modifyDetailInfo', function () {
+
+            $('input').attr('readonly', false);
+
+            var text = $('#modifyDetailInfo').text();
+            if(text == '상세정보수정') {
+
+                $('#modifyDetailInfo').text('수정 완료');
+                $('#modifyDetailInfo').attr('id', 'successModifyDetailInfo');
+
+                $('#deleteDetailInfo').text('돌아가기');
+                $('#deleteDetailInfo').attr('id', 'backToDetail');
+
+            }
+
+            $(document).on('click', '#successModifyDetailInfo', function () {
+                $('#modifyForm').attr('action', '/customer/company/modify');
+                $('#modifyForm').attr('method', 'post');
+                $('#modifyForm').submit();
+            });
+
+            $(document).on('click', '#backToDetail', function () {
+
+                const companyNo = $(this).prev().val();
+
+                $('#detailInfo').load('company/detail?companyNo=' + companyNo, function () {
+                    $('#detailModal').modal();
+                });
+            });
+
+        });
+    </script>
+</body>
+
+</html>

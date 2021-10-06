@@ -58,4 +58,28 @@ public interface CustomerMapper {
 
     /* 영업 활동 수정 */
     int modifyActivity(BusinessActivityDTO parameters);
+
+    /* 영업 활동 삭제 */
+    int deleteActivity(BusinessActivityDTO parameters);
+
+    /* 고객사 전체 조회 */
+    List<CustomerCompanyDTO> selectAllCustomerCompany();
+
+    /* 고객사 상세 조회 */
+    CustomerCompanyDTO selectCustomerCompanyInfo(int companyNo);
+
+    /* 고객사 정보 수정 */
+    int modifyDetailInfoToCustomerCompany(CustomerCompanyDTO parameters);
+
+    /* 고객사 삭제 */
+    int deleteCustomerCompany(CustomerCompanyDTO parameters);
+
+    /* 고객사 등록 */
+    int insertCustomerCompany(CustomerCompanyDTO parameters);
+
+    /* 상품 조회 */
+    List<ProductDTO> selectProduct();
+
+    /* 분석고객 기본정보 등록 */
+    int insertCustomer(InsertCustomerDTO parameters);
 }
