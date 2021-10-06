@@ -145,8 +145,8 @@
 	</select>
 	
 	<!-- 판매가능 상태인 모든 상품들 -->
-	<select id="selectSellAbleProductAll" resultMap="storageResultMap">
-	SELECT /* com.deft.crud.stock.model.dao.StockMapper#selectSellAbleProductAll() */
+	<select id="selectSellableProductAll" resultMap="storageResultMap">
+	SELECT /* com.deft.crud.stock.model.dao.StockMapper#selectSellableProductAll() */
 	       A.PRODUCT_NO
 	     , A.PRODUCT_NAME
 	     , A.UNIT
