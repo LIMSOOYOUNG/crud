@@ -18,9 +18,17 @@
 				<div class="container-fluid" id="container-wrapper">
 					<div
 						class="d-sm-flex align-items-center justify-content-between mb-4">
-						<h1 class="h3 mb-0 text-gray-800">공지사항</h1>
+						<h1 class="h3 mb-0 text-gray-800">공지사항 조회</h1>
 					</div>
-
+					<div align="right">
+						<form action="/admin/noticedelete" method="post">
+							<input type="hidden" name="writeNo" th:value="${boardDTO.writeNo}">
+							<button type="submit"  class="btn btn-primary" id="deletebtn" >삭제</button>
+						</form>
+					</div>
+					<br>
+					
+					
 					
 					<!-- Row -->
 					<div class="row">
@@ -54,9 +62,8 @@
                             		<textarea rows="20" cols="150" class="form-control" id="exampleFormControlTextarea1" th:text="${boardDTO.contents}" th:readonly="readonly"></textarea>
                             	</div>
                             	<div align="right">
-                            		<button type="submit" class="btn btn-primary">수정</button>
-                            		<button type="submit" class="btn btn-primary">삭제</button>
-                            	</div>
+                            		<button type="button" class="btn btn-primary" th:onclick="|location.href='@{/admin/noticemodify(writeNo=${boardDTO.writeNo})}'|">수정</button>
+                        		</div> 
                             	</div>
 						</div>
 				</div>
@@ -67,6 +74,17 @@
 
 	<!-- Script -->
 	<th:block th:replace="@{/common/script} :: script"></th:block>
+	<script>
+		$("#deletebtn").click(function(){
+			if(confirm("삭제하시겠습니까?") == true){
+				alert("삭제되었습니다.")
+			}
+			else{
+				return;
+			}
+		});
+	</script>
+	
 </body>
 
 </html>

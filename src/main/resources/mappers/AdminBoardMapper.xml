@@ -41,9 +41,31 @@
 		  FROM USER_SEQUENCES
 	     WHERE SEQUENCE_NAME = 'SEQ_WRITE_NO'
 	</select>
+	<select id="noticeModifyform" parameterType="_int" resultType="com.deft.crud.admin.board.model.dto.AdminBoardDTO">
+		SELECT /*com.deft.crud.board.model.dto.BoardDTO*/
+		       B.BOARD_NO
+		     , B.WRITE_NO
+             , B.BOARD_NAME
+             , B.CONTENTS
+          FROM TBL_BOARD B
+          JOIN TBL_EMP_INFO E ON (E.EMP_NO = B.EMP_NO)
+         WHERE B.BOARD_NO = 1
+           AND B.WRITE_NO = #{ writeNo }
+	</select>
+	<update id="noticeModify" parameterType="com.deft.crud.admin.board.model.dto.AdminBoardDTO">
+		UPDATE /*com.deft.crud.admin.board.model.dto.AdminBoardDTO*/
+	           TBL_BOARD B
+	       SET B.BOARD_NAME = #{ boardName,jdbcType=VARCHAR }
+	         , B.CONTENTS = #{ contents,jdbcType=VARCHAR }
+	     WHERE B.WRITE_NO = #{ writeNo }
+	</update>
 
-
-
+		
+	<delete id="deleteNotice" parameterType="_int">
+		DELETE /*com.deft.crud.admin.board.model.dto.AdminBoardDTO*/
+		  FROM TBL_BOARD B
+		 WHERE B.WRITE_NO = #{ writeNo, jdbcType = INTEGER }
+	</delete>
 
 
 </mapper>

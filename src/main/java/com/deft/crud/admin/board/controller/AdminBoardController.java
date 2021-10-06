@@ -28,28 +28,6 @@ public class AdminBoardController {
 	}
 	
 	
-	/* 공지사항 삭제 */
-	@GetMapping("deletenotice")
-	public void deleteNotice() {}
-	
-	@PostMapping("deletenotice")
-	public ModelAndView deleteNoticeForm(ModelAndView mv, RedirectAttributes rttr
-			, @RequestParam(defaultValue = "0")int BoardNo) {
-		
-		int result = adminBoardService.deleteNotice(BoardNo);
-		
-		if(result > 0) {
-			rttr.addAttribute("flashMessage", "공지사항 삭제성공!!");
-		}else {
-			rttr.addFlashAttribute("flashMessage", "공지사항 삭제실패!!");
-		}
-		mv.setViewName("board/selectfreeboard");
-		
-		
-		
-		return mv;
-	}
-	
 	/* 공지사항 등록 */
 	@GetMapping("noticeinsert")
 	public ModelAndView noticeinsert(ModelAndView mv) {
@@ -78,6 +56,53 @@ public class AdminBoardController {
 		return mv;
 	}
 	
+	/* 공지사항 수정 */
+	@GetMapping("noticemodify")
+	public ModelAndView noticeModify(ModelAndView mv, @RequestParam int writeNo) {
+		
+		AdminBoardDTO boardDTO = adminBoardService.noticeModifyform(writeNo);
+		
+		System.out.println("여기는 수정페이지입니다." + boardDTO);
+		
+		mv.setViewName("admin/noticemodify");
+		mv.addObject("boardDTO", boardDTO);
+		
+		return mv;
+	}
 	
+	@PostMapping("noticemodify")
+	public ModelAndView noticeModifyForm(ModelAndView mv, @ModelAttribute BoardDTO parameters
+			,@AuthenticationPrincipal UserImpl loginInfo) {
+		
+		System.out.println("DTO 입니다: " + parameters);
+		
+		int result = adminBoardService.noticeModify(parameters);
+		
+		if(result > 0) {
+			
+			mv.setViewName("redirect:/board/noticedetail?writeNo=" + parameters.getWriteNo());
+			
+		}
+		
+		mv.addObject("parameters", parameters);
+		
+		return mv;
+		
+	}
+	
+	/* 공지사항 삭제 */
+	@GetMapping("noticedelete")
+	public void deletenotice() {}
+	
+	@PostMapping("noticedelete")
+	public ModelAndView deleteNotice(ModelAndView mv, @ModelAttribute BoardDTO parameters) throws Exception {
+		
+		int writeNo = adminBoardService.deleteNotice(parameters.getWriteNo());
+		
+		mv.setViewName("redirect:/board/selectnotice");
+		mv.addObject("writeNo", writeNo);
+		
+		return mv;
+	}
 	
 }

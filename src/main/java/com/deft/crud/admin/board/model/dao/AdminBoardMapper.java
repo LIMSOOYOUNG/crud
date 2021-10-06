@@ -14,7 +14,14 @@ public interface AdminBoardMapper {
 	/* 공지사항 등록 */
 	int noticeInsert(BoardDTO parameters);
 
+	/* 공지사항 등록페이지 공지사항 글번호 전달*/
 	int selectSeqNoticeNo();
+
+	/* 공지사항 수정 페이지에 로그인값 전달 */
+	AdminBoardDTO noticeModifyform(int writeNo);
+
+	/* 공지사항 수정 */
+	int noticeModify(BoardDTO parameters);
 
 
 	

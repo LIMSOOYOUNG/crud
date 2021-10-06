@@ -1,12 +1,16 @@
 package com.deft.crud.board.controller;
 
+import java.security.Principal;
+import java.time.LocalDate;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -15,6 +19,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.deft.crud.board.model.dto.BoardDTO;
 import com.deft.crud.board.model.service.BoardService;
+import com.deft.crud.member.model.service.UserImpl;
 
 @Controller
 @RequestMapping("/board")
@@ -53,45 +58,33 @@ public class BoardController {
 	
 	/* 자유게시글 등록 */
 	@GetMapping("/freeboardinsert")
-	public void freeboardInsert() {}
-	
-	
-	@PostMapping("/freeboardinsert")
-	public ModelAndView insertfreeboardForm(ModelAndView mv, HttpSession session,
-			@RequestParam String boardName) 
-					throws Exception {
-
-	    String writer = (String) session.getAttribute("emp_id");
+	public ModelAndView freeboardInsert(ModelAndView mv) {
 		
-		BoardDTO board = new BoardDTO();
-		board.setEmpName(writer);
-	
-		System.out.println(board);
+		int writeNo = boardService.selectSeqFreeboardNo();
 		
-		System.out.println(board);
-		int result = boardService.insertFreeboard(board);
-
-		if(result>0) {
-			mv.setViewName("redirect:/board/selectfreeboard?writer=" + writer);
-		}
-
+		mv.addObject("writeNo", writeNo);
+		
+		System.out.println(writeNo);
+		
 		return mv;
 	}
 	
-	/* 자유게시글 삭제 */
-	@GetMapping("/deletefreeboard")
-	public void deletefreeboard() {}
 	
-	@PostMapping("/deletefreeboard")
-	public ModelAndView deletefreeboardform(ModelAndView mv, RedirectAttributes rttr
-											, @RequestParam(defaultValue = "0")int BoardNo) {
+	@PostMapping("/freeboardinsert")
+	public ModelAndView insertfreeboardForm(ModelAndView mv, @ModelAttribute BoardDTO parameters,
+			@AuthenticationPrincipal UserImpl loginInfo) 
+					throws Exception {
 		
-		int result = boardService.deleteFreeboard(BoardNo);
+	    int loginEmpNo = loginInfo.getEmpNo();
+	    parameters.setEmpNo(loginEmpNo);
+	    
+		int result = boardService.insertFreeboard(parameters);
 		
-		if(result > 0) {
-			mv.setViewName("board/selectfreeboard");
+		if(result>0) {
+			
+			mv.setViewName("redirect:/board/selectfreeboard");
 		}
-		
+
 		return mv;
 	}
 	
@@ -126,5 +119,58 @@ public class BoardController {
 		return mv;
 	}
 	
+	/* 자유게시글 수정*/
+	@GetMapping("freeboardmodify")
+	public ModelAndView freeboardModify(ModelAndView mv, @RequestParam int writeNo) throws Exception {
+		
+		BoardDTO boardDTO = boardService.freeboardModifyForm(writeNo);
+		
+		System.out.println("여기는 수정페이지입니다." + boardDTO);
+		
+		mv.setViewName("board/freeboardmodify");
+		mv.addObject("boardDTO", boardDTO);
+		
+		
+		return mv;
+	}
+	
+	@PostMapping("freeboardmodify")
+	public ModelAndView freeboardForm(ModelAndView mv, @ModelAttribute BoardDTO parameters,@AuthenticationPrincipal UserImpl loginInfo) {
+		
+		System.out.println("DTO 입니다: " + parameters);
+		
+		int result = boardService.freeboardModify(parameters);
+		
+		
+		if(result > 0) {
+			
+			mv.setViewName("redirect:/board/freeboarddetail?writeNo=" + parameters.getWriteNo());
+			
+		}
+		System.out.println(result);
+		
+		mv.addObject("parameters", parameters);
+		
+		return mv;
+	}
+	
+	/* 자유게시글 삭제 */
+	@GetMapping("deletefreeboard")
+	public void deletefreeboard() {}
+	
+	@PostMapping("deletefreeboard")
+	public ModelAndView deletefreeboard(ModelAndView mv, @ModelAttribute BoardDTO parameters)throws Exception {
+		
+		int writeNo = boardService.deleteFreeboard(parameters.getWriteNo());
+		
+		System.out.println("writeNo : " + writeNo);
+		
+		mv.setViewName("redirect:/board/selectfreeboard");
+		
+		mv.addObject("writeNo", writeNo);
+		
+		return mv;
+	}
 	
 }
+
