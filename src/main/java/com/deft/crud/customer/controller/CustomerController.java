@@ -2,26 +2,16 @@ package com.deft.crud.customer.controller;
 
 import com.deft.crud.customer.model.dto.*;
 import com.deft.crud.customer.model.service.CustomerService;
-import com.deft.crud.member.model.dto.MemberDTO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.SimpleTimeZone;
 
 @Controller
 @RequestMapping("/customer")
@@ -73,10 +63,6 @@ public class CustomerController {
         List<BusinessActivityDTO> businessActivityList = customerService.selectBusinessActivity(customerNo);
 
         List<EmpInfoDTO> empInfoList = customerService.selectEmpInfo();
-
-//        for(BusinessActivityDTO businessActivityDTO : businessActivityList) {
-//            int actNo = businessActivityDTO.getActivityNo();
-//        }
 
         mv.addObject("customerInfo", customerInfo);
         mv.addObject("businessActivityList", businessActivityList);
@@ -306,8 +292,6 @@ public class CustomerController {
     @PostMapping("/activity/modify")
     public ModelAndView modifyDetailActivity(ModelAndView mv, @ModelAttribute BusinessActivityDTO parameters) {
 
-        System.out.println("처리 메소드 진입");
-
         int customerNo = parameters.getCustomerNo();
 
         int result = customerService.modifyActivity(parameters);
@@ -431,21 +415,13 @@ public class CustomerController {
     @PostMapping("/ana/insert")
     public ModelAndView insertCustomer(ModelAndView mv, @ModelAttribute InsertCustomerDTO parameters, @RequestParam List<Integer> productNo) {
 
-
         int customerResult = customerService.insertCustomer(parameters);
-
-        for (int value : productNo) {
-
-            System.out.println(value);
-        }
 
         List<CustomerProductDTO> products = new ArrayList<>();
 
         for (int integer : productNo) {
             products.add(new CustomerProductDTO(parameters.getCustomerNo(), integer, null));
         }
-
-
 
         int detailResult = customerService.insertDetail(parameters);
         int productResult = customerService.insertProduct(products);
