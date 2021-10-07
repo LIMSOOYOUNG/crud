@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -42,14 +43,14 @@ public class SalesController {
 		
 		int empNo = loginInfo.getEmpNo();
 		
-		/* 목표 실적 조회*/
+		/* 로그인 된 사원의 목표 실적 조회*/
 		List<TargetPerfomDTO> empTargetPerformList = salesService.empTargetPerformList(empNo);
 		
-		/* 폼에다 실적을 등록하기 위한 연과 월을 확인해주기 위해 LocalDate 생성 후 연과 월의 객체를 뷰에 전달*/
-		LocalDate insertTargetDate = LocalDate.of(2021, 9, 1);
+		/* 폼에다 실적을 등록하기 위한 연과 월을 확인해주기 위해 LocalDate 생성 후 현재 연도와 월의 객체를 뷰에 전달*/
+		LocalDate insertTargetDate = LocalDate.now();
 		
-		String performYear = Integer.toString(insertTargetDate.getYear());
-		String performMonth = Integer.toString(insertTargetDate.getMonthValue());
+		String performYear = Integer.toString(insertTargetDate.getYear());				// 디비에 값 저장을 위해 String 타입으로 형변환(연도)
+		String performMonth = Integer.toString(insertTargetDate.getMonthValue());       // 위와 내용 같음 (월)
 		System.out.println("monthValue : " + insertTargetDate.getMonthValue());
 		
 		System.out.println("empTargetPerformList : " + empTargetPerformList);
@@ -76,6 +77,22 @@ public class SalesController {
 		mv.addObject("empPerfomList", objectMapper.writeValueAsString(empPerfomList));
 		mv.setViewName("jsonView");
 		return mv;
+	}
+	
+	@GetMapping("/select")
+	public ModelAndView userPerformList(ModelAndView mv, 
+										@RequestParam("no") String performDate) {
+		
+		String performYear = performDate.substring(0, 4);
+		String performMonth = performDate.substring(4);
+		
+		System.out.println("performYear : " + performYear);
+		System.out.println("performMonth : " + performMonth);
+		
+		System.out.println("performDate : " + performDate);
+		
+		
+		return null;
 	}
 	
 	

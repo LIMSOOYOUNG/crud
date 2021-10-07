@@ -234,6 +234,7 @@ public class ProductController {
 		return mv;
 	}
 	
+	/* 카테고리(중) 수정*/
 	@PostMapping("/category/medium/modify")
 	public ModelAndView updateMediumCategory(ModelAndView mv, @ModelAttribute ProductCategoryDTO parameters,
 			RedirectAttributes rttr) {
