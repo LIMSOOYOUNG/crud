@@ -185,4 +185,24 @@ public class CustomerService {
 
         return customerMapper.insertCustomer(parameters);
     }
+
+    /* 분석고객 상태 등록 */
+    @Transactional
+    public int insertDetail(InsertCustomerDTO parameters) {
+
+        return customerMapper.insertDetail(parameters);
+    }
+
+    /* 분석고객 관심상품 등록 */
+    @Transactional
+    public int insertProduct(List<CustomerProductDTO> products) {
+
+        return customerMapper.insertProduct(products);
+    }
+
+    /* 분석고객 -> 기존고객 변경 */
+    public int insertExtCustomer(AnaCustomerDetailDTO parameters) {
+
+        return customerMapper.insertExtCustomer(parameters);
+    }
 }

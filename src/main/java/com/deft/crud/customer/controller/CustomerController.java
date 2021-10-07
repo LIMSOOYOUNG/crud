@@ -2,26 +2,16 @@ package com.deft.crud.customer.controller;
 
 import com.deft.crud.customer.model.dto.*;
 import com.deft.crud.customer.model.service.CustomerService;
-import com.deft.crud.member.model.dto.MemberDTO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.SimpleTimeZone;
 
 @Controller
 @RequestMapping("/customer")
@@ -73,10 +63,6 @@ public class CustomerController {
         List<BusinessActivityDTO> businessActivityList = customerService.selectBusinessActivity(customerNo);
 
         List<EmpInfoDTO> empInfoList = customerService.selectEmpInfo();
-
-//        for(BusinessActivityDTO businessActivityDTO : businessActivityList) {
-//            int actNo = businessActivityDTO.getActivityNo();
-//        }
 
         mv.addObject("customerInfo", customerInfo);
         mv.addObject("businessActivityList", businessActivityList);
@@ -204,6 +190,10 @@ public class CustomerController {
 
         int result = customerService.modifyAnaCustomerStatus(parameters);
 
+        if(parameters.getCustomerStatus().equals("성공고객")) {
+            int insertResult = customerService.insertExtCustomer(parameters);
+        }
+
         if(result > 0) {
             mv.setViewName("redirect:/customer/anainfo?customerNo=" + customerNo);
         }
@@ -224,28 +214,6 @@ public class CustomerController {
         }
 
         return mv;
-    }
-
-    /* 담당사원명 자동 완성 기능 */
-    @PostMapping("/auto")
-    public void getEmpNameList(HttpServletRequest request, HttpServletResponse response, @RequestParam String term) throws IOException {
-
-        response.setContentType("application/json; charset=UTF-8");
-
-        List<EmpInfoDTO> empList = new ArrayList<>();
-
-        if(term != null) {
-
-            empList = customerService.selectEmpName(term);
-
-            ObjectMapper mapper = new ObjectMapper();
-
-            PrintWriter out = response.getWriter();
-
-            out.print(mapper.writeValueAsString(empList));
-
-            out.close();
-        }
     }
 
     /* 분석 고객 영업활동 등록 */
@@ -293,7 +261,7 @@ public class CustomerController {
         return mv;
     }
 
-    /* 기존 고객 담당사원 변경 */
+    /* 분석 고객 담당사원 변경 */
     @PostMapping("/ana/manager/modify")
     public ModelAndView modifyAnaManager(ModelAndView mv, @ModelAttribute CustomerDTO parameters) {
 
@@ -323,8 +291,6 @@ public class CustomerController {
     /* 영업 활동 수정 처리 메소드 */
     @PostMapping("/activity/modify")
     public ModelAndView modifyDetailActivity(ModelAndView mv, @ModelAttribute BusinessActivityDTO parameters) {
-
-        System.out.println("처리 메소드 진입");
 
         int customerNo = parameters.getCustomerNo();
 
@@ -447,20 +413,23 @@ public class CustomerController {
 
     /* 고객 등록 */
     @PostMapping("/ana/insert")
-    public ModelAndView insertCustomer(ModelAndView mv,
-                                       @ModelAttribute InsertCustomerDTO parameters,
-                                       @AuthenticationPrincipal MemberDTO member) {
-
-        parameters.setEmpNo(member.getEmpNo());
+    public ModelAndView insertCustomer(ModelAndView mv, @ModelAttribute InsertCustomerDTO parameters, @RequestParam List<Integer> productNo) {
 
         int customerResult = customerService.insertCustomer(parameters);
-//        int detailResult = customerService.insertDetail(parameters);
-//        int productResult = customerService.insertProduct(parameters);
 
-//        if(customerResult > 0 && detailResult > 0 && productResult > 0) {
-//        }
+        List<CustomerProductDTO> products = new ArrayList<>();
 
+        for (int integer : productNo) {
+            products.add(new CustomerProductDTO(parameters.getCustomerNo(), integer, null));
+        }
+
+        int detailResult = customerService.insertDetail(parameters);
+        int productResult = customerService.insertProduct(products);
+
+        if(customerResult > 0 && detailResult > 0 && productResult > 0) {
             mv.setViewName("redirect:/customer/ana");
+        }
+
         return mv;
     }
 }

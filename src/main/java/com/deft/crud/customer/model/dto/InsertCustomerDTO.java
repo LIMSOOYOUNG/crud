@@ -3,6 +3,7 @@ package com.deft.crud.customer.model.dto;
 import lombok.*;
 
 import java.io.Serializable;
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor

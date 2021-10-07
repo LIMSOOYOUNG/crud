@@ -82,4 +82,13 @@ public interface CustomerMapper {
 
     /* 분석고객 기본정보 등록 */
     int insertCustomer(InsertCustomerDTO parameters);
+
+    /* 분석고객 상태 등록 */
+    int insertDetail(InsertCustomerDTO parameters);
+
+    /* 분석고객 관심상품 등록 */
+    int insertProduct(List<CustomerProductDTO> products);
+
+    /* 분석고객 -> 기존고객 변경 */
+    int insertExtCustomer(AnaCustomerDetailDTO parameters);
 }

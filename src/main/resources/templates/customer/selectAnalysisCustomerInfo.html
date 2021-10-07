@@ -175,45 +175,47 @@
                             <br>
                             <div class="row">
                                 <div class="form-group col-lg-12 row">
-                                    <div class="form-group col-lg-9"><h3>활동 이력</h3></div>
-
+                                    <div class="form-group col-lg-9">
+                                        <h3>활동 이력</h3>
+                                    </div>
                                     <div class="form-group col-lg-3">
                                         <a class="btn btn-info btn-icon-split"
                                            id="insertActivity">
                                             <span class="icon text-white">
                                                 <i class="fas fa-edit"></i>
                                             </span>
-                                        <span class="text text-white">영업활동등록</span>
-                                    </a></div>
+                                            <span class="text text-white">영업활동등록</span>
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
                             <div class="form-group col-lg-12" style="overflow-y: scroll; height: 200px;">
                                 <table id="table_activity" class="table align-items-center table-flush table-hover">
                                     <thead class="thead-light" th:align="center">
-                                    <tr>
-                                        <th>활동이력번호</th>
-                                        <th>활동주제</th>
-                                        <th>등록자</th>
-                                        <th>등록일</th>
-                                        <th>고객접촉일자</th>
-                                        <th> </th>
-                                    </tr>
+                                        <tr>
+                                            <th>활동이력번호</th>
+                                            <th>활동주제</th>
+                                            <th>등록자</th>
+                                            <th>등록일</th>
+                                            <th>고객접촉일자</th>
+                                            <th> </th>
+                                        </tr>
                                     </thead>
                                     <tbody th:align="center">
-                                    <tr th:each="activity : ${ businessActivityList }">
-                                        <td th:text="${ activity.activityNo }"></td>
-                                        <td th:text="${ activity.businessSubject }"></td>
-                                        <td th:text="${ activity.empInfo.empName }"></td>
-                                        <td th:text="${ activity.writingDate }"></td>
-                                        <td th:text="${ activity.activityStartTime}"></td>
-                                        <td>
-                                            <a class="btn btn-primary btn-icon-split"
-                                               style="font-size: 12px; height: 30px;">
-                                                <input type="hidden" th:value="${ activity.activityNo }">
-                                                <span class="text text-white">상세정보</span>
-                                            </a>
-                                        </td>
-                                    </tr>
+                                        <tr th:each="activity : ${ businessActivityList }">
+                                            <td th:text="${ activity.activityNo }"></td>
+                                            <td th:text="${ activity.businessSubject }"></td>
+                                            <td th:text="${ activity.empInfo.empName }"></td>
+                                            <td th:text="${ activity.writingDate }"></td>
+                                            <td th:text="${ activity.activityStartTime}"></td>
+                                            <td>
+                                                <a class="btn btn-primary btn-icon-split"
+                                                   style="font-size: 12px; height: 30px;">
+                                                    <input type="hidden" th:value="${ activity.activityNo }">
+                                                    <span class="text text-white">상세정보</span>
+                                                </a>
+                                            </td>
+                                        </tr>
                                     </tbody>
                                 </table>
                             </div>
