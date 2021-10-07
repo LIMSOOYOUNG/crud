@@ -1,5 +1,8 @@
 package com.deft.crud.stock.controller;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
@@ -20,8 +23,8 @@ import com.deft.crud.member.model.service.UserImpl;
 import com.deft.crud.stock.model.dto.ProductStockInfoDTO;
 import com.deft.crud.stock.model.dto.RequestStockDTO;
 import com.deft.crud.stock.model.dto.StorageDTO;
+import com.deft.crud.stock.model.dto.approval.ApprovalModifyDTO;
 import com.deft.crud.stock.model.dto.approval.ReceivingReqDTO;
-import com.deft.crud.stock.model.dto.approval.ReceivingReqProductDTO;
 import com.deft.crud.stock.model.service.StockService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -127,6 +130,7 @@ public class StockController {
 		return mv;
 	}
 	
+	/* 선택한 요청서 상세 정보*/
 	@GetMapping("request/selectOne")
 	public ModelAndView selectReceivingReqByNo(ModelAndView mv, HttpServletResponse response
 												, @RequestParam("reqNo") int reqNo) throws JsonProcessingException {
@@ -139,10 +143,33 @@ public class StockController {
 		
 		System.out.println(receivingReqProductList);
 		
+		System.out.println("작성일자 : " + receivingReqInfo.getApprovalDocumentDTO().getDocumentWriteDate());
+		
 		mv.addObject("receivingReqInfo", objectMapper.writeValueAsString(receivingReqInfo));
 		mv.addObject("receivingReqProductList", objectMapper.writeValueAsString(receivingReqProductList));
 		mv.setViewName("jsonView");
 		
+		return mv;
+	}
+	
+	/* 선택한 요청서 결재 처리*/
+	@PostMapping("ApprovalStatus/modify")
+	public ModelAndView modifyApprovalStatus(ModelAndView mv, RedirectAttributes rttr
+											, @ModelAttribute ApprovalModifyDTO parameters) {
+		
+		boolean result = stockService.modifyApprovalStatus(parameters);
+	
+		String message = "";
+		
+		if(result) {
+			message = "결재 처리완료.";
+		} else {
+			message = "결재 처리실패!";
+		}
+		
+		rttr.addFlashAttribute("message", message);
+		
+		mv.setViewName("redirect:/stock/request/selectAll");
 		return mv;
 	}
 	

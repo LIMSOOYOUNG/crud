@@ -11,10 +11,11 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class ReceivingReqHistoryDTO {
+public class ApprovalModifyDTO {
 
-	private int receivingReqHisNo;
-	private String documentProcessDate;
-	private String approvalStatus;
 	private int receivingReqNo;
+	private int approvalDocumentNo;
+	private String approvalDocumentType;
+	private String approvalStatus;
+	private String documentProcessDate;
 }

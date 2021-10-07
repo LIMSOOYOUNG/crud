@@ -1,5 +1,7 @@
 package com.deft.crud.stock.model.service;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,6 +15,7 @@ import com.deft.crud.stock.model.dto.ProductStockInfoDTO;
 import com.deft.crud.stock.model.dto.RequestStockDTO;
 import com.deft.crud.stock.model.dto.StorageDTO;
 import com.deft.crud.stock.model.dto.approval.ApprovalDocumentDTO;
+import com.deft.crud.stock.model.dto.approval.ApprovalModifyDTO;
 import com.deft.crud.stock.model.dto.approval.ReceivingReqDTO;
 import com.deft.crud.stock.model.dto.approval.ReceivingReqProductDTO;
 
@@ -132,6 +135,29 @@ public class StockService {
 		List<ReceivingReqDTO> receivingReqProductList = mapper.receivingReqProductByReqNo(reqNo);
 		
 		return receivingReqProductList;
+	}
+
+	public boolean modifyApprovalStatus(ApprovalModifyDTO parameters) {
+		
+		  LocalDateTime sysDateLocalDateTime = LocalDateTime.now();
+		  
+		  String sysDate= sysDateLocalDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss"));
+		  
+		  parameters.setDocumentProcessDate(sysDate);
+		
+		
+		int result = 0;
+		
+		int modifyResult = mapper.modifyApprovalStatus(parameters);
+		int hisResult = mapper.insertReceivingReqHistory(parameters);	//요청이력 INSERT 
+		
+		if(modifyResult > 0 && hisResult > 0) {
+			
+			result = 1;
+		}
+		
+		return result > 0? true: false;
+		
 	}
 
 
