@@ -29,8 +29,19 @@
                     </div>
                     <div class="card mb-4">
                         <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                           <h6 class="m-0 font-weight-bold text-primary">고객 현황</h6>
+                           <h6 class="m-0 font-weight-bold text-primary" id="tableTitle">고객 현황</h6>
                         </div>
+                        <ul class="nav nav-tabs nav-justfied">
+                            <li class="nav-item">
+                                <a th:href="@{/}" name="status" value="all" class="nav-link active" data-toggle="tab">전체</a>
+                            </li>
+                            <li class="nav-item">
+                                <a th:href="@{/}" name="status" value="progress" class="nav-link" data-toggle="tab">기존고객</a>
+                            </li>
+                            <li class="nav-item">
+                                <a th:href="@{/}" name="status" value="success" class="nav-link" data-toggle="tab">해지고객</a>
+                            </li>
+                        </ul>
                         <div class="table-responsive p-3">
                             <table id="table_customer" class="table align-items-center table-flush table-hover">
                                 <thead class="thead-light" th:align="center">
@@ -81,10 +92,46 @@
     <script src="/vendor/datatables/dataTables.bootstrap4.min.js"></script>
 
     <script>
-        $(document).ready(function () {
-            $('#dataTable').DataTable(); // ID From dataTable
-            $('#table_customer').DataTable(); // ID From dataTable with Hover
-        });
+        // $(document).ready(function () {
+        //     $('#dataTable').DataTable(); // ID From dataTable
+        //     $('#table_customer').DataTable(); // ID From dataTable with Hover
+        // });
+
+        $('a[name=status]').click(function () {
+
+            let customerStatus = $(this).attr('value');
+
+            $.ajax({
+                url: '/customer/selectExt?customerStatus=' + customerStatus,
+                type: 'GET',
+                success: function(data, status, xhr) {
+
+                    const customerList = JSON.parse(data.customerCompanyList);
+                    const $table = $('#table_customer tbody');
+
+                    if(customerStatus == 'all') {
+                        $('#tableTitle').html('고객 현황');
+                    } else {
+                        $('#tableTitle').html(customerCompanyList[0].customerList.extCustomerDetail.customerStatus + ' 현황')
+                    }
+
+                    $table.html('');
+
+                    for(let index in customerCompanyList) {
+                        let company = customerCompanyList[index];
+
+                        $tr = $('<tr>');
+                        $customerNoTd = $('<td>').text(company.customerList.extCustomerDetail.customerStatus);
+                        $businessStatusTd = $('<td>').text(company.customerList.extCustomerDetail.businessStatus);
+                        $companyNameTd = $('<td>').text(company.companyName);
+                        $customerNameTd = $('<td>').text(company.customerList.customerName);
+                        $empNameTd = $('<td>').text(company.customerList.empInfo.empName);
+                        $customizationDate = $('<td>').text(company.customerList.extCustomerDetail.customizationDate);
+
+                    }
+                }
+            });
+        })
     </script>
 </body>
 

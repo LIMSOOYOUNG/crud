@@ -481,7 +481,7 @@
                                         <label for="selectEmp" class="col-lg-3 form-control-plaintext"
                                                th:align="center"
                                                style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">새 담당사원</label>
-                                        <select id="selectEmp" name="empNo" class="col-lg-8">
+                                        <select id="selectEmp" name="empNo" class="col-lg-8" style="width: 66%" multiple="multiple">
                                             <option th:each=" emp : ${ empInfoList }" th:value="${ emp.empNo }"
                                                     th:text="${ emp.dept.deptName } + ' ' + ${ emp.job.jobName } + ' - ' + ${ emp.empName }"></option>
                                         </select>
@@ -916,6 +916,10 @@
         $(document).ready(function () {
             $('#dataTable').DataTable(); // ID From dataTable
             $('#table_activity').DataTable(); // ID From dataTable with Hover
+        });
+
+        $('#selectEmp').select2({
+            maximumSelectionLength: 1
         });
 
         $('#detailInfo').click(function () {
