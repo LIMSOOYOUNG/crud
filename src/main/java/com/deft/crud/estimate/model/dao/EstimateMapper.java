@@ -14,4 +14,6 @@ public interface EstimateMapper {
 	List<EstimateDTO> selectEstimateListByStatus(String estimateStatus);
 
 	String selectLastEstimateSeq();
+
+	int insertEstimate(EstimateDTO estimateInfo);
 }
