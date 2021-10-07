@@ -1,10 +1,9 @@
 package com.deft.crud.admin.adminemployee.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -57,19 +56,51 @@ public class AdminEmployeeController {
 	}
 	 
 	/* 사원상세 정보 */
-	@GetMapping("detailselectemployee")
-	public ModelAndView employeeDetailSelect(ModelAndView mv, @RequestParam int employeeNo) {
+	@GetMapping("employeedetail")
+	public ModelAndView employeeDetailSelect(ModelAndView mv, @RequestParam int employeeNo) throws Exception {
 		
-		List<AdminEmployeeDTO> employeList = adminEmployeeService.detailselect(employeeNo);
+		System.out.println("너의 정보는 ????" + employeeNo);
+
+		AdminEmployeeDTO employeeDTO = adminEmployeeService.empDetail(employeeNo);
 		
-		System.out.println(employeList);
+		System.out.println(employeeDTO);
 		
-		mv.setViewName("admin/detailselectemployee");
-		mv.addObject("employeList", employeList);
+		mv.setViewName("admin/employeedetail");
+		mv.addObject("employeeDTO", employeeDTO);
 		
 		return mv;
 	}
 
+	/* 수정 페이지 */
+	@GetMapping("employeeinfomodify")
+	public ModelAndView employeeModifyForm(ModelAndView mv, @RequestParam int employeeNo) {
+		
+		AdminEmployeeDTO employeeDTO = adminEmployeeService.empInfoModify(employeeNo);
+		
+		
+		
+		mv.setViewName("admin/employeedetail");
+		mv.addObject("employeeDTO", employeeDTO);
+		
+		
+		return mv;
+	}
+	
+	@PostMapping("employeeinfomodify")
+	public ModelAndView employeeModify(ModelAndView mv, @ModelAttribute AdminEmployeeDTO parameters) {
+		
+		int result = adminEmployeeService.employeeModify(parameters);
+		
+		if(result > 0) {
+			
+			mv.setViewName("redirect:/admin/employeedetail?employeeNo=" + parameters.getEmployeeNo());
+			
+		}
+		
+		mv.addObject("parameters", parameters);
+		
+		return mv;
+	}
 	
 	
 }
