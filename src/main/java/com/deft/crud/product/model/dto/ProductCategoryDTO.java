@@ -15,8 +15,8 @@ public class ProductCategoryDTO {
 	
 	private int categoryCode;
 	private String categoryName;
-	private String refCategoryName;
 	private int refCategoryCode;
+	private String refCategoryName;
 	private String categoryStatus;
 	
 }

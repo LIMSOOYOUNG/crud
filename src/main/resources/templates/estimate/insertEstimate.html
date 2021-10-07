@@ -28,7 +28,7 @@
 
 					<div class="row">
 						<div class="col-lg-12">
-							<form>
+							<form th:action="@{/estimate/insert}" method="POST">
 								<!-- EstimateInfo -->
 								<div class="card mb-4">
 									<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
@@ -51,8 +51,8 @@
 											<label for="customerCompany" class="col-form-label col-lg-1">고객사</label>
 											<input type="text" class="form-control col-lg-4" id="customerCompany" name="customerCompany" readonly>
 											<label for="customerName" class="col-form-label col-lg-2">고객명</label>
-											<input class="form-control col-lg-4" id="customerName" name="customerName" readonly>
-											<input class="form-control" id="customerNo" name="customerNo" hidden="hidden">
+											<input type="text" class="form-control col-lg-4" id="customerName" name="customerName" readonly>
+											<input type="hidden" class="form-control" id="customerNo" name="customerNo">
 											<div class="input-group-append">
 												<button type="button" class="btn btn-primary" id="searchCustomer"
 														data-toggle="modal" data-target="#customerModal">검색</button>
@@ -61,13 +61,14 @@
 										<div class="form-group row mb-4" th:align="right">
 											<label for="estimateStatus" class="col-form-label col-lg-1">진행상태</label>
 											<select class="form-control col-lg-4" id="estimateStatus" name="estimateStatus">
-												<option th:text="진행중"></option>
-												<option th:text="완료"></option>
-												<option th:text="보류"></option>
-												<option th:text="실패"></option>
+												<option th:value="progress" th:text="진행중"></option>
+												<option th:value="success" th:text="완료"></option>
+												<option th:value="postpone" th:text="보류"></option>
+												<option th:value="failed" th:text="실패"></option>
 											</select>
 											<label for="resEmp" class="col-form-label col-lg-2">담당사원</label>
-											<input type="text" class="form-control col-lg-4" id="resEmp" name="resEmp" readonly>
+											<input type="text" class="form-control col-lg-4" id="resEmpName" name="empName" readonly>
+											<input type="hidden" class="form-control" id="resEmpNo" name="empNo">
 										</div>
 
 										<div class="form-group row mb-2" th:align="right">
@@ -103,20 +104,24 @@
 									<div class="table-responsible">
 										<table class="table align-items-center table-flush" id="estimateProductTable">
 											<thead class="thead-light" th:align="center">
-											  <tr>
-												<th>No</th>
-												<th>상품번호</th>
-												<th>상품명</th>
-												<th>공급가</th>
-												<th>할인가</th>
-												<th>단위</th>
-												<th>수량</th>
-												<th>합계</th>
-												<th>세액</th>
-												<th></th>
-											  </tr>
+												<tr>
+													<th>No</th>
+													<th>상품번호</th>
+													<th>상품명</th>
+													<th>공급가</th>
+													<th>할인가</th>
+													<th>단위</th>
+													<th>수량</th>
+													<th>합계</th>
+													<th>세액</th>
+													<th></th>
+												</tr>
 											</thead>
-											<tbody th:align="center">
+											<tbody th:align="center" th:object="${ estimateProduct }">
+												<tr>
+													<td name="productAmount" value=3>
+													</td>
+												</tr>
 												<tr id="addProductBtn">
 													<td colspan="10" th:align="center">
 														<button type="button" class="btn btn-sm btn-dark btn-icon-split" id="addProduct"
@@ -225,7 +230,7 @@
 														</thead>
 														<tbody th:align="center">
 															<tr th:each="stock : ${ stockList }">
-																<td th:text="${ stock.productNo }"></td>
+																<td name="productNo" th:text="${ stock.productNo }"></td>
 																<td th:text="${ stock.product.category.refCategoryName }"></td>
 																<td th:text="${ stock.product.category.categoryName }"></td>
 																<td th:text="${ stock.product.productName }"></td>
@@ -234,8 +239,7 @@
 																<td th:text="${ stock.product.unit }"></td>
 																<td th:text="${ stock.productStock }"></td>
 																<td>
-																	<input type="number" class="form-control" id="inputAmount" value="0"
-																		min="0" max="'${ #numbers.formatInteger((stock.productStock), 1) }'">
+																	<input type="text" class="form-control">
 																</td>
 																<td>
 																	<button class="btn btn-sm btn-dark" name="selectStock" id="selectStockBtn"
@@ -277,14 +281,6 @@
 			});
 		});
 		
-		// .on("touchspin.on.startspin", function() {
-			// 	const estimateTotal = $("#estimateTotal").val();
-			// 	let discountRate = $("#discountRate").val();
-			
-			// 	$("#estimateTotal").val(estimateTotal * (1 - (discountRate / 100)));
-			// 	console.log(estimateTotal * (1 - (discountRate / 100)));
-			// });
-		
 		/* 고객 목록 중 선택하여 정보 입력 */
 		$("button[name='selectCustomer']").on("click", function() {
 			$tr = $(this).parent().parent();
@@ -293,11 +289,13 @@
 			const customerCompany = $tr.children().eq(2).text();
 			const customerName = $tr.children().eq(3).text();
 			const empName = $tr.children().eq(4).text();
+			const empNo = $tr.children().eq(5).text();
 			
 			$("#customerCompany").val(customerCompany);
 			$("#customerName").val(customerName);
 			$("#customerNo").val(customerNo);
-			$("#resEmp").val(empName);
+			$("#resEmpName").val(empName);
+			$("#resEmpNo").val(empNo);
 		});
 		
 		/* 할인 적용에 따라 수치 입력 칸 활성화/비활성화 */
@@ -311,15 +309,33 @@
 
 		/* 입력한 수치로 할인 적용 */
 		$("#setDiscount").on("click", function() {
-			const total = $("#estimateTotal").val();
+			const $estimateProductTr = $("#estimateProductTable tbody tr");
+			const discountRate = Number($("#discountRate").val() / 100);
 
-			console.log(total);
+			let total = 0;
+			for(let i = 0; i < $estimateProductTr.length - 1; i++) {
+				let discountPrice = (Number($estimateProductTr.eq(i).children().eq(3).text()) * (1 - discountRate)).toFixed();
+				let qty = $estimateProductTr.eq(i).children().eq(6).text();
+				let subtotal = Number(discountPrice) * Number(qty);
+				let tax = Number((subtotal * 0.1).toFixed());
+				
+				total += subtotal + tax;
+
+				$estimateProductTr.eq(i).children().eq(4).text(discountPrice);
+				$estimateProductTr.eq(i).children().eq(7).text(subtotal);
+				$estimateProductTr.eq(i).children().eq(8).text(tax);
+
+			}
+
+			$("#estimateTotal").val(total);
+			
+			let totalKorean = translateKorean(total);
+			$("#estimateKoreanTotal").text("(" + totalKorean + ")");
 		});
 			
 		/* 상품 검색 후 리스트에 추가 */
 		$("button[name='selectStock']").on("click", function() {
-			const $estimateProductTable = $("#estimateProductTable tbody");
-			const $estimateProductTr = $estimateProductTable.children();
+			const $estimateProductTr = $("#estimateProductTable tbody tr");
 			const $stockTr = $(this).parent().parent();
 
 			if($stockTr.children().eq(8).children().val() == 0) {
@@ -339,10 +355,12 @@
 			$productNoTd = $("<td>").text($stockTr.children().eq(0).text());
 			$productNameTd = $("<td>").text($stockTr.children().eq(3).text());
 			$sellingPriceTd = $("<td>").text($stockTr.children().eq(5).text());
-			$discountPriceTd = $("<td>").text(Number($sellingPriceTd.text()) * (1 - Number($("#discountRate").val() / 100)));
+			$discountPriceTd = $("<td>").text($sellingPriceTd.text());
 			$unitTd = $("<td>").text($stockTr.children().eq(6).text());
-			$amountTd = $("<td>").text($stockTr.children().eq(8).children().val());
-			$subtotalTd = $("<td>").text(Number($discountPriceTd.text()) * Number($amountTd.text()));
+			$qtyTd = $("<td>").text($stockTr.children().eq(8).children().val())
+					.attr("value", $stockTr.children().eq(8).children().val())
+					.attr("name", "productAmount");
+			$subtotalTd = $("<td>").text(Number($discountPriceTd.text()) * Number($qtyTd.text()));
 			$taxTd = $("<td>").text(Number($subtotalTd.text()) * 0.1);
 			$td = $("<td>");
 			
@@ -352,12 +370,14 @@
 			$tr.append($sellingPriceTd);
 			$tr.append($discountPriceTd);
 			$tr.append($unitTd);
-			$tr.append($amountTd);
+			$tr.append($qtyTd);
 			$tr.append($subtotalTd);
 			$tr.append($taxTd);
 			$tr.append($td);
 			
 			$("#addProductBtn").before($tr);
+
+			$stockTr.children().eq(8).children().val(0);
 
 			let total = Number($("#estimateTotal").val());
 			total += Number($subtotalTd.text()) + Number($taxTd.text());
