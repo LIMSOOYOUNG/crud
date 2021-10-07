@@ -26,11 +26,10 @@
 				<!-- Content -->
 				<div class="container-fluid" id="container-wrapper">
 					<div class="d-sm-flex align-items-center justify-content-between mb-4">
-						<h1 class="h3 mb-0 text-gray-800">상품관리</h1>
+						<h1 class="h3 mb-0 text-gray-800">실적조회</h1>
 						<ol class="breadcrumb">
 							<li class="breadcrumb-item"><a href="./">Home</a></li>
-							<li class="breadcrumb-item">상품조회</li>
-							<li class="breadcrumb-item active" aria-current="page">목표실적등록</li>
+							<li class="breadcrumb-item active" aria-current="page">사원실적조회</li>
 						</ol>
 					</div>
                     
@@ -70,7 +69,9 @@
 												<td th:text = "${targetPerformList.targetSales}"></td>
 												<td></td>
 												<td></td>
-												<td><input type ="button" id="detailButton" class="btn btn-primary" value="상세보기"></td>
+												<td>
+													<button type="button" id="detailButton" name="detailButton" class="btn btn-primary">상세보기</button>
+												</td>
 											</tr>
 										</tbody>
 									</table>
@@ -159,7 +160,9 @@
     <!-- Page level custom scripts -->
 	<script>
 		$(document).ready(function () {
-			$('#userPerformTable').DataTable(); // ID From dataTable 
+			$('#userPerformTable').DataTable({  // ID From dataTable
+				order:[]
+			});  
 			
 			$.ajax({
 				url: "/sales/user/perform/selectAll",
@@ -175,12 +178,13 @@
 									
 					
 					console.log($table.children().length);
-					//3,4,6,7(index)
+// 					3,4,6,7(index)
 					for(let i = 0; i < empPerformanceList.length; i++) {
 						let collectBillYear = empPerformanceList[i].collect.collectBillYear;
 						let collectBillMonth = empPerformanceList[i].collect.collectBillMonth;
 						let performanceCount = empPerformanceList[i].performanceCount;
 						let collectBillAmount = empPerformanceList[i].collect.collectBillAmount;
+						let empNo = empPerformanceList[i].empNo;
 						
 						for(let j = 0; j < $table.children().length; j++) {
 							let performYear = $table.children().eq(j).children().eq(0).text();
@@ -191,11 +195,16 @@
 							if(performYear == collectBillYear && performMonth == collectBillMonth) {
 								let contractPercent = (performanceCount / targetContract * 100).toFixed(1);
 								let salesPercent = (collectBillAmount / targetSales * 100).toFixed(1);
-
+								let peformValue = collectBillYear + collectBillMonth;
+								
+								console.log(peformValue);
+								
 								$table.children().eq(j).children().eq(3).text(performanceCount);
 								$table.children().eq(j).children().eq(4).text(contractPercent);
 								$table.children().eq(j).children().eq(6).text(collectBillAmount);
 								$table.children().eq(j).children().eq(7).text(salesPercent);
+								$table.children().eq(j).children().eq(8).children().attr('value', peformValue);
+								
 							}
 						}
 					}
@@ -206,6 +215,19 @@
 				}
 			});
         });
+		
+		$(document).on('click', '#detailButton', function () {
+			
+			let performDate = $(this).val();
+			
+			console.log(performDate);
+			
+			location.href = "/sales/select?no=" + performDate;
+			
+			
+			
+						
+		})
     
 	function check() {
 
