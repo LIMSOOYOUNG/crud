@@ -144,18 +144,23 @@
     WHERE A.PRODUCT_NO = #{ productNo }       
    </select>
    
-   <!-- 판매가능 상태인 모든 상품들 -->
+<!-- 판매가능 상태인 모든 상품들 -->
    <select id="selectSellableProductAll" resultMap="storageResultMap">
-   SELECT /* com.deft.crud.stock.model.dao.StockMapper#selectSellableProductAll() */
-          A.PRODUCT_NO
-        , A.PRODUCT_NAME
-        , A.UNIT
-        , C.CATEGORY_NAME
-        , B.PRODUCT_STOCK
-     FROM TBL_PRODUCT A
-      LEFT JOIN TBL_STORAGE B ON (A.PRODUCT_NO = B.PRODUCT_NO)
-     LEFT JOIN TBL_PRODUCT_CATEGORY C ON (A.CATEGORY_CODE = C.CATEGORY_CODE)
-    WHERE A.SELL_STATUS = '판매'         
+        SELECT /* com.deft.crud.stock.model.dao.StockMapper#selectSellableProductAll() */
+               P.PRODUCT_NO
+             , P.PRODUCT_NAME
+             , P.SELLING_PRICE
+             , P.UNIT
+             , S.PRODUCT_STOCK
+             , RC.CATEGORY_NAME "REF_CATEGORY_NAME"
+             , M.MANUFACTURER_NAME
+          FROM TBL_PRODUCT P
+          LEFT JOIN TBL_STORAGE S ON (P.PRODUCT_NO = S.PRODUCT_NO)
+          LEFT JOIN TBL_PRODUCT_CATEGORY C ON (P.CATEGORY_CODE = C.CATEGORY_CODE)
+          LEFT JOIN TBL_PRODUCT_CATEGORY RC ON (C.REF_CATEGORY_CODE = RC.CATEGORY_CODE)
+          LEFT JOIN TBL_MANUFACTURER M ON (P.MANUFACTURER_NO = M.MANUFACTURER_NO)
+         WHERE P.SELL_STATUS = '판매'
+         ORDER BY P.PRODUCT_NO
    </select>
    
    <!-- 상품 재고관련 상세정보 -->
