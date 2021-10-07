@@ -19,6 +19,9 @@
 		<result property="jobName" column="JOB_NAME"/>
 		<result property="deptName" column="DEPT_NAME"/>
 		<result property="managerNo" column="MANAGER_NO"/>
+		<result property="managerName" column="MANAGER_NAME"/>
+		<result property="deptCode" column="DEPT_CODE"/>
+		<result property="jobCode" column="JOB_CODE"/>
 	</resultMap>
 	
 	<select id="empDetail" parameterType="_int" resultType="com.deft.crud.admin.adminemployee.model.dto.AdminEmployeeDTO" resultMap="adminEmployeeResultMap">
@@ -38,10 +41,13 @@
 		     , A.EMP_TEL
 		     , J.JOB_NAME 
 		     , D.DEPT_NAME
+		     , B.EMP_NAME "MANAGER_NAME"
 		  FROM TBL_EMP_INFO A
+          JOIN TBL_EMP_INFO B ON ( A.MANAGER_NO = B.EMP_NO )
           JOIN TBL_JOB J ON (A.JOB_CODE = J.JOB_CODE)
-          JOIN TBL_DEPARTMENT D ON (A.DEPT_CODE = D.DEPT_CODE)	
-         WHERE EMP_NO = #{ employeeNo }
+          JOIN TBL_DEPARTMENT D ON (A.DEPT_CODE = D.DEPT_CODE)
+          JOIN TBL_EMP_INFO B ON ( A.MANAGER_NO = B.EMP_NO )	
+         WHERE A.EMP_NO = #{ employeeNo }
 	</select>
 	
 	<select id="empInfoModify" parameterType="_int" resultType="com.deft.crud.admin.adminemployee.model.dto.AdminEmployeeDTO" resultMap="adminEmployeeResultMap">
@@ -61,11 +67,27 @@
 		     , A.EMP_TEL
 		     , J.JOB_NAME 
 		     , D.DEPT_NAME
+		     , B.EMP_NAME "MANAGER_NAME"
 		  FROM TBL_EMP_INFO A
+          JOIN TBL_EMP_INFO B ON ( A.MANAGER_NO = B.EMP_NO )
           JOIN TBL_JOB J ON (A.JOB_CODE = J.JOB_CODE)
-          JOIN TBL_DEPARTMENT D ON (A.DEPT_CODE = D.DEPT_CODE)	
-         WHERE EMP_NO = #{ employeeNo }
-	
+          JOIN TBL_DEPARTMENT D ON (A.DEPT_CODE = D.DEPT_CODE)
+          JOIN TBL_EMP_INFO B ON ( A.MANAGER_NO = B.EMP_NO )	
+         WHERE A.EMP_NO = #{ employeeNo }
 	</select>
-	
+	<update id="employeeModify" parameterType="com.deft.crud.admin.adminemployee.model.dto.AdminEmployeeDTO">
+		UPDATE /* com.deft.crud.admin.adminemployee.model.dto.AdminEmployeeDTO */
+			   TBL_EMP_INFO E
+	       SET E.EMP_EMAIL = #{ email }
+	         , E.AUTHORITY = #{ authority }
+	         , E.EMP_ADDRESS = #{ empAddress }
+	         , E.EMP_PHONE = #{ empPhone }
+	         , E.EMP_TEL = #{ empTel }
+			 , E.ENT_YN = #{ entYn }
+			 , E.ENT_DATE = #{ entDate }
+			 , E.JOB_CODE = #{ jobCode }
+			 , E.DEPT_CODE = #{ deptCode }
+			 , E.MANAGER_NO = #{ managerNo }
+		 WHERE E.EMP_NO = #{ employeeNo }	 
+	</update>
 </mapper>

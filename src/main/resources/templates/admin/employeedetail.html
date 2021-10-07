@@ -8,7 +8,6 @@
 <meta name="description" content="">
 <meta name="author" content="">
 <link href="img/logo/logo.png" rel="icon">
-<title>RuangAdmin - Register</title>
 <link href="/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
 <link href="/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css">
 <link href="/css/ruang-admin.min.css" rel="stylesheet">
@@ -16,6 +15,7 @@
 <body class="bg-gradient-login">
 	<!-- Register Content -->
 	<div class="container-login">
+	
 		<div class="row justify-content-center">
 			<div class="col-xl-10 col-lg-12 col-md-9">
 				<div class="card shadow-sm my-5">
@@ -26,6 +26,7 @@
 									<div class="text-center">
 										<h1 class="h4 text-gray-900 mb-4"><span th:text="${ employeeDTO.employeeName }"></span>님 정보</h1>
 									</div>
+									<form action="employeeinfomodify" method="post">
 										<div class="row">
 											<div class="col-lg-2" style="margin-top: 60px;">
 												<div align="center">
@@ -68,7 +69,7 @@
 												<div class="row">
 													<div class="form-group col-xl-6">
 														<label>담당자</label> 
-															<input type="number" 	class="form-control" th:value="${employeeDTO.managerNo}" th:readonly="readonly">
+															<input type="text" class="form-control" th:value="${ employeeDTO.managerName }" th:readonly="readonly">
 													</div>
 													<div class="form-group col-xl-6">
 														<label>권한</label> 
@@ -121,6 +122,7 @@
 										<div class="form-group col-xl-12" align="right">
 											<button type="button" class="btn btn-primary" th:onclick="|location.href='@{/admin/employeeinfomodify(employeeNo=${employeeDTO.employeeNo})}'|">사원수정</button>
 										</div>
+								</form>
 								</div>
 							</div>
 						</div>
@@ -128,11 +130,13 @@
 				</div>
 			</div>
 		</div>
+	</div>
 	<!-- Register Content -->
 	<script src="/vendor/jquery/jquery.min.js"></script>
 	<script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 	<script src="/vendor/jquery-easing/jquery.easing.min.js"></script>
 	<script src="/js/admin/insertMember.js"></script>
 	<script src="/js/ruang-admin.min.js"></script>
+
 </body>
 </html>

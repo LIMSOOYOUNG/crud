@@ -57,7 +57,7 @@ public class AdminEmployeeController {
 	 
 	/* 사원상세 정보 */
 	@GetMapping("employeedetail")
-	public ModelAndView employeeDetailSelect(ModelAndView mv, @RequestParam int employeeNo) throws Exception {
+	public ModelAndView employeeDetailSelect(ModelAndView mv, @RequestParam int employeeNo)  {
 		
 		System.out.println("너의 정보는 ????" + employeeNo);
 
@@ -79,7 +79,7 @@ public class AdminEmployeeController {
 		
 		
 		
-		mv.setViewName("admin/employeedetail");
+		mv.setViewName("admin/employeeinfomodify");
 		mv.addObject("employeeDTO", employeeDTO);
 		
 		
