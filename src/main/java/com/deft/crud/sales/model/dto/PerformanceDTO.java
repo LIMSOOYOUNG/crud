@@ -22,5 +22,6 @@ public class PerformanceDTO {
 	private CollectBillDTO collect;
 	private ChargeDTO charge;
 	private PurchaseOrderDTO purchaseOrder;
+	private EmployeeDTO employeeInfo;
 	
 }

@@ -16,5 +16,9 @@ public interface SalesMapper {
 	int insertTargetSales(TargetPerfomDTO parameters);
 
 	List<PerformanceDTO> empPerformList(int empNo);
+
+	List<PerformanceDTO> selectUserPerformDetail(int empNo, String performYear, String performMonth);
+
+	List<PerformanceDTO> selectDeptPerformList();
 	
 }
