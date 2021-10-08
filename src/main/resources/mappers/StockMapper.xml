@@ -153,6 +153,7 @@
              , P.UNIT
              , S.PRODUCT_STOCK
              , RC.CATEGORY_NAME "REF_CATEGORY_NAME"
+             , C.CATEGORY_NAME
              , M.MANUFACTURER_NAME
           FROM TBL_PRODUCT P
           LEFT JOIN TBL_STORAGE S ON (P.PRODUCT_NO = S.PRODUCT_NO)
@@ -239,7 +240,7 @@
            , EMP_NO
            , MANAGER_NO
            , DOCUMENT_STATUS
-           , DOCUMENT_PROCESS_DATE
+           , DOCUMENT_WRITE_DATE
            )
            VALUES
            (
@@ -274,23 +275,72 @@
    </insert>
    
    <!-- 요청목록 전체 조회(담당자용) -->
-   <select id="selectReceivingReqAll" resultMap="receivingReqResultMap">
+   <select id="selectReceivingReqAll" resultMap="receivingReqResultMap" parameterType="com.deft.crud.member.model.service.UserImpl">
       SELECT /* com.deft.crud.stock.model.dao.StockMapper#selectReceivingReqAll() */
-            A.APPROVAL_DOCUMENT_NO
-          , A.APPROVAL_DOCUMENT_NAME
-          , A.APPROVAL_DOCUMENT_TYPE
-          , A.REQ_REASON
-          , A.EMP_NO
-          , E.EMP_NAME
-          , A.MANAGER_NO
-          , B.RECEIVING_REQ_NO  
-          , A.DOCUMENT_WRITE_DATE
-          , A.DOCUMENT_STATUS
-         FROM TBL_APPROVAL_DOCUMENT A
-         LEFT JOIN TBL_EMP_INFO E ON (A.EMP_NO = E.EMP_NO)
-          LEFT JOIN TBL_RECEIVING_REQ B ON (A.APPROVAL_DOCUMENT_NO = B.APPROVAL_DOCUMENT_NO)
-          ORDER BY A.DOCUMENT_WRITE_DATE DESC
+             A.APPROVAL_DOCUMENT_NO
+           , A.APPROVAL_DOCUMENT_NAME
+           , A.APPROVAL_DOCUMENT_TYPE
+           , A.REQ_REASON
+           , A.EMP_NO
+           , E.EMP_NAME
+           , A.MANAGER_NO
+           , B.RECEIVING_REQ_NO  
+           , A.DOCUMENT_WRITE_DATE
+           , A.DOCUMENT_STATUS
+        FROM TBL_APPROVAL_DOCUMENT A
+        LEFT JOIN TBL_EMP_INFO E ON (A.EMP_NO = E.EMP_NO)
+        LEFT JOIN TBL_RECEIVING_REQ B ON (A.APPROVAL_DOCUMENT_NO = B.APPROVAL_DOCUMENT_NO)
+      <choose>
+      	<when test="authority == '담당자'">
+     		 WHERE A.MANAGER_NO = #{ empNo }
+      	</when>
+      	<when test="authority != '담당자'">
+     		 WHERE A.EMP_NO = #{ empNo } 
+      	</when>
+      </choose> 
+       ORDER BY A.DOCUMENT_WRITE_DATE DESC
    </select>
+   
+   <!-- 요청목록 결재상태별 조회(사원용) -->
+   <select id="selectReceivingReqByStatus" resultMap="receivingReqResultMap" parameterType="com.deft.crud.member.model.service.UserImpl">
+      SELECT /* com.deft.crud.stock.model.dao.StockMapper#selectReceivingReqByStatus() */
+             A.APPROVAL_DOCUMENT_NO
+           , A.APPROVAL_DOCUMENT_NAME
+           , A.APPROVAL_DOCUMENT_TYPE
+           , A.REQ_REASON
+           , A.EMP_NO
+           , E.EMP_NAME
+           , A.MANAGER_NO
+           , B.RECEIVING_REQ_NO  
+           , A.DOCUMENT_WRITE_DATE
+           , A.DOCUMENT_STATUS
+        FROM TBL_APPROVAL_DOCUMENT A
+        LEFT JOIN TBL_EMP_INFO E ON (A.EMP_NO = E.EMP_NO)
+        LEFT JOIN TBL_RECEIVING_REQ B ON (A.APPROVAL_DOCUMENT_NO = B.APPROVAL_DOCUMENT_NO)
+       <choose>
+      		<when test="userInfo.authority == '담당자'">
+     			 WHERE A.MANAGER_NO = #{ userInfo.empNo }
+      		</when>
+      		<when test="userInfo.authority != '담당자'">
+     			 WHERE A.EMP_NO = #{ userInfo.empNo } 
+      		</when>
+      </choose> 
+      <choose>
+      		<when test="documentStatus == 'all'">
+      		</when>
+      		<when test="documentStatus == 'ready'">
+      			 AND A.DOCUMENT_STATUS = '대기중' 
+      		</when>
+      		<when test="documentStatus == 'approve'">
+      			 AND A.DOCUMENT_STATUS = '승인' 
+      		</when>
+      		<when test="documentStatus == 'reject'">
+      			 AND A.DOCUMENT_STATUS = '반려' 
+      		</when>
+      	</choose>	
+       ORDER BY A.DOCUMENT_WRITE_DATE DESC
+   </select>
+   
    
    <!-- 선택한 요청서 상세정보 -->
    <select id="selectReceivingReqByNo" resultMap="receivingReqResultMap" parameterType="_int">
@@ -315,7 +365,7 @@
    </select>
    
    <!-- 요청서 상세내용 중 입고요청상품 목록 -->
-   <select id="receivingReqProductByReqNo" resultMap="receivingReqResultMap" parameterType="_int">
+   <select id="selectReceivingReqProductByReqNo" resultMap="receivingReqResultMap" parameterType="_int">
       SELECT /* com.deft.crud.stock.model.dao.StockMapper#receivingReqProductByReqNo() */
              A.PRODUCT_NO
            , A.PRODUCT_AMOUNT

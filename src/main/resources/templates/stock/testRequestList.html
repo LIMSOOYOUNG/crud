@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="https://www.thymeleaf.org">
+<html lang="ko"
+	 xmlns:th="https://www.thymeleaf.org"
+	 xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-spingsecurity5">
 
 <head>
 <th:block th:replace="@{common/config} :: config"></th:block>
@@ -7,41 +9,40 @@
 </head>
 
 <body id="page-top">
-   <div id="wrapper">
+	<div id="wrapper">
 
-      <!-- Sidebar -->
-      <th:block th:replace="@{/common/sidebar} :: sidebar"></th:block>
+		<!-- Sidebar -->
+		<th:block th:replace="@{/common/sidebar} :: sidebar"></th:block>
 
-      <div id="content-wrapper" class="d-flex flex-column">
-         <div id="content">
+		<div id="content-wrapper" class="d-flex flex-column">
+			<div id="content">
 
-            <!-- Header -->
-            <th:block th:replace="@{/common/header} :: header"></th:block>
+				<!-- Header -->
+				<th:block th:replace="@{/common/header} :: header"></th:block>
 
-            <!-- Container Fluid-->
-            <div class="container-fluid" id="container-wrapper">
-               <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                  <h1 class="h3 mb-0 text-gray-800">요청 목록</h1>
-                  <ol class="breadcrumb">
-                     <li class="breadcrumb-item"><a th:href="@{/dashboard}">Home</a></li>
-                     <li class="breadcrumb-item">재고관리</li>
-                     <li class="breadcrumb-item active" aria-current="page">요청목록조회</li>
-                  </ol>
-               </div>
+				<!-- Container Fluid-->
+				<div class="container-fluid" id="container-wrapper">
+					<div class="d-sm-flex align-items-center justify-content-between mb-4">
+						<h1 class="h3 mb-0 text-gray-800">요청 목록</h1>
+						<ol class="breadcrumb">
+							<li class="breadcrumb-item"><a th:href="@{/dashboard}">Home</a></li>
+							<li class="breadcrumb-item">재고관리</li>
+							<li class="breadcrumb-item active" aria-current="page">요청목록조회</li>
+						</ol>
+					</div>
 
-               <!-- Row -->
-               <div class="row" style="margin-left: 30px;">
-               
-               <div class="col-lg-2"></div>
+					<!-- Row -->
+					<div class="row" style="margin-left: 30px;">
+					
+					<div class="col-lg-2"></div>
 
-                  <!-- DataTable with Hover -->
-                  <div class="col-lg-8" style="margin-left: 30px;">
-                     <div class="card mb-4">
-                        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                           <h6 class="m-0 font-weight-bold text-primary">결재요청목록</h6>
-                        </div>
-
-						<ul class="nav nav-tabs nav-justfied">
+						<!-- DataTable with Hover -->
+						<div class="col-lg-8" style="margin-left: 30px;">
+							<div class="card mb-4">
+								<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+									<h6 class="m-0 font-weight-bold text-primary" id="tableTitle">결재요청목록(전체)</h6>
+								</div>
+								<ul class="nav nav-tabs nav-justfied">
 									<li class="nav-item">
 										<a th:href="@{/}" name="status" value="all" class="nav-link active" data-toggle="tab">전체</a>
 									</li>
@@ -55,76 +56,78 @@
 										<a th:href="@{/}" name="status" value="reject" class="nav-link" data-toggle="tab">반려</a>
 									</li>
 								</ul>
-						
-                        <div class="table-responsive p-3">
-                           <table class="table align-items-center table-flush table-hover" id="receivingTable">
-                              <thead align="center" class="thead-light">
-                                 <tr>
-                                    <th>요청번호</th>
-                                    <th>요청분류</th>
-                                    <th>사원번호</th>
-                                    <th>사원명</th>
-                                    <th>처리상태</th>
-                                    <th>요청일시</th>
-                                    <th></th>
-                                    
-                                 </tr>
-                              </thead>
-                              
-                              <tbody align="center">
-                                 <tr th:each="receivingReqList : ${receivingReqList}">
-                                    <td th:text="${receivingReqList.receivingReqHistoryDTO.receivingReqNo}"></td>
-                                    <td th:text="${receivingReqList.ApprovalDocumentDTO.approvalDocumentType}"></td>
-                                    <td th:text="${receivingReqList.ApprovalDocumentDTO.empNo}"></td>
-                                    <td th:text="${receivingReqList.ApprovalDocumentDTO.empName}"></td>
-                                    <td th:switch="${receivingReqList.ApprovalDocumentDTO.documentStatus}">
-                                       <span th:case="'승인'" class="badge badge-success" th:text="${receivingReqList.ApprovalDocumentDTO.documentStatus}"></span>
-                                       <span th:case="'반려'" class="badge badge-danger" th:text="${receivingReqList.ApprovalDocumentDTO.documentStatus}"></span>
-                                       <span th:case="'대기중'" class="badge badge-warning" th:text="${receivingReqList.ApprovalDocumentDTO.documentStatus}"></span>
-                                    </td>
-                                    <td th:text="${receivingReqList.ApprovalDocumentDTO.documentWriteDate}"></td>
-                                    <td>
-                                       <button class="btn btn-dark btn-icon-split"
-                                             id="detailInfoBtn"
-                                             name="detailInfoBtn" data-toggle="modal"
-                                             data-target="#detailInfoBtnModal"
-                                             th:data-receiving-req-no="${receivingReqList.receivingReqHistoryDTO.receivingReqNo}"
-                                             th:data-receiving-req-type="${receivingReqList.ApprovalDocumentDTO.approvalDocumentType}">
-                                          <span class="icon text-white-50">
-                                             <i class="fas fa-clipboard-list"></i>
-                                          </span>
-                                          <span class="text text-white">상세정보</span>
-                                       </button>
-                                    </td>
-                                 </tr>
-                              </tbody>
-                              
-                              <tfoot align="center">
-                              </tfoot>
-                              
-                           </table>
-                        </div>
-                     </div>
-                  </div>
-                  <div class="col-lg-2"></div>
-               </div>
-            </div>
-         </div>
-      </div>
-   </div>
-   
-   <!------------- 재고관리 Modal --------------->
-   <div class="modal fade" id="detailInfoBtnModal" role="dialog">
-      <div class="modal-dialog modal-xl centered">
+								<div class="table-responsive p-3">
+									<table class="table align-items-center table-flush table-hover" id="receivingTable">
+										
+										<thead align="center" class="thead-light">
+											<tr>
+												<th>요청번호</th>
+												<th>요청분류</th>
+												<th>사원번호</th>
+												<th>사원명</th>
+												<th>처리상태</th>
+												<th>요청일시</th>
+												<th></th>
+											</tr>
+										</thead>
+										
+										<tbody align="center">
+											<tr th:each="receivingReqList : ${receivingReqList}">
+												<td th:text="${receivingReqList.receivingReqHistoryDTO.receivingReqNo}"></td>
+												<td th:text="${receivingReqList.ApprovalDocumentDTO.approvalDocumentType}"></td>
+												<td th:text="${receivingReqList.ApprovalDocumentDTO.empNo}"></td>
+												<td th:text="${receivingReqList.ApprovalDocumentDTO.empName}"></td>
+												<td th:switch="${receivingReqList.ApprovalDocumentDTO.documentStatus}">
+													<h5><span th:case="'승인'" class="badge badge-success"
+															  th:text="${receivingReqList.ApprovalDocumentDTO.documentStatus}"></span></h5>
+													<h5><span th:case="'반려'" class="badge badge-danger" 
+															  th:text="${receivingReqList.ApprovalDocumentDTO.documentStatus}"></span></h5>
+													<h5><span th:case="'대기중'" class="badge badge-warning"
+															  th:text="${receivingReqList.ApprovalDocumentDTO.documentStatus}"></span></h5>
+												</td>
+												<td th:text="${receivingReqList.ApprovalDocumentDTO.documentWriteDate}"></td>
+												<td>
+													<button class="btn btn-dark btn-icon-split"
+															id="detailInfoBtn"
+															name="detailInfoBtn" data-toggle="modal"
+															data-target="#detailInfoBtnModal"
+															th:data-receiving-req-no="${receivingReqList.receivingReqHistoryDTO.receivingReqNo}"
+															th:data-receiving-req-type="${receivingReqList.ApprovalDocumentDTO.approvalDocumentType}">
+														<span class="icon text-white-50">
+															<i class="fas fa-clipboard-list"></i>
+														</span>
+														<span class="text text-white">상세정보</span>
+													</button>
+												</td>
+											</tr>
+										</tbody>
+										
+										<tfoot align="center">
+										</tfoot>
+										
+									</table>
+								</div>
+							</div>
+						</div>
+						<div class="col-lg-2"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<!------------- 요청서 상세정보 Modal --------------->
+	<div class="modal fade" id="detailInfoBtnModal" role="dialog">
+		<div class="modal-dialog modal-xl centered">
 
-         <!-- Modal content-->
-         <div class="modal-content">
-            
+			<!-- Modal content-->
+			<div class="modal-content">
 
-            <div class="modal-body">
-               <form>
-                        <!-- EstimateInfo -->
-                        <div class="card mb-4">
+				<div class="modal-body">
+					<form id="approvalForm" 
+						  th:action="@{/stock/ApprovalStatus/modify}" method="post">
+								<!-- EstimateInfo -->
+								<div class="card mb-4">
 									<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
 										<h6 class="m-0 font-weight-bold text-primary" id="tableTitle">요청서 상세정보</h6>
 										<button type="button" id="xBtn" class="close" data-dismiss="modal">
@@ -190,8 +193,8 @@
 									</div>
 								</div>		<!-- End EstimateInfo -->
 
-                        <!-- EstimateProductList -->
-                        <div class="card mb-4" style="overflow-y: scroll; height: 300px;">
+								<!-- EstimateProductList -->
+								<div class="card mb-4" style="overflow-y: scroll; height: 300px;">
 									<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
 										<h6 class="m-0 font-weight-bold text-primary" id="tableTitle">요청상품목록</h6>
 									</div>
@@ -221,20 +224,20 @@
 									<button type="reset" id="modalCloseBtn" data-dismiss='modal' class="btn btn-outline-danger mx-2">취소</button>
 								</div>
 							</form>
-            </div>
-         </div>
-      </div>
-      <div class="modal-footer"></div>
-      <div id="count" value="1"></div>
-   </div>
+				</div>
+			</div>
+		</div>
+		<div class="modal-footer"></div>
+		<div id="count" value="1"></div>
+	</div>
 
-   <!-- Script -->
-   <th:block th:replace="@{/common/script} :: script"></th:block>
+	<!-- Script -->
+	<th:block th:replace="@{/common/script} :: script"></th:block>
 
-   <!-- Page level plugins -->
+	<!-- Page level plugins -->
 
-   <!-- Page level custom scripts -->
- 	<script>
+	<!-- Page level custom scripts -->
+	<script>
 	
 	const message = '[[${ message }]]';
 
@@ -243,7 +246,7 @@
 	}
 	
     $(document).ready(function () {      								 // ID From dataTable with Hover
-      $('#receivingTable').DataTable({
+      $('#dataTableHover').DataTable({
     	  order:[]
       }); 
       $('#dataTable').DataTable();      								 // ID From dataTable
@@ -335,12 +338,11 @@
 		$.ajax({
 			url: "/stock/request/select?documentStatus=" + documentStatus,
 			type: "get",
-			success: function(data, status, xhr) {
+			sueccess: function(data, status, xhr) {
 				
 				const receivingReqList = JSON.parse(data.receivingReqList);
 				
 				console.table(receivingReqList);
-				
 				const $table = $("#receivingTable tbody");
 				
 				if(documentStatus == 'all') {
@@ -352,24 +354,21 @@
 				$table.html("");
 				
 				for(let index in receivingReqList) {
-					
 					let receivingReq = receivingReqList[index];
 
-					console.log(receivingReq.approvalDocumentDTO.approvalDocumentType);
-					
 					$tr = $("<tr>");
 					$receivingReqNoTd = $("<td>").text(receivingReq.receivingReqHistoryDTO.receivingReqNo);
-					$approvalDocumentTypeTd = $("<td>").text(receivingReq.approvalDocumentDTO.approvalDocumentType);
-					$empNoTd = $("<td>").text(receivingReq.approvalDocumentDTO.empNo);
-					$empNameTd = $("<td>").text(receivingReq.approvalDocumentDTO.empName);
-					$badgeSpan = $("<span>").text(receivingReq.approvalDocumentDTO.documentStatus);
-					switch(receivingReq.approvalDocumentDTO.documentStatus) {
+					$approvalDocumentTypeTd = $("<td>").text(receivingReq.ApprovalDocumentDTO.approvalDocumentType);
+					$empNoTd = $("<td>").text(receivingReq.ApprovalDocumentDTO.empNo);
+					$empNameTd = $("<td>").text(receivingReq.ApprovalDocumentDTO.empName);
+					$badgeSpan = $("<span>").text(receivingReq.ApprovalDocumentDTO.documentStatus);
+					switch(receivingReq.ApprovalDocumentDTO.documentStatus) {
 						case '대기중' : $badgeSpan.addClass("badge badge-success"); break;
 						case '승인' : $badgeSpan.addClass("badge badge-info"); break;
 						case '반려' : $badgeSpan.addClass("badge badge-danger"); break;
 					}
 					$documentStatusTd = $("<td>").append($badgeSpan);
-					$documentWriteDateTd = $("<td>").text(receivingReq.approvalDocumentDTO.documentWriteDate);
+					$documentWriteDateTd = $("<td>").text(receivingReq.ApprovalDocumentDTO.documentWriteDate);
 					$detailBtn = $("<button>").addClass("btn btn-sm btn-primary").text("상세정보");
 					$detailTd = $("<td>").append($detailBtn);
 					
@@ -432,3 +431,29 @@
   </script>
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
