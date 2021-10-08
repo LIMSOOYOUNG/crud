@@ -1,8 +1,10 @@
 package com.deft.crud.business.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,6 +17,7 @@ import com.deft.crud.business.model.dto.BusinessChanceHistoryDTO;
 import com.deft.crud.business.model.service.BusinessService;
 import com.deft.crud.customer.model.dto.CustomerCompanyDTO;
 import com.deft.crud.customer.model.service.CustomerService;
+import com.deft.crud.member.model.service.UserImpl;
 
 @Controller
 @RequestMapping("/business/*")
@@ -29,11 +32,19 @@ public class BusinessController {
 		this.customerService = customerService;
 	}
 	
-	/* 전체 영업기회 목록 조회 */
+	/* 전체 영업기회 목록 조회(담당자 or 사원) */
 	@GetMapping("/chance/selectAll")
-	public ModelAndView selectBusinessChanceAll(ModelAndView mv) {
+	public ModelAndView selectBusinessChanceAll(ModelAndView mv, @AuthenticationPrincipal UserImpl userInfo) {
 		
-		List<BusinessChanceDTO> businessChanceList = businessService.selectBusinessChanceAll();
+		List<BusinessChanceDTO> businessChanceList = new ArrayList<>();
+		
+		if(userInfo.getAuthority().equals("담당자")) {
+		
+			businessChanceList = businessService.selectBusinessChanceAllForManager(userInfo);
+		} else {
+			
+			businessChanceList = businessService.selectBusinessChanceAllForEmp(userInfo);
+		}
 		
 		mv.addObject("businessChanceList", businessChanceList);
 		mv.setViewName("business/businessChanceList");

@@ -87,12 +87,12 @@ input {
 												<td th:text="${stock.productStock}"></td>
 												<td th:text="${stock.product.unit}"></td>
 												<td th:switch="${stock.product.sellStatus}">
-												<span th:case="'판매'" class="badge badge-success"
+												<h5><span th:case="'판매'" class="badge badge-success"
 													  th:text="${stock.product.sellStatus}">
-												</span>
-												<span th:case="'미판매'" class="badge badge-danger"
+												</span></h5>
+												<h5><span th:case="'미판매'" class="badge badge-danger"
 													  th:text="${stock.product.sellStatus}">
-												</span>
+												</span></h5>
 												</td>
 												<td	th:text="|${stock.storageSection} - ${stock.storageSpace}|"></td>
 
@@ -110,13 +110,8 @@ input {
 													</button>
 												</td>
 
-												<!-- 관지자 권한이 없는 아이디인경우 상품정보 페이지로 이동 버튼 -->
-
 											</tr>
 										</tbody>
-
-										<tfoot align="center">
-										</tfoot>
 
 									</table>
 								</div>

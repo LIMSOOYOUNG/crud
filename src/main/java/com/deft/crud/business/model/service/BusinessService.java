@@ -10,6 +10,7 @@ import com.deft.crud.business.model.dto.BusinessActivityDTO;
 import com.deft.crud.business.model.dto.BusinessChanceDTO;
 import com.deft.crud.business.model.dto.BusinessChanceHistoryDTO;
 import com.deft.crud.customer.model.dao.CustomerMapper;
+import com.deft.crud.member.model.service.UserImpl;
 
 @Service
 public class BusinessService {
@@ -22,13 +23,22 @@ public class BusinessService {
 		this.businessMapper = businessMapper;
 	}
 	
-	public List<BusinessChanceDTO> selectBusinessChanceAll() {
+	/* 영업기회 전체조회(담당자용) */
+	public List<BusinessChanceDTO> selectBusinessChanceAllForManager(UserImpl userInfo) {
 		
-		List<BusinessChanceDTO> businessChanceList = businessMapper.selectBusinessChanceAll();
+		List<BusinessChanceDTO> businessChanceList = businessMapper.selectBusinessChanceAllForManager(userInfo);
 		
 		return businessChanceList;
 	}
 
+	/* 영업기회 전체조회(사원용) */
+	public List<BusinessChanceDTO> selectBusinessChanceAllForEmp(UserImpl userInfo) {
+		
+		List<BusinessChanceDTO> businessChanceList = businessMapper.selectBusinessChanceAllForEmp(userInfo);
+		
+		return businessChanceList;
+	}
+	
 	/* 선택한 영업기회 내용 변경 이력*/
 	public List<BusinessChanceHistoryDTO> selectChanceHistoryByNo(int businessChanceNo) {
 		
@@ -61,5 +71,7 @@ public class BusinessService {
 		
 		return businessActivityList;
 	}
+
+	
 
 }

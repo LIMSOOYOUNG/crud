@@ -215,7 +215,7 @@
 													<td th:text="${activityList.businessSubject}"></td>
 													<td th:text="${activityList.empName}"></td>
 													<td th:text="${activityList.writingTime}"></td>
-													<td><a class="btn btn-light btn-icon-split"
+													<td><a class="btn btn-light btn-icon-split activityDetail"
 													       id="activityDetail" 
 													       th:value="${ activityList.activityNo }">
 															<span class="icon text-black-50">
@@ -619,7 +619,7 @@
            window.history.back();
         });
 
-        $('#activityDetail').click(function() {
+        $('.activityDetail').click(function() {
             $.ajax({
                url: "customer/activity/select",
                type: "GET",

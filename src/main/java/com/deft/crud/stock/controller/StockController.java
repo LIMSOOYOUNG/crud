@@ -1,8 +1,6 @@
 package com.deft.crud.stock.controller;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
@@ -43,15 +41,17 @@ public class StockController {
 		this.objectMapper = objectMapper;
 	}
 
-	/* 창고보유(재고) 상품목록 조회 */
+	/* 창고보유(재고) 상품목록 전체 조회 */
 	@GetMapping("/selectAll")
 	public ModelAndView selectStockAll(ModelAndView mv) {
 		
-		/* 창고에 보유중인 전체 상품 목록*/
+		/* 창고에 보유중인 전체 상품 목록 */
 		List<StorageDTO> stockList = stockService.selectStockAll();
 		
-		/* 판매가능 상태인 모든 상품들*/
+		/* 판매가능 상태인 모든 상품들 */
 		List<StorageDTO> sellableProductList = stockService.selectSellableProductAll();
+		
+		System.out.println("@@@@@@@@@@@@@@@@@@판매중인 상품 목록 : " + sellableProductList);
 		
 		mv.addObject("stockList", stockList);
 		mv.addObject("sellableProductList", sellableProductList);
@@ -60,7 +60,8 @@ public class StockController {
 		return mv;
 	}
 	
-	/*  */
+	
+	/* 선택한 상품의 재고관련 정보 조회 */
 	@GetMapping("/productInfo/selectOne")
 	public ModelAndView selectProductInfoByNo(ModelAndView mv, HttpServletResponse response
 											, @RequestParam("productNo") int productNo) throws JsonProcessingException {
@@ -75,6 +76,7 @@ public class StockController {
 		return mv;
 	}
 	
+	/* 선택한 재고상품의 재고관련 정보 변경 */
 	@PostMapping("/stockCondition/modify")
 	public ModelAndView modifyStockCondition(ModelAndView mv, RedirectAttributes rttr
 											, @ModelAttribute RequestStockDTO parameters) {
@@ -95,12 +97,11 @@ public class StockController {
 		return mv;
 	}
 	
-	/* 입고요청서 작성 */
+	/* 입고요청서 작성(입고 요청한 상품들의 정보 insert ) */
 	@PostMapping("receivingProduct/insert")
 	public ModelAndView insertStockReceivingProduct(ModelAndView mv, HttpServletResponse response
 													, @AuthenticationPrincipal UserImpl userInfo
 													, @RequestBody List<RequestStockDTO> request) {
-													
 		
 		response.setContentType("application/json; charset=UTF-8");
 		
@@ -118,11 +119,13 @@ public class StockController {
 	
 // ----------------------------------요청 목록------------------------------------------------------------------------	
 	
-	/* 요청서 목록 전체 조회(담당자) */
+	/* 요청서 목록 전체 조회(담당자 or 사원) */
 	@GetMapping("request/selectAll")
-	public ModelAndView selectRequestAll(ModelAndView mv) {
+	public ModelAndView selectRequestAll(ModelAndView mv, @AuthenticationPrincipal UserImpl userInfo) {
 		
-		List<ReceivingReqDTO> receivingReqList = stockService.selectReceivingReqAll();
+		List<ReceivingReqDTO> receivingReqList = new ArrayList<>();
+		
+		receivingReqList = stockService.selectReceivingReqAll(userInfo);	
 		
 		mv.addObject("receivingReqList", receivingReqList);
 		mv.setViewName("stock/requestList");
@@ -130,23 +133,47 @@ public class StockController {
 		return mv;
 	}
 	
+	/* 요청서 목록 결재상태 별 조회 */
+	@GetMapping("request/select")
+	public ModelAndView selectRequestByStatus(ModelAndView mv, HttpServletResponse response
+											, @RequestParam String documentStatus
+											, @AuthenticationPrincipal UserImpl userInfo) throws JsonProcessingException {
+	
+		response.setContentType("application/json; charset=UTF-8");
+		
+		System.out.println("@@@@@@@@ documentStatus : " + documentStatus);
+		
+		List<ReceivingReqDTO> receivingReqList = new ArrayList<>();
+		
+		receivingReqList = stockService.selectReceivingReqByStatus(documentStatus, userInfo);	
+		
+		System.out.println("@@@@@ receivingReqList : " + receivingReqList);
+		
+		mv.addObject("receivingReqList", objectMapper.writeValueAsString(receivingReqList));
+		mv.setViewName("jsonView");
+		
+		return mv;
+	}
+	
+	
 	/* 선택한 요청서 상세 정보*/
 	@GetMapping("request/selectOne")
-	public ModelAndView selectReceivingReqByNo(ModelAndView mv, HttpServletResponse response
+	public ModelAndView selectReceivingReqByNo(ModelAndView mv
+												, HttpServletResponse response
+												, @AuthenticationPrincipal UserImpl userInfo
 												, @RequestParam("reqNo") int reqNo) throws JsonProcessingException {
 		
 		response.setContentType("application/json; charset=UTF-8");
 		
 		ReceivingReqDTO receivingReqInfo = stockService.selectReceivingReqByNo(reqNo);
 		
-		List<ReceivingReqDTO> receivingReqProductList = stockService.receivingReqProductByReqNo(reqNo);
+		List<ReceivingReqDTO> receivingReqProductList = stockService.selectReceivingReqProductByReqNo(reqNo);
 		
-		System.out.println(receivingReqProductList);
+		String authority = userInfo.getAuthority();
 		
-		System.out.println("작성일자 : " + receivingReqInfo.getApprovalDocumentDTO().getDocumentWriteDate());
-		
-		mv.addObject("receivingReqInfo", objectMapper.writeValueAsString(receivingReqInfo));
-		mv.addObject("receivingReqProductList", objectMapper.writeValueAsString(receivingReqProductList));
+		mv.addObject("receivingReqInfo", objectMapper.writeValueAsString(receivingReqInfo));				//요청서 내용
+		mv.addObject("receivingReqProductList", objectMapper.writeValueAsString(receivingReqProductList));	//요청서 내용중 입고요청 상품목록 
+		mv.addObject("authority", objectMapper.writeValueAsString(authority));								//접속중인 사용자의 정보
 		mv.setViewName("jsonView");
 		
 		return mv;
@@ -162,7 +189,7 @@ public class StockController {
 		String message = "";
 		
 		if(result) {
-			message = "결재 처리완료.";
+			message = "결재 처리완료";
 		} else {
 			message = "결재 처리실패!";
 		}
