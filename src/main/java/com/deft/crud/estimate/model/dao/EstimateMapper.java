@@ -13,6 +13,8 @@ public interface EstimateMapper {
 
 	List<EstimateDTO> selectEstimateListByStatus(String estimateStatus);
 
+	EstimateDTO selectEstimateDetail(String estimateNo);
+	
 	String selectLastEstimateSeq();
 
 	int insertEstimate(EstimateDTO estimateInfo);

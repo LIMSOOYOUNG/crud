@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="ko"
+	xmlns:th="https://www.thymeleaf.org">
+<head>
+	<th:block th:replace="@{common/config} :: config"></th:block>
+</head>
+
+<body id="page-top">
+	<div id="wrapper">
+		<!-- Sidebar -->
+		<th:block th:replace="@{/common/sidebar} :: sidebar"></th:block>
+
+		<div id="content-wrapper" class="d-flex flex-column">
+			<div id="content">
+				<!-- Header -->
+				<th:block th:replace="@{/common/header} :: header"></th:block>
+
+				<!-- Content -->
+				<div class="container-fluid" id="container-wrapper">
+					<div class="d-sm-flex align-items-center justify-content-between mb-4">
+						<h1 class="h3 mb-0 text-gray-800">견적서 관리</h1>
+						<ol class="breadcrumb">
+							<li class="breadcrumb-item"><a th:href="@{/}">Home</a></li>
+							<li class="breadcrumb-item"><a th:href="@{/estimate/selectAll}">견적서 조회</a></li>
+							<li class="breadcrumb-item active" aria-current="page">견적서 상세조회</li>
+						</ol>
+					</div>
+
+					<div class="row">
+						<div class="col-lg-12">
+							<!-- EstimateInfo -->
+							<div class="card mb-4">
+								<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+									<h6 class="m-0 font-weight-bold text-primary" id="tableTitle">견적서 작성</h6>
+								</div>
+								<div class="card-body">
+									<div class="form-group row mb-2" th:align="right">
+											<label for="estimateTitle" class="col-form-label col-lg-1">제목</label>
+											<input type="text" class="form-control col-lg-10" id="estimateTitle" name="estimateTitle"
+													th:value="${ estimate.estimateTitle }" readonly>
+									</div>
+									<div class="form-group row mb-2" th:align="right">
+										<label for="estimateNo" class="col-form-label col-lg-1">견적번호</label>
+										<input type="text" class="form-control col-lg-4" id="estimateNo" name="estimateNo"
+												th:value="${ estimate.estimateNo }" readonly>
+										<label for="estimateDate" class="col-form-label col-lg-2">견적일자</label>
+										<input type="text" class="form-control col-lg-4" id="estimateDate" name="estimateDate"
+												th:value="${ estimate.estimateDate }" readonly>
+									</div>
+									<div class="form-group row mb-2" th:align="right">
+										<label for="customerCompany" class="col-form-label col-lg-1">고객사</label>
+										<input type="text" class="form-control col-lg-4" id="customerCompany" name="customerCompany"
+												th:value="${ estimate.customer.company.companyName }" readonly>
+										<label for="customerName" class="col-form-label col-lg-2">고객명</label>
+										<input type="text" class="form-control col-lg-4" id="customerName" name="customerName"
+												th:value="${ estimate.customer.customerName }" readonly>
+									</div>
+									<div class="form-group row mb-4" th:align="right">
+										<label for="estimateStatus" class="col-form-label col-lg-1">진행상태</label>
+										<input class="form-control col-lg-4" id="estimateStatus" name="estimateStatus"
+												th:value="${ estimate.estimateStatus }" readonly>
+										<div class="input-group-btn col-lg-1" th:align="left">
+											<button type="button" class="btn btn-primary" id="changeStatus">변경</button>
+										</div>
+										<label for="resEmp" class="col-form-label col-lg-1">담당사원</label>
+										<input type="text" class="form-control col-lg-4" id="resEmpName" name="empName"
+												th:value="|${ estimate.customer.empInfo.empName } ${ estimate.customer.empInfo.job.jobName }|" readonly>
+									</div>
+
+									<div class="form-group row mb-2" th:align="right">
+										<label class="col-form-label col-lg-1">금액할인</label>
+										<div class="custom-control custom-radio mt-2 col-lg-1">
+											<input type="radio" class="custom-control-input" id="noApplyDiscount" name="discount" value="N"
+													th:checked="${ estimate.discountStatus == 'N' }">
+											<label for="noApplyDiscount" class="custom-control-label">미적용</label>
+										</div>
+										<div class="custom-control custom-radio mt-2 col-lg-1">
+											<input type="radio" class="custom-control-input" id="applyDiscount" name="discount" value="Y"
+													th:checked="${ estimate.discountStatus == 'Y' }">
+											<label for="applyDiscount" class="custom-control-label">적용</label>
+										</div>
+										<div class="input-group bootstrap-touchspin bootstrap-touchspin-injected col-lg-2">
+											<input type="text" class="form-control" id="discountRate" name="discountRate" value="0" disabled required>
+										</div>
+										
+									</div>
+									<div class="form-group row mb-2" th:align="right">
+										<label for="estimateTotal" class="col-form-label col-lg-1">합계금액</label>
+										<input type="text" class="form-control col-lg-4" id="estimateTotal" readonly>
+										<h5 for="estimateTotal" class="col-lg-4" id="estimateKoreanTotal" th:align="left"></h5>
+									</div>
+								</div>
+							</div>		<!-- End EstimateInfo -->
+
+							<!-- EstimateProductList -->
+							<div class="card mb-4">
+								<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+									<h6 class="m-0 font-weight-bold text-primary" id="tableTitle">상품 추가</h6>
+								</div>
+								<div class="table-responsible">
+									<table class="table align-items-center table-flush" id="estimateProductTable">
+										<thead class="thead-light" th:align="center">
+											<tr>
+												<th>No</th>
+												<th>상품번호</th>
+												<th>상품명</th>
+												<th>공급가</th>
+												<th>할인가</th>
+												<th>단위</th>
+												<th>수량</th>
+												<th>합계</th>
+												<th>세액</th>
+												<th></th>
+											</tr>
+										</thead>
+										<tbody th:align="center" th:object="${ estimateProduct }">
+											<tr>
+												<td name="productAmount" value=3>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>		<!-- End EstimateProductList -->
+
+							<div th:align="center">
+								<button type="submit" class="btn btn-primary mx-2">등록</button>
+								<button type="reset" class="btn btn-outline-danger mx-2">취소</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Script -->
+	<th:block th:replace="@{/common/script} :: script"></th:block>
+	<script>
+		$(document).ready(function() {
+			$('#customerTable').DataTable();
+			$('#stockTable').DataTable();
+
+			$("#discountRate").TouchSpin({
+				min: 0,
+				max: 100,
+				initval: 0,
+				boostat: 5,
+				maxboostedstep: 10,
+				postfix: '%'
+			});
+		});
+	</script>
+</body>
+
+</html>

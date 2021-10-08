@@ -21,6 +21,7 @@ public class CustomerDTO implements Serializable {
     private String customerPhone;
     private String customerFax;
 
+    private CustomerCompanyDTO company;
     private ExtCustomerDetailDTO extCustomerDetail;
     private AnaCustomerDetailDTO anaCustomerDetail;
     private EmpInfoDTO empInfo;

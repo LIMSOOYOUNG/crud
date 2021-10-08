@@ -47,12 +47,12 @@ public class EstimateControllerTests {
 	}
 	
 	@Test
-	public void testSelectEstimateByStatus() throws Exception {
+	public void testSelectEstimateListByStatus() throws Exception {
 		
 		MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
 		params.add("estimateStatus", "progress");
 		
-		mockMvc.perform(get("/estimate/select").params(params))
+		mockMvc.perform(get("/estimate/selectAll/status").params(params))
 				.andExpect(status().isOk())
 				.andExpect(forwardedUrl("jsonView"))
 				.andDo(print());
