@@ -42,7 +42,7 @@
 	
 	<resultMap type="com.deft.crud.member.model.dto.MemberDTO" id="managerResultMap">
 		<id property="empNo" column="EMP_NO"/>
-		<result property="empName" column="EMP_NAME"/>
+		<result property="empName" column="MANAGER_NAME"/>
 	</resultMap>
 	
 	<select id="findMemberById" resultMap="loginMemberResultMap">
@@ -50,7 +50,7 @@
                E.*
              , J.*
              , D.*
-             , M.EMP_NAME
+             , M.EMP_NAME "MANAGER_NAME"
           FROM TBL_EMP_INFO E
           LEFT JOIN TBL_JOB J ON (E.JOB_CODE = J.JOB_CODE)
           LEFT JOIN TBL_DEPARTMENT D ON (E.DEPT_CODE = D.DEPT_CODE)

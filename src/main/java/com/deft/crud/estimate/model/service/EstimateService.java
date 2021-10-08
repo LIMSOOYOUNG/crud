@@ -50,9 +50,9 @@ public class EstimateService {
 			int sellingPrice = estimateProduct.getProduct().getSellingPrice();
 			int amount = estimateProduct.getProductAmount();
 			
-			int discountedPrice = sellingPrice * (1 - (discountRate / 100));
+			int discountedPrice = (int) (sellingPrice * (1 - (discountRate * 0.01)));
 			int subtotal = discountedPrice * amount;
-			int tax = subtotal / 10;
+			int tax = (int) (subtotal * 0.1);
 			
 			estimateProduct.getProduct().setDiscountedPrice(discountedPrice);
 			estimateProduct.getProduct().setSubtotal(subtotal);

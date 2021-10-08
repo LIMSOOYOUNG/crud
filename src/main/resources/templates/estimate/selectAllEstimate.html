@@ -31,7 +31,7 @@
 							<div class="card mb-4">
 								<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
 									<h6 class="m-0 font-weight-bold text-primary" id="tableTitle">견적서 조회 (전체)</h6>
-									<button type="button" class="btn btn-info btn-icon-split" th:onclick="location.href='/estimate/insert'">
+									<button type="button" class="btn btn-info btn-icon-split" th:onclick="|location.href='@{/estimate/insert}'|">
 										<span class="icon text-white">
 											<i class="fas fa-edit"></i>
 										</span>
@@ -115,7 +115,7 @@
 			
 			$.ajax({
 				url: "/estimate/selectAll/status?estimateStatus=" + estimateStatus,
-				type: "get",
+				type: "GET",
 				success: function(data, status, xhr) {
 
 					const estimateList = JSON.parse(data.estimateListByStatus);
@@ -132,10 +132,10 @@
 					for(let index in estimateList) {
 						let estimate = estimateList[index];
 
-						$tr = $("<tr>").prop("th:align", "center");
+						$tr = $("<tr>").prop("align", "center");
 						$estimateNoTd = $("<td>").text(estimate.estimateNo);
 						$customerNameTd = $("<td>").text(estimate.customer.customerName);
-						$estimateTitleTd = $("<td>").prop("th:align", "center").text(estimate.estimateTitle);
+						$estimateTitleTd = $("<td>").attr("align", "left").text(estimate.estimateTitle);
 						$badgeSpan = $("<span>").text(estimate.estimateStatus);
 						switch(estimate.estimateStatus) {
 							case '진행중' : $badgeSpan.addClass("badge badge-success"); break;

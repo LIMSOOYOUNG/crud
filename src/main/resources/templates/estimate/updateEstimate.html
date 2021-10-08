@@ -22,122 +22,141 @@
 						<ol class="breadcrumb">
 							<li class="breadcrumb-item"><a th:href="@{/}">Home</a></li>
 							<li class="breadcrumb-item"><a th:href="@{/estimate/selectAll}">견적서 조회</a></li>
-							<li class="breadcrumb-item active" aria-current="page">견적서 작성</li>
+							<li class="breadcrumb-item active" aria-current="page">견적서 수정</li>
 						</ol>
 					</div>
 
 					<div class="row">
 						<div class="col-lg-12" th:align="center">
-							<form th:action="@{/estimate/insert}" method="POST">
-								<!-- EstimateInfo -->
-								<div class="card mb-4">
-									<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-										<h6 class="m-0 font-weight-bold text-primary" id="tableTitle">견적서 작성</h6>
-									</div>
-									<div class="card-body">
-										<div class="form-group row mb-2" th:align="right">
-												<label for="estimateTitle" class="col-form-label col-lg-1">제목</label>
-												<input type="text" class="form-control col-lg-10" id="estimateTitle" name="estimateTitle" required>
-										</div>
-										<div class="form-group row mb-2" th:align="right">
-											<label for="estimateNo" class="col-form-label col-lg-1">견적번호</label>
-											<input type="text" class="form-control col-lg-4" id="estimateNo" name="estimateNo"
-													th:value="${ newEstimate.estimateNo }" readonly>
-											<label for="estimateDate" class="col-form-label col-lg-2">견적일자</label>
-											<input type="text" class="form-control col-lg-4" id="estimateDate" name="estimateDate"
-													th:value="${ newEstimate.estimateDate }" readonly>
-										</div>
-										<div class="form-group row mb-2" th:align="right">
-											<label for="customerCompany" class="col-form-label col-lg-1">고객사</label>
-											<input type="text" class="form-control col-lg-4" id="customerCompany" name="customerCompany" readonly>
-											<label for="customerName" class="col-form-label col-lg-2">고객명</label>
-											<input type="text" class="form-control col-lg-4" id="customerName" name="customerName" readonly>
-											<input type="hidden" class="form-control" id="customerNo" name="customerNo">
-											<div class="input-group-btn col-lg-1" th:align="left">
-												<button type="button" class="btn btn-primary" id="searchCustomer"
-														data-toggle="modal" data-target="#customerModal">검색</button>
-											</div>
-										</div>
-										<div class="form-group row mb-4" th:align="right">
-											<label for="estimateStatus" class="col-form-label col-lg-1">진행상태</label>
-											<select class="form-control col-lg-4" id="estimateStatus" name="estimateStatus">
-												<option th:value="progress" th:text="진행중"></option>
-												<option th:value="success" th:text="완료"></option>
-												<option th:value="postpone" th:text="보류"></option>
-												<option th:value="failed" th:text="실패"></option>
-											</select>
-											<label for="resEmp" class="col-form-label col-lg-2">담당사원</label>
-											<input type="text" class="form-control col-lg-4" id="resEmpName" name="resEmpName" readonly>
-											<input type="hidden" class="form-control" id="resEmpNo" name="empNo">
-										</div>
-
-										<div class="form-group row mb-2" th:align="right">
-											<label class="col-form-label col-lg-1">금액할인</label>
-											<div class="custom-control custom-radio mt-2 col-lg-1">
-												<input type="radio" class="custom-control-input" id="noApplyDiscount" name="discount" value="N" checked>
-												<label for="noApplyDiscount" class="custom-control-label">미적용</label>
-											</div>
-											<div class="custom-control custom-radio mt-2 col-lg-1">
-												<input type="radio" class="custom-control-input" id="applyDiscount" name="discount" value="Y">
-												<label for="applyDiscount" class="custom-control-label">적용</label>
-											</div>
-											<div class="input-group bootstrap-touchspin bootstrap-touchspin-injected col-lg-2">
-												<input type="text" class="form-control" id="discountRate" name="discountRate" value="0" disabled>
-											</div>
-											<div class="input-group-btn">
-												<button type="button" class="btn btn-primary" id="setDiscount">설정</button>
-											</div>
-										</div>
-										<div class="form-group row mb-2" th:align="right">
-											<label for="estimateTotal" class="col-form-label col-lg-1">합계금액</label>
-											<input type="text" class="form-control col-lg-4" id="estimateTotal" readonly>
-											<h5 class="col-lg-4" id="estimateKoreanTotal" th:align="left"></h5>
-										</div>
-									</div>
-								</div>		<!-- End EstimateInfo -->
-
-								<!-- EstimateProductList -->
-								<div class="card mb-4">
-									<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-										<h6 class="m-0 font-weight-bold text-primary" id="tableTitle">견적 품목</h6>
-									</div>
-									<div class="table-responsible">
-										<table class="table align-items-center table-flush" id="estimateProductTable">
-											<thead class="thead-light" th:align="center">
-												<tr>
-													<th>No</th>
-													<th>상품번호</th>
-													<th>상품명</th>
-													<th>공급가</th>
-													<th>할인가</th>
-													<th>단위</th>
-													<th>수량</th>
-													<th>합계</th>
-													<th>세액</th>
-													<th></th>
-												</tr>
-											</thead>
-											<tbody th:align="center">
-												<tr id="addProductBtn">
-													<td colspan="10" th:align="center">
-														<button type="button" class="btn btn-sm btn-dark btn-icon-split" id="addProduct"
-																data-toggle="modal" data-target="#stockModal">
-															<span class="icon text-white-50"><i class="fas fa-search-plus"></i></span>
-															<span class="text text-white">상품 추가</span>
-														</button>
-													</td>
-												</tr>
-											</tbody>
-										</table>
-									</div>
-								</div>		<!-- End EstimateProductList -->
-
-								<div class="mb-4" th:align="center">
-									<button type="submit" class="btn btn-primary mx-2">등록</button>
-									<button type="reset" class="btn btn-outline-danger mx-2"
-											th:onclick="history.back()">취소</button>
+							<!-- EstimateInfo -->
+							<div class="card mb-4">
+								<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+									<h6 class="m-0 font-weight-bold text-primary" id="tableTitle">견적서 수정</h6>
 								</div>
-							</form>
+								<div class="card-body" th:object="${ estimate }">
+									<div class="form-group row mb-2" th:align="right">
+											<label for="estimateTitle" class="col-form-label col-lg-1">제목</label>
+											<input type="text" class="form-control col-lg-10" id="estimateTitle" name="estimateTitle"
+													th:value="*{ estimateTitle }" required>
+									</div>
+									<div class="form-group row mb-2" th:align="right">
+										<label for="estimateNo" class="col-form-label col-lg-1">견적번호</label>
+										<input type="text" class="form-control col-lg-4" id="estimateNo" name="estimateNo"
+												th:value="*{ estimateNo }" readonly>
+										<label for="estimateDate" class="col-form-label col-lg-2">견적일자</label>
+										<input type="text" class="form-control col-lg-4" id="estimateDate" name="estimateDate"
+												th:value="*{ estimateDate }" readonly>
+									</div>
+									<div class="form-group row mb-2" th:align="right">
+										<label for="customerCompany" class="col-form-label col-lg-1">고객사</label>
+										<input type="text" class="form-control col-lg-4" id="customerCompany" name="customerCompany"
+												th:value="*{ customer.company.companyName }" readonly>
+										<label for="customerName" class="col-form-label col-lg-2">고객명</label>
+										<input type="text" class="form-control col-lg-4" id="customerName" name="customerName"
+												th:value="*{ customer.customerName }" readonly>
+										<input type="hidden" class="form-control" id="customerNo" name="customerNo">
+										<div class="input-group-btn col-lg-1" th:align="left">
+											<button type="button" class="btn btn-primary" id="searchCustomer"
+													data-toggle="modal" data-target="#customerModal">검색</button>
+										</div>
+									</div>
+									<div class="form-group row mb-4" th:align="right">
+										<label for="estimateStatus" class="col-form-label col-lg-1">진행상태</label>
+										<select class="form-control col-lg-4" id="estimateStatus" name="estimateStatus">
+											<option th:text="진행중" th:selected="*{ estimateStatus } == '진행중'"></option>
+											<option th:text="완료" th:selected="*{ estimateStatus } == '완료'"></option>
+											<option th:text="보류" th:selected="*{ estimateStatus } == '보류'"></option>
+											<option th:text="실패" th:selected="*{ estimateStatus } == '실패'"></option>
+										</select>
+										<label for="resEmp" class="col-form-label col-lg-2">담당사원</label>
+										<input type="text" class="form-control col-lg-4" id="resEmpName" name="resEmpName"
+												th:value="|*{ customer.empInfo.empName } *{ customer.empInfo.job.jobName }|" readonly>
+										<input type="hidden" class="form-control" id="resEmpNo" name="empNo">
+									</div>
+
+									<div class="form-group row mb-2" th:align="right">
+										<label class="col-form-label col-lg-1">금액할인</label>
+										<div class="custom-control custom-radio mt-2 col-lg-1">
+											<input type="radio" class="custom-control-input" id="noApplyDiscount" name="discount" value="N"
+													th:checked="*{ discountStatus == 'N' }">
+											<label for="noApplyDiscount" class="custom-control-label">미적용</label>
+										</div>
+										<div class="custom-control custom-radio mt-2 col-lg-1">
+											<input type="radio" class="custom-control-input" id="applyDiscount" name="discount" value="Y"
+													th:checked="*{ discountStatus == 'Y' }">
+											<label for="applyDiscount" class="custom-control-label">적용</label>
+										</div>
+										<div class="input-group bootstrap-touchspin bootstrap-touchspin-injected col-lg-2">
+											<input type="text" class="form-control" id="discountRate" name="discountRate"
+													th:value="*{ discountRate }" th:if="*{ discountStatus } == 'N'" disabled>
+											<input type="text" class="form-control" id="discountRate" name="discountRate"
+													th:value="*{ discountRate }" th:unless="*{ discountStatus } == 'N'">
+										</div>
+										<div class="input-group-btn">
+											<button type="button" class="btn btn-primary" id="setDiscount">설정</button>
+										</div>
+									</div>
+									<div class="form-group row mb-2" th:align="right">
+										<label for="estimateTotal" class="col-form-label col-lg-1">합계금액</label>
+										<input type="text" class="form-control col-lg-4" id="estimateTotal" th:value="*{ total }" readonly>
+										<h5 class="col-lg-4" id="estimateKoreanTotal" th:align="left"></h5>
+									</div>
+								</div>
+							</div>		<!-- End EstimateInfo -->
+
+							<!-- EstimateProductList -->
+							<div class="card mb-4">
+								<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+									<h6 class="m-0 font-weight-bold text-primary" id="tableTitle">견적 품목</h6>
+								</div>
+								<div class="table-responsible">
+									<table class="table align-items-center table-flush" id="estimateProductTable">
+										<thead class="thead-light" th:align="center">
+											<tr>
+												<th>No</th>
+												<th>상품번호</th>
+												<th>상품명</th>
+												<th>공급가</th>
+												<th>할인가</th>
+												<th>단위</th>
+												<th>수량</th>
+												<th>합계</th>
+												<th>세액</th>
+												<th></th>
+											</tr>
+										</thead>
+										<tbody th:align="center">
+											<tr th:each="estimateProduct, i : ${ estimate.estimateProductList }" th:object="${ estimateProduct }">
+												<td th:text="${ i.count }"></td>
+												<td th:text="*{ productNo }"></td>
+												<td th:text="*{ product.productName }"></td>
+												<td th:text="*{ product.sellingPrice }"></td>
+												<td th:text="*{ product.discountedPrice }"></td>
+												<td th:text="*{ product.unit }"></td>
+												<td th:text="*{ productAmount }"></td>
+												<td th:text="*{ product.subtotal }"></td>
+												<td th:text="*{ product.tax }"></td>
+												<td></td>
+											</tr>
+											<tr id="addProductBtn">
+												<td colspan="10" th:align="center">
+													<button type="button" class="btn btn-sm btn-dark btn-icon-split" id="addProduct"
+															data-toggle="modal" data-target="#stockModal">
+														<span class="icon text-white-50"><i class="fas fa-search-plus"></i></span>
+														<span class="text text-white">상품 추가</span>
+													</button>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>		<!-- End EstimateProductList -->
+
+							<div class="mb-4" th:align="center">
+								<button type="button" class="btn btn-primary mx-2">수정</button>
+								<button type="button" th:onclick="|location.href='@{/estimate/selectAll}'|"
+										class="btn btn-outline-danger mx-2">취소</button>
+							</div>
 						</div>
 					</div>
 
@@ -267,7 +286,7 @@
 		$(document).ready(function() {
 			$('#customerTable').DataTable();
 			$('#stockTable').DataTable();
-			
+
 			$("#discountRate").TouchSpin({
 				min: 0,
 				max: 100,
@@ -276,8 +295,11 @@
 				maxboostedstep: 10,
 				postfix: '%'
 			});
+			
+			let totalKorean = translateKorean($("#estimateTotal").val());
+			$("#estimateKoreanTotal").text("(" + totalKorean + ")");
 		});
-		
+
 		/* 고객 목록 중 선택하여 정보 입력 */
 		$("button[name='selectCustomer']").on("click", function() {
 			$tr = $(this).parent().parent();
@@ -294,7 +316,7 @@
 			$("#resEmpName").val(empName);
 			$("#resEmpNo").val(empNo);
 		});
-		
+
 		/* 할인 적용에 따라 수치 입력 칸 활성화/비활성화 */
 		$("input:radio[name='discount']").on('click', function() {
 			if($(this).val() == 'Y') {
@@ -328,7 +350,7 @@
 			let totalKorean = translateKorean(total);
 			$("#estimateKoreanTotal").text("(" + totalKorean + ")");
 		});
-			
+
 		/* 상품 검색 후 리스트에 추가 */
 		$("button[name='selectStock']").on("click", function() {
 			const $estimateProductTr = $("#estimateProductTable tbody tr");

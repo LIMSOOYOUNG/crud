@@ -72,8 +72,6 @@ public class EstimateController {
 		
 		EstimateDTO estimate = estimateService.selectEstimateDetail(estimateNo);
 		
-		System.out.println(estimate);
-		
 		mv.addObject("estimate", estimate);
 		mv.setViewName("estimate/selectEstimate");
 		
@@ -113,6 +111,26 @@ public class EstimateController {
 		System.out.println("estimateInfo : " + estimateInfo);
 		
 		int result = estimateService.insertEstimate(estimateInfo);
+		
+		return mv;
+	}
+	
+	@GetMapping("/update")
+	public ModelAndView updateEstimate(ModelAndView mv, @RequestParam String estimateNo) {
+		
+		/* 견적서 정보 조회 */
+		EstimateDTO estimate = estimateService.selectEstimateDetail(estimateNo);
+		
+		/* 고객 목록 조회 */
+		List<ExtCustomerDTO> extCustomerList = customerService.selectExtCustomerList();
+		
+		/* 상품 목록 조회 */
+		List<StorageDTO> stockList = stockService.selectSellableProductAll();
+		
+		mv.addObject("estimate", estimate);
+		mv.addObject("customerList", extCustomerList);
+		mv.addObject("stockList", stockList);
+		mv.setViewName("estimate/updateEstimate");
 		
 		return mv;
 	}
