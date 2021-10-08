@@ -274,7 +274,7 @@
         )   
    </insert>
    
-   <!-- 요청목록 전체 조회(담당자용) -->
+   <!-- 요청목록 전체 조회(담당자 or 사원) -->
    <select id="selectReceivingReqAll" resultMap="receivingReqResultMap" parameterType="com.deft.crud.member.model.service.UserImpl">
       SELECT /* com.deft.crud.stock.model.dao.StockMapper#selectReceivingReqAll() */
              A.APPROVAL_DOCUMENT_NO
@@ -301,7 +301,7 @@
        ORDER BY A.DOCUMENT_WRITE_DATE DESC
    </select>
    
-   <!-- 요청목록 결재상태별 조회(사원용) -->
+   <!-- 요청목록 결재상태별 조회(담당자 or 사원) -->
    <select id="selectReceivingReqByStatus" resultMap="receivingReqResultMap" parameterType="com.deft.crud.member.model.service.UserImpl">
       SELECT /* com.deft.crud.stock.model.dao.StockMapper#selectReceivingReqByStatus() */
              A.APPROVAL_DOCUMENT_NO

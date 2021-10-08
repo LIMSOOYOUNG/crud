@@ -23,18 +23,18 @@ public class BusinessService {
 		this.businessMapper = businessMapper;
 	}
 	
-	/* 영업기회 전체조회(담당자용) */
-	public List<BusinessChanceDTO> selectBusinessChanceAllForManager(UserImpl userInfo) {
+	/* 영업기회 전체조회(담당자 or 사원) */
+	public List<BusinessChanceDTO> selectBusinessChanceAll(UserImpl userInfo) {
 		
-		List<BusinessChanceDTO> businessChanceList = businessMapper.selectBusinessChanceAllForManager(userInfo);
+		List<BusinessChanceDTO> businessChanceList = businessMapper.selectBusinessChanceAll(userInfo);
 		
 		return businessChanceList;
 	}
 
-	/* 영업기회 전체조회(사원용) */
-	public List<BusinessChanceDTO> selectBusinessChanceAllForEmp(UserImpl userInfo) {
+	/* 영업기회 진행상태별 조회(담당자 or 사원) */
+	public List<BusinessChanceDTO> selectBusinessChanceByStatus(String businessChanceStatus, UserImpl userInfo) {
 		
-		List<BusinessChanceDTO> businessChanceList = businessMapper.selectBusinessChanceAllForEmp(userInfo);
+		List<BusinessChanceDTO> businessChanceList = businessMapper.selectBusinessChanceByStatus(businessChanceStatus, userInfo);
 		
 		return businessChanceList;
 	}
@@ -65,12 +65,14 @@ public class BusinessService {
 	}
  
 	/* 전체사원 영업활동 목록조회 (담당자용)*/
-	public List<BusinessActivityDTO> selectActivityAll() {
+	public List<BusinessActivityDTO> selectActivityAll(UserImpl userInfo) {
 		
-		List<BusinessActivityDTO> businessActivityList = businessMapper.selectActivityAll();
+		List<BusinessActivityDTO> businessActivityList = businessMapper.selectActivityAll(userInfo);
 		
 		return businessActivityList;
 	}
+
+	
 
 	
 

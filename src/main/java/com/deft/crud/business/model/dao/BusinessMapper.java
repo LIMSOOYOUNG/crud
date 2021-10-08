@@ -12,9 +12,7 @@ import com.deft.crud.member.model.service.UserImpl;
 @Mapper
 public interface BusinessMapper {
 
-	List<BusinessChanceDTO> selectBusinessChanceAllForManager(UserImpl userInfo);
-
-	List<BusinessChanceDTO> selectBusinessChanceAllForEmp(UserImpl userInfo);
+	List<BusinessChanceDTO> selectBusinessChanceAll(UserImpl userInfo);
 	
 	List<BusinessActivityDTO> selectActivityListByNo(int customerNo);
 
@@ -22,7 +20,9 @@ public interface BusinessMapper {
 
 	List<BusinessChanceHistoryDTO> selectChanceHistoryByNo(int businessChanceNo);
 
-	List<BusinessActivityDTO> selectActivityAll();
+	List<BusinessActivityDTO> selectActivityAll(UserImpl userInfo);
+
+	List<BusinessChanceDTO> selectBusinessChanceByStatus(String businessChanceStatus, UserImpl userInfo);
 
 
 
