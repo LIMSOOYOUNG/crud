@@ -201,6 +201,7 @@ public class CustomerService {
     }
 
     /* 분석고객 -> 기존고객 변경 */
+    @Transactional
     public int insertExtCustomer(AnaCustomerDetailDTO parameters) {
 
         return customerMapper.insertExtCustomer(parameters);

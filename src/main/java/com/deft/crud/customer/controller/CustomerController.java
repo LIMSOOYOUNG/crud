@@ -96,8 +96,6 @@ public class CustomerController {
                                           @RequestParam int activityNo) throws JsonProcessingException {
         response.setContentType("application/json; charser=UTF-8");
 
-        System.out.println(activityNo);
-
         ObjectMapper mapper = new ObjectMapper();
 
         BusinessActivityDTO businessActivity = customerService.selectBusinessActivityByActivityNo(activityNo);

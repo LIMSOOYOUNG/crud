@@ -184,6 +184,60 @@
         )
     </insert>
 
+    <!-- 분석 고객 상태 등록 -->
+    <insert id="insertDetail" parameterType="com.deft.crud.customer.model.dto.InsertCustomerDTO">
+        INSERT /* com.deft.crud.customer.model.dao.CustomerMapper#insertDetail() */
+        INTO TBL_ANA_CUSTOMER_DETAIL
+        (
+        CUSTOMER_NO
+        , CUSTOMER_STATUS
+        , CUSTOMIZATION_LEVEL
+        , CUSTOMIZATION_POSIBILLITY
+        )
+        VALUES
+        (
+        #{ customerNo }
+        , '잠재고객'
+        , '요구 분석'
+        , 0
+        )
+    </insert>
+
+    <!-- 분석 고객 관심상품 등록 -->
+    <insert id="insertProduct" parameterType="java.util.List">
+        INSERT ALL /* com.deft.crud.customer.model.dao.CustomerMapper#insertProduct() */
+        <foreach collection="products" item="item" index="index">
+            INTO TBL_CUSTOMER_PRODUCT
+            (
+            CUSTOMER_NO
+            , PRODUCT_NO
+            )
+            VALUES
+            (
+            #{ item.customerNo }
+            , #{ item.productNo }
+            )
+        </foreach>
+        SELECT * FROM DUAL
+    </insert>
+
+    <!-- 분석고객 -> 기존고객 변경 -->
+    <insert id="insertExtCustomer" parameterType="com.deft.crud.customer.model.dto.AnaCustomerDetailDTO">
+        INSERT /* com.deft.crud.customer.model.dao.CustomerMapper#insertExtCustomer() */
+        INTO TBL_EXT_CUSTOMER_DETAIL
+        (
+        CUSTOMER_NO
+        , CUSTOMER_STATUS
+        , CUSTOMIZATION_DATE
+        )
+        VALUES
+        (
+        #{ customerNo }
+        , '기존고객'
+        , SYSDATE
+        )
+    </insert>
+
     <!-- 고객 기본 정보 수정 -->
     <update id="modifyBasicInfo" parameterType="com.deft.crud.customer.model.dto.ModifyBasicInfoDTO">
         UPDATE /* com.deft.crud.customer.model.dao.CustomerMapper#modifyBasicInfo() */
