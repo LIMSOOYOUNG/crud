@@ -15,11 +15,11 @@ import lombok.ToString;
 @ToString
 public class ChargeDTO {
 	
-	private int collectBillNo;
-	private int collectBillAmount;
-	private Date collectBillDate;
-	private int chargeNo; 
-	private String chargeYear;
-	private String chargeMonth;
+	private int chargeNo;
+	private int orderNo;
+	private String chargeStatus;
+	private String collectBillStatus; 
+	private Date chargeDate; 
+	private int chargeCount; 	//부서 실적에서 청구건수를 조회하기 위한 별칭 사용
 	
 }

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ko"
+	xmlns:th="https://www.thymeleaf.org">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<head>
+	<th:block th:replace="@{common/config} :: config"></th:block>
+	<link href="/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+</head>
+<body id="page-top">
+	<div id="wrapper">
+		<!-- Sidebar -->
+		<th:block th:replace="@{/common/sidebar} :: sidebar"></th:block>
+
+		<div id="content-wrapper" class="d-flex flex-column">
+			<div id="content"> 
+				<!-- Header -->
+				<th:block th:replace="@{/common/header} :: header"></th:block>
+
+				<!-- Content -->
+				<div class="container-fluid" id="container-wrapper">
+					<div class="d-sm-flex align-items-center justify-content-between mb-4">
+						<h1 class="h3 mb-0 text-gray-800">실적상세조회</h1>
+						<ol class="breadcrumb">
+							<li class="breadcrumb-item"><a href="./">Home</a></li>
+							<li class="breadcrumb-item active" aria-current="page">사원실적조회</li>
+							<li class="breadcrumb-item active" aria-current="page">상세조회</li>
+						</ol>
+					</div>
+                    
+                    <!-- Row -->
+					<div class="row">
+                        
+                        <!-- DataTable with Hover -->
+                        <div class="col-lg-2"></div>
+						<div class="col-lg-8">
+							<div class="card mb-4">
+								<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+									<h6 class="m-0 font-weight-bold text-primary" th:text="|${performYear}년 ${performMonth}월|"></h6>
+								</div>
+								<div class="table-responsive p-3">
+                                    <table class="table align-items-center table-flush table-hover" id="userPerformTable">
+										<thead th:align="center" class="thead-light">
+                                            <tr>
+                                                <th>청구번호</th> 
+                                                <th>청구일자</th>
+                                                <th>청구서제목</th>
+                                                <th>매출</th>
+                                                <th>상세정보</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody th:align="center">
+                                            <tr th:each = "userPerformDetail : ${selectUserPerformDetail}">
+                                                <td th:text = "${userPerformDetail.charge.chargeNo}"></td>
+                                                <td th:text = "${userPerformDetail.charge.chargeDate}"></td>
+                                                <td th:text = "${userPerformDetail.purchaseOrder.orderTitle}"></td>
+                                                <td th:text = "${userPerformDetail.collect.collectBillAmount}"></td>
+                                                <td>
+													<button type="button" id="detailButton" name="detailButton" class="btn btn-primary" th:value="${userPerformDetail.charge.chargeNo}">청구서 상세보기</button>
+												</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+     <!-- Script -->
+     <th:block th:replace="@{/common/script} :: script"></th:block>
+     <!-- Page level custom scripts -->
+     <script>
+        $(document).ready(function () {
+            $('#userPerformTable').DataTable({  // ID From dataTable
+                 order:[]
+            }); 
+        });  
+    </script>
+</html>

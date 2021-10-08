@@ -58,11 +58,12 @@ public class SalesController {
 		mv.addObject("performYear", performYear);
 		mv.addObject("performMonth", performMonth);
 		mv.addObject("empTargetPerformList", empTargetPerformList);
-		mv.setViewName("sales/selectAllEmpSales");
+		mv.setViewName("sales/selectEmpSales");
 		 
 		return mv;
 	}
 	
+	/* 사원의 실제 개인실적 조회를 ajax 통신으로 조회한 후 목표실적과 비교한다. */
 	@PostMapping("/user/perform/selectAll")
 	public ModelAndView selectUserPerformList(ModelAndView mv, HttpServletResponse response, @AuthenticationPrincipal UserImpl loginInfo) throws JsonProcessingException {
 		
@@ -79,10 +80,12 @@ public class SalesController {
 		return mv;
 	}
 	
+	/* 사원 개인 실적 상세조회*/
 	@GetMapping("/select")
 	public ModelAndView userPerformList(ModelAndView mv, 
-										@RequestParam("no") String performDate) {
+										@RequestParam("no") String performDate, @AuthenticationPrincipal UserImpl loginInfo) {
 		
+		int empNo = loginInfo.getEmpNo();
 		String performYear = performDate.substring(0, 4);
 		String performMonth = performDate.substring(4);
 		
@@ -91,11 +94,30 @@ public class SalesController {
 		
 		System.out.println("performDate : " + performDate);
 		
+		List<PerformanceDTO> selectUserPerformDetail = salesService.selectUserPerformDetail(empNo, performYear, performMonth);
 		
-		return null;
+		System.out.println("selectUserPerformDetail : " + selectUserPerformDetail);
+		
+		mv.addObject("performYear", performYear);
+		mv.addObject("performMonth", performMonth);
+		mv.addObject("selectUserPerformDetail", selectUserPerformDetail);
+		mv.setViewName("sales/selectEmpSalesDetail");
+		return mv;
 	}
 	
 	
+	/* 부서별 영업실적*/
+	@GetMapping("/dept/selectAll")
+	public ModelAndView deptPerformList(ModelAndView mv) {
+		
+		List<PerformanceDTO> selectDeptPerformList = salesService.selectDeptPerformList();
+		
+		System.out.println("selectDeptPerformList : " + selectDeptPerformList);
+		
+		mv.addObject("selectDeptPerformList", selectDeptPerformList);
+		mv.setViewName("sales/selectDeptSales");
+		return mv;
+	}
 	
 	/* 사원 목표 실적 등록*/
 	@PostMapping("/insert/target")

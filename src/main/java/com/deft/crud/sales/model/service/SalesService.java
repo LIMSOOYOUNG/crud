@@ -64,6 +64,19 @@ public class SalesService {
 		
 	}
 
+	/* 개인 실적 상세조회 */
+	public List<PerformanceDTO> selectUserPerformDetail(int empNo, String performYear, String performMonth) {
+		
+		return salesMapper.selectUserPerformDetail(empNo, performYear, performMonth);
+	}
+	
+	
+	/* 부서 실적 조회*/
+	public List<PerformanceDTO> selectDeptPerformList() {
+
+		return salesMapper.selectDeptPerformList();
+	}
+
 	
 
 }
