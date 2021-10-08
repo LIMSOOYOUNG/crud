@@ -7,7 +7,6 @@ import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -20,7 +19,6 @@ import com.deft.crud.customer.model.dto.ExtCustomerDTO;
 import com.deft.crud.customer.model.service.CustomerService;
 import com.deft.crud.estimate.model.dto.EstimateDTO;
 import com.deft.crud.estimate.model.service.EstimateService;
-import com.deft.crud.member.model.service.UserImpl;
 import com.deft.crud.stock.model.dto.StorageDTO;
 import com.deft.crud.stock.model.service.StockService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -55,16 +53,29 @@ public class EstimateController {
 		return mv;
 	}
 	
-	@GetMapping("/select")
-	public ModelAndView selectEstimateByStatus(ModelAndView mv, HttpServletResponse response,
+	@GetMapping("/selectAll/status")
+	public ModelAndView selectEstimateListByStatus(ModelAndView mv, HttpServletResponse response,
 			@RequestParam String estimateStatus) throws JsonProcessingException {
 		
 		response.setContentType("application/json; charset=UTF-8");
 		
 		List<EstimateDTO> estimateList = estimateService.selectEstimateListByStatus(estimateStatus);
 		
-		mv.addObject("estimateList", objectMapper.writeValueAsString(estimateList));
+		mv.addObject("estimateListByStatus", objectMapper.writeValueAsString(estimateList));
 		mv.setViewName("jsonView");
+		
+		return mv;
+	}
+	
+	@GetMapping("/select")
+	public ModelAndView selectEstimateDetail(ModelAndView mv, @RequestParam String estimateNo) {
+		
+		EstimateDTO estimate = estimateService.selectEstimateDetail(estimateNo);
+		
+		System.out.println(estimate);
+		
+		mv.addObject("estimate", estimate);
+		mv.setViewName("estimate/selectEstimate");
 		
 		return mv;
 	}

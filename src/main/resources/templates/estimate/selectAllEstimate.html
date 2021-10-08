@@ -40,19 +40,19 @@
 								</div>
 								<ul class="nav nav-tabs nav-justfied">
 									<li class="nav-item">
-										<a th:href="@{/}" name="status" value="all" class="nav-link active" data-toggle="tab">전체</a>
+										<a th:href="@{ #estimateTable }" th:name="status" th:value="all" class="nav-link active" data-toggle="tab">전체</a>
 									</li>
 									<li class="nav-item">
-										<a th:href="@{/}" name="status" value="progress" class="nav-link" data-toggle="tab">진행중</a>
+										<a th:href="@{ #estimateTable }" th:name="status" th:value="progress" class="nav-link" data-toggle="tab">진행중</a>
 									</li>
 									<li class="nav-item">
-										<a th:href="@{/}" name="status" value="success" class="nav-link" data-toggle="tab">완료</a>
+										<a th:href="@{ #estimateTable }" th:name="status" th:value="success" class="nav-link" data-toggle="tab">완료</a>
 									</li>
 									<li class="nav-item">
-										<a th:href="@{/}" name="status" value="postpone" class="nav-link" data-toggle="tab">보류</a>
+										<a th:href="@{ #estimateTable }" th:name="status" th:value="postpone" class="nav-link" data-toggle="tab">보류</a>
 									</li>
 									<li class="nav-item">
-										<a th:href="@{/}" name="status" value="failed" class="nav-link" data-toggle="tab">실패</a>
+										<a th:href="@{ #estimateTable }" th:name="status" th:value="failed" class="nav-link" data-toggle="tab">실패</a>
 									</li>
 								</ul>
 								<div class="table-responsive p-3">
@@ -68,11 +68,11 @@
 												<th></th>
 											</tr>
 										</thead>
-										<tbody th:switch="${estimate.estimateStatus}">
-											<tr th:each="estimate : ${estimateList}">
+										<tbody>
+											<tr th:each="estimate : ${estimateList}" th:align="center">
 												<td th:text="${estimate.estimateNo}"></td>
 												<td th:text="${estimate.customer.customerName}"></td>
-												<td th:text="${estimate.estimateTitle}"></td>
+												<td th:text="${estimate.estimateTitle}" th:align="left"></td>
 												<td th:switch="${estimate.estimateStatus}">
 													<h5><span th:case="'진행중'" class="badge badge-success" th:text="${estimate.estimateStatus}"></span></h5>
 													<h5><span th:case="'완료'" class="badge badge-info" th:text="${estimate.estimateStatus}"></span></h5>
@@ -82,10 +82,10 @@
 												<td th:text="${estimate.customer.empInfo.empName}"></td>
 												<td th:text="${estimate.estimateDate}"></td>
 												<td>
-													<a href="#" class="btn btn-sm btn-dark btn-icon-split">
+													<button class="btn btn-sm btn-dark btn-icon-split" name="estimateDetailBtn">
 														<span class="icon text-white-50"><i class="fas fa-clipboard-list"></i></span>
 														<span class="text text-white">상세정보</span>
-													</a>
+													</button>
 												</td>
 											</tr>
 										</tbody>
@@ -104,26 +104,24 @@
 
 	<script>
 		$(document).ready(function () {
-        	$('#estimateTable').DataTable({
+        	$("#estimateTable").DataTable({
 				order:[]
 			});
         });
-	</script>
 
-	<script>
-		$("a[name=status]").click(function() {
+		$(document).on("click", "a[name='status']", function() {
 			
 			let estimateStatus = $(this).attr('value');
 			
 			$.ajax({
-				url: '/estimate/select?estimateStatus=' + estimateStatus,
+				url: "/estimate/selectAll/status?estimateStatus=" + estimateStatus,
 				type: "get",
 				success: function(data, status, xhr) {
 
-					const estimateList = JSON.parse(data.estimateList);
+					const estimateList = JSON.parse(data.estimateListByStatus);
 					const $table = $("#estimateTable tbody");
 
-					if(estimateStatus == 'all') {
+					if(estimateStatus == "all") {
 						$("#tableTitle").html("견적서 조회 (전체)");
 					} else {
 						$("#tableTitle").html("견적서 조회 (" + estimateList[0].estimateStatus + ")");
@@ -134,10 +132,10 @@
 					for(let index in estimateList) {
 						let estimate = estimateList[index];
 
-						$tr = $("<tr>");
+						$tr = $("<tr>").prop("th:align", "center");
 						$estimateNoTd = $("<td>").text(estimate.estimateNo);
 						$customerNameTd = $("<td>").text(estimate.customer.customerName);
-						$estimateTitleTd = $("<td>").text(estimate.estimateTitle);
+						$estimateTitleTd = $("<td>").prop("th:align", "center").text(estimate.estimateTitle);
 						$badgeSpan = $("<span>").text(estimate.estimateStatus);
 						switch(estimate.estimateStatus) {
 							case '진행중' : $badgeSpan.addClass("badge badge-success"); break;
@@ -145,12 +143,16 @@
 							case '보류' : $badgeSpan.addClass("badge badge-warning"); break;
 							case '실패' : $badgeSpan.addClass("badge badge-danger"); break;
 						}
-						$estimateStatusTd = $("<td>").append($badgeSpan);
+						$estimateStatusTd = $("<td>").append($("<h5>").append($badgeSpan));
 						$empNameTd = $("<td>").text(estimate.customer.empInfo.empName);
 						$estimateDateTd = $("<td>").text(estimate.estimateDate);
-						$detailBtn = $("<button>").addClass("btn btn-sm btn-primary").text("상세정보");
+						$btnIcon = $("<i>").addClass("fas fa-clipboard-list");
+						$btnIconSpan = $("<span>").addClass("icon text-white-50").append($btnIcon);
+						$btnTextSpan = $("<span>").addClass("text text-white").text("상세정보");
+						$detailBtn = $("<button>").addClass("btn btn-sm btn-dark btn-icon-split")
+								.prop("name", "estimateDetailBtn").append($btnIconSpan).append($btnTextSpan);
 						$detailTd = $("<td>").append($detailBtn);
-						
+
 						$tr.append($estimateNoTd);
 						$tr.append($customerNameTd);
 						$tr.append($estimateTitleTd);
@@ -166,6 +168,12 @@
 					console.log(xhr);
 				}
 			});
+		});
+
+		$(document).on("click", "button[name='estimateDetailBtn']", function() {
+			const estimateNo = $(this).parent().parent().children().eq(0).text();
+
+			location.href="/estimate/select?estimateNo=" + estimateNo;
 		});
 	</script>
 </body>

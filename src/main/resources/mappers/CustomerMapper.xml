@@ -171,9 +171,6 @@
 
     <!-- 분석 고객 기본정보 등록 -->
     <insert id="insertCustomer" parameterType="com.deft.crud.customer.model.dto.InsertCustomerDTO">
-        <selectKey resultType="integer" keyProperty="customerNo" order="AFTER">
-            SELECT SEQ_CUSTOMER_NO.CURRVAL FROM DUAL
-        </selectKey>
         INSERT /* com.deft.crud.customer.model.dao.CustomerMapper#insertCustomer() */
           INTO TBL_CUSTOMER
         (
@@ -184,60 +181,6 @@
         (
           SEQ_CUSTOMER_NO.NEXTVAL, #{ customerCompanyNo }, #{ empNo }, #{ customerName }
         , #{ customerEmail }, #{ customerAddress }, #{ customerPhone }, #{ customerFax }
-        )
-    </insert>
-
-    <!-- 분석 고객 상태 등록 -->
-    <insert id="insertDetail" parameterType="com.deft.crud.customer.model.dto.InsertCustomerDTO">
-        INSERT /* com.deft.crud.customer.model.dao.CustomerMapper#insertDetail() */
-          INTO TBL_ANA_CUSTOMER_DETAIL
-        (
-          CUSTOMER_NO
-        , CUSTOMER_STATUS
-        , CUSTOMIZATION_LEVEL
-        , CUSTOMIZATION_POSIBILLITY
-        )
-        VALUES
-        (
-          #{ customerNo }
-        , '잠재고객'
-        , '요구 분석'
-        , 0
-        )
-    </insert>
-
-    <!-- 분석 고객 관심상품 등록 -->
-    <insert id="insertProduct" parameterType="java.util.List">
-        INSERT ALL /* com.deft.crud.customer.model.dao.CustomerMapper#insertProduct() */
-        <foreach collection="products" item="item" index="index">
-          INTO TBL_CUSTOMER_PRODUCT
-        (
-          CUSTOMER_NO
-        , PRODUCT_NO
-        )
-        VALUES
-        (
-          #{ item.customerNo }
-        , #{ item.productNo }
-        )
-        </foreach>
-        SELECT * FROM DUAL
-    </insert>
-
-    <!-- 분석고객 -> 기존고객 변경 -->
-    <insert id="insertExtCustomer" parameterType="com.deft.crud.customer.model.dto.AnaCustomerDetailDTO">
-        INSERT /* com.deft.crud.customer.model.dao.CustomerMapper#insertExtCustomer() */
-          INTO TBL_EXT_CUSTOMER_DETAIL
-        (
-          CUSTOMER_NO
-        , CUSTOMER_STATUS
-        , CUSTOMIZATION_DATE
-        )
-        VALUES
-        (
-          #{ customerNo }
-        , '기존고객'
-        , SYSDATE
         )
     </insert>
 
@@ -288,9 +231,6 @@
 
     <!-- 분석 고객 상태 변경 -->
     <update id="modifyAnaCustomerStatus" parameterType="com.deft.crud.customer.model.dto.AnaCustomerDetailDTO">
-        <selectKey resultType="string" keyProperty="customerStatus" order="AFTER">
-            SELECT CUSTOMER_STATUS FROM TBL_ANA_CUSTOMER_DETAIL WHERE CUSTOMER_NO = #{ customerNo }
-        </selectKey>
         UPDATE /* com.deft.crud.customer.model.dao.CustomerMapper#modifyAnaCustomerStatus() */
                TBL_ANA_CUSTOMER_DETAIL A
            SET A.CUSTOMER_STATUS = #{ customerStatus }
@@ -386,10 +326,12 @@
              , CP.COMPANY_NAME
              , CP.BUSINESS_STATUS
              , E.EMP_NAME
+             , J.JOB_NAME
              , EX.CUSTOMER_STATUS
           FROM TBL_CUSTOMER C
           LEFT JOIN TBL_CUSTOMER_COMPANY CP ON (C.CUSTOMER_COMPANY_NO = CP.CUSTOMER_COMPANY_NO)
           LEFT JOIN TBL_EMP_INFO E ON (C.EMP_NO = E.EMP_NO)
+          LEFT JOIN TBL_JOB J ON (E.JOB_CODE = J.JOB_CODE)
           JOIN TBL_EXT_CUSTOMER_DETAIL EX ON (C.CUSTOMER_NO = EX.CUSTOMER_NO)
          WHERE EX.CUSTOMER_STATUS = '기존고객'
         ORDER BY C.CUSTOMER_NO DESC

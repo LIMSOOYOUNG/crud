@@ -22,11 +22,13 @@ public class EstimateDTO implements Serializable {
 	private String estimateTitle;
 	private String estimateDate;
 	private int customerNo;
-	private double discountRate;
+	private String discountStatus;
+	private int discountRate;
+	private int total;
 	private String estimateStatus;
 	private String providerRegistNo;
 	
 	private CustomerDTO customer;
 	private ProviderDTO provider;
-	private List<EstimateProductDTO> estimateProduct;
+	private List<EstimateProductDTO> estimateProductList;
 }

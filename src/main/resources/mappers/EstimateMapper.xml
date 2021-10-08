@@ -5,46 +5,39 @@
 		<id property="estimateNo" column="ESTIMATE_NO"/>
 		<result property="estimateTitle" column="ESTIMATE_TITLE"/>
 		<result property="estimateDate" column="ESTIMATE_DATE"/>
-		<result property="customerNo" column="CUSTOMER_NO"/>
 		<result property="discountRate" column="DISCOUNT_RATE"/>
 		<result property="estimateStatus" column="ESTIMATE_STATUS"/>
 		<result property="providerRegistNo" column="PROVIDER_REGIST_NO"/>
 		
 		<association property="customer" resultMap="customerResultMap"/>
 		<association property="provider" resultMap="providerResultMap"/>
+		<collection property="estimateProductList" resultMap="estimateProductResultMap"/>
 	</resultMap>
 		
 	<resultMap type="com.deft.crud.customer.model.dto.CustomerDTO" id="customerResultMap">
 		<id property="customerNo" column="CUSTOMER_NO"/>
-        <result property="customerCompanyNo" column="CUSTOMER_COMPANY_NO"/>
-        <result property="empNo" column="EMP_NO"/>
         <result property="customerName" column="CUSTOMER_NAME"/>
-        <result property="customerEmail" column="CUSTOMER_EMAIL"/>
-        <result property="customerAddress" column="CUSTOMER_ADDRESS"/>
-        <result property="customerPhone" column="CUSTOMER_PHONE"/>
-        <result property="customerFax" column="CUSTOMER_FAX"/>
+        <result property="empNo" column="EMP_NO"/>
 		
+		<association property="company" resultMap="companyResultMap"/>
 		<association property="empInfo" resultMap="empInfoResultMap"/>
+	</resultMap>
+	
+	<resultMap type="com.deft.crud.customer.model.dto.CustomerCompanyDTO" id="companyResultMap">
+		<id property="customerCompanyNo" column="CUSTOMER_COMPANY_NO"/>
+		<result property="companyName" column="COMPANY_NAME"/>
 	</resultMap>
 
 	<resultMap type="com.deft.crud.customer.model.dto.EmpInfoDTO" id="empInfoResultMap">
 		<id property="empNo" column="EMP_NO"/>
         <result property="empName" column="EMP_NAME"/>
-        <result property="empId" column="EMP_ID"/>
-        <result property="empPwd" column="EMP_PWD"/>
-        <result property="empEmail" column="EMP_EMAIL"/>
-        <result property="empGender" column="EMP_GENDER"/>
-        <result property="empBirth" column="EMP_BIRTH"/>
-        <result property="empAddress" column="EMP_ADDRESS"/>
-        <result property="empPhone" column="EMP_PHONE"/>
-        <result property="empTel" column="EMP_TEL"/>
-        <result property="hireDate" column="HIRE_DATE"/>
-        <result property="entDate" column="ENT_DATE"/>
-        <result property="entYn" column="ENT_YN"/>
-        <result property="authority" column="AUTHORITY"/>
-        <result property="jobCode" column="JOB_CODE"/>
-        <result property="deptCode" column="DEPT_CODE"/>
-        <result property="managerNo" column="MANAGER_NO"/>
+        
+		<association property="job" resultMap="jobResultMap"></association>
+	</resultMap>
+	
+	<resultMap type="com.deft.crud.customer.model.dto.JobDTO" id="jobResultMap">
+		<id property="jobCode" column="JOB_CODE"/>
+		<result property="jobName" column="JOB_NAME"/>
 	</resultMap>
 	
 	<resultMap type="com.deft.crud.estimate.model.dto.ProviderDTO" id="providerResultMap">
@@ -54,6 +47,23 @@
 		<result property="providerAddress" column="PROVIDER_ADDRESS"/>
 		<result property="providerBusinessStatus" column="PROVIDER_BUSINESS_STATUS"/>
 		<result property="providerBusinessType" column="PROVIDER_BUSINESS_TYPE"/>
+	</resultMap>
+	
+	<resultMap type="com.deft.crud.estimate.model.dto.EstimateProductDTO" id="estimateProductResultMap">
+		<id property="estimateNo" column="ESTIMATE_NO"/>
+		<id property="productNo" column="PRODUCT_NO"/>
+		<result property="productAmount" column="PRODUCT_AMOUNT"/>
+		
+		<association property="product" resultMap="productResultMap"/>
+	</resultMap>
+	
+	<resultMap type="com.deft.crud.product.model.dto.ProductDTO" id="productResultMap">
+		<id property="productNo" column="PRODUCT_NO"/>
+		<result property="sellStatus" column="SELL_STATUS"/>
+		<result property="productName" column="PRODUCT_NAME"/>
+		<result property="purchasePrice" column="PURCHASE_PRICE"/>
+		<result property="sellingPrice" column="SELLING_PRICE"/>
+		<result property="unit" column="UNIT"/>
 	</resultMap>
 	
 	<select id="selectEstimateList" resultMap="estimateSelectResultMap">
@@ -96,6 +106,32 @@
          	</when>
          </choose>
          ORDER BY E.ESTIMATE_NO DESC
+	</select>
+	
+	<select id="selectEstimateDetail" resultMap="estimateSelectResultMap">
+        SELECT /* com.deft.crud.estimate.model.dao.EstimateMapper#selectEstimateDetail() */
+               E.ESTIMATE_NO
+             , E.ESTIMATE_TITLE
+             , TO_CHAR(E.ESTIMATE_DATE, 'YYYY-MM-DD') "ESTIMATE_DATE"
+             , CC.COMPANY_NAME
+             , C.CUSTOMER_NAME
+             , E.ESTIMATE_STATUS
+             , EI.EMP_NAME
+             , J.JOB_NAME
+             , E.DISCOUNT_RATE
+             , P.PRODUCT_NO
+             , P.PRODUCT_NAME
+             , P.SELLING_PRICE
+             , P.UNIT
+             , EP.PRODUCT_AMOUNT
+          FROM TBL_ESTIMATE E
+          LEFT JOIN TBL_CUSTOMER C ON (E.CUSTOMER_NO = C.CUSTOMER_NO)
+          LEFT JOIN TBL_CUSTOMER_COMPANY CC ON (C.CUSTOMER_COMPANY_NO = CC.CUSTOMER_COMPANY_NO)
+          LEFT JOIN TBL_EMP_INFO EI ON (C.EMP_NO = EI.EMP_NO)
+          LEFT JOIN TBL_JOB J ON (EI.JOB_CODE = J.JOB_CODE)
+          LEFT JOIN TBL_ESTIMATE_PRODUCT EP ON (E.ESTIMATE_NO = EP.ESTIMATE_NO)
+          LEFT JOIN TBL_PRODUCT P ON (EP.PRODUCT_NO = P.PRODUCT_NO)
+         WHERE E.ESTIMATE_NO = #{ estimateNo }
 	</select>
 	
 	<select id="selectLastEstimateSeq" resultType="java.lang.String">

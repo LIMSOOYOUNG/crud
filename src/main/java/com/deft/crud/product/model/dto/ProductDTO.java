@@ -18,6 +18,9 @@ public class ProductDTO {
 	private String productName;
 	private int purchasePrice;
 	private int sellingPrice;
+	private int discountedPrice;
+	private int subtotal;
+	private int tax;
 	private String unit;
 	private int categoryCode;
 	private int accountNo;
