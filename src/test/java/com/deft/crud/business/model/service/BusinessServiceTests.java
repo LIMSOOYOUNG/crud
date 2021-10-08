@@ -31,13 +31,13 @@ public class BusinessServiceTests {
 	@Disabled
 	public void testSelectBusinessChanceAll() {
 
-		List<BusinessChanceDTO> businessChanceList = businessService.selectBusinessChanceAll();
+//		List<BusinessChanceDTO> businessChanceList = businessService.selectBusinessChanceAll();
 
-		assertNotNull(businessChanceList);
-
-		for(BusinessChanceDTO businessChance : businessChanceList) {
-			System.out.println(businessChance);
-		}
+//		assertNotNull(businessChanceList);
+//
+//		for(BusinessChanceDTO businessChance : businessChanceList) {
+//			System.out.println(businessChance);
+//		}
 
 	}
 	
