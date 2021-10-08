@@ -1,5 +1,7 @@
 package com.deft.crud.admin.adminemployee.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,6 +13,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.deft.crud.admin.adminemployee.model.dto.AdminEmployeeDTO;
+import com.deft.crud.admin.adminemployee.model.dto.DepartmentDTO;
+import com.deft.crud.admin.adminemployee.model.dto.JobDTO;
 import com.deft.crud.admin.adminemployee.model.service.AdminEmployeeService;
 import com.deft.crud.member.model.dto.MemberDTO;
 
@@ -77,10 +81,14 @@ public class AdminEmployeeController {
 		
 		AdminEmployeeDTO employeeDTO = adminEmployeeService.empInfoModify(employeeNo);
 		
+		List<JobDTO> jobList = adminEmployeeService.jobNameList();
 		
+		List<DepartmentDTO> deptList = adminEmployeeService.deptNameList();
 		
 		mv.setViewName("admin/employeeinfomodify");
 		mv.addObject("employeeDTO", employeeDTO);
+		mv.addObject("jobList", jobList);
+		mv.addObject("deptList", deptList);
 		
 		
 		return mv;

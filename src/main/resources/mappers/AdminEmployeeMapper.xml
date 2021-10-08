@@ -22,6 +22,24 @@
 		<result property="managerName" column="MANAGER_NAME"/>
 		<result property="deptCode" column="DEPT_CODE"/>
 		<result property="jobCode" column="JOB_CODE"/>
+		
+		<association property="dept" resultMap="departmentResultMap"/>
+		<association property="job" resultMap="jobResultMap"/> 
+	</resultMap>
+	
+	<resultMap type="com.deft.crud.admin.adminemployee.model.dto.DepartmentDTO" id="departmentResultMap">
+		<id property="deptCode" column="DEPT_CODE"/>
+		<result property="deptName" column="DEPT_NAME"/>
+		<result property="deptFax" column="DEPT_FAX"/>
+		<result property="deptTel" column="DEPT_TEL"/>
+		<result property="deptStatus" column="DEPT_STATUS"/>
+	</resultMap>
+	
+	
+	<resultMap type="com.deft.crud.admin.adminemployee.model.dto.JobDTO" id="jobResultMap">
+		<id property="jobCode" column="JOB_CODE"/>
+		<result property="jobName" column="JOB_NAME"/>
+		<result property="jobStatus" column="JOB_STATUS"/>
 	</resultMap>
 	
 	<select id="empDetail" parameterType="_int" resultType="com.deft.crud.admin.adminemployee.model.dto.AdminEmployeeDTO" resultMap="adminEmployeeResultMap">
@@ -78,16 +96,31 @@
 	<update id="employeeModify" parameterType="com.deft.crud.admin.adminemployee.model.dto.AdminEmployeeDTO">
 		UPDATE /* com.deft.crud.admin.adminemployee.model.dto.AdminEmployeeDTO */
 			   TBL_EMP_INFO E
-	       SET E.EMP_EMAIL = #{ email }
-	         , E.AUTHORITY = #{ authority }
-	         , E.EMP_ADDRESS = #{ empAddress }
-	         , E.EMP_PHONE = #{ empPhone }
-	         , E.EMP_TEL = #{ empTel }
-			 , E.ENT_YN = #{ entYn }
-			 , E.ENT_DATE = #{ entDate }
-			 , E.JOB_CODE = #{ jobCode }
-			 , E.DEPT_CODE = #{ deptCode }
-			 , E.MANAGER_NO = #{ managerNo }
+	       SET E.EMP_EMAIL = #{ email, jdbcType=VARCHAR }
+	         , E.AUTHORITY = #{ authority, jdbcType=VARCHAR }
+	         , E.EMP_ADDRESS = #{ empAddress, jdbcType=VARCHAR }
+	         , E.EMP_PHONE = #{ empPhone, jdbcType=VARCHAR }
+	         , E.EMP_TEL = #{ empTel, jdbcType=VARCHAR }
+			 , E.ENT_YN = #{ entYn, jdbcType=VARCHAR}
+			 , E.ENT_DATE = #{ entDate, jdbcType=DATE }
+			 , E.JOB_NAME = #{ jobName, jdbcType=VARCHAR }
+			 , E.DEPT_NAME = #{ deptName, jdbcType=VARCHAR }
+			 , E.MANAGER_NAME = #{ managerName, jdbcType=VARCHAR }
 		 WHERE E.EMP_NO = #{ employeeNo }	 
 	</update>
+	
+	<select id="jobNameList" parameterType="_int" resultType="com.deft.crud.admin.adminemployee.model.dto.JobDTO">
+		SELECT /* com.deft.crud.admin.adminemployee.model.dto.JobDTO */
+		       J.JOB_CODE
+	         , J.JOB_NAME
+	      FROM TBL_JOB J
+	</select>
+	
+	<select id="deptNameList" parameterType="_int" resultType="com.deft.crud.admin.adminemployee.model.dto.DepartmentDTO">
+		SELECT /* com.deft.crud.admin.adminemployee.model.dto.DepartmentDTO */
+	           D.DEPT_CODE
+	         , D.DEPT_NAME
+	      FROM TBL_DEPARTMENT D	         
+	</select>
+	
 </mapper>

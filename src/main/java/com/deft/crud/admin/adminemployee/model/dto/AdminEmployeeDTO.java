@@ -2,6 +2,8 @@ package com.deft.crud.admin.adminemployee.model.dto;
 
 import java.time.LocalDate;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,6 +21,7 @@ public class AdminEmployeeDTO implements java.io.Serializable{
 	private String employeeName;
 	private String employeeId;
 	private String employeePwd;
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private LocalDate employeeBirth;
 	private String gender;
 	private String email;
@@ -30,10 +33,15 @@ public class AdminEmployeeDTO implements java.io.Serializable{
 	private String authority;
 	private int managerNo;
 	private String entYn;
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private LocalDate hireDate;
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private LocalDate entDate;
 	private String managerName;
 	private String jobCode;
 	private String deptCode;
+	
+	private DepartmentDTO dept;
+	private JobDTO job;
 	
 }

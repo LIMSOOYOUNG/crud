@@ -8,7 +8,6 @@
 <meta name="description" content="">
 <meta name="author" content="">
 <link href="img/logo/logo.png" rel="icon">
-<title>RuangAdmin - Register</title>
 <link href="/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
 <link href="/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css">
 <link href="/css/ruang-admin.min.css" rel="stylesheet">
@@ -26,6 +25,7 @@
 									<div class="text-center">
 										<h1 class="h4 text-gray-900 mb-4"><span th:text="${ employeeDTO.employeeName }"></span>님 정보 수정</h1>
 									</div>
+									<form action="employeeinfomodify" method="post">
 										<div class="row">
 											<div class="col-lg-2" style="margin-top: 60px;">
 												<div align="center">
@@ -58,17 +58,32 @@
 												<div class="row">
 													<div class="form-group col-xl-6">
 														<label>부서</label> 
-															<input type="text" class="form-control" name="deptName" th:value="${employeeDTO.deptName}">
+															<select name="deptName" class="form-control">
+																<option th:each="dept : ${deptList}"
+																        th:value="${dept?.deptName}"
+																        th:utext="${dept?.deptName}">
+																</option>
+															</select>
 													</div>
 													<div class="form-group col-xl-6">
 														<label>직급</label> 
-															<input type="text"  class="form-control" name="jobName" th:value="${employeeDTO.jobName}">
+															<select name="jobName"  class="form-control">
+																<option th:each="job : ${jobList}"
+																        th:value="${job?.jobName}"
+																        th:utext="${job?.jobName}">
+																</option>
+															</select>
 													</div>
 												</div>
 												<div class="row">
 													<div class="form-group col-xl-6">
 														<label>담당자</label> 
-															<input type="text" class="form-control" name="managerName" th:value="${ employeeDTO.managerName }">
+															<select name="managerName" class="form-control">
+																<option th:each="emp : ${employeeDTO}"
+																        th:value="${emp?.managerName}"
+																        th:utext="${emp?.managerName}">
+																</option>
+															</select>
 													</div>
 													<div class="form-group col-xl-6">
 														<label>권한</label> 
@@ -113,7 +128,10 @@
 													</div>
 													<div class="form-group col-xl-6">
 													<label>퇴사 상태</label> 
-														<input type="text" class="form-control" name="entYn" th:value="${ employeeDTO.entYn }">
+														<select style="width: 100%;" name="entYn" class="form-control" id="entYn">
+															<option value="Y">Y</option>
+															<option value="N">N</option>
+														</select>
 													</div>
 												</div>
 											</div>
@@ -122,6 +140,7 @@
 											<button type="submit" class="btn btn-primary" id="updatebtn">수정</button>
 											<button type="button" class="btn btn-primary" th:onclick="history.back()">취소</button>
 										</div>
+									</form>
 								</div>
 							</div>
 						</div>
