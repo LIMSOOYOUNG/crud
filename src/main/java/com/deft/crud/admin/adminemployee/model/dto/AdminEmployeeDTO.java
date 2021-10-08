@@ -1,5 +1,7 @@
 package com.deft.crud.admin.adminemployee.model.dto;
 
+import java.time.LocalDate;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,7 +19,7 @@ public class AdminEmployeeDTO implements java.io.Serializable{
 	private String employeeName;
 	private String employeeId;
 	private String employeePwd;
-	private java.util.Date employeeBirth;
+	private LocalDate employeeBirth;
 	private String gender;
 	private String email;
 	private String empAddress;
@@ -28,8 +30,10 @@ public class AdminEmployeeDTO implements java.io.Serializable{
 	private String authority;
 	private int managerNo;
 	private String entYn;
-	private java.util.Date hireDate;
-	private java.util.Date entDate;
-	
+	private LocalDate hireDate;
+	private LocalDate entDate;
+	private String managerName;
+	private String jobCode;
+	private String deptCode;
 	
 }
