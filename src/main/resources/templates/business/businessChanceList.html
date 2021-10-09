@@ -31,46 +31,40 @@
 
 					<!-- Row -->
 					<div class="row">
-					
 						
-						<!-- DataTable with Hover -->
+						<!-- businessChanceTable -->
 						<div class="col-lg-12" style="margin-left: 10px; margin-right: 10px;">
 							<div class="card mb-4">
 								<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
 									<h6 class="m-0 font-weight-bold text-primary" id="tableTitle">영업기회 현황 (전체)</h6>
-									<div>
-										<a class="btn btn-info btn-icon-split"
-											th:onclick="location.href=''">
-												<span class="icon text-white">
-													<i class="fas fa-edit"></i>
-												</span>
-												<span class="text text-white">영업기회등록</span>
+									<div><a class="btn btn-info btn-icon-split" th:onclick="location.href=''">
+											<span class="icon text-white"><i class="fas fa-edit"></i></span>
+											<span class="text text-white">영업기회등록</span>
 										</a>
 									</div>
 								</div>
 								
 								<ul class="nav nav-tabs nav-justfied">
 									<li class="nav-item">
-										<a th:href="@{ #estimateTable }" th:name="status" th:value="all" class="nav-link active" data-toggle="tab">전체</a>
+										<a th:href="@{ #businessChanceTable }" th:name="status" th:value="all" class="nav-link active" data-toggle="tab">전체</a>
 									</li>
 									<li class="nav-item">
-										<a th:href="@{ #estimateTable }" th:name="status" th:value="progress" class="nav-link" data-toggle="tab">진행중</a>
+										<a th:href="@{ #businessChanceTable }" th:name="status" th:value="progress" class="nav-link" data-toggle="tab">진행중</a>
 									</li>
 									<li class="nav-item">
-										<a th:href="@{ #estimateTable }" th:name="status" th:value="success" class="nav-link" data-toggle="tab">성공</a>
+										<a th:href="@{ #businessChanceTable }" th:name="status" th:value="success" class="nav-link" data-toggle="tab">성공</a>
 									</li>
 									<li class="nav-item">
-										<a th:href="@{ #estimateTable }" th:name="status" th:value="postpone" class="nav-link" data-toggle="tab">보류</a>
+										<a th:href="@{ #businessChanceTable }" th:name="status" th:value="postpone" class="nav-link" data-toggle="tab">보류</a>
 									</li>
 									<li class="nav-item">
-										<a th:href="@{ #estimateTable }" th:name="status" th:value="failed" class="nav-link" data-toggle="tab">실패</a>
+										<a th:href="@{ #businessChanceTable }" th:name="status" th:value="failed" class="nav-link" data-toggle="tab">실패</a>
 									</li>
 								</ul>
 
 								<div class="table-responsive p-3">
-									<table class="table align-items-center table-flush table-hover"
-										id="businessChanceTable">
-										<thead align="center" class="thead-light">
+									<table class="table align-items-center table-flush table-hover" id="businessChanceTable">
+										<thead th:align="center" class="thead-light">
 											<tr>
 												<th>영업기회번호</th>
 												<th>영업기회명</th>
@@ -83,7 +77,7 @@
 											</tr>
 										</thead>
 										
-										<tbody align="center">
+										<tbody th:align="center">
 											<tr th:each="chanceList : ${businessChanceList}">
 												<td th:text="${chanceList.businessChanceNo}"></td>
 												<td th:text="${chanceList.businessTitle}"></td>
@@ -98,17 +92,15 @@
 												<td th:text="${chanceList.salesLevel}"></td>
 												<td th:text="${chanceList.dueDate}"></td>
 												<td><a class="btn btn-sm btn-dark btn-icon-split" 
-													th:href="@{/business/chance/selectBasicInfo(customerNo=${ chanceList.customerNo }, businessChanceNo=${ chanceList.businessChanceNo })}">
-													<span class="icon text-white-50">
-														<i class="fas fa-clipboard-list"></i>
-													</span>
+													   th:href="@{/business/chance/selectBasicInfo(customerNo=${ chanceList.customerNo }, businessChanceNo=${ chanceList.businessChanceNo })}">
+													<span class="icon text-white-50"><i class="fas fa-clipboard-list"></i></span>
 													<span class="text text-white">상세정보</span>
 													</a>
 												</td>
 											</tr>
 										</tbody>
 										
-										<tfoot align="center">
+										<tfoot th:align="center">
 										</tfoot>
 										
 									</table>
@@ -124,10 +116,14 @@
 	<!-- Script -->
 	<th:block th:replace="@{/common/script} :: script"></th:block>
 
+<script>
+$(document).ready(function () {
 
-	<!-- Page level custom scripts -->
-	<script>
-	
+	// ID From dataTable with Hover
+	$('#businessChanceTable').DataTable({     
+		order:[]
+	});
+});
 	/* 메세지 출력 */
 	const message = '[[${ message }]]';
 
@@ -135,19 +131,12 @@
 		alert(message);
 	}
 	
-    $(document).ready(function () {
-      $('#dataTable').DataTable(); // ID From dataTable 
-      $('#dataTableHover').DataTable({
-    	  order:[]
-      }); // ID From dataTable with Hover
-    });
+ 
     
  // 테이블 (진행상태)별 검색 결과 
     $(document).on('click', "a[name=status]",  function() {
     	
     	let businessChanceStatus = $(this).attr('value');
-    	
-    	console.log(businessChanceStatus);
     	
 			if(businessChanceStatus == 'all') {
 				$("#tableTitle").html("영업기회 현황 (전체)");
@@ -166,7 +155,7 @@
 				
 				const $table = $('#businessChanceTable tbody');
 				
-				$table.html("");
+				$table.html("");		//기존 테이블데이터(body내용) 초기화
 				
 				if(businessChanceList != null) {
 				
@@ -176,7 +165,7 @@
 					$tr = $("<tr>").prop("th:align", "center");
 					$businessChanceNoTd = $("<td>").text(businessChance.businessChanceNo);
 					$estimateTitleTd = $("<td>").prop("th:align", "center").text(businessChance.businessTitle);
-					$customerNoTd = $("<td>").text(businessChance.customerNo).attr("disabled", "disabled");
+					$customerNoTd = $("<td>").text(businessChance.customerNo).attr("hidden", "hidden");
 					$customerNameTd = $("<td>").text(businessChance.customerName);
 					$badgeSpan = $("<span>").text(businessChance.progressStatus);
 					switch(businessChance.progressStatus) {

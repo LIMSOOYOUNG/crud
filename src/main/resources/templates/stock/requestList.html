@@ -78,22 +78,24 @@
                                     <td th:text="${receivingReqList.ApprovalDocumentDTO.approvalDocumentNo}"></td>
                                     <td th:text="|${receivingReqList.ApprovalDocumentDTO.empNo} ${receivingReqList.ApprovalDocumentDTO.empName}|"></td>
                                     <td th:switch="${receivingReqList.ApprovalDocumentDTO.documentStatus}">
-                                       <span th:case="'승인'" class="badge badge-success" th:text="${receivingReqList.ApprovalDocumentDTO.documentStatus}"></span>
-                                       <span th:case="'반려'" class="badge badge-danger" th:text="${receivingReqList.ApprovalDocumentDTO.documentStatus}"></span>
-                                       <span th:case="'대기중'" class="badge badge-warning" th:text="${receivingReqList.ApprovalDocumentDTO.documentStatus}"></span>
+                                       <span th:case="'승인'" class="badge badge-success"
+                                       		 th:text="${receivingReqList.ApprovalDocumentDTO.documentStatus}"></span>
+                                       <span th:case="'반려'" class="badge badge-danger"
+                                       		 th:text="${receivingReqList.ApprovalDocumentDTO.documentStatus}"></span>
+                                       <span th:case="'대기중'" class="badge badge-warning"
+                                       		 th:text="${receivingReqList.ApprovalDocumentDTO.documentStatus}"></span>
                                     </td>
                                     <td th:text="${receivingReqList.ApprovalDocumentDTO.documentWriteDate}"></td>
                                     <td>
                                        <button class="btn btn-sm btn-dark btn-icon-split"
-                                             id="detailInfoBtn" name="detailInfoBtn" 
-                                             data-toggle="modal"
-                                             data-target="#detailInfoBtnModal"
-                                             th:data-receiving-req-no="${receivingReqList.receivingReqHistoryDTO.receivingReqNo}"
-                                             th:data-receiving-req-type="${receivingReqList.ApprovalDocumentDTO.approvalDocumentType}">
-                                          <span class="icon text-white-50">
-                                             <i class="fas fa-clipboard-list"></i>
-                                          </span>
-                                          <span class="text text-white">상세정보</span>
+                                               id="detailInfoBtn" name="detailInfoBtn" 
+                                               data-toggle="modal"
+                                               data-target="#detailInfoBtnModal"
+                                               th:data-receiving-req-no="${receivingReqList.receivingReqHistoryDTO.receivingReqNo}"
+                                               th:data-receiving-req-type="${receivingReqList.ApprovalDocumentDTO.approvalDocumentType}">
+                                           <span class="icon text-white-50">
+                                              <i class="fas fa-clipboard-list"></i></span>
+                                           <span class="text text-white">상세정보</span>
                                        </button>
                                     </td>
                                  </tr>
@@ -119,107 +121,99 @@
 
          <!-- Modal content-->
          <div class="modal-content">
-            
 
             <div class="modal-body">
-               <form>
-                        <!-- receivingReqInfo -->
-                        <div class="card mb-4">
-									<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-										<h6 class="m-0 font-weight-bold text-primary">요청서 상세정보</h6>
-										<button type="button" id="xBtn" class="close" data-dismiss="modal">
-											<i class="far fa-times-circle"></i>
-										</button>
-									</div>
-									<div class="card-body">
-										<div class="form-group row mb-2" th:align="right">
-											<label for="approvalDocumentName" class="col-lg-1 col-form-label">제목</label>
-											<input type="text" class="form-control col-lg-10"
-												   id="approvalDocumentName" name="approvalDocumentName" readonly>
-										</div>
-										<div class="form-group row mb-2" th:align="left">
-										<div class="col-lg-1"></div>	
-											<label for="approvalDocumentNo" class="col-lg-2 col-form-label" th:align="right">결재문서번호</label>
-											<input type="text" class="form-control col-lg-2" id="approvalDocumentNo" name="approvalDocumentNo"
-													 readonly>
-											<input type="text" class="form-control col-lg-2" id="receivingReqNo" name="receivingReqNo"
-													 hidden="hidden">		 
-											<div class="col-lg-1"></div>		 
-											<label for="documentWriteDate" class="col-lg-1 col-form-label">요청일시</label>
-											
-											<input type="text" class="form-control col-lg-4" id="documentWriteDate" name="documentWriteDate"
-												   readonly>
-										</div>
-										
-										<div class="form-group row mb-4" th:align="right">
-										<div class="col-lg-2"></div>	
-										<div class="col-lg-3"></div>
-											<label for="empName" class="col-lg-2 col-form-label">작성자</label>
-											<input type="text" class="form-control col-lg-4" id="empName" name="empName" readonly >
-										</div>
-										
-										<div class="form-group row" >
-											<label for="reqReason" class="col-lg-1 col-form-label" th:align="right">요청사유</label>
-											<textarea id="reqReason" name="reqReason" class="form-control col-xl-10"
-													  style="height:150px; resize: none; overflow-y: scroll;" readonly></textarea>
-										</div>
-										<div class="form-group row mb-2" th:align="left">
-										<div class="col-lg-2"></div>	
-											<label for="approvalStatus" class="col-lg-1 col-form-label">결재상태</label>
-											<select class="form-control col-lg-2" id="approvalStatus" name="approvalStatus">
-												<option th:text="대기중"></option>
-												<option th:text="승인"></option>
-												<option th:text="반려"></option>
-											</select>
-											<div class="col-lg-1"></div>		 
-											<label for="documentProcessDate" class="col-lg-1 col-form-label">결재일자</label>
-											
-											<input type="text" class="form-control col-lg-4" id="documentProcessDate" name="documentProcessDate"
-												   readonly>
-										</div>
-										
-										<div class="form-group row mb-4" th:align="right">
-										<div class="col-lg-2"></div>	
-										<div class="col-lg-3"></div>
-											<label for="managerName" class="col-lg-2 col-form-label">담당자</label>
-											<input type="text" class="form-control col-lg-4" id="managerName" name="managerName" readonly>
-										</div>
-										
-										
-										
-									</div>
-								</div>		<!-- End receivingReqInfo -->
+               <form id="approvalForm" th:action="@{/stock/ApprovalStatus/modify}" method="post">
+                    <!-- receivingReqInfo -->
+                    <div class="card mb-4">
+						<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+							<h6 class="m-0 font-weight-bold text-primary">요청서 상세정보</h6>
+								<button type="button" id="xBtn" class="close" data-dismiss="modal">
+									<i class="far fa-times-circle"></i>
+								</button>
+						</div>
+						<div class="card-body">
+							<div class="form-group row mb-2" th:align="right">
+								<label for="approvalDocumentName" class="col-lg-1 col-form-label">제목</label>
+								<input type="text" class="form-control col-lg-10"
+									   id="approvalDocumentName" name="approvalDocumentName" readonly>
+							</div>
+							<div class="form-group row mb-2" th:align="left">
+								<div class="col-lg-1"></div>	
+									<label for="approvalDocumentNo" class="col-lg-2 col-form-label" th:align="right">결재문서번호</label>
+									<input type="text" class="form-control col-lg-2"
+										   id="approvalDocumentNo" name="approvalDocumentNo" readonly>
+									<input type="text" class="form-control col-lg-2"
+									       id="receivingReqNo" name="receivingReqNo" hidden="hidden">	
+								<div class="col-lg-1"></div>		 
+									<label for="documentWriteDate" class="col-lg-1 col-form-label">요청일시</label>
+									<input type="text" class="form-control col-lg-4"
+										   id="documentWriteDate" name="documentWriteDate" readonly>
+							</div>
+							<div class="form-group row mb-4" th:align="right">
+								<div class="col-lg-5"></div>
+									<label for="empName" class="col-lg-2 col-form-label">작성자</label>
+									<input type="text" class="form-control col-lg-4"
+										   id="empName" name="empName" readonly >
+							</div>
+								<div class="form-group row" >
+									<label for="reqReason" class="col-lg-1 col-form-label" th:align="right">요청사유</label>
+									<textarea id="reqReason" name="reqReason" class="form-control col-xl-10"
+											  style="height:150px; resize: none; overflow-y: scroll;" readonly>
+									</textarea>
+								</div>
+								<div class="form-group row mb-2" th:align="left">
+									<div class="col-lg-2"></div>	
+										<label for="approvalStatus" class="col-lg-1 col-form-label">결재상태</label>
+										<select class="form-control col-lg-2" id="approvalStatus" name="approvalStatus">
+											<option th:text="대기중"></option>
+											<option th:text="승인"></option>
+											<option th:text="반려"></option>
+										</select>
+									<div class="col-lg-1"></div>		 
+										<label for="documentProcessDate" class="col-lg-1 col-form-label">결재일자</label>
+										<input type="text" class="form-control col-lg-4"
+											   id="documentProcessDate" name="documentProcessDate" readonly>
+								</div>
+								<div class="form-group row mb-4" th:align="right">
+									<div class="col-lg-5"></div>	
+										<label for="managerName" class="col-lg-2 col-form-label">담당자</label>
+										<input type="text" class="form-control col-lg-4"
+											   id="managerName" name="managerName" readonly>
+								</div>
+							</div>
+						</div>		<!-- End receivingReqInfo -->
 
                         <!-- receivingReqProductList -->
                         <div class="card mb-4" style="overflow-y: scroll; height: 300px;">
-									<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-										<h6 class="m-0 font-weight-bold text-primary" id="tableTitle">요청상품목록</h6>
-									</div>
-									<div class="table-responsible" style="margin-left: 3%; margin-right: 3%;" >
-										<table class="table align-items-center table-flush" id="receivingReqProductTable">
-											<thead class="thead-light" th:align="center">
-											  <tr>
-												<th>No</th>
-												<th>상품번호</th>
-												<th>상품명</th>
-												<th>현재창고재고수량</th>
-												<th>단위</th>
-												<th>추가요청수량</th>
-												<th></th>
-											  </tr>
-											</thead>
-											<tbody th:align="center">
+							<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+								<h6 class="m-0 font-weight-bold text-primary" id="tableTitle">요청상품목록</h6>
+							</div>
+							<div class="table-responsible" style="margin-left: 3%; margin-right: 3%;" >
+								<table class="table align-items-center table-flush" id="receivingReqProductTable">
+									<thead class="thead-light" th:align="center">
+										<tr>
+											<th>No</th>
+											<th>상품번호</th>
+											<th>상품명</th>
+											<th>현재창고재고수량</th>
+											<th>단위</th>
+											<th>추가요청수량</th>
+											<th></th>
+										</tr>
+									</thead>
+									<tbody th:align="center">
 												
-											</tbody>
-										</table>
-									</div>
-								</div>		<!-- End receivingReqProductList -->
+									</tbody>
+								</table>
+							</div>
+						</div>		<!-- End receivingReqProductList -->
 
-								<div id="buttonArea" th:align="center">
-									<button type="button" id="approvalBtn" onclick="modifyApprovalStatus()" class="btn btn-primary mx-2">결재</button>
-									<button type="reset" id="modalCloseBtn" data-dismiss='modal' class="btn btn-outline-danger mx-2">취소</button>
-								</div>
-							</form>
+					<div id="buttonArea" th:align="center">
+						<button type="button" id="approvalBtn" onclick="modifyApprovalStatus()" class="btn btn-primary mx-2">결재</button>
+						<button type="reset" id="modalCloseBtn" data-dismiss='modal' class="btn btn-outline-danger mx-2">취소</button>
+					</div>
+				</form>
             </div>
          </div>
       </div>
@@ -229,7 +223,6 @@
 
    <!-- Script -->
    <th:block th:replace="@{/common/script} :: script"></th:block>
-
 
  	<script>
 	/* 결재완료 후 alert 메세지 출력 */

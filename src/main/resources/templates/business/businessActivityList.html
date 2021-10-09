@@ -29,11 +29,43 @@
 
 					<!-- Row -->
 					<div class="row">
+					
+					<!-- DataTable with Hover -->
+						<div class="col-lg-4" style="padding-left: 50px;">
+							<div style="background: lightgray;">
+								<div th:align="center"
+									style="font-size: 20px; font-weight: bold;">담당중인 고객 리스트</div>
+							</div>
+								<div class="card mb-4">
+									<div class="table-responsive p-3" style="overflow-y: scroll; height: 700px;">
+										<table class="table align-items-center table-flush table-hover"	id="table_activity">
+											<thead th:align="center" class="thead-light">
+												<tr>
+													<th>고객번호</th>
+													<th>고객명</th>
+													<th>관리</th>
+												</tr>
+											</thead>
+											<tbody align="center">
+												<tr th:each="activityList : ${businessActivityList}">
+													<td th:text="${activityList.activityNo}"></td>
+													<td th:text="${activityList.empName}"></td>
+													<td><a class="btn-sm btn-info activityDetail"
+													       id="activityDetail" 
+													       th:value="${ activityList.activityNo }">
+															<span class="text text-black">상세정보</span>
+														</a>
+													</td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+								</div>
+						</div>
+					
 
 						<!-- DataTable with Hover -->
-						<div class="col-lg-1">
-						</div>
-						<div class="col-lg-10">
+						<div class="col-lg-8">
 							<div class="card mb-4">
 								<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
 									<h6 class="m-0 font-weight-bold text-primary">영업 활동 현황</h6>
@@ -50,6 +82,7 @@
 										<thead align="center" class="thead-light">
 											<tr>
 												<th>활동이력번호</th>
+												<th>고객명</th>
 												<th>활동주제</th>
 												<th>담당자</th>
 												<th>등록일</th>
@@ -59,6 +92,7 @@
 										<tbody th:align="center">
 											<tr th:each="activityList : ${businessActivityList}">
 												<td th:text="${activityList.activityNo}"></td>
+												<td th:text="${activityList.customerName}"></td>
 												<td th:text="${activityList.businessSubject}"></td>
 												<td th:text="${activityList.empName}"></td>
 												<td th:text="${activityList.writingTime}"></td>
@@ -76,7 +110,6 @@
 								</div>
 							</div>
 						</div>
-					<div class="col-lg-1">
 					</div>
 				</div>
 			</div>

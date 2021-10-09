@@ -128,12 +128,14 @@
 		SELECT /* com.deft.crud.business.model.dao.BusinessMapper#selectBasicInfoByNo */
 		       A.ACTIVITY_NO
 		     , A.BUSINESS_SUBJECT
+             , C.CUSTOMER_NAME
 	     	 , B.EMP_NAME
 		     , A.WRITING_TIME
 		     , A.ACTIVITY_START_TIME
 		  FROM TBL_BUSINESS_ACTIVITY A
-		  JOIN TBL_EMP_INFO B ON(A.EMP_NO = B.EMP_NO)
-		 WHERE CUSTOMER_NO = #{ customerNo }
+		  JOIN TBL_CUSTOMER C ON(A.CUSTOMER_NO = C.CUSTOMER_NO)
+		  JOIN TBL_EMP_INFO B ON(C.EMP_NO = B.EMP_NO)
+		 WHERE A.CUSTOMER_NO = #{ customerNo }
 	</select>
 
 	<!-- 영업기회번호로 해당 영업기회 정보 조회 -->
@@ -193,11 +195,13 @@
 		     , B.EMP_NAME
 		     , B.EMP_NO
 		     , B.MANAGER_NO
+		     , C.CUSTOMER_NAME
 		     , A.WRITING_TIME
 		     , A.ACTIVITY_START_TIME
 		     , A.ACTIVITY_END_TIME
 		  FROM TBL_BUSINESS_ACTIVITY A
-		  LEFT JOIN TBL_EMP_INFO B ON(A.EMP_NO = B.EMP_NO)
+		  LEFT JOIN TBL_CUSTOMER C ON(A.CUSTOMER_NO = C.CUSTOMER_NO)
+		  LEFT JOIN TBL_EMP_INFO B ON(C.EMP_NO = B.EMP_NO)
 		<choose>
 			<when test="authority == '담당자'">
 				WHERE B.MANAGER_NO = #{ empNo }
