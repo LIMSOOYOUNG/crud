@@ -91,4 +91,13 @@ public interface CustomerMapper {
 
     /* 분석고객 -> 기존고객 변경 */
     int insertExtCustomer(AnaCustomerDetailDTO parameters);
+
+    /* 고객화 변경 이력 조회 */
+    List<AnaCustomerDetailHisDTO> selectCustomizationHistory(int customerNo);
+
+    /* 고객화 변경 이력 등록 */
+    int insertAnaCustomizationHistory(AnaCustomerDetailDTO parameters);
+
+    /* 상품 구매 내역 조회 */
+    List<OrderChargeDTO> selectChargeByCustomerNo(int customerNo);
 }

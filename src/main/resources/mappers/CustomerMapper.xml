@@ -24,9 +24,9 @@
 
         <collection property="customerProductList" resultMap="customerProductResultMap"/>
     </resultMap>
-    
+
     <resultMap id="extCustomerResultMap" type="com.deft.crud.customer.model.dto.ExtCustomerDTO">
-    	<id property="customerNo" column="CUSTOMER_NO"/>
+        <id property="customerNo" column="CUSTOMER_NO"/>
         <result property="customerCompanyNo" column="CUSTOMER_COMPANY_NO"/>
         <result property="empNo" column="EMP_NO"/>
         <result property="customerName" column="CUSTOMER_NAME"/>
@@ -34,7 +34,7 @@
         <result property="customerAddress" column="CUSTOMER_ADDRESS"/>
         <result property="customerPhone" column="CUSTOMER_PHONE"/>
         <result property="customerFax" column="CUSTOMER_FAX"/>
-        
+
         <association property="company" resultMap="customerCompanyResultMap"/>
         <association property="extCustomerDetail" resultMap="extCustomerDetailResultMap"/>
         <association property="anaCustomerDetail" resultMap="anaCustomerDetailResultMap"/>
@@ -70,7 +70,7 @@
         <association property="dept" resultMap="departmentResultMap"/>
         <association property="job" resultMap="jobResultMap"/>
     </resultMap>
-    
+
     <resultMap id="customerCompanyResultMap" type="com.deft.crud.customer.model.dto.CustomerCompanyDTO">
         <id property="customerCompanyNo" column="CUSTOMER_COMPANY_NO"/>
         <result property="companyRegistNo" column="COMPANY_REGIST_NO"/>
@@ -135,51 +135,77 @@
         <result property="deptStatus" column="DEPT_STATUS"/>
     </resultMap>
 
+    <resultMap id="chargeResultMap" type="com.deft.crud.customer.model.dto.CustomerChargeDTO">
+        <id property="chargeNo" column="CHARGE_NO"/>
+        <result property="orderNo" column="ORDER_NO"/>
+        <result property="chargeStatus" column="CHARGE_STATUS"/>
+        <result property="collectBillStatus" column="COLLECT_BILL_STATUS"/>
+        <result property="chargeDate" column="CHARGE_DATE"/>
+    </resultMap>
+
+    <resultMap id="orderChargeResultMap" type="com.deft.crud.customer.model.dto.OrderChargeDTO">
+        <id property="orderNo" column="ORDER_NO"/>
+        <result property="orderDate" column="ORDER_DATE"/>
+        <result property="discountRate" column="DISCOUNT_DATE"/>
+        <result property="dueDate" column="DUE_DATE"/>
+        <result property="deliveryPlace" column="DELIVERY_PLACE"/>
+        <result property="paymentStatus" column="PAYMENT_STATUS"/>
+        <result property="orderTitle" column="ORDER_TITLE"/>
+        <result property="customerNo" column="CUSTOMER_NO"/>
+        <result property="providerRegistNo" column="PROVIDER_REGIST_NO"/>
+        <result property="sumPrice" column="SUM_PRICE"/>
+
+        <association property="charge" resultMap="chargeResultMap"/>
+    </resultMap>
+
     <!-- 영업 활동 등록 -->
     <insert id="insertActivity" parameterType="com.deft.crud.customer.model.dto.BusinessActivityDTO">
         INSERT /* com.deft.crud.customer.model.dao.CustomerMapper#insertActivity() */
-          INTO TBL_BUSINESS_ACTIVITY
+        INTO TBL_BUSINESS_ACTIVITY
         (
-          ACTIVITY_NO, CUSTOMER_NO, BUSINESS_SUBJECT
+        ACTIVITY_NO, CUSTOMER_NO, BUSINESS_SUBJECT
         , BUSINESS_TYPE, BUSINESS_LOCATION, BUSINESS_PURPOSE
         , BUSINESS_CONTENTS, WRITING_TIME, ACTIVITY_START_TIME
-        , ACTIVITY_END_TIME, EMP_NO
+        , ACTIVITY_END_TIME
         )
         VALUES
         (
-          SEQ_ACTIVITY_NO.NEXTVAL, #{ customerNo }, #{ businessSubject }
+        SEQ_ACTIVITY_NO.NEXTVAL, #{ customerNo }, #{ businessSubject }
         , #{ businessType }, #{ businessLocation }, #{ businessPurpose }
         , #{ businessContents }, SYSDATE, TO_DATE(REPLACE(#{ activityStartTime },'T',' '), 'YYYY-MM-DD HH24:MI:SS')
-        , TO_DATE(REPLACE(#{ activityEndTime },'T',' '), 'YYYY-MM-DD HH24:MI:SS'), #{ empNo }
+        , TO_DATE(REPLACE(#{ activityEndTime },'T',' '), 'YYYY-MM-DD HH24:MI:SS')
         )
     </insert>
 
     <!-- 고객사 등록 -->
     <insert id="insertCustomerCompany" parameterType="com.deft.crud.customer.model.dto.CustomerCompanyDTO">
         INSERT /* com.deft.crud.customer.model.dao.CustomerMapper#insertCustomerCompany() */
-          INTO TBL_CUSTOMER_COMPANY
+        INTO TBL_CUSTOMER_COMPANY
         (
-          CUSTOMER_COMPANY_NO, COMPANY_REGIST_NO, BUSINESS_STATUS, BUSINESS_TYPE, NUMBER_OF_EMPLOYEES
+        CUSTOMER_COMPANY_NO, COMPANY_REGIST_NO, BUSINESS_STATUS, BUSINESS_TYPE, NUMBER_OF_EMPLOYEES
         , COMPANY_REVENUE, HOMEPAGE, COMPANY_ADDRESS, COMPANY_NAME, CEO_NAME
         )
         VALUES
         (
-          SEQ_CUSTOMER_COMPANY_NO.NEXTVAL, #{ companyRegistNo }, #{ businessStatus }, #{ businessType }, #{ numberOfEmployees }
+        SEQ_CUSTOMER_COMPANY_NO.NEXTVAL, #{ companyRegistNo }, #{ businessStatus }, #{ businessType }, #{ numberOfEmployees }
         , #{ companyRevenue }, #{ homepage }, #{ companyAddress }, #{ companyName }, #{ ceoName }
         )
     </insert>
 
     <!-- 분석 고객 기본정보 등록 -->
     <insert id="insertCustomer" parameterType="com.deft.crud.customer.model.dto.InsertCustomerDTO">
+        <selectKey resultType="integer" keyProperty="customerNo" order="AFTER">
+            SELECT SEQ_CUSTOMER_NO.CURRVAL FROM DUAL
+        </selectKey>
         INSERT /* com.deft.crud.customer.model.dao.CustomerMapper#insertCustomer() */
-          INTO TBL_CUSTOMER
+        INTO TBL_CUSTOMER
         (
-          CUSTOMER_NO, CUSTOMER_COMPANY_NO, EMP_NO, CUSTOMER_NAME
+        CUSTOMER_NO, CUSTOMER_COMPANY_NO, EMP_NO, CUSTOMER_NAME
         , CUSTOMER_EMAIL, CUSTOMER_ADDRESS, CUSTOMER_PHONE, CUSTOMER_FAX
         )
         VALUES
         (
-          SEQ_CUSTOMER_NO.NEXTVAL, #{ customerCompanyNo }, #{ empNo }, #{ customerName }
+        SEQ_CUSTOMER_NO.NEXTVAL, #{ customerCompanyNo }, #{ empNo }, #{ customerName }
         , #{ customerEmail }, #{ customerAddress }, #{ customerPhone }, #{ customerFax }
         )
     </insert>
@@ -238,244 +264,260 @@
         )
     </insert>
 
+    <!-- 고객화 변경 이력 등록 -->
+    <insert id="insertAnaCustomizationHistory" parameterType="com.deft.crud.customer.model.dto.AnaCustomerDetailHisDTO">
+        INSERT /* com.deft.crud.customer.model.dao.CustomerMapper#insertAnaCustomizationHistory() */
+          INTO TBL_ANA_CUSTOMER_DETAIL_HIS
+        (
+          ANA_CUSTOMER_HIS_NO, CUSTOMER_NO, CUSTOMER_STATUS
+        , CUSTOMIZATION_LEVEL, CUSTOMIZATION_POSIBILLITY, CUSTOMIZATION_CHANGE_DATE
+        )
+        VALUES
+        (
+          SEQ_ANA_CUSTOMER_HIS_NO.NEXTVAL, #{ customerNo }, #{ customerStatus }
+        , #{ customizationLevel }, #{ customizationPosibillity }, SYSDATE
+        )
+    </insert>
+
     <!-- 고객 기본 정보 수정 -->
     <update id="modifyBasicInfo" parameterType="com.deft.crud.customer.model.dto.ModifyBasicInfoDTO">
         UPDATE /* com.deft.crud.customer.model.dao.CustomerMapper#modifyBasicInfo() */
-               TBL_CUSTOMER C
-           SET C.CUSTOMER_NAME = #{ customerName }
-             , C.CUSTOMER_EMAIL = #{ customerEmail }
-             , C.CUSTOMER_PHONE = #{ customerPhone }
-             , C.CUSTOMER_FAX = #{ customerFax }
-         WHERE C.CUSTOMER_NO = #{ customerNo }
+        TBL_CUSTOMER C
+        SET C.CUSTOMER_NAME = #{ customerName }
+        , C.CUSTOMER_EMAIL = #{ customerEmail }
+        , C.CUSTOMER_PHONE = #{ customerPhone }
+        , C.CUSTOMER_FAX = #{ customerFax }
+        WHERE C.CUSTOMER_NO = #{ customerNo }
     </update>
 
     <!-- 기존 고객 상세 정보 수정 -->
     <update id="modifyDetailInfoToCustomer" parameterType="com.deft.crud.customer.model.dto.ModifyDetailInfoForExtDTO">
         UPDATE /* com.deft.crud.customer.model.dao.CustomerMapper#modifyDetailInfoToCustomer() */
-               TBL_CUSTOMER C
-           SET C.CUSTOMER_NAME = #{ customerName }
-             , C.CUSTOMER_EMAIL = #{ customerEmail }
-             , C.CUSTOMER_PHONE = #{ customerPhone }
-             , C.CUSTOMER_FAX = #{ customerFax }
-             , C.CUSTOMER_ADDRESS = #{ customerAddress }
-         WHERE C.CUSTOMER_NO = #{ customerNo }
+        TBL_CUSTOMER C
+        SET C.CUSTOMER_NAME = #{ customerName }
+        , C.CUSTOMER_EMAIL = #{ customerEmail }
+        , C.CUSTOMER_PHONE = #{ customerPhone }
+        , C.CUSTOMER_FAX = #{ customerFax }
+        , C.CUSTOMER_ADDRESS = #{ customerAddress }
+        WHERE C.CUSTOMER_NO = #{ customerNo }
     </update>
     <update id="modifyDetailInfoToCompany" parameterType="com.deft.crud.customer.model.dto.ModifyDetailInfoForExtDTO">
         UPDATE /* com.deft.crud.customer.model.dao.CustomerMapper#modifyDetailInfoToCompany() */
-               TBL_CUSTOMER_COMPANY CP
-           SET CP.COMPANY_REGIST_NO = #{ companyRegistNo }
-             , CP.BUSINESS_STATUS = #{ businessStatus }
-             , CP.BUSINESS_TYPE = #{ businessType }
-             , CP.NUMBER_OF_EMPLOYEES = #{ numberOfEmployees }
-             , CP.COMPANY_REVENUE = #{ companyRevenue }
-             , CP.HOMEPAGE = #{ homepage }
-         WHERE CP.CUSTOMER_COMPANY_NO = #{ customerCompanyNo }
+        TBL_CUSTOMER_COMPANY CP
+        SET CP.COMPANY_REGIST_NO = #{ companyRegistNo }
+        , CP.BUSINESS_STATUS = #{ businessStatus }
+        , CP.BUSINESS_TYPE = #{ businessType }
+        , CP.NUMBER_OF_EMPLOYEES = #{ numberOfEmployees }
+        , CP.COMPANY_REVENUE = #{ companyRevenue }
+        , CP.HOMEPAGE = #{ homepage }
+        WHERE CP.CUSTOMER_COMPANY_NO = #{ customerCompanyNo }
     </update>
 
     <!-- 기존, 해지 고객 상태 변경 -->
     <update id="modifyExtCustomerStatus" parameterType="_int">
         UPDATE /* com.deft.crud.customer.model.dao.CustomerMapper#modifyExtCustomerStatus() */
-               TBL_EXT_CUSTOMER_DETAIL E
-           SET E.CUSTOMER_STATUS = CASE
-                                   WHEN (E.CUSTOMER_STATUS = '기존고객') THEN '해지고객'
-                                   ELSE '기존고객'
-                                   END
-         WHERE E.CUSTOMER_NO = #{ customerNo }
+        TBL_EXT_CUSTOMER_DETAIL E
+        SET E.CUSTOMER_STATUS = CASE
+        WHEN (E.CUSTOMER_STATUS = '기존고객') THEN '해지고객'
+        ELSE '기존고객'
+        END
+        WHERE E.CUSTOMER_NO = #{ customerNo }
     </update>
 
     <!-- 분석 고객 상태 변경 -->
     <update id="modifyAnaCustomerStatus" parameterType="com.deft.crud.customer.model.dto.AnaCustomerDetailDTO">
+        <selectKey resultType="string" keyProperty="customerStatus" order="AFTER">
+            SELECT CUSTOMER_STATUS FROM TBL_ANA_CUSTOMER_DETAIL WHERE CUSTOMER_NO = #{ customerNo }
+        </selectKey>
         UPDATE /* com.deft.crud.customer.model.dao.CustomerMapper#modifyAnaCustomerStatus() */
-               TBL_ANA_CUSTOMER_DETAIL A
-           SET A.CUSTOMER_STATUS = #{ customerStatus }
-         WHERE A.CUSTOMER_NO = #{ customerNo }
+        TBL_ANA_CUSTOMER_DETAIL A
+        SET A.CUSTOMER_STATUS = #{ customerStatus }
+        WHERE A.CUSTOMER_NO = #{ customerNo }
     </update>
 
     <!-- 분석 고객 고객화 수정 -->
     <update id="modifyAnaCustomization" parameterType="com.deft.crud.customer.model.dto.AnaCustomerDetailDTO">
         UPDATE /* com.deft.crud.customer.model.dao.CustomerMapper#modifyAnaCustomization */
-               TBL_ANA_CUSTOMER_DETAIL A
-           SET A.CUSTOMIZATION_LEVEL = #{ customizationLevel }
-             , A.CUSTOMIZATION_POSIBILLITY = #{ customizationPosibillity }
-         WHERE A.CUSTOMER_NO = #{ customerNo }
+        TBL_ANA_CUSTOMER_DETAIL A
+        SET A.CUSTOMIZATION_LEVEL = #{ customizationLevel }
+        , A.CUSTOMIZATION_POSIBILLITY = #{ customizationPosibillity }
+        WHERE A.CUSTOMER_NO = #{ customerNo }
     </update>
 
     <!-- 담당 사원 변경 -->
     <update id="modifyManager" parameterType="com.deft.crud.customer.model.dto.CustomerDTO">
         UPDATE /* com.deft.crud.customer.model.dao.CustomerMapper#modifyManager() */
-               TBL_CUSTOMER
-           SET EMP_NO = #{ empNo }
-         WHERE CUSTOMER_NO = #{ customerNo }
+        TBL_CUSTOMER
+        SET EMP_NO = #{ empNo }
+        WHERE CUSTOMER_NO = #{ customerNo }
     </update>
 
     <!-- 영업 활동 수정 -->
     <update id="modifyActivity" parameterType="com.deft.crud.customer.model.dto.BusinessActivityDTO">
         UPDATE /* com.deft.crud.customer.model.dao.CustomerMapper#modifyActivity() */
-               TBL_BUSINESS_ACTIVITY
-           SET BUSINESS_SUBJECT = #{ businessSubject }
-             , BUSINESS_TYPE = #{ businessType }
-             , BUSINESS_LOCATION = #{ businessLocation }
-             , BUSINESS_PURPOSE = #{ businessPurpose }
-             , BUSINESS_CONTENTS = #{ businessContents }
-             , WRITING_TIME = SYSDATE
-             , ACTIVITY_START_TIME = TO_DATE(REPLACE(#{ activityStartTime },'T',' '), 'YYYY-MM-DD HH24:MI:SS')
-             , ACTIVITY_END_TIME = TO_DATE(REPLACE(#{ activityEndTime },'T',' '), 'YYYY-MM-DD HH24:MI:SS')
-         WHERE ACTIVITY_NO = #{ activityNo }
+        TBL_BUSINESS_ACTIVITY
+        SET BUSINESS_SUBJECT = #{ businessSubject }
+        , BUSINESS_TYPE = #{ businessType }
+        , BUSINESS_LOCATION = #{ businessLocation }
+        , BUSINESS_PURPOSE = #{ businessPurpose }
+        , BUSINESS_CONTENTS = #{ businessContents }
+        , WRITING_TIME = SYSDATE
+        , ACTIVITY_START_TIME = TO_DATE(REPLACE(#{ activityStartTime },'T',' '), 'YYYY-MM-DD HH24:MI:SS')
+        , ACTIVITY_END_TIME = TO_DATE(REPLACE(#{ activityEndTime },'T',' '), 'YYYY-MM-DD HH24:MI:SS')
+        WHERE ACTIVITY_NO = #{ activityNo }
     </update>
 
     <!-- 고객사 정보 수정 -->
     <update id="modifyDetailInfoToCustomerCompany" parameterType="com.deft.crud.customer.model.dto.CustomerCompanyDTO">
         UPDATE /* com.deft.crud.customer.model.dao.CustomerMapper#modifyDetailInfoToCustomerCompany() */
-               TBL_CUSTOMER_COMPANY
-           SET CUSTOMER_COMPANY_NO = #{ customerCompanyNo }
-             , COMPANY_REGIST_NO = #{ companyRegistNo }
-             , BUSINESS_STATUS = #{ businessStatus }
-             , BUSINESS_TYPE = #{ businessType }
-             , NUMBER_OF_EMPLOYEES = #{ numberOfEmployees }
-             , COMPANY_REVENUE = #{ companyRevenue }
-             , HOMEPAGE = #{ homepage }
-             , COMPANY_ADDRESS = #{ companyAddress }
-             , COMPANY_NAME = #{ companyName }
-             , CEO_NAME = #{ ceoName }
-         WHERE CUSTOMER_COMPANY_NO = #{ customerCompanyNo }
+        TBL_CUSTOMER_COMPANY
+        SET CUSTOMER_COMPANY_NO = #{ customerCompanyNo }
+        , COMPANY_REGIST_NO = #{ companyRegistNo }
+        , BUSINESS_STATUS = #{ businessStatus }
+        , BUSINESS_TYPE = #{ businessType }
+        , NUMBER_OF_EMPLOYEES = #{ numberOfEmployees }
+        , COMPANY_REVENUE = #{ companyRevenue }
+        , HOMEPAGE = #{ homepage }
+        , COMPANY_ADDRESS = #{ companyAddress }
+        , COMPANY_NAME = #{ companyName }
+        , CEO_NAME = #{ ceoName }
+        WHERE CUSTOMER_COMPANY_NO = #{ customerCompanyNo }
     </update>
 
     <!-- 영업 활동 삭제 -->
     <delete id="deleteActivity" parameterType="com.deft.crud.customer.model.dto.BusinessActivityDTO">
         DELETE /* com.deft.crud.customer.model.dao.CustomerMapper#deleteActivity() */
-          FROM TBL_BUSINESS_ACTIVITY
-         WHERE ACTIVITY_NO = #{ activityNo }
+        FROM TBL_BUSINESS_ACTIVITY
+        WHERE ACTIVITY_NO = #{ activityNo }
     </delete>
 
     <!-- 고객사 삭제 -->
     <delete id="deleteCustomerCompany" parameterType="com.deft.crud.customer.model.dto.CustomerCompanyDTO">
         DELETE /* com.deft.crud.customer.model.dao.CustomerMapper#deleteCustomerCompany() */
-          FROM TBL_CUSTOMER_COMPANY
-         WHERE CUSTOMER_COMPANY_NO = #{ customerCompanyNo }
+        FROM TBL_CUSTOMER_COMPANY
+        WHERE CUSTOMER_COMPANY_NO = #{ customerCompanyNo }
     </delete>
 
     <!-- 전체 고객 조회 -->
     <select id="selectAllCustomer" resultMap="customerCompanyResultMap">
         SELECT /* com.deft.crud.customer.model.dao.CustomerMapper#selectAllCustomer() */
-               C.CUSTOMER_NAME
-             , CP.COMPANY_NAME
-             , E.EMP_NAME
-             , EX.CUSTOMER_STATUS
-             , CP.BUSINESS_STATUS
-             , EX.CUSTOMIZATION_DATE
-             , C.CUSTOMER_NO
-          FROM TBL_CUSTOMER C
-          LEFT JOIN TBL_CUSTOMER_COMPANY CP ON (C.CUSTOMER_COMPANY_NO = CP.CUSTOMER_COMPANY_NO)
-          LEFT JOIN TBL_EMP_INFO E ON (C.EMP_NO = E.EMP_NO)
-          LEFT JOIN TBL_EXT_CUSTOMER_DETAIL EX ON (C.CUSTOMER_NO = EX.CUSTOMER_NO)
-         WHERE EX.CUSTOMER_STATUS IS NOT NULL
-         ORDER BY C.CUSTOMER_NO DESC
-    </select>
-    
-	<!-- 기존 고객 조회(해지 고객 제외) -->
-	<select id="selectExtCustomerList" resultMap="extCustomerResultMap">
-        SELECT /* com.deft.crud.customer.model.dao.CustomerMapper#selectCustomerList() */
-               C.CUSTOMER_NO
-             , C.CUSTOMER_NAME
-             , CP.COMPANY_NAME
-             , CP.BUSINESS_STATUS
-             , E.EMP_NAME
-             , J.JOB_NAME
-             , EX.CUSTOMER_STATUS
-          FROM TBL_CUSTOMER C
-          LEFT JOIN TBL_CUSTOMER_COMPANY CP ON (C.CUSTOMER_COMPANY_NO = CP.CUSTOMER_COMPANY_NO)
-          LEFT JOIN TBL_EMP_INFO E ON (C.EMP_NO = E.EMP_NO)
-          LEFT JOIN TBL_JOB J ON (E.JOB_CODE = J.JOB_CODE)
-          JOIN TBL_EXT_CUSTOMER_DETAIL EX ON (C.CUSTOMER_NO = EX.CUSTOMER_NO)
-         WHERE EX.CUSTOMER_STATUS = '기존고객'
+        C.CUSTOMER_NAME
+        , CP.COMPANY_NAME
+        , E.EMP_NAME
+        , EX.CUSTOMER_STATUS
+        , CP.BUSINESS_STATUS
+        , EX.CUSTOMIZATION_DATE
+        , C.CUSTOMER_NO
+        FROM TBL_CUSTOMER C
+        LEFT JOIN TBL_CUSTOMER_COMPANY CP ON (C.CUSTOMER_COMPANY_NO = CP.CUSTOMER_COMPANY_NO)
+        LEFT JOIN TBL_EMP_INFO E ON (C.EMP_NO = E.EMP_NO)
+        LEFT JOIN TBL_EXT_CUSTOMER_DETAIL EX ON (C.CUSTOMER_NO = EX.CUSTOMER_NO)
+        WHERE EX.CUSTOMER_STATUS IS NOT NULL
         ORDER BY C.CUSTOMER_NO DESC
-	</select>
+    </select>
+
+    <!-- 기존 고객 조회(해지 고객 제외) -->
+    <select id="selectExtCustomerList" resultMap="extCustomerResultMap">
+        SELECT /* com.deft.crud.customer.model.dao.CustomerMapper#selectCustomerList() */
+        C.CUSTOMER_NO
+        , C.CUSTOMER_NAME
+        , CP.COMPANY_NAME
+        , CP.BUSINESS_STATUS
+        , E.EMP_NAME
+        , EX.CUSTOMER_STATUS
+        FROM TBL_CUSTOMER C
+        LEFT JOIN TBL_CUSTOMER_COMPANY CP ON (C.CUSTOMER_COMPANY_NO = CP.CUSTOMER_COMPANY_NO)
+        LEFT JOIN TBL_EMP_INFO E ON (C.EMP_NO = E.EMP_NO)
+        JOIN TBL_EXT_CUSTOMER_DETAIL EX ON (C.CUSTOMER_NO = EX.CUSTOMER_NO)
+        WHERE EX.CUSTOMER_STATUS = '기존고객'
+        ORDER BY C.CUSTOMER_NO DESC
+    </select>
 
     <!-- 분석 고객 조회 -->
     <select id="selectAllAnalysisCustomer" resultMap="customerCompanyResultMap">
         SELECT /* com.deft.crud.customer.model.dao.CustomerMapper#selectAllAnalysisCustomer() */
-               C.CUSTOMER_NAME
-             , C.CUSTOMER_NO
-             , CP.COMPANY_NAME
-             , E.EMP_NAME
-             , AN.CUSTOMER_STATUS
-             , CP.BUSINESS_STATUS
-             , LISTAGG(P.PRODUCT_NAME, ', ') WITHIN GROUP (ORDER BY P.PRODUCT_NO) AS PRODUCT_NAME
-          FROM TBL_CUSTOMER C
-          LEFT JOIN TBL_CUSTOMER_COMPANY CP ON (C.CUSTOMER_COMPANY_NO = CP.CUSTOMER_COMPANY_NO)
-          LEFT JOIN TBL_EMP_INFO E ON (C.EMP_NO = E.EMP_NO)
-          LEFT JOIN TBL_ANA_CUSTOMER_DETAIL AN ON (C.CUSTOMER_NO = AN.CUSTOMER_NO)
-          LEFT JOIN TBL_CUSTOMER_PRODUCT CD ON (AN.CUSTOMER_NO = CD.CUSTOMER_NO)
-          LEFT JOIN TBL_PRODUCT P ON (P.PRODUCT_NO = CD.PRODUCT_NO)
-         WHERE CD.CUSTOMER_NO IS NOT NULL GROUP BY C.CUSTOMER_NAME, CP.COMPANY_NAME
-             , E.EMP_NAME, AN.CUSTOMER_STATUS, CP.BUSINESS_STATUS, C.CUSTOMER_NO
-         ORDER BY C.CUSTOMER_NO DESC
+        C.CUSTOMER_NAME
+        , C.CUSTOMER_NO
+        , CP.COMPANY_NAME
+        , E.EMP_NAME
+        , AN.CUSTOMER_STATUS
+        , CP.BUSINESS_STATUS
+        , LISTAGG(P.PRODUCT_NAME, ', ') WITHIN GROUP (ORDER BY P.PRODUCT_NO) AS PRODUCT_NAME
+        FROM TBL_CUSTOMER C
+        LEFT JOIN TBL_CUSTOMER_COMPANY CP ON (C.CUSTOMER_COMPANY_NO = CP.CUSTOMER_COMPANY_NO)
+        LEFT JOIN TBL_EMP_INFO E ON (C.EMP_NO = E.EMP_NO)
+        LEFT JOIN TBL_ANA_CUSTOMER_DETAIL AN ON (C.CUSTOMER_NO = AN.CUSTOMER_NO)
+        LEFT JOIN TBL_CUSTOMER_PRODUCT CD ON (AN.CUSTOMER_NO = CD.CUSTOMER_NO)
+        LEFT JOIN TBL_PRODUCT P ON (P.PRODUCT_NO = CD.PRODUCT_NO)
+        WHERE CD.CUSTOMER_NO IS NOT NULL GROUP BY C.CUSTOMER_NAME, CP.COMPANY_NAME
+        , E.EMP_NAME, AN.CUSTOMER_STATUS, CP.BUSINESS_STATUS, C.CUSTOMER_NO
+        ORDER BY C.CUSTOMER_NO DESC
     </select>
 
     <!-- 기존 고객 정보 조회 -->
     <select id="selectCustomerInfo" resultMap="customerCompanyResultMap" parameterType="_int">
         SELECT /* com.deft.crud.customer.model.dao.CustomerMapper#selectCustomerInfo() */
-               C.CUSTOMER_NAME
-             , C.CUSTOMER_ADDRESS
-             , C.CUSTOMER_NO
-             , CP.COMPANY_NAME
-             , E.EMP_NAME
-             , E.EMP_NO
-             , C.CUSTOMER_EMAIL
-             , CP.BUSINESS_STATUS
-             , EX.CUSTOMER_STATUS
-             , C.CUSTOMER_PHONE
-             , CP.NUMBER_OF_EMPLOYEES
-             , NVL(C.CUSTOMER_FAX, ' ') AS CUSTOMER_FAX
-             , CP.COMPANY_REVENUE
-             , CP.BUSINESS_TYPE
-             , CP.CUSTOMER_COMPANY_NO
-             , CP.HOMEPAGE
-             , CP.COMPANY_ADDRESS
-             , CP.COMPANY_REGIST_NO
-             , EX.CUSTOMIZATION_DATE
-          FROM TBL_CUSTOMER C
-          LEFT JOIN TBL_CUSTOMER_COMPANY CP ON (C.CUSTOMER_COMPANY_NO = CP.CUSTOMER_COMPANY_NO)
-          LEFT JOIN TBL_EMP_INFO E ON (C.EMP_NO = E.EMP_NO)
-          LEFT JOIN TBL_EXT_CUSTOMER_DETAIL EX ON (C.CUSTOMER_NO = EX.CUSTOMER_NO)
-         WHERE C.CUSTOMER_NO = #{ customerNo, jdbcType=INTEGER }
+        C.CUSTOMER_NAME
+        , C.CUSTOMER_ADDRESS
+        , C.CUSTOMER_NO
+        , CP.COMPANY_NAME
+        , E.EMP_NAME
+        , E.EMP_NO
+        , C.CUSTOMER_EMAIL
+        , CP.BUSINESS_STATUS
+        , EX.CUSTOMER_STATUS
+        , C.CUSTOMER_PHONE
+        , CP.NUMBER_OF_EMPLOYEES
+        , NVL(C.CUSTOMER_FAX, ' ') AS CUSTOMER_FAX
+        , CP.COMPANY_REVENUE
+        , CP.BUSINESS_TYPE
+        , CP.CUSTOMER_COMPANY_NO
+        , CP.HOMEPAGE
+        , CP.COMPANY_ADDRESS
+        , CP.COMPANY_REGIST_NO
+        , EX.CUSTOMIZATION_DATE
+        FROM TBL_CUSTOMER C
+        LEFT JOIN TBL_CUSTOMER_COMPANY CP ON (C.CUSTOMER_COMPANY_NO = CP.CUSTOMER_COMPANY_NO)
+        LEFT JOIN TBL_EMP_INFO E ON (C.EMP_NO = E.EMP_NO)
+        LEFT JOIN TBL_EXT_CUSTOMER_DETAIL EX ON (C.CUSTOMER_NO = EX.CUSTOMER_NO)
+        WHERE C.CUSTOMER_NO = #{ customerNo, jdbcType=INTEGER }
     </select>
 
     <!-- 분석 고객 기본정보 조회 -->
     <select id="selectAnalysisCustomerInfo" resultMap="customerCompanyResultMap" parameterType="_int">
         SELECT /* com.deft.crud.customer.model.dao.CustomerMapper#selectAnalysisCustomerInfo() */
-               C.CUSTOMER_NAME
-             , C.CUSTOMER_ADDRESS
-             , C.CUSTOMER_NO
-             , CP.COMPANY_NAME
-             , CP.CUSTOMER_COMPANY_NO
-             , C.CUSTOMER_EMAIL
-             , CP.BUSINESS_STATUS
-             , C.CUSTOMER_PHONE
-             , NVL(C.CUSTOMER_FAX, ' ') AS CUSTOMER_FAX
-             , AN.CUSTOMIZATION_LEVEL
-             , AN.CUSTOMIZATION_POSIBILLITY
-             , CP.BUSINESS_TYPE
-             , CP.COMPANY_REGIST_NO
-             , CP.NUMBER_OF_EMPLOYEES
-             , CP.COMPANY_REVENUE
-             , CP.HOMEPAGE
-             , CP.COMPANY_ADDRESS
-             , LISTAGG(P.PRODUCT_NAME, ', ') WITHIN GROUP (ORDER BY P.PRODUCT_NO) AS PRODUCT_NAME
-             , E.EMP_NAME
-             , E.EMP_NO
-             , AN.CUSTOMER_STATUS
-          FROM TBL_CUSTOMER C
-          LEFT JOIN TBL_CUSTOMER_COMPANY CP ON (C.CUSTOMER_COMPANY_NO = CP.CUSTOMER_COMPANY_NO)
-          LEFT JOIN TBL_EMP_INFO E ON (C.EMP_NO = E.EMP_NO)
-          LEFT JOIN TBL_ANA_CUSTOMER_DETAIL AN ON (C.CUSTOMER_NO = AN.CUSTOMER_NO)
-          LEFT JOIN TBL_CUSTOMER_PRODUCT CD ON (AN.CUSTOMER_NO = CD.CUSTOMER_NO)
-          LEFT JOIN TBL_PRODUCT P ON (P.PRODUCT_NO = CD.PRODUCT_NO)
-         WHERE C.CUSTOMER_NO = #{ customerNo }
-         GROUP BY C.CUSTOMER_NAME, C.CUSTOMER_NO, CP.COMPANY_NAME, C.CUSTOMER_EMAIL, CP.BUSINESS_STATUS
-             , C.CUSTOMER_PHONE, NVL(C.CUSTOMER_FAX, ' '), AN.CUSTOMIZATION_LEVEL, AN.CUSTOMIZATION_POSIBILLITY, CP.BUSINESS_TYPE
-             , CP.COMPANY_REGIST_NO, CP.NUMBER_OF_EMPLOYEES, CP.COMPANY_REVENUE, CP.HOMEPAGE, CP.COMPANY_ADDRESS
-             , E.EMP_NAME, AN.CUSTOMER_STATUS, C.CUSTOMER_ADDRESS, CP.CUSTOMER_COMPANY_NO, E.EMP_NO
+        C.CUSTOMER_NAME
+        , C.CUSTOMER_ADDRESS
+        , C.CUSTOMER_NO
+        , CP.COMPANY_NAME
+        , CP.CUSTOMER_COMPANY_NO
+        , C.CUSTOMER_EMAIL
+        , CP.BUSINESS_STATUS
+        , C.CUSTOMER_PHONE
+        , NVL(C.CUSTOMER_FAX, ' ') AS CUSTOMER_FAX
+        , AN.CUSTOMIZATION_LEVEL
+        , AN.CUSTOMIZATION_POSIBILLITY
+        , CP.BUSINESS_TYPE
+        , CP.COMPANY_REGIST_NO
+        , CP.NUMBER_OF_EMPLOYEES
+        , CP.COMPANY_REVENUE
+        , CP.HOMEPAGE
+        , CP.COMPANY_ADDRESS
+        , LISTAGG(P.PRODUCT_NAME, ', ') WITHIN GROUP (ORDER BY P.PRODUCT_NO) AS PRODUCT_NAME
+        , E.EMP_NAME
+        , E.EMP_NO
+        , AN.CUSTOMER_STATUS
+        FROM TBL_CUSTOMER C
+        LEFT JOIN TBL_CUSTOMER_COMPANY CP ON (C.CUSTOMER_COMPANY_NO = CP.CUSTOMER_COMPANY_NO)
+        LEFT JOIN TBL_EMP_INFO E ON (C.EMP_NO = E.EMP_NO)
+        LEFT JOIN TBL_ANA_CUSTOMER_DETAIL AN ON (C.CUSTOMER_NO = AN.CUSTOMER_NO)
+        LEFT JOIN TBL_CUSTOMER_PRODUCT CD ON (AN.CUSTOMER_NO = CD.CUSTOMER_NO)
+        LEFT JOIN TBL_PRODUCT P ON (P.PRODUCT_NO = CD.PRODUCT_NO)
+        WHERE C.CUSTOMER_NO = #{ customerNo }
+        GROUP BY C.CUSTOMER_NAME, C.CUSTOMER_NO, CP.COMPANY_NAME, C.CUSTOMER_EMAIL, CP.BUSINESS_STATUS
+        , C.CUSTOMER_PHONE, NVL(C.CUSTOMER_FAX, ' '), AN.CUSTOMIZATION_LEVEL, AN.CUSTOMIZATION_POSIBILLITY, CP.BUSINESS_TYPE
+        , CP.COMPANY_REGIST_NO, CP.NUMBER_OF_EMPLOYEES, CP.COMPANY_REVENUE, CP.HOMEPAGE, CP.COMPANY_ADDRESS
+        , E.EMP_NAME, AN.CUSTOMER_STATUS, C.CUSTOMER_ADDRESS, CP.CUSTOMER_COMPANY_NO, E.EMP_NO
     </select>
 
     <!-- 영업 활동 조회 -->
@@ -493,7 +535,8 @@
              , BA.ACTIVITY_END_TIME
              , E.EMP_NAME
           FROM TBL_BUSINESS_ACTIVITY BA
-          LEFT JOIN TBL_EMP_INFO E ON (BA.EMP_NO = E.EMP_NO)
+          LEFT JOIN TBL_CUSTOMER C ON (BA.CUSTOMER_NO = C.CUSTOMER_NO)
+          LEFT JOIN TBL_EMP_INFO E ON (C.EMP_NO = E.EMP_NO)
          WHERE BA.CUSTOMER_NO = #{ customerNo }
     </select>
     <select id="selectBusinessActivityByActivityNo"
@@ -511,76 +554,107 @@
              , BA.ACTIVITY_END_TIME
              , E.EMP_NAME
           FROM TBL_BUSINESS_ACTIVITY BA
-          LEFT JOIN TBL_EMP_INFO E ON (BA.EMP_NO = E.EMP_NO)
+          LEFT JOIN TBL_CUSTOMER C ON (BA.CUSTOMER_NO = C.CUSTOMER_NO)
+          LEFT JOIN TBL_EMP_INFO E ON (C.EMP_NO = E.EMP_NO)
          WHERE BA.ACTIVITY_NO = #{ activityNo }
     </select>
 
     <!-- 담당사원명 조회 -->
     <select id="selectEmpName" resultType="com.deft.crud.customer.model.dto.EmpInfoDTO">
         SELECT /* com.deft.crud.customer.model.dao.CustomerMapper#selectEmpName() */
-               EMP_NO
-             , EMP_NAME
-          FROM TBL_EMP_INFO
-         WHERE EMP_NAME LIKE '%'||#{ term }||'%'
+        EMP_NO
+        , EMP_NAME
+        FROM TBL_EMP_INFO
+        WHERE EMP_NAME LIKE '%'||#{ term }||'%'
     </select>
 
     <!-- 사원 정보 조회 -->
     <select id="selectEmpInfo" resultMap="empInfoResultMap">
         SELECT /* com.deft.crud.customer.model.dao.CustomerMapper#selectEmpInfo() */
-               E.EMP_NO
-             , E.EMP_NAME
-             , J.JOB_NAME
-             , D.DEPT_NAME
-          FROM TBL_EMP_INFO E
-          LEFT JOIN TBL_JOB J ON (E.JOB_CODE = J.JOB_CODE)
-          LEFT JOIN TBL_DEPARTMENT D ON (E.DEPT_CODE = D.DEPT_CODE)
+        E.EMP_NO
+        , E.EMP_NAME
+        , J.JOB_NAME
+        , D.DEPT_NAME
+        FROM TBL_EMP_INFO E
+        LEFT JOIN TBL_JOB J ON (E.JOB_CODE = J.JOB_CODE)
+        LEFT JOIN TBL_DEPARTMENT D ON (E.DEPT_CODE = D.DEPT_CODE)
     </select>
 
     <!-- 고객사 전체 조회 -->
     <select id="selectAllCustomerCompany" resultMap="customerCompanyResultMap">
         SELECT /* com.deft.crud.customer.model.dao.CustomerMapper#selectAllCustomerCompany() */
-               CUSTOMER_COMPANY_NO
-             , COMPANY_REGIST_NO
-             , BUSINESS_STATUS
-             , BUSINESS_TYPE
-             , NUMBER_OF_EMPLOYEES
-             , COMPANY_REVENUE
-             , HOMEPAGE
-             , COMPANY_ADDRESS
-             , COMPANY_NAME
-             , CEO_NAME
-          FROM TBL_CUSTOMER_COMPANY
+        CUSTOMER_COMPANY_NO
+        , COMPANY_REGIST_NO
+        , BUSINESS_STATUS
+        , BUSINESS_TYPE
+        , NUMBER_OF_EMPLOYEES
+        , COMPANY_REVENUE
+        , HOMEPAGE
+        , COMPANY_ADDRESS
+        , COMPANY_NAME
+        , CEO_NAME
+        FROM TBL_CUSTOMER_COMPANY
     </select>
 
     <!-- 고객사 상세 조회 -->
     <select id="selectCustomerCompanyInfo" resultMap="customerCompanyResultMap" parameterType="_int">
         SELECT /* com.deft.crud.customer.model.dao.CustomerMapper#selectCustomerCompanyInfo() */
-               CUSTOMER_COMPANY_NO
-             , COMPANY_REGIST_NO
-             , BUSINESS_STATUS
-             , BUSINESS_TYPE
-             , NUMBER_OF_EMPLOYEES
-             , COMPANY_REVENUE
-             , HOMEPAGE
-             , COMPANY_ADDRESS
-             , COMPANY_NAME
-             , CEO_NAME
-          FROM TBL_CUSTOMER_COMPANY
-         WHERE CUSTOMER_COMPANY_NO = #{ companyNo }
+        CUSTOMER_COMPANY_NO
+        , COMPANY_REGIST_NO
+        , BUSINESS_STATUS
+        , BUSINESS_TYPE
+        , NUMBER_OF_EMPLOYEES
+        , COMPANY_REVENUE
+        , HOMEPAGE
+        , COMPANY_ADDRESS
+        , COMPANY_NAME
+        , CEO_NAME
+        FROM TBL_CUSTOMER_COMPANY
+        WHERE CUSTOMER_COMPANY_NO = #{ companyNo }
     </select>
 
     <!-- 상품 조회 -->
     <select id="selectProduct" resultMap="productResultMap">
         SELECT /* com.deft.crud.customer.model.dao.CustomerMapper#selectProduct() */
-               PRODUCT_NO
-             , SELL_STATUS
-             , PRODUCT_NAME
-             , PURCHASE_PRICE
-             , SELLING_PRICE
-             , UNIT
-             , CATEGORY_CODE
-             , ACCOUNT_NO
-             , MANUFACTURER_NO
-          FROM TBL_PRODUCT
+        PRODUCT_NO
+        , SELL_STATUS
+        , PRODUCT_NAME
+        , PURCHASE_PRICE
+        , SELLING_PRICE
+        , UNIT
+        , CATEGORY_CODE
+        , ACCOUNT_NO
+        , MANUFACTURER_NO
+        FROM TBL_PRODUCT
+    </select>
+
+    <!-- 고객화 변경 이력 조회 -->
+    <select id="selectCustomizationHistory"
+            parameterType="_int"
+            resultType="com.deft.crud.customer.model.dto.AnaCustomerDetailHisDTO">
+        SELECT /* com.deft.crud.customer.model.dao.CustomerMapper#selectCustomizationHistory() */
+               ANA_CUSTOMER_HIS_NO
+             , CUSTOMER_NO
+             , CUSTOMER_STATUS
+             , CUSTOMIZATION_LEVEL
+             , CUSTOMIZATION_POSIBILLITY
+             , CUSTOMIZATION_CHANGE_DATE
+          FROM TBL_ANA_CUSTOMER_DETAIL_HIS
+         WHERE CUSTOMER_NO = #{ customerNo }
+         ORDER BY ANA_CUSTOMER_HIS_NO DESC
+    </select>
+
+    <!-- 상품 구매 내역 조회 -->
+    <select id="selectChargeByCustomerNo"
+            parameterType="_int"
+            resultMap="orderChargeResultMap">
+        SELECT /* com.deft.crud.customer.model.dao.CustomerMapper#selectChargeByCustomerNo() */
+               C.CHARGE_NO
+             , O.ORDER_TITLE
+          FROM TBL_PURCHASE_ORDER O
+          LEFT JOIN TBL_CHARGE C ON (O.ORDER_NO = C.ORDER_NO)
+         WHERE O.CUSTOMER_NO = #{ customerNo }
+           AND C.COLLECT_BILL_STATUS = '수금'
+         ORDER BY C.CHARGE_NO DESC
     </select>
 </mapper>
