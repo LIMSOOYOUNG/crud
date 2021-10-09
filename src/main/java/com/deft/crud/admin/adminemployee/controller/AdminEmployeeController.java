@@ -85,8 +85,11 @@ public class AdminEmployeeController {
 		
 		List<DepartmentDTO> deptList = adminEmployeeService.deptNameList();
 		
+		List<AdminEmployeeDTO> managerList = adminEmployeeService.managerList();
+		
 		mv.setViewName("admin/employeeinfomodify");
 		mv.addObject("employeeDTO", employeeDTO);
+		mv.addObject("managerList", managerList);
 		mv.addObject("jobList", jobList);
 		mv.addObject("deptList", deptList);
 		
@@ -97,7 +100,10 @@ public class AdminEmployeeController {
 	@PostMapping("employeeinfomodify")
 	public ModelAndView employeeModify(ModelAndView mv, @ModelAttribute AdminEmployeeDTO parameters) {
 		
+		System.out.println("................." + parameters);
+		
 		int result = adminEmployeeService.employeeModify(parameters);
+		
 		
 		if(result > 0) {
 			

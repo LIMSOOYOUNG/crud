@@ -67,6 +67,14 @@ public class AdminEmployeeService {
 	}
 
 
+	public List<AdminEmployeeDTO> managerList() {
+		
+		List<AdminEmployeeDTO> managerList = adminEmployeeMapper.managerList();
+		
+		return managerList;
+	}
+
+
 
 
 	

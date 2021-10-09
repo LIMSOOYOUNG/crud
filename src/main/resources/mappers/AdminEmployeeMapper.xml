@@ -103,9 +103,9 @@
 	         , E.EMP_TEL = #{ empTel, jdbcType=VARCHAR }
 			 , E.ENT_YN = #{ entYn, jdbcType=VARCHAR}
 			 , E.ENT_DATE = #{ entDate, jdbcType=DATE }
-			 , E.JOB_NAME = #{ jobName, jdbcType=VARCHAR }
-			 , E.DEPT_NAME = #{ deptName, jdbcType=VARCHAR }
-			 , E.MANAGER_NAME = #{ managerName, jdbcType=VARCHAR }
+			 , E.JOB_CODE = #{ jobCode }
+			 , E.DEPT_CODE = #{ deptCode }
+			 , E.MANAGER_NO = #{ managerNo }
 		 WHERE E.EMP_NO = #{ employeeNo }	 
 	</update>
 	
@@ -123,4 +123,12 @@
 	      FROM TBL_DEPARTMENT D	         
 	</select>
 	
+	<select id="managerList" parameterType="_int" resultType="com.deft.crud.admin.adminemployee.model.dto.AdminEmployeeDTO">
+		SELECT /* com.deft.crud.admin.adminemployee.model.dto.AdminEmployeeDTO */
+			   E.EMP_NO
+			 , E.MANAGER_NO   
+	         , B.EMP_NAME "MANAGER_NAME"
+	      FROM TBL_EMP_INFO E
+          JOIN TBL_EMP_INFO B ON ( E.MANAGER_NO = B.EMP_NO )
+	</select>
 </mapper>

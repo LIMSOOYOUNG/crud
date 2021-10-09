@@ -28,6 +28,7 @@ public interface AdminEmployeeMapper {
 	/* DeptName List 불러오기*/
 	List<DepartmentDTO> deptNameList();
 
-
+	/* manager List 불러오기*/
+	List<AdminEmployeeDTO> managerList();
 
 }

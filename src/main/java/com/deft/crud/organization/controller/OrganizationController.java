@@ -149,51 +149,5 @@ public class OrganizationController {
 		return mv;
 	}
 	
-//	/* 부서 비활성화 */
-//	@GetMapping("departmentdisabled")
-//	public void departDisabled() {}
-//	
-//	@PostMapping("departmentdisabled")
-//	public ModelAndView departDisabled(ModelAndView mv, RedirectAttributes rttr, @RequestParam String deptCode, @RequestParam String deptStatus) {
-//		
-//		DepartmentDTO deptDTO = new DepartmentDTO();
-//		deptDTO.setDeptCode(deptCode);
-//		deptDTO.setDeptStatus(deptStatus);
-//		
-//		int result = organizationService.departmentDisabled(deptDTO);
-//		
-//		if(result > 0) {
-//			rttr.addFlashAttribute("flashMessage", "성공!!");
-//		}else {
-//			rttr.addFlashAttribute("flashMessage", "실패!!");
-//		}
-//		mv.setViewName("redirect:/departmentDisabled");
-//		
-//		return mv;
-//	}
-//	
-//	/* 직급 비활성화 */
-//	@GetMapping("jobdisabled")
-//	public void jobDisabled() {}
-//	
-//	@PostMapping("jobdisabled")
-//	public ModelAndView jobDisabledForm(ModelAndView mv, RedirectAttributes rttr, @RequestParam String jobCode, @RequestParam String deptStatus) {
-//		
-//		JobDTO jobDTO = new JobDTO();
-//		jobDTO.setJobCode(jobCode);
-//		jobDTO.setJobStatus(deptStatus);
-//		
-//		int result = organizationService.jobDisabled(jobDTO);
-//		
-//		if(result > 0) {
-//			rttr.addFlashAttribute("flashMessage", "성공!!");
-//		}else {
-//			rttr.addFlashAttribute("flashMessage", "실패!!");
-//		}
-//		mv.setViewName("redirect:/jobdisabled");
-//		
-//		
-//		return mv;
-//	}
-	
+
 }
