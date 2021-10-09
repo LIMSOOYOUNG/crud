@@ -169,6 +169,7 @@
 		       , A.DUE_DATE
 	</select>
 
+
 	<!-- 영업상태별 영업기회 목록조회 -->
 	<select id="selectChanceHistoryByNo" resultMap="businessChanceChangeHistoryResultMap">
 		SELECT /* com.deft.crud.business.model.dao.BusinessMapper#selectChanceHistoryByNo */
