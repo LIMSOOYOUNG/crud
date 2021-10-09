@@ -74,10 +74,10 @@
 												<td th:text="${estimate.customer.customerName}"></td>
 												<td th:text="${estimate.estimateTitle}" th:align="left"></td>
 												<td th:switch="${estimate.estimateStatus}">
-													<h5><span th:case="'진행중'" class="badge badge-success" th:text="${estimate.estimateStatus}"></span></h5>
-													<h5><span th:case="'완료'" class="badge badge-info" th:text="${estimate.estimateStatus}"></span></h5>
-													<h5><span th:case="'보류'" class="badge badge-warning" th:text="${estimate.estimateStatus}"></span></h5>
-													<h5><span th:case="'실패'" class="badge badge-danger" th:text="${estimate.estimateStatus}"></span></h5>
+													<h5><span th:case="진행중" class="badge badge-success" th:text="${estimate.estimateStatus}"></span></h5>
+													<h5><span th:case="완료" class="badge badge-info" th:text="${estimate.estimateStatus}"></span></h5>
+													<h5><span th:case="보류" class="badge badge-warning" th:text="${estimate.estimateStatus}"></span></h5>
+													<h5><span th:case="실패" class="badge badge-danger" th:text="${estimate.estimateStatus}"></span></h5>
 												</td>
 												<td th:text="${estimate.customer.empInfo.empName}"></td>
 												<td th:text="${estimate.estimateDate}"></td>
@@ -110,58 +110,57 @@
         });
 
 		$(document).on("click", "a[name='status']", function() {
-			
 			let estimateStatus = $(this).attr('value');
-			
+			let estimateStatusKor = $(this).text();
+
 			$.ajax({
-				url: "/estimate/selectAll/status?estimateStatus=" + estimateStatus,
+				url: "/estimate/selectAll/status",
 				type: "GET",
+				data: { "estimateStatus" : estimateStatus },
 				success: function(data, status, xhr) {
 
 					const estimateList = JSON.parse(data.estimateListByStatus);
 					const $table = $("#estimateTable tbody");
 
-					if(estimateStatus == "all") {
-						$("#tableTitle").html("견적서 조회 (전체)");
-					} else {
-						$("#tableTitle").html("견적서 조회 (" + estimateList[0].estimateStatus + ")");
-					}
+					$("#tableTitle").html("견적서 조회 (" + estimateStatusKor + ")");
 
 					$table.html("");
-					
-					for(let index in estimateList) {
-						let estimate = estimateList[index];
 
-						$tr = $("<tr>").prop("align", "center");
-						$estimateNoTd = $("<td>").text(estimate.estimateNo);
-						$customerNameTd = $("<td>").text(estimate.customer.customerName);
-						$estimateTitleTd = $("<td>").attr("align", "left").text(estimate.estimateTitle);
-						$badgeSpan = $("<span>").text(estimate.estimateStatus);
-						switch(estimate.estimateStatus) {
-							case '진행중' : $badgeSpan.addClass("badge badge-success"); break;
-							case '완료' : $badgeSpan.addClass("badge badge-info"); break;
-							case '보류' : $badgeSpan.addClass("badge badge-warning"); break;
-							case '실패' : $badgeSpan.addClass("badge badge-danger"); break;
+					if(estimateList.length != 0) {
+						for(let index in estimateList) {
+							let estimate = estimateList[index];
+
+							$tr = $("<tr>").prop("align", "center");
+							$estimateNoTd = $("<td>").text(estimate.estimateNo);
+							$customerNameTd = $("<td>").text(estimate.customer.customerName);
+							$estimateTitleTd = $("<td>").attr("align", "left").text(estimate.estimateTitle);
+							$badgeSpan = $("<span>").text(estimate.estimateStatus);
+							switch(estimate.estimateStatus) {
+								case "진행중" : $badgeSpan.addClass("badge badge-success"); break;
+								case "완료" : $badgeSpan.addClass("badge badge-info"); break;
+								case "보류" : $badgeSpan.addClass("badge badge-warning"); break;
+								case "실패" : $badgeSpan.addClass("badge badge-danger"); break;
+							}
+							$estimateStatusTd = $("<td>").append($("<h5>").append($badgeSpan));
+							$empNameTd = $("<td>").text(estimate.customer.empInfo.empName);
+							$estimateDateTd = $("<td>").text(estimate.estimateDate);
+							$btnIcon = $("<i>").addClass("fas fa-clipboard-list");
+							$btnIconSpan = $("<span>").addClass("icon text-white-50").append($btnIcon);
+							$btnTextSpan = $("<span>").addClass("text text-white").text("상세정보");
+							$detailBtn = $("<button>").addClass("btn btn-sm btn-dark btn-icon-split")
+									.prop("name", "estimateDetailBtn").append($btnIconSpan).append($btnTextSpan);
+							$detailTd = $("<td>").append($detailBtn);
+
+							$tr.append($estimateNoTd);
+							$tr.append($customerNameTd);
+							$tr.append($estimateTitleTd);
+							$tr.append($estimateStatusTd);
+							$tr.append($empNameTd);
+							$tr.append($estimateDateTd);
+							$tr.append($detailTd);
+							
+							$table.append($tr);
 						}
-						$estimateStatusTd = $("<td>").append($("<h5>").append($badgeSpan));
-						$empNameTd = $("<td>").text(estimate.customer.empInfo.empName);
-						$estimateDateTd = $("<td>").text(estimate.estimateDate);
-						$btnIcon = $("<i>").addClass("fas fa-clipboard-list");
-						$btnIconSpan = $("<span>").addClass("icon text-white-50").append($btnIcon);
-						$btnTextSpan = $("<span>").addClass("text text-white").text("상세정보");
-						$detailBtn = $("<button>").addClass("btn btn-sm btn-dark btn-icon-split")
-								.prop("name", "estimateDetailBtn").append($btnIconSpan).append($btnTextSpan);
-						$detailTd = $("<td>").append($detailBtn);
-
-						$tr.append($estimateNoTd);
-						$tr.append($customerNameTd);
-						$tr.append($estimateTitleTd);
-						$tr.append($estimateStatusTd);
-						$tr.append($empNameTd);
-						$tr.append($estimateDateTd);
-						$tr.append($detailTd);
-						
-						$table.append($tr);
 					}
 				},
 				error: function(xhr, status, error) {

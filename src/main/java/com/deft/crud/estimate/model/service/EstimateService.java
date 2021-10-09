@@ -21,14 +21,14 @@ public class EstimateService {
 		this.estimateMapper = estimateMapper;
 	}
 	
-	public List<EstimateDTO> selectEstimateList() {
+	public List<EstimateDTO> selectEstimateList(int empNo) {
 		
-		return estimateMapper.selectEstimateList();
+		return estimateMapper.selectEstimateList(empNo);
 	}
 
-	public List<EstimateDTO> selectEstimateListByStatus(String estimateStatus) {
+	public List<EstimateDTO> selectEstimateListByStatus(String estimateStatus, int empNo) {
 		
-		return estimateMapper.selectEstimateListByStatus(estimateStatus);
+		return estimateMapper.selectEstimateListByStatus(estimateStatus, empNo);
 	}
 	
 	public EstimateDTO selectEstimateDetail(String estimateNo) {
@@ -61,7 +61,7 @@ public class EstimateService {
 			total += subtotal + tax;
 		}
 		
-		estimate.setTotal(total);
+		estimate.setEstimateTotal(total);
 		
 		return estimate;
 	}
