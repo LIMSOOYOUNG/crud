@@ -98,4 +98,21 @@
 	       SET J.JOB_STATUS = #{ jobStatus }
 	     WHRER J.JOB_CODE = #{ jobCode }   
 	</update>
+	
+	<select id="jobModifyForm" parameterType="_int" resultType="com.deft.crud.organization.model.dto.JobDTO">
+		SELECT
+               J.JOB_CODE
+             , J.JOB_NAME
+             , J.JOB_STATUS
+          FROM TBL_JOB J
+         WHERE J.JOB_CODE = #{ jobCode }
+	</select>
+	<select id="deptModifyForm" parameterType="_int" resultType="com.deft.crud.organization.model.dto.DepartmentDTO">
+		SELECT
+               D.DEPT_CODE
+             , D.DEPT_NAME
+             , D.DEPT_STATUS
+		  FROM TBL_DEPARTMENT D
+	     WHERE D.DEPT_CODE = #{ deptCode } 
+	</select>
 </mapper>

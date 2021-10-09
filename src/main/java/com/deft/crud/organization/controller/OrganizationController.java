@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -96,16 +97,26 @@ public class OrganizationController {
 		int result = organizationService.jobInsert(jobDTO);
 		
 		if(result > 0) {
-			rttr.addFlashAttribute("flashMessage", "성공!!");
-		}else {
-			rttr.addFlashAttribute("flashMessage", "실패!!");
+			
+			mv.setViewName("redirect:/organization/selectjob");
+			
 		}
-		mv.setViewName("redirect:/organization/selectjob");
 		
 		return mv;
 	}
 	
 	/* 부서 수정 */
+	@GetMapping("departmentmodify")
+	public ModelAndView departmentModify(ModelAndView mv, @RequestParam String deptCode) {
+		
+		DepartmentDTO deptDTO = organizationService.deptModifyForm(deptCode);
+		
+		mv.setViewName("organization/departmentmodify");
+		mv.addObject("deptDTO", deptDTO);
+		
+		return mv;
+	}
+	
 	@PostMapping("departmentmodify")
 	public ModelAndView departmentModifyForm(ModelAndView mv, @RequestParam String deptCode
 		     , @RequestParam String deptName, @RequestParam String deptFax, @RequestParam String deptTel, @RequestParam String deptStatus){
@@ -128,6 +139,18 @@ public class OrganizationController {
 	}
 	
 	/* 직급 수정 */
+	@GetMapping("jobmodify")
+	public ModelAndView jobModify(ModelAndView mv, @RequestParam String jobCode) {
+		
+		JobDTO jobDTO = organizationService.jobModifyForm(jobCode);
+		
+		mv.setViewName("organization/jobmodify");
+		mv.addObject("jobDTO", jobDTO);
+		
+		return mv;
+	}
+	
+	
 	@PostMapping("jobmodify")
 	public ModelAndView jobModifyForm(ModelAndView mv, @RequestParam String jobCode
             , @RequestParam String jobName, @RequestParam String jobStatus){
@@ -142,7 +165,8 @@ public class OrganizationController {
 		int result = organizationService.jobModify(jobDTO);
 		
 		if(result > 0) {
-			mv.setViewName("redirect:/organization/selectjob?jobCode=" + jobCode);
+			
+			mv.setViewName("redirect:/organization/jobmodify?jobCode=" + jobCode);
 		}
 		
 		

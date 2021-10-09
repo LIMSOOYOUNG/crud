@@ -26,7 +26,7 @@
 						</ol>
 					</div>
 					<div align="right">
-							<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalLong" id="#jobbtn">직급 추가</button>
+							<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#jobinsert" id="#jobbtn">직급 추가</button>
 					</div>
 						<br>
 					
@@ -56,8 +56,7 @@
 												<td th:text="${job.jobCode}"></td>
 												<td th:text="${job.jobName}"></td>
 												<td th:text="${job.jobStatus}"></td>
-												<td><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#jobModify" id="jobModifyBtn" 
-														onclick="jobModify('${job.jobCode}','${job.jobName}','${job.jobStatus}')">직급관리</button></td>
+												<td><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#jobModify" id="#jobmodifybtn" >직급관리</button></td>
 											</tr>
 										</tbody>
 									</table>
@@ -66,10 +65,12 @@
 						</div>
 					</div>
 				</div>
-				
+			</div>
+		</div>
+	</div>
 				<!-- 직급 추가 모달 -->
 				<form th:action="jobinsert" method="post">
-				<div class="modal fade" id="exampleModalLong" tabindex="-1"
+				<div class="modal fade" id="jobinsert" tabindex="-1"
 					role="dialog" aria-labelledby="exampleModalLongTitle"
 					aria-hidden="true">
 					<div class="modal-dialog" role="document">
@@ -106,33 +107,25 @@
 					</div>
 				</div>
 				</form>
-				
-				<!-- 직급 수정 모달 -->
-				
-				<div class="modal fade" id="jobModify" tabindex="-1" role="dialog"
-					aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+				<!-- 직급 수정 -->
+					<!-- 직급 수정 -->
+				<form action="jobmodify" method="post">
+						<div class="modal fade" id="jobModify" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
 					<div class="modal-dialog" role="document">
 						<div class="modal-content">
 							<div class="modal-header">
-								<h5 class="modal-title" id="exampleModalLongTitle"
-									style="color: blue;">직급관리</h5>
-								<button type="button" class="close" data-dismiss="modal"
-									aria-label="Close">
-									<span aria-hidden="true">&times;</span>
-								</button>
-							</div>
-							<form th:action="jobmodify" method="post">
-							<div class="modal-body">
-								<div class="form-group">
-									<label>직급 코드</label>
-									<input type="text" class="form-control" id="exampleFormControlInput1" name="jobCode" th:value="${jobDTO.jobCode}" th:readonly="readonly">
+								<h5 class="modal-title" id="exampleModalLongTitle" style="color: blue;">직급 관리</h5>
+									<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>						
 								</div>
-								<div class="form-group">
-									<label>직급명</label>
-									<input type="text" class="form-control" id="exampleFormControlInput1" th:value="${jobDTO.jobName}" name="jobName">
-								</div>
-								<div class="form-group">
-									<label>직급상태</label>
+									<div class="modal-body">
+										<div class="form-group">
+											<label>직급 코드</label>
+											<input type="text" class="form-control" name="jobCode" value="${ jobDTO.jobCode }" th:readonly="readonly">
+										</div> 
+									    <div class="form-group">
+											<label>직급명</label>
+											<input type="text" class="form-control" value="${jobDTO.jobName}" name="jobName">
+										</div>
 									<div class="custom-control custom-radio" >
 										 <input type="radio" id="customRadio5" name="jobStatus" class="custom-control-input" value="Y">
                         				<label class="custom-control-label" for="customRadio5">Y</label>
@@ -141,28 +134,29 @@
 										<input type="radio" id="customRadio6" name="jobStatus" class="custom-control-input" value="N">
                         				<label class="custom-control-label" for="customRadio6">N</label>
 									</div>
-								</div>
-								<div class="modal-footer">
-									<button type="submit" class="btn btn-primary" >수정하기</button>
-								</div>
-							</div>
-							</form>
+									</div>
+									<div class="modal-footer">
+										<button type="submit" class="btn btn-primary" >수정하기</button>
+									</div>
+							</div>     
 						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-
+					</div>  
+				</form>
 		<!-- Script -->
 		<th:block th:replace="@{/common/script} :: script"></th:block>
 		 	<!-- Page level plugins -->
 	<script src="/vendor/datatables/jquery.dataTables.min.js"></script>
 	<script src="/vendor/datatables/dataTables.bootstrap4.min.js"></script>
 		<script>
-		
-		
-		</script>
+	$("#updatebtn").click(function(){
+		if(confirm("수정하시겠습니까?") == true){
+			alert("수정되었습니다.")
+		}
+		else{
+			return;
+		}
+	})
+	</script>
 </body>
 
 </html>

@@ -100,7 +100,6 @@ public class AdminEmployeeController {
 	@PostMapping("employeeinfomodify")
 	public ModelAndView employeeModify(ModelAndView mv, @ModelAttribute AdminEmployeeDTO parameters) {
 		
-		System.out.println("................." + parameters);
 		
 		int result = adminEmployeeService.employeeModify(parameters);
 		
