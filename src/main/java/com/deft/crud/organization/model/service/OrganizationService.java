@@ -67,21 +67,22 @@ public class OrganizationService {
 		return result;
 	}
 
-//	/* 부서 비활성화 */
-//	public int departmentDisabled(DepartmentDTO deptDTO) {
-//		
-//		int result = organizationMapper.departmentDisabled(deptDTO);
-//		
-//		return result;
-//	}
-//
-//	/* 직급 비활성화*/
-//	public int jobDisabled(JobDTO jobDTO) {
-//		
-//		int result = organizationMapper.jobDisabled(jobDTO);
-//		
-//		return result;
-//	}
+	/* jobForm 불러오기*/
+	public JobDTO jobModifyForm(String jobCode) {
+		
+		JobDTO jobDTO = organizationMapper.jobModifyForm(jobCode);
+		
+		return jobDTO;
+	}
+	
+	/* deptFrom 불러오기 */
+	public DepartmentDTO deptModifyForm(String deptCode) {
+
+		DepartmentDTO deptDTO = organizationMapper.deptModifyForm(deptCode);
+		
+		return deptDTO;
+	}
+
 
 	
 }
