@@ -201,8 +201,28 @@ public class CustomerService {
     }
 
     /* 분석고객 -> 기존고객 변경 */
+    @Transactional
     public int insertExtCustomer(AnaCustomerDetailDTO parameters) {
 
         return customerMapper.insertExtCustomer(parameters);
+    }
+
+    /* 고객화 변경 이력 조회 */
+    public List<AnaCustomerDetailHisDTO> selectCustomizationHistory(int customerNo) {
+
+        return customerMapper.selectCustomizationHistory(customerNo);
+    }
+
+    /* 고객화 변경 이력 등록 */
+    @Transactional
+    public int insertAnaCustomizationHistory(AnaCustomerDetailDTO parameters) {
+
+        return customerMapper.insertAnaCustomizationHistory(parameters);
+    }
+
+    /* 상품 구매 내역 조회 */
+    public List<OrderChargeDTO> selectChargeByCustomerNo(int customerNo) {
+
+        return customerMapper.selectChargeByCustomerNo(customerNo);
     }
 }

@@ -59,14 +59,14 @@ public class CustomerController {
     public ModelAndView selectCustomerInfo(ModelAndView mv, @RequestParam int customerNo) {
 
         CustomerCompanyDTO customerInfo = customerService.selectCustomerInfo(customerNo);
-
         List<BusinessActivityDTO> businessActivityList = customerService.selectBusinessActivity(customerNo);
-
         List<EmpInfoDTO> empInfoList = customerService.selectEmpInfo();
+        List<OrderChargeDTO> chargeList = customerService.selectChargeByCustomerNo(customerNo);
 
         mv.addObject("customerInfo", customerInfo);
         mv.addObject("businessActivityList", businessActivityList);
         mv.addObject("empInfoList", empInfoList);
+        mv.addObject("chargeList", chargeList);
         mv.setViewName("customer/selectCustomerInfo");
 
         return mv;
@@ -77,14 +77,14 @@ public class CustomerController {
     public ModelAndView selectAnalysisCustomerInfo(ModelAndView mv, @RequestParam int customerNo) {
 
         CustomerCompanyDTO customerInfo = customerService.selectAnalysisCustomerInfo(customerNo);
-
         List<BusinessActivityDTO> businessActivityList = customerService.selectBusinessActivity(customerNo);
-
         List<EmpInfoDTO> empInfoList = customerService.selectEmpInfo();
+        List<AnaCustomerDetailHisDTO> customizationHisList = customerService.selectCustomizationHistory(customerNo);
 
         mv.addObject("businessActivityList", businessActivityList);
         mv.addObject("customerInfo", customerInfo);
         mv.addObject("empInfoList", empInfoList);
+        mv.addObject("hisList", customizationHisList);
         mv.setViewName("customer/selectAnalysisCustomerInfo");
 
         return mv;
@@ -95,8 +95,6 @@ public class CustomerController {
     public ModelAndView selectOneActivity(ModelAndView mv, HttpServletResponse response,
                                           @RequestParam int activityNo) throws JsonProcessingException {
         response.setContentType("application/json; charser=UTF-8");
-
-        System.out.println(activityNo);
 
         ObjectMapper mapper = new ObjectMapper();
 
@@ -207,9 +205,10 @@ public class CustomerController {
 
         int customerNo = parameters.getCustomerNo();
 
-        int result = customerService.modifyAnaCustomization(parameters);
+        int modifyResult = customerService.modifyAnaCustomization(parameters);
+        int insertResult = customerService.insertAnaCustomizationHistory(parameters);
 
-        if(result > 0) {
+        if(modifyResult > 0 && insertResult > 0) {
             mv.setViewName("redirect:/customer/anainfo?customerNo=" + customerNo);
         }
 

@@ -30,11 +30,11 @@
                             <h3>고객화 단계 이력</h3>
 
                             <ul class="navbar-nav">
-                                <li class="alert alert-danger mb-1">구매내역</li>
-                                <li class="alert alert-light mb-1">진행중</li>
-                                <li class="alert alert-light mb-1">성공</li>
-                                <li class="alert alert-light mb-1">실패</li>
-                                <li class="alert alert-light mb-1">보류중</li>
+                                <li class="alert alert-light mb-1"
+                                    th:each="his : ${ hisList }"
+                                    th:text="${ customerInfo.customerList[0].empInfo.empName } + '님이 ' + '고객화 단계를 '
+                                            + ${ his.customizationLevel } + '고객화 가능성을 ' + ${ his.customizationPosibillity }
+                                            + '% 로 수정하셨습니다.'"></li>
                             </ul>
                         </div>
 
@@ -774,10 +774,14 @@
                         <h4 class="modal-title" style="color: #0da8ee">고객화 변경</h4>
                         <button type="button" class="close" data-dismiss="modal"><i class="far fa-times-circle"></i></button>
                         <div class="row">
-                            <div class="form-group col-lg-12"><input type="hidden" value="emptyRow"></div>
+                            <div class="form-group col-lg-12">
+                                <input type="hidden" value="emptyRow">
+                            </div>
+
                         </div>
                     </div>
                     <form th:action="@{/customer/ana/customization/modify}" method="post">
+                                <input type="hidden" name="customerStatus" th:value="${ customerInfo.customerList[0].anaCustomerDetail.customerStatus}">
                         <div class="modal-body">
                             <div class="card mb-auto">
                                 <div class="row">
