@@ -20,7 +20,7 @@ public class BusinessChanceDTO implements Serializable {
 	private String salesLevel;
 	private int successPosibillity;
 	private String businessTitle;
-	private java.sql.Date dueDate;
+	private String dueDate;
 	private String empName;
 	private int empNo;
 	private String customerName;

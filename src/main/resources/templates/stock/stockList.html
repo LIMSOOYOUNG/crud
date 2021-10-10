@@ -41,31 +41,28 @@ input {
 					<!-- Row -->
 					<div class="row">
 
-						<!-- DataTable with Hover -->
+						<!-- stockTable -->
 						<div class="col-lg-1"></div>
 						<div class="col-lg-10">
 							<div class="card mb-4">
 								<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
 									<h6 class="m-0 font-weight-bold text-primary">창고 재고현황</h6>
 									<div>
-										<a class="btn btn-success btn-icon-split" id="stockOrderBtn">
+										<a class="btn btn-success btn-icon-split" id="stockOrderBtn" style="margin-right: 15px;">
 											<span class="icon text-white">
-												<i class="fas fa-arrow-circle-down"></i>
-											</span>
+												<i class="fas fa-arrow-circle-down"></i></span>
 											<span class="text text-white">입고요청서작성</span>
-										</a> &nbsp&nbsp&nbsp&nbsp
+										</a> 
 										 <a id="stockOrder" class="btn btn-info btn-icon-split">
 											<span class="icon text-white">
-												<i class="fas fa-arrow-circle-up"></i>
-											</span>
+												<i class="fas fa-arrow-circle-up"></i></span>
 											<span class="text text-white">출고요청서작성</span>
 										</a>
 									</div>
 								</div>
 								<div class="table-responsive p-3">
-									<table id="dataTableHover"
-										class="table align-items-center table-flush table-hover">
-										<thead align="center" class="thead-light">
+									<table id="stockTable" class="table align-items-center table-flush table-hover">
+										<thead th:align="center" class="thead-light">
 											<tr>
 												<th>상품번호</th>
 												<th>카테고리</th>
@@ -78,21 +75,18 @@ input {
 											</tr>
 										</thead>
 
-										<tbody align="center">
+										<tbody th:align="center">
 											<tr th:each="stock : ${stockList}">
-												<td id="productNo" th:value="${stock.productNo}"
-													th:text="${stock.productNo}"></td>
+												<td id="productNo" th:value="${stock.productNo}" th:text="${stock.productNo}"></td>
 												<td id="categoryName" th:text="${stock.product.category.categoryName}"></td>
 												<td id="productName" th:text="${stock.product.productName}"></td>
 												<td th:text="${stock.productStock}"></td>
 												<td th:text="${stock.product.unit}"></td>
 												<td th:switch="${stock.product.sellStatus}">
 												<h5><span th:case="'판매'" class="badge badge-success"
-													  th:text="${stock.product.sellStatus}">
-												</span></h5>
+													  	  th:text="${stock.product.sellStatus}"></span></h5>
 												<h5><span th:case="'미판매'" class="badge badge-danger"
-													  th:text="${stock.product.sellStatus}">
-												</span></h5>
+													 	  th:text="${stock.product.sellStatus}"></span></h5>
 												</td>
 												<td	th:text="|${stock.storageSection} - ${stock.storageSpace}|"></td>
 
@@ -100,19 +94,17 @@ input {
 												<!-- <th:if sec:authorize-expr ="hasRole('ROLE_ADMIN')"> -->
 												<td>
 													<button class="btn btn-dark btn-icon-split"
-															name="stockManagerBtn" data-toggle="modal"
+															id="stockManagerBtn" name="stockManagerBtn"
+															data-toggle="modal"
 															data-target="#stockManagerModal"
 															th:data-product-no="${stock.productNo}">
 														<span class="icon text-white-50">
-															<i class="fas fa-clipboard-list"></i>
-														</span>
+															<i class="fas fa-clipboard-list"></i></span>
 														<span class="text text-white">재고관리</span>
 													</button>
 												</td>
-
 											</tr>
 										</tbody>
-
 									</table>
 								</div>
 							</div>
@@ -152,8 +144,8 @@ input {
 									<h6 class="m-0 font-weight-bold text-primary">전체상품현황</h6>
 								</div>
 								<div class="table-responsive p-3" style="overflow-y: scroll; height: 650px;">
-									<table id="modalDataTableHover" class="table align-items-center table-flush table-hover">
-										<thead align="center" class="thead-light">
+									<table id="orderProductTable" class="table align-items-center table-flush table-hover">
+										<thead th:align="center" class="thead-light">
 											<tr>
 												<th>상품번호</th>
 												<th>카테고리</th>
@@ -163,7 +155,7 @@ input {
 												<th></th>
 											</tr>
 										</thead>
-										<tbody align="center">
+										<tbody th:align="center">
 											<tr th:each="sellableProduct : ${sellableProductList}">
 												<td th:text="${sellableProduct.productNo}"></td>
 												<td th:text="${sellableProduct.product.category.categoryName}"></td>
@@ -173,8 +165,7 @@ input {
 												<td>
 													<a class="btn btn-white btn-icon-split addBtn">
 														<span class="icon text-black" style="color: #66bb6a;">
-															<i class="fas fa-cart-plus fa-lg"></i>
-														</span>
+															<i class="fas fa-cart-plus fa-lg"></i></span>
 													</a>
 												</td>
 											</tr>
@@ -211,9 +202,9 @@ input {
 								</div>
 								<div class="row">
 									<div class="form-group col-xl-12" >
-										<label>요청서제목</label>
-										<input type="text" id="orderTitle" 
-									       name="orderTitle" class="form-control" style="text-align: left;" required>
+										<label for="orderTitle">요청서제목</label>
+										<input type="text" class="form-control" style="text-align: left;" 
+									      	   id="orderTitle" name="orderTitle" required>
 									</div>
 								</div>
 								<div class="form-group row mb-12" th:align="right">
@@ -224,7 +215,6 @@ input {
 												<span sec:authentication='principal.managerName'></span>
 											</span>
 											<input class="form-control" id="managerNo" name="managerNo" hidden="hidden">
-											
 										</div>
 								<div class="row">
 									<div class="form-group col-xl-12">
@@ -233,8 +223,8 @@ input {
 									</div>
 									<div class="form-group col-xl-4"></div>
 									<div class="form-group col-xl-4" th:align="center" style="margin-top: 40px;">
-										<button id="receivingProductBtn" onclick="receivingProduct()"
-												type="button" class="btn btn-primary">입고요청</button>
+										<button type="button" class="btn btn-primary"
+												id="receivingProductBtn" onclick="receivingProduct()">입고요청</button>
 									</div>
 									<div class="form-group col-xl-4"></div>
 								</div>
@@ -266,16 +256,15 @@ input {
 				</div>
 
 				<div class="modal-body">
-					<form id="stockConditionForm"
-						th:action="@{/stock/stockCondition/modify}" method="post">
+					<form id="stockConditionForm" th:action="@{/stock/stockCondition/modify}" method="post">
 						<div class="row" th:align="center">
 							<div class="col-lg-4" style="margin-top: 30px;">
 								<div class="card mb-4">
 									<div class="card-header flex-row align-items-center justify-content-between">
 										<h6 class="m-0 font-weight-bold text-primary">상품이미지</h6>
 									</div>
-									<div align="center" class="card-body" style="width: 90%; height: 300px;">
-										<div align="center" class="form-group">
+									<div th:align="center" class="card-body" style="width: 90%; height: 300px;">
+										<div th:align="center" class="form-group">
 											<img alt="noImage" src="" width=80%; height=80%;>
 										</div>
 									</div>
@@ -283,30 +272,29 @@ input {
 							</div>
 							<div class="col-lg-4">
 								<div class="form-group">
-									<label>카테고리(중)</label>
+									<label for="stockRefCategoryName">카테고리(중)</label>
 									<input type="text" id="stockRefCategoryName" class="form-control"
 										   name="stockRefCategoryName" readonly>
 								</div>
 								<div class="form-group">
-									<label>상품번호</label>
+									<label for="stockProductNo">상품번호</label>
 									<input type="text" id="stockProductNo"
 									       name="stockProductNo" class="form-control" readonly>
 								</div>
 								<div class="form-group">
-									<label>제조사</label>
+									<label for="companyName">제조사</label>
 									<input type="text" id="companyName"
 										   name="companyName" class="form-control" readonly>
-
 								</div>
 								<div class="form-group">
-									<label>판매가</label>
+									<label for="sellingPrice">판매가</label>
 									<input type="text" id="sellingPrice"
 										   name="sellingPrice" class="form-control" readonly>
 								</div>
 								<div class="row form-group">
 									<div class="col-xl-5">
 										<label>상품위치</label>
-										<div class="row ">
+										<div class="row">
 											<select id="storageSection" name="storageSection"
 													class="ui search dropdown form-control col-xl-6">
 												<option id="A" value="A">A</option>
@@ -337,12 +325,12 @@ input {
 										</div>
 									</div>
 									<div class="col-xl-4">
-										<label>재고수량</label>
+										<label for="productStock">재고수량</label>
 										<input type="text" class="form-control"
 											id="productStock" name="productStock" disabled>
 									</div>
 									<div class="col-xl-3">
-										<label>단위</label>
+										<label for="unit">단위</label>
 										<input type="text" class="form-control"
 											id="unit" name="unit" disabled>
 									</div>
@@ -350,22 +338,22 @@ input {
 							</div>
 							<div class="col-lg-4">
 								<div class="form-group">
-									<label>카테고리(소)</label>
+									<label for="stockCategoryName">카테고리(소)</label>
 									<input type="text" class="form-control"
 										id="stockCategoryName" name="stockCategoryName" readonly>
 								</div>
 								<div class="form-group">
-									<label>상품명</label>
+									<label for="stockProductName">상품명</label>
 									<input type="text" class="form-control"
 										id="stockProductName" name="stockProductName" disabled>
 								</div>
 								<div class="form-group">
-									<label>거래처</label>
+									<label for="manufacturerName">거래처</label>
 									<input type="text" class="form-control"
 										id="manufacturerName" name="manufacturerName" disabled>
 								</div>
 								<div class="form-group">
-									<label>판매상태</label>
+									<label for="sellStatus">판매상태</label>
 									<div class="form-control" style="border: 0;">
 									<h4><span id="sellStatus"></span></h4>
 									</div>
@@ -373,7 +361,7 @@ input {
 								<div class="row">
 									<div class="form-group col-xl-3"></div>
 									<div class="form-group col-xl-6" th:align="center">
-										<label>추가 or 삭제할 수량</label>
+										<label for="orderStockAmount">추가 or 삭제할 수량</label>
 										<input type="number" class="form-control"
 											   id="orderStockAmount" name="orderStockAmount" min="-${ '#prodcutStock' }.val()" required>
 									</div>
@@ -411,8 +399,8 @@ input {
 		}
 	
 	$(document).ready(function() {
-		$('#dataTableHover').DataTable(); 								// 창고 재고 현황 테이블
-		$('#modalDataTableHover').DataTable(); 							// [Modal]입고요청서작성시 입고요청할 판매가능상태의 상품목록
+		$('#stockTable').DataTable(); 								// 창고 재고 현황 테이블
+		$('#orderProductTable').DataTable(); 							// [Modal]입고요청서작성시 입고요청할 판매가능상태의 상품목록
 		$('#table_activity').DataTable(); 								// ID From dataTable with Hover
 		$('#stockManagerModal').on('show.bs.modal', function(event) {   //영업활동 모달창이 보여질때 동작
 

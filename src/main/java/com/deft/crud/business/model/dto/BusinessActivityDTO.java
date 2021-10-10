@@ -21,6 +21,7 @@ public class BusinessActivityDTO implements Serializable {
 	private int customerNo;
 	private String empName;
 	private int empNo;
+	private int managerNo;
 	private String businessSubject;
 	private String businessType;
 	private String businessLocation;
