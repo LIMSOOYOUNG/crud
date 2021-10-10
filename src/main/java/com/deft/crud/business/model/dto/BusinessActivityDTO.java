@@ -1,6 +1,7 @@
 package com.deft.crud.business.model.dto;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -27,8 +28,8 @@ public class BusinessActivityDTO implements Serializable {
 	private String businessLocation;
 	private String businessPurpose;
 	private String businessContents;
-	private java.sql.Date writingTime;
-	private java.sql.Date activityStartTime;
-	private java.sql.Date activityEndTime;
+	private String writingTime;
+	private String activityStartTime;
+	private String activityEndTime;
 
 }

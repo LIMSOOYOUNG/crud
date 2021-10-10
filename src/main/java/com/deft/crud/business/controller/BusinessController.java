@@ -69,8 +69,8 @@ public class BusinessController {
 	/* 영업기회 상태변경이력 + 선택한 영업기회 정보 + 현재영업기회 관련 고객에 대한 활동 내역*/
 	@GetMapping("/chance/selectBasicInfo")
 	public ModelAndView selectBasicInfoByNo(ModelAndView mv,
-											@RequestParam("customerNo") int customerNo,
-											@RequestParam("businessChanceNo") int businessChanceNo) {
+										    @RequestParam("customerNo") int customerNo,
+										    @RequestParam("businessChanceNo") int businessChanceNo) {
 		
 		/* 선택한 영업기회의 내용 변경내역*/
 		List<BusinessChanceHistoryDTO> chanceHistoryList = businessService.selectChanceHistoryByNo(businessChanceNo);
@@ -95,15 +95,30 @@ public class BusinessController {
 		return mv;
 	}
 	
-	/* 전체사원 영업활동 목록조회 (담당자 or 사원)*/
+	/* 영업활동 목록조회 (담당자 or 사원)*/
 	@GetMapping("/activity/selectAll")
-	public ModelAndView selectActivityAll(ModelAndView mv, @AuthenticationPrincipal UserImpl userInfo) {
+	public ModelAndView selectActivityAll(ModelAndView mv,
+										  @AuthenticationPrincipal UserImpl userInfo) {
 		
 		List<BusinessActivityDTO> businessActivityList = businessService.selectActivityAll(userInfo);
 		
 		mv.addObject("businessActivityList", businessActivityList);
 		mv.setViewName("business/businessActivityList");
 		
+		return mv;
+	}
+	
+	/* 선택한 영업활동의 상세정보 조회 */
+	@GetMapping("activity/selectDetailInfo")
+	public ModelAndView selectActivityDetailInfoByNo(ModelAndView mv, HttpServletResponse response,
+													 @RequestParam("activityNo") int activityNo) throws JsonProcessingException {
+		
+		response.setContentType("application/json; charset=UTF-8");
+		
+		BusinessActivityDTO activityInfo = businessService.selectActivityDetailInfoByNo(activityNo);
+		
+		mv.addObject("activityInfo", objectMapper.writeValueAsString(activityInfo));
+		mv.setViewName("jsonView");
 		return mv;
 	}
 
