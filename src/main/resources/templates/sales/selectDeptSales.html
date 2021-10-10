@@ -37,12 +37,44 @@
 								<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
 									<h6 class="m-0 font-weight-bold text-primary">전체상품현황</h6>
 								</div>
+								<div class="row ml-3">
+									<div class="form-group col-lg-2">
+										<label for="collectBillYear">연도</label>
+										<select class="form-control" id="collectBillYear" name="collectBillYear">
+											<option th:selected="${collectBillYear} == '2021'">2021</option>
+											<option th:selected="${collectBillYear} == '2020'">2020</option>
+											<option th:selected="${collectBillYear} == '2019'">2019</option>
+											<option th:selected="${collectBillYear} == '2018'">2018</option>
+											<option th:selected="${collectBillYear} == '2017'">2017</option>
+										</select>
+									</div>
+									<div class="form-group col-lg-2">
+										<label for="collectBillMonth">월</label>
+										<select class="form-control" id="collectBillMonth" name="collectBillMonth">
+											<option th:selected="${collectBillMonth} == '1'">1</option>
+											<option th:selected="${collectBillMonth} == '2'">2</option>
+											<option th:selected="${collectBillMonth} == '3'">3</option>
+											<option th:selected="${collectBillMonth} == '4'">4</option>
+											<option th:selected="${collectBillMonth} == '5'">5</option>
+											<option th:selected="${collectBillMonth} == '6'">6</option>
+											<option th:selected="${collectBillMonth} == '7'">7</option>
+											<option th:selected="${collectBillMonth} == '8'">8</option>
+											<option th:selected="${collectBillMonth} == '9'">9</option>
+											<option th:selected="${collectBillMonth} == '10'">10</option>
+											<option th:selected="${collectBillMonth} == '11'">11</option>
+											<option th:selected="${collectBillMonth} == '12'">12</option>
+										</select>
+									</div>
+									<div class="form-group col-lg-2">
+										<button type="button" class="btn btn-outline-primary my-4" id="selectPerformButton">확인</button>
+									</div>
+								</div>
 								<div class="table-responsive p-3">
 									<table class="table align-items-center table-flush table-hover" id="deptPerformTable">
 										<thead th:align="center" class="thead-light">
                                                 <tr>
-                                                    <th>부서</th>
-                                                    <th>청구건수</th>
+                                                    <th>부서명</th>
+                                                    <th>실적(계약)</th>
                                                     <th>실적</th>
                                                     <th>상세보기</th>
                                                 </tr>
@@ -53,8 +85,7 @@
                                                 <td th:text="|${deptPerformList.charge.chargeCount}건 |"></td>
                                                 <td th:text="|${#numbers.formatDecimal(deptPerformList.collect.collectBillAmount, 0, 'COMMA', 0, 'POINT')}&#8361|" ></td>
                                                 <td>
-                                                    <input type="button" id="detailButton" class="btn btn-primary" value="상세보기">
-                                                    <input type="hidden" id="deptCode" name="deptCode" th:value="${deptPerformList.employeeInfo.dept.deptCode}">
+                                                    <button type="button" name="detailButton" th:value="${deptPerformList.employeeInfo.dept.deptCode}" class="btn btn-primary">상세보기</button>
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -75,7 +106,73 @@
     $(document).ready(function () {
       $('#deptPerformTable').DataTable(); // ID From dataTable 
     });
+    
+    $(document).on('click', '#selectPerformButton', function() {
     	
+    	let collectBillYear = $('#collectBillYear').val();
+    	let collectBillMonth = $('#collectBillMonth').val();
+    	
+    	console.log(collectBillYear);
+    	console.log(collectBillMonth);
+    	
+    	let data = {"collectBillYear" : collectBillYear, "collectBillMonth" : collectBillMonth};
+    	
+    	$.ajax({
+    		url: "/sales/select/perform/date",
+    		data : data,
+    		success: function(data, status, xhr) {
+    			console.log(data);
+    			
+    			const selectPerformForDate = JSON.parse(data.selectPerformForDate);
+    			console.table(selectPerformForDate);
+    			
+    			const $table = $("#deptPerformTable tbody");
+    			$table.html("")
+    			
+    			for(let index in selectPerformForDate) {
+    				let performForDate = selectPerformForDate[index];
+    				let collectAmount = performForDate.collect.collectBillAmount;
+    				collectAmount = collectAmount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    				
+    				console.log(collectAmount);
+    				
+    				$tr = $("<tr>");
+    				$deptNameTd = $("<td>").text(performForDate.employeeInfo.dept.deptName);
+    				$chargeCountTd = $("<td>").text(performForDate.charge.chargeCount + '건');
+    				$collectBillAmountTd = $("<td>").text(collectAmount);
+    				$detailButton = $("<button>").addClass("btn btn-primary mt-2").text("상세정보").attr('value', performForDate.employeeInfo.dept.deptCode).attr('name', 'detailButton');
+    				
+    				$tr.append($deptNameTd);
+    				$tr.append($chargeCountTd);
+    				$tr.append($collectBillAmountTd);
+    				$tr.append($detailButton);
+    				
+    				$table.append($tr);
+    			}
+    			
+    		},
+    		
+    		error: function(xhr, status, error) {
+    			console.log(error);
+    		}
+    	});
+    	
+    });
+	
+    $(document).on('click', "button[name=detailButton]", function() {
+		
+		let collectBillYear = $("#collectBillYear option:selected").val();
+		let collectBillMonth = $("#collectBillMonth option:selected").val();
+		console.log(collectBillYear);
+		console.log(collectBillMonth);
+		
+		let deptCode = $(this).val();
+		console.log(deptCode);
+		
+		
+		location.href = "/sales/dept/select?collectBillYear=" + collectBillYear + "&collectBillMonth=" + collectBillMonth + "&deptCode=" + deptCode; 
+		
+	});  				
     </script>
 </body>
 </html>

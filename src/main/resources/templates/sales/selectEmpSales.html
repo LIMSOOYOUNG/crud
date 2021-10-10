@@ -40,15 +40,28 @@
 						<div class="col-lg-12">
 							<div class="card mb-4">
 								<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-									<h6 class="m-0 font-weight-bold text-primary">전체상품현황</h6>
+									<h6 class="m-0 font-weight-bold text-primary">사원실적조회</h6>
 									<input type="button" id="insertProduct" class="btn btn-primary" data-toggle="modal" data-target="#insertSalesTarget" value="목표실적등록">
 								</div>
-			
+								<div class="row ml-3">
+									<div class="form-group col-lg-2">
+										<label for="collectBillYear">연도</label>
+										<select class="form-control" id="performYear" name="performYear">
+											<option th:selected="${performYear} == '2021'">2021</option>
+											<option th:selected="${performYear} == '2020'">2020</option>
+											<option th:selected="${performYear} == '2019'">2019</option>
+											<option th:selected="${performYear} == '2018'">2018</option>
+											<option th:selected="${performYear} == '2017'">2017</option>
+										</select>
+									</div>
+									<div class="form-group col-lg-2">
+										<button type="button" class="btn btn-outline-primary my-4" id="selectPerformButton">확인</button>
+									</div>
+								</div>	
 								<div class="table-responsive p-3">
 									<table class="table align-items-center table-flush table-hover" id="userPerformTable">
 										<thead th:align="center" class="thead-light">
 											<tr>
-												<th>연도</th>
 												<th>월</th>
 												<th>목표계약수</th>
 												<th>실적(계약)</th>
@@ -60,13 +73,12 @@
 											</tr>
 										</thead>
 										<tbody th:align="center">
-											<tr th:each = " targetPerformList : ${empTargetPerformList}">
-												<td th:text = "${targetPerformList.performYear}"></td>
-												<td th:text = "${targetPerformList.performMonth}"></td>
-												<td th:text = "${targetPerformList.targetContract}"></td>
+											<tr th:each = "targetPerform : ${empTargetPerformList}">
+												<td th:text="${targetPerform.performMonth}"></td>
+												<td th:text="${targetPerform.targetContract}"></td>
 												<td></td>
 												<td></td>
-												<td th:text = "${targetPerformList.targetSales}"></td>
+												<td th:text="${targetPerform.targetSales}"></td>
 												<td></td>
 												<td></td>
 												<td>
@@ -162,48 +174,52 @@
 		$(document).ready(function () {
 			$('#userPerformTable').DataTable({  // ID From dataTable
 				order:[]
-			});  
+			});
+			
+			let performYear = $('#performYear').val();
+			
+			console.log(performYear);
 			
 			$.ajax({
 				url: "/sales/user/perform/selectAll",
 				type: "post",
+				data: { "performYear" : performYear },
 				success: function(data, status, xhr) {
 					
-					console.table(JSON.parse(data.empPerfomList));
+					console.log(data);
 					
-					const empPerformanceList = JSON.parse(data.empPerfomList);
+					console.table(JSON.parse(data.empPerformList));
+					
+					const empPerformanceList = JSON.parse(data.empPerformList);
 					console.log(empPerformanceList[0].collect.collectBillAmount);
 					
 					const $table = $("#userPerformTable tbody");
-									
-					
+						
 					console.log($table.children().length);
-// 					3,4,6,7(index)
+					// 					1,2,4,5(index)
+					
 					for(let i = 0; i < empPerformanceList.length; i++) {
 						let collectBillYear = empPerformanceList[i].collect.collectBillYear;
-						let collectBillMonth = empPerformanceList[i].collect.collectBillMonth;
 						let performanceCount = empPerformanceList[i].performanceCount;
 						let collectBillAmount = empPerformanceList[i].collect.collectBillAmount;
 						let empNo = empPerformanceList[i].empNo;
 						
 						for(let j = 0; j < $table.children().length; j++) {
-							let performYear = $table.children().eq(j).children().eq(0).text();
-							let performMonth = $table.children().eq(j).children().eq(1).text();
-							let targetContract = $table.children().eq(j).children().eq(2).text();
-							let targetSales = $table.children().eq(j).children().eq(5).text();
+							let performMonth = $table.children().eq(j).children().eq(0).text();
+							let targetContract = $table.children().eq(j).children().eq(1).text();
+							let targetSales = $table.children().eq(j).children().eq(4).text();
 							
-							if(performYear == collectBillYear && performMonth == collectBillMonth) {
+							//1,2,4,5,6
+							if(performYear == collectBillYear) {
 								let contractPercent = (performanceCount / targetContract * 100).toFixed(1);
 								let salesPercent = (collectBillAmount / targetSales * 100).toFixed(1);
-								let peformValue = collectBillYear + collectBillMonth;
 								
-								console.log(peformValue);
 								
-								$table.children().eq(j).children().eq(3).text(performanceCount);
-								$table.children().eq(j).children().eq(4).text(contractPercent);
-								$table.children().eq(j).children().eq(6).text(collectBillAmount);
-								$table.children().eq(j).children().eq(7).text(salesPercent);
-								$table.children().eq(j).children().eq(8).children().attr('value', peformValue);
+								$table.children().eq(j).children().eq(2).text(performanceCount);
+								$table.children().eq(j).children().eq(3).text(contractPercent);
+								$table.children().eq(j).children().eq(5).text(collectBillAmount);
+								$table.children().eq(j).children().eq(6).text(salesPercent);
+								$table.children().eq(j).children().eq(7).children().attr('value', empNo);
 								
 							}
 						}
@@ -214,20 +230,77 @@
 					console.log(error);
 				}
 			});
-        });
-		
-		$(document).on('click', '#detailButton', function () {
+
+		});  
 			
-			let performDate = $(this).val();
-			
-			console.log(performDate);
-			
-			location.href = "/sales/select?no=" + performDate;
-			
-			
-			
+			$(document).on('click', '#selectPerformButton', function() {
+				
+				let performYear = $('#performYear').val();
+				
+				console.log(performYear);
+				
+				console.log(data);
+				
+// 				$.ajax({
+// 					url: "/sales/user/perform/selectAll",
+// 					type: "post",
+// 					data: { "performYear" : performYear },
+// 					success: function(data, status, xhr) {
 						
-		})
+// 						console.log(data);
+						
+// 						console.table(JSON.parse(data.empPerformList));
+						
+// 						const empPerformanceList = JSON.parse(data.empPerformList);
+// 						console.log(empPerformanceList.collect.collectBillAmount);
+						
+// 						const $table = $("#userPerformTable tbody");
+// 						$table.html("")			 
+						 
+// 						console.log($table.children().length);
+// 						// 					1,2,4,5(index)
+// 						let collectBillYear = empPerformanceList.collect.collectBillYear;
+// 						let collectBillMonth = empPerformanceList.collect.collectBillMonth;
+// 						let performanceCount = empPerformanceList.performanceCount;
+// 						let collectBillAmount = empPerformanceList.collect.collectBillAmount;
+// 						let empNo = empPerformanceList.empNo;
+						
+// 						for(let j = 0; j < $table.children().length; j++) {
+// 							let targetContract = $table.children().eq(j).children().eq(0).text();
+// 							let targetSales = $table.children().eq(j).children().eq(3).text();
+// 							// let performYear = $table.children().eq(j).children().eq(0).text();
+// 							// let performMonth = $table.children().eq(j).children().eq(1).text();
+							
+// 							if(performYear == collectBillYear && performMonth == collectBillMonth) {
+// 								let contractPercent = (performanceCount / targetContract * 100).toFixed(1);
+// 								let salesPercent = (collectBillAmount / targetSales * 100).toFixed(1);
+// 								let collectBillDate = collectBillYear + collectBillMonth;
+								
+// 								console.log(collectBillDate);
+								
+// 								$table.children().eq(j).children().eq(1).text(performanceCount);
+// 								$table.children().eq(j).children().eq(2).text(contractPercent);
+// 								$table.children().eq(j).children().eq(4).text(collectBillAmount);
+// 								$table.children().eq(j).children().eq(5).text(salesPercent);
+// 								$table.children().eq(j).children().eq(6).children().attr('value', collectBillDate);
+								
+// 							}
+// 						}
+// 					}, 
+					
+// 					error: function(xhr, status, error) {
+// 						console.log(error);
+// 					}
+// 				});
+			});
+			
+			$(document).on('click', '#detailButton', function () {
+				
+				let collectBillDate = $(this).val();
+				
+			location.href = "/sales/select?performNo=" + collectBillDate;
+
+		});
     
 	function check() {
 

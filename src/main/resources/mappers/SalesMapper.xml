@@ -100,9 +100,10 @@
 	    	 , T.TARGET_CONTRACT
 	    	 , T.PERFORM_YEAR
 	    	 , T.PERFORM_MONTH
-		   FROM TBL_EMP_TARGET_PERFOM T
-		  WHERE T.EMP_NO = #{ empNo }
-		  ORDER BY T.PERFORM_YEAR DESC, T.PERFORM_MONTH DESC
+		  FROM TBL_EMP_TARGET_PERFOM T
+		 WHERE T.EMP_NO = #{ empNo }
+		   AND T.PERFORM_YEAR = #{ targetPerformDate.performYear }
+		 ORDER BY T.PERFORM_YEAR DESC, T.PERFORM_MONTH DESC
 	</select>
 	
 	<!-- 사원 실적 조회 -->
@@ -121,7 +122,8 @@
  	     GROUP BY EXTRACT(YEAR FROM B.COLLECT_BILL_DATE)
                 , EXTRACT(MONTH FROM B.COLLECT_BILL_DATE)
                 , P.EMP_NO
-        HAVING P.EMP_NO = #{ empNo }
+        HAVING EXTRACT(YEAR FROM B.COLLECT_BILL_DATE) = #{ performYear }
+           AND P.EMP_NO = #{ empNo }
         ORDER BY EXTRACT(YEAR FROM B.COLLECT_BILL_DATE) DESC, EXTRACT(MONTH FROM B.COLLECT_BILL_DATE) DESC
 		
 	</select>
@@ -138,42 +140,114 @@
 		  JOIN TBL_CHARGE C ON (C.CHARGE_NO = B.CHARGE_NO)
 		  JOIN TBL_PURCHASE_ORDER O ON (O.ORDER_NO = C.ORDER_NO)
 		 WHERE P.EMP_NO = #{ empNo }
-		   AND EXTRACT(YEAR FROM C.CHARGE_DATE) = #{ performYear }
-		   AND EXTRACT(MONTH FROM C.CHARGE_DATE) = #{ performMonth }
+		   AND EXTRACT(YEAR FROM C.CHARGE_DATE) = #{ collectBillDate.collectBillYear }
+		   AND EXTRACT(MONTH FROM C.CHARGE_DATE) = #{ collectBillDate.collectBillMonth }
 			   
 	</select>
 
 	<!-- 사원 목표실적 등록 -->
-	<insert id="insertTargetSales" parameterType="com.deft.crud.sales.model.dto.TargetPerfomDTO">
-		INSERT /*com.deft.crud.product.model.dao.SalesMapper#insertTargetSales()*/
-		  INTO TBL_EMP_TARGET_PERFOM T
-	    (
-		  T.TARGET_NO, T.EMP_NO, T.TARGET_SALES, T.TARGET_CONTRACT, 
-		  T.PERFORM_YEAR, PERFORM_MONTH 
-		)	
-		VALUES
-		(
-		  SEQ_TARGET_NO.NEXTVAL, #{ empNo }, #{ targetSales }, #{ targetContract }
-		, #{ performYear }, #{ performMonth }
-		)
-	</insert>
+<!-- 	<insert id="insertTargetSales" parameterType="com.deft.crud.sales.model.dto.TargetPerfomDTO"> -->
+<!-- 		INSERT /*com.deft.crud.product.model.dao.SalesMapper#insertTargetSales()*/ -->
+<!-- 		  INTO TBL_EMP_TARGET_PERFOM T -->
+<!-- 	    ( -->
+<!-- 		  T.TARGET_NO, T.EMP_NO, T.TARGET_SALES, T.TARGET_CONTRACT,  -->
+<!-- 		  T.PERFORM_YEAR, PERFORM_MONTH  -->
+<!-- 		)	 -->
+<!-- 		VALUES -->
+<!-- 		( -->
+<!-- 		  SEQ_TARGET_NO.NEXTVAL, #{ empNo }, #{ targetSales }, #{ targetContract } -->
+<!-- 		, #{ performYear }, #{ performMonth } -->
+<!-- 		) -->
+<!-- 	</insert> -->
 	
 	<!-- 부서별 실적 조회 -->
 	<select id="selectDeptPerformList" resultMap="performResultMap">
-	    SELECT /*com.deft.crud.product.model.dao.SalesMapper#insertTargetSales()*/
-        	   D.DEPT_CODE
-      		 , D.DEPT_NAME
-      		 , COUNT(CH.CHARGE_NO) "CHARGE_COUNT"
-      		 , SUM(CO.COLLECT_BILL_AMOUNT) "COLLECT_BILL_AMOUNT"
-   		  FROM TBL_PERFORMANCE P
-	      JOIN TBL_EMP_INFO E ON (E.EMP_NO = P.EMP_NO)
-	      JOIN TBL_DEPARTMENT D ON (D.DEPT_CODE = E.DEPT_CODE)
-	      JOIN TBL_COLLECT_BILL CO ON (CO.COLLECT_BILL_NO = P.COLLECT_BILL_NO)
+	    SELECT /*com.deft.crud.product.model.dao.SalesMapper#selectDeptPerformList()*/
+	    	   EXTRACT(YEAR FROM CO.COLLECT_BILL_DATE) "COLLECT_BILL_YEAR"
+	         , EXTRACT(MONTH FROM CO.COLLECT_BILL_DATE) "COLLECT_BILL_MONTH"
+	     	 , D.DEPT_CODE
+	     	 , D.DEPT_NAME
+	     	 , COUNT(CH.CHARGE_NO) "CHARGE_COUNT"
+	     	 , SUM(CO.COLLECT_BILL_AMOUNT) "COLLECT_BILL_AMOUNT"
+	      FROM TBL_PERFORMANCE P
+	      JOIN TBL_EMP_INFO E ON ( E.EMP_NO = P.EMP_NO)
+	      JOIN TBL_DEPARTMENT D ON ( D.DEPT_CODE = E.DEPT_CODE)
+	      JOIN TBL_COLLECT_BILL CO ON ( CO.COLLECT_BILL_NO = P.COLLECT_BILL_NO)
 	      JOIN TBL_CHARGE CH ON (CH.CHARGE_NO = CO.CHARGE_NO)
-	      GROUP BY D.DEPT_CODE
-	             , D.DEPT_NAME
-	      ORDER BY D.DEPT_CODE ASC
+	     WHERE CH.COLLECT_BILL_STATUS = '수금'
+	     GROUP BY EXTRACT(YEAR FROM CO.COLLECT_BILL_DATE) 
+		        , EXTRACT(MONTH FROM CO.COLLECT_BILL_DATE)
+		        , D.DEPT_CODE
+		        , D.DEPT_NAME
+	    HAVING EXTRACT(YEAR FROM CO.COLLECT_BILL_DATE) = #{ collectBillYear }
+	       AND EXTRACT(MONTH FROM CO.COLLECT_BILL_DATE) = #{ collectBillMonth }
+	     ORDER BY D.DEPT_CODE ASC
 	
 	</select>
-
+	
+	<select id="selectDeptEachPerformList" resultMap="performResultMap">
+		SELECT /*com.deft.crud.product.model.dao.SalesMapper#empPerformList()*/
+			   EXTRACT(YEAR FROM B.COLLECT_BILL_DATE)  "COLLECT_BILL_YEAR"
+             , EXTRACT(MONTH FROM B.COLLECT_BILL_DATE) "COLLECT_BILL_MONTH"
+		     , E.EMP_NO
+		     , E.EMP_NAME
+		     , J.JOB_NAME        
+		     , SUM(B.COLLECT_BILL_AMOUNT) "COLLECT_BILL_AMOUNT"
+		     , COUNT(P.PERFORMANCE_NO) "PERFORMANCE_COUNT"
+		  FROM TBL_PERFORMANCE P
+		  JOIN TBL_COLLECT_BILL B ON (P.COLLECT_BILL_NO = B.COLLECT_BILL_NO)
+		  JOIN TBL_EMP_INFO E ON (P.EMP_NO = E.EMP_NO)
+		  JOIN TBL_JOB J ON (J.JOB_CODE = E.JOB_CODE)
+		  JOIN TBL_CHARGE C ON (C.CHARGE_NO = B.CHARGE_NO)
+		  JOIN TBL_DEPARTMENT D ON (D.DEPT_CODE = E.DEPT_CODE)
+		 WHERE C.COLLECT_BILL_STATUS = '수금'
+		   AND D.DEPT_CODE = #{ deptCode } 
+		 GROUP BY EXTRACT(YEAR FROM B.COLLECT_BILL_DATE) 
+		        , EXTRACT(MONTH FROM B.COLLECT_BILL_DATE)
+		 		, E.EMP_NO
+		        , E.EMP_NAME
+		        , J.JOB_NAME
+		 HAVING EXTRACT(YEAR FROM B.COLLECT_BILL_DATE) = #{ parameters.collectBillYear }
+            AND EXTRACT(MONTH FROM B.COLLECT_BILL_DATE) = #{ parameters.collectBillMonth }
+		 ORDER BY E.EMP_NO ASC
+	</select>
+	
+	<!-- 연도와 월별로 조회하는 부서실적 조회리스트 -->
+	<select id="selectPerformForDate" resultMap="performResultMap">
+		SELECT /*com.deft.crud.product.model.dao.SalesMapper#selectPerformForDate()*/
+			   EXTRACT(YEAR FROM CO.COLLECT_BILL_DATE) "COLLECT_BILL_YEAR"
+	         , EXTRACT(MONTH FROM CO.COLLECT_BILL_DATE) "COLLECT_BILL_MONTH"
+	     	 , D.DEPT_CODE
+	     	 , D.DEPT_NAME
+	     	 , COUNT(CH.CHARGE_NO) "CHARGE_COUNT"
+	     	 , SUM(CO.COLLECT_BILL_AMOUNT) "COLLECT_BILL_AMOUNT"
+	      FROM TBL_PERFORMANCE P
+	      JOIN TBL_EMP_INFO E ON ( E.EMP_NO = P.EMP_NO)
+	      JOIN TBL_DEPARTMENT D ON ( D.DEPT_CODE = E.DEPT_CODE)
+	      JOIN TBL_COLLECT_BILL CO ON ( CO.COLLECT_BILL_NO = P.COLLECT_BILL_NO)
+	      JOIN TBL_CHARGE CH ON (CH.CHARGE_NO = CO.CHARGE_NO)
+	     WHERE CH.COLLECT_BILL_STATUS = '수금'
+	     GROUP BY EXTRACT(YEAR FROM CO.COLLECT_BILL_DATE) 
+		        , EXTRACT(MONTH FROM CO.COLLECT_BILL_DATE)
+		        , D.DEPT_CODE
+		        , D.DEPT_NAME
+	    HAVING EXTRACT(YEAR FROM CO.COLLECT_BILL_DATE) = #{ collectBillYear }
+	       AND EXTRACT(MONTH FROM CO.COLLECT_BILL_DATE) = #{ collectBillMonth }
+	     ORDER BY D.DEPT_CODE ASC
+	</select>
+	
+	<select id="deptTargetPerformList" resultMap="targetPerformResultMap">
+		SELECT /*com.deft.crud.product.model.dao.SalesMapper#selectPerformForDate()*/
+	           T.TARGET_NO
+	    	 , T.EMP_NO
+	    	 , T.TARGET_SALES
+	    	 , T.TARGET_CONTRACT
+	    	 , T.PERFORM_YEAR
+	    	 , T.PERFORM_MONTH
+		  FROM TBL_EMP_TARGET_PERFOM T
+		 WHERE T.PERFORM_YEAR = #{ collectBillYear }
+           AND T.PERFORM_MONTH = #{ collectBillMonth }
+		 ORDER BY T.EMP_NO ASC, T.PERFORM_YEAR DESC, T.PERFORM_MONTH DESC
+	</select>
+	
 </mapper>

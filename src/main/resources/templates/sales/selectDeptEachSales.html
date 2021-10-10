@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="ko"
+	xmlns:th="https://www.thymeleaf.org">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<head>
+	<th:block th:replace="@{common/config} :: config"></th:block>
+	<link href="/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+</head>
+<body id="page-top">
+	<div id="wrapper">
+		<!-- Sidebar -->
+		<th:block th:replace="@{/common/sidebar} :: sidebar"></th:block>
+
+		<div id="content-wrapper" class="d-flex flex-column">
+			<div id="content">
+				<!-- Header -->
+				<th:block th:replace="@{/common/header} :: header"></th:block>
+
+				<!-- Content -->
+				<div class="container-fluid" id="container-wrapper">
+					<div class="d-sm-flex align-items-center justify-content-between mb-4">
+						<h1 class="h3 mb-0 text-gray-800">부서별 실적조회</h1>
+						<ol class="breadcrumb">
+							<li class="breadcrumb-item"><a href="./">Home</a></li>
+							<li class="breadcrumb-item">Tables</li>
+							<li class="breadcrumb-item active" aria-current="page">영업그룹별 실적 조회</li>
+						</ol>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="card mb-4">
+                                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between" id="collectBillDate">
+                                    <h3 class="m-0 font-weight-bold text-primary" th:text="|${parameters.collectBillYear}.${parameters.collectBillMonth}|" th:align="center"></h3>
+                                </div>
+                                <div class="table-responsive p-3">
+                                    <table class="table align-items-center table-flush table-hover" id="deptPerformEachTable">
+                                        <thead th:align="center" class="thead-light">
+                                            <tr>
+                                                <th>사원번호</th>
+                                                <th>사원이름</th>
+                                                <th>직급</th>
+                                                <th>목표계약수</th>
+                                                <th>실적(계약)</th>
+                                                <th>달성률(%)</th>
+                                                <th>목표실적</th>
+                                                <th>실적</th>
+                                                <th>달성률(%)</th>
+                                                <th>상세보기</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody th:align="center">
+                                            <tr th:each="deptEachPerformList : ${selectDeptEachPerformList}">
+                                                <td th:text="${deptEachPerformList.employeeInfo.empNo}"></td>
+                                                <td th:text="${deptEachPerformList.employeeInfo.empName}"></td>
+                                                <td th:text="${deptEachPerformList.employeeInfo.job.jobName}"></td>
+                                                <td></td>
+                                                <td th:text="${deptEachPerformList.performanceCount}"></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td th:text="${deptEachPerformList.collect.collectBillAmount}"></td>
+                                                <td></td>
+                                                <td><button type="button" name="detailButton" class="btn btn-primary">상세보기</button></td> 
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>    
+                            </div>
+                        </div>    
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>    
+
+     <!-- Script -->
+    <th:block th:replace="@{/common/script} :: script"></th:block>
+
+     <!-- Page level custom scripts --> 
+     
+     <!-- 페이지 로드 될 때 ajax로 사원의 목표실적 데이터를 연도와 월을 맞춰서 비교해주고 text로 표시하게 만든다. -->
+     <script>
+        $(document).ready(function () {
+            $('#deptPerformEachTable').DataTable(); // ID From dataTable
+
+            let collectBillDate = $("#collectBillDate h3").text();
+            
+//             console.log(collectBillDate);
+            
+            let collectBillYear = collectBillDate.substring(0, 4);
+            let collectBillMonth = collectBillDate.substring(5);
+
+//             console.log(collectBillYear);
+//             console.log(collectBillMonth);
+            
+            let data = {"collectBillYear": collectBillYear, "collectBillMonth": collectBillMonth};
+            
+            $.ajax({
+                url:"/sales/dept/target/perform/selectAll",
+                type: "post",
+                data: data,
+                success: function(data, stauts, xhr) {
+                    
+                    const deptTargetPerformList = JSON.parse(data.deptTargetPerformList);
+					console.table(deptTargetPerformList);
+                    
+                    // console.log(deptTargetPerformList[0].targetSales);
+                    
+                    const $table = $("#deptPerformEachTable tbody");
+					console.table($table);
+                    
+//                     console.log($table.children().length);
+                    
+                    for(let i = 0; i < deptTargetPerformList.length; i++) {
+                    	let empNoFortargetPerform = deptTargetPerformList[i].empNo;             // 목표실적 테이블에 있는 사원번호
+                    	let targetSales = deptTargetPerformList[i].targetSales;
+                    	let targetContract = deptTargetPerformList[i].targetContract;
+                    	let performYear = deptTargetPerformList[i].performYear;
+                    	let performMonth = deptTargetPerformList[i].performMonth;
+                    	
+                    	//3, 5 index
+                    	for(let j = 0; j < $table.children().length; j++) {
+
+                            let empNoForPerform = $table.children().eq(j).children().eq(0).text();   // 실적 테이블에 있는 사원번호
+                    		let empName = $table.children().eq(j).children().eq(1).text();
+                    		let deptName = $table.children().eq(j).children().eq(2).text();
+                    		let performanceCount = $table.children().eq(j).children().eq(4).text();
+                    		let collectBillAmount = $table.children().eq(j).children().eq(7).text();
+                    		
+                    	    if(collectBillYear == performYear && collectBillMonth == performMonth && empNoFortargetPerform == empNoForPerform) {
+
+                                let contractPercent = (Number(performanceCount) / targetContract * 100).toFixed(1);
+                                let salesPercent = (Number(collectBillAmount) / targetSales * 100).toFixed(1);
+                                
+                                let detailValue =  empNoForPerform;
+
+                                $table.children().eq(j).children().eq(3).text(targetContract);
+                                $table.children().eq(j).children().eq(5).text(contractPercent);
+                                $table.children().eq(j).children().eq(6).text(targetSales);
+                                $table.children().eq(j).children().eq(8).text(salesPercent);
+                                $table.children().eq(j).children().eq(9).children().attr('value', detailValue);
+                            } 
+                            
+                        }
+                    } 
+                },
+                error: function(xhr, status, error) {
+                    console.log(error);
+                }    
+            });
+        });
+
+        $(document).on('click', "button[name=detailButton]", function() {
+
+            let collectBillDate = $("#collectBillDate h3").text();
+            let empNo = $(this).val();
+            
+            
+            let collectBillYear = collectBillDate.substring(0, 4);
+            let collectBillMonth = collectBillDate.substring(5);
+            
+            console.log(collectBillYear);
+            console.log(collectBillMonth);
+            console.log(empNo);
+
+            location.href = "/sales/dept/emp/select?empNo=" + empNo + "&collectBillYear=" + collectBillYear + "&collectBillMonth=" + collectBillMonth;
+        });
+ 
+</script>
+
+</body>
+</html> 
