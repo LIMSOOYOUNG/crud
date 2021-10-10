@@ -25,17 +25,19 @@ public class EstimateServiceTests {
 	private EstimateService estimateService;
 	
 	private String estimateStatus;
+	private int empNo;
 	
 	@BeforeEach
 	public void init() {
 		this.estimateStatus = "progress";
+		this.empNo = 203;
 	}
 	
 	@Test
 	@Disabled
 	public void testSelectEstimateList() throws Exception {
-
-		List<EstimateDTO> estimateList = estimateService.selectEstimateList();
+		
+		List<EstimateDTO> estimateList = estimateService.selectEstimateList(empNo);
 		
 		assertNotNull(estimateList);
 		
@@ -47,7 +49,7 @@ public class EstimateServiceTests {
 	@Test
 	public void testSelectEstimateListByStatus() {
 		
-		List<EstimateDTO> estimateList = estimateService.selectEstimateListByStatus(estimateStatus);
+		List<EstimateDTO> estimateList = estimateService.selectEstimateListByStatus(estimateStatus, empNo);
 		
 		assertNotNull(estimateList);
 		

@@ -7,6 +7,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -19,6 +20,7 @@ import com.deft.crud.customer.model.dto.ExtCustomerDTO;
 import com.deft.crud.customer.model.service.CustomerService;
 import com.deft.crud.estimate.model.dto.EstimateDTO;
 import com.deft.crud.estimate.model.service.EstimateService;
+import com.deft.crud.member.model.service.UserImpl;
 import com.deft.crud.stock.model.dto.StorageDTO;
 import com.deft.crud.stock.model.service.StockService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -43,9 +45,11 @@ public class EstimateController {
 	}
 	
 	@GetMapping("/selectAll")
-	public ModelAndView selectEstimateList(ModelAndView mv) {
+	public ModelAndView selectEstimateList(ModelAndView mv, @AuthenticationPrincipal UserImpl userInfo) {
 		
-		List<EstimateDTO> estimateList = estimateService.selectEstimateList();
+		int empNo = userInfo.getEmpNo();
+		
+		List<EstimateDTO> estimateList = estimateService.selectEstimateList(empNo);
 		
 		mv.addObject("estimateList", estimateList);
 		mv.setViewName("estimate/selectAllEstimate");
@@ -55,11 +59,13 @@ public class EstimateController {
 	
 	@GetMapping("/selectAll/status")
 	public ModelAndView selectEstimateListByStatus(ModelAndView mv, HttpServletResponse response,
-			@RequestParam String estimateStatus) throws JsonProcessingException {
+			@RequestParam String estimateStatus, @AuthenticationPrincipal UserImpl userInfo) throws JsonProcessingException {
 		
 		response.setContentType("application/json; charset=UTF-8");
 		
-		List<EstimateDTO> estimateList = estimateService.selectEstimateListByStatus(estimateStatus);
+		int empNo = userInfo.getEmpNo();
+		
+		List<EstimateDTO> estimateList = estimateService.selectEstimateListByStatus(estimateStatus, empNo);
 		
 		mv.addObject("estimateListByStatus", objectMapper.writeValueAsString(estimateList));
 		mv.setViewName("jsonView");
@@ -72,8 +78,6 @@ public class EstimateController {
 		
 		EstimateDTO estimate = estimateService.selectEstimateDetail(estimateNo);
 		
-		System.out.println(estimate);
-		
 		mv.addObject("estimate", estimate);
 		mv.setViewName("estimate/selectEstimate");
 		
@@ -85,7 +89,7 @@ public class EstimateController {
 		
 		/* 새로운 견적번호 및 일자 입력 */
 		EstimateDTO newEstimate = new EstimateDTO();
-		LocalDate newEstimateLocalDate = LocalDate.now(); 
+		LocalDate newEstimateLocalDate = LocalDate.now();
 		String newEstimateDate= newEstimateLocalDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 		
 		String newEstimateNo = estimateService.selectEstimateNo(newEstimateDate);
@@ -112,7 +116,27 @@ public class EstimateController {
 		
 		System.out.println("estimateInfo : " + estimateInfo);
 		
-		int result = estimateService.insertEstimate(estimateInfo);
+//		int result = estimateService.insertEstimate(estimateInfo);
+		
+		return mv;
+	}
+	
+	@GetMapping("/update")
+	public ModelAndView updateEstimate(ModelAndView mv, @RequestParam String estimateNo) {
+		
+		/* 견적서 정보 조회 */
+		EstimateDTO estimate = estimateService.selectEstimateDetail(estimateNo);
+		
+		/* 고객 목록 조회 */
+		List<ExtCustomerDTO> extCustomerList = customerService.selectExtCustomerList();
+		
+		/* 상품 목록 조회 */
+		List<StorageDTO> stockList = stockService.selectSellableProductAll();
+		
+		mv.addObject("estimate", estimate);
+		mv.addObject("customerList", extCustomerList);
+		mv.addObject("stockList", stockList);
+		mv.setViewName("estimate/updateEstimate");
 		
 		return mv;
 	}

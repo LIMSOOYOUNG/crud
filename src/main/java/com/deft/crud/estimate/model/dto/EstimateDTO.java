@@ -24,7 +24,7 @@ public class EstimateDTO implements Serializable {
 	private int customerNo;
 	private String discountStatus;
 	private int discountRate;
-	private int total;
+	private int estimateTotal;
 	private String estimateStatus;
 	private String providerRegistNo;
 	
