@@ -170,7 +170,7 @@
 		});
 
 		$(document).on("click", "button[name='estimateDetailBtn']", function() {
-			const estimateNo = $(this).parent().parent().children().eq(0).text();
+			const estimateNo = $(this).parent().siblings().eq(0).text();
 
 			location.href="/estimate/select?estimateNo=" + estimateNo;
 		});
