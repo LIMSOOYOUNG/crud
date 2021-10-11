@@ -71,11 +71,11 @@ public class OrganizationController {
 		int result = organizationService.departmentInsert(departDTO);
 		
 		if(result>0) {
-			rttr.addFlashAttribute("flashMessage", "성공!!");
-		}else {
-			rttr.addFlashAttribute("flashMessage", "실패!!");
+			
+			mv.setViewName("redirect:/organization/selectdepartment");
+			
 		}
-		mv.setViewName("redirect:/organization/selectdepartment");
+		
 		
 		return mv;
 	}
