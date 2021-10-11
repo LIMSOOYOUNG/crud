@@ -51,6 +51,7 @@ public class EstimateControllerTests {
 		
 		MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
 		params.add("estimateStatus", "progress");
+		params.add("userImpl", "empNo");
 		
 		mockMvc.perform(get("/estimate/selectAll/status").params(params))
 				.andExpect(status().isOk())

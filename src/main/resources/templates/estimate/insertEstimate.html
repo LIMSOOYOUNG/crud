@@ -114,7 +114,7 @@
 													<th></th>
 												</tr>
 											</thead>
-											<tbody th:align="center">
+											<tbody th:align="center" th:object="${estimateProductList}">
 											</tbody>
 											<tfoot>
 												<tr id="addProductBtn">
@@ -191,7 +191,7 @@
 								</div>
 							</div>
 						</div>
-					</div>		<!-- End CustomerModal -->
+					</div>		End CustomerModal
 
 					<!-- StockModal -->
 					<div class="modal fade" id="stockModal" tabindex="-1" role="dialog" aria-labelledby="stockModalLabel"
@@ -235,10 +235,10 @@
 																<td th:text="${stock.product.unit}"></td>
 																<td th:text="${stock.productStock}"></td>
 																<td>
-																	<input type="text" class="form-control">
+																	<input type="number" class="form-control" name="stockQty" min="0">
 																</td>
 																<td>
-																	<button class="btn btn-sm btn-dark" name="selectStock" id="selectStockBtn"
+																	<button class="btn btn-sm btn-dark" name="selectStockBtn"
 																			th:text="선택" data-dismiss="modal"></button>
 																</td>
 															</tr>
@@ -279,19 +279,17 @@
 		
 		/* 고객 목록 중 선택하여 정보 입력 */
 		$("button[name='selectCustomer']").on("click", function() {
-			$tr = $(this).parent().parent();
+			$td = $(this).parent();
 
-			const customerNo = $tr.children().eq(0).text();
-			const customerCompany = $tr.children().eq(2).text();
-			const customerName = $tr.children().eq(3).text();
-			const empName = $tr.children().eq(4).text();
-			const empNo = $tr.children().eq(5).text();
+			const customerNo = $td.siblings().eq(0).text();
+			const customerCompany = $td.siblings().eq(2).text();
+			const customerName = $td.siblings().eq(3).text();
+			const empName = $td.siblings().eq(4).text();
 			
 			$("#customerCompany").val(customerCompany);
 			$("#customerName").val(customerName);
 			$("#customerNo").val(customerNo);
 			$("#resEmpName").val(empName);
-			$("#resEmpNo").val(empNo);
 		});
 		
 		/* 할인 적용에 따라 수치 입력 칸 활성화/비활성화 */
@@ -310,18 +308,26 @@
 		});
 			
 		/* 상품 검색 후 리스트에 추가 */
-		$("button[name='selectStock']").on("click", function() {
+		$("button[name='selectStockBtn']").on("click", function() {
 			const $estimateProduct = $("#estimateProductTable tbody");
 			const $stockTr = $(this).parent().parent();
 
 			if($stockTr.children().eq(8).children().val() == 0) {
 				alert("상품 수량이 입력되지 않았습니다.");
+				$("input[name='stockQty']").val("");
+				return;
+			}
+			
+			if(Number($stockTr.children().eq(7).text()) < $stockTr.children().eq(8).children().val()) {
+				alert("상품 재고가 부족합니다.");
+				$("input[name='stockQty']").val("");
 				return;
 			}
 
 			for(let i = 0; i < $estimateProduct.children().length; i++) {
 				if($estimateProduct.children().eq(i).children().eq(1).text() == $stockTr.children().eq(0).text()) {
 					alert("이미 선택된 상품입니다.");
+					$("input[name='stockQty']").val("");
 					return;
 				}
 			}
@@ -338,7 +344,9 @@
 					.attr("name", "productAmount");
 			$subtotalTd = $("<td>").text(Number($discountPriceTd.text()) * Number($qtyTd.text()));
 			$taxTd = $("<td>").text(Number($subtotalTd.text()) * 0.1);
-			$td = $("<td>");
+			$deleteStockBtn = $("<button>").addClass("btn btn-sm btn-outline-dark")
+					.prop("name", "deleteStockBtn").text("삭제");
+			$deleteStockTd = $("<td>").append($deleteStockBtn);
 			
 			$tr.append($noTd);
 			$tr.append($productNoTd);
@@ -349,33 +357,45 @@
 			$tr.append($qtyTd);
 			$tr.append($subtotalTd);
 			$tr.append($taxTd);
-			$tr.append($td);
+			$tr.append($deleteStockTd);
 			
-			$estimateProduct.parent().append($tr);
+			$estimateProduct.append($tr);
 
-			$stockTr.children().eq(8).children().val("");
+			$("input[name='stockQty']").val("");
+
+			calculateTotal();
+		});
+
+		/* 선택한 상품 삭제 */
+		$(document).on("click", "button[name='deleteStockBtn']", function() {
+			$(this).parent().parent().remove();
+
+			const $estimateProduct = $("#estimateProductTable tbody");
+			for(let i = 0; i < $estimateProduct.children().length; i++) {
+				$estimateProduct.children().eq(i).children().eq(0).text(i + 1);
+			}
 
 			calculateTotal();
 		});
 
 		/* 합계 금액 계산 */
 		function calculateTotal() {
-			const $estimateProductTr = $("#estimateProductTable tbody tr");
+			const $estimateProduct = $("#estimateProductTable tbody");
 			const discountRate = $("#discountRate").val();
 			let total = 0;
 
-			for(let i = 0; i < $estimateProductTr.length; i++) {
-				let discountPrice = (Number($estimateProductTr.eq(i).children().eq(3).text())
+			for(let i = 0; i < $estimateProduct.children().length; i++) {
+				let discountPrice = (Number($estimateProduct.children().eq(i).children().eq(3).text())
 						* (100 - discountRate) / 100).toFixed();
-				let qty = $estimateProductTr.eq(i).children().eq(6).text();
+				let qty = $estimateProduct.children().eq(i).children().eq(6).text();
 				let subtotal = Number(discountPrice) * Number(qty);
 				let tax = Number((subtotal * 0.1).toFixed());
 				
 				total += subtotal + tax;
 
-				$estimateProductTr.eq(i).children().eq(4).text(discountPrice);
-				$estimateProductTr.eq(i).children().eq(7).text(subtotal);
-				$estimateProductTr.eq(i).children().eq(8).text(tax);
+				$estimateProduct.children().eq(i).children().eq(4).text(discountPrice);
+				$estimateProduct.children().eq(i).children().eq(7).text(subtotal);
+				$estimateProduct.children().eq(i).children().eq(8).text(tax);
 			}
 
 			$("#estimateTotal").val(total);

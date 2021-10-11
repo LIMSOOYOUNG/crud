@@ -120,6 +120,7 @@
              , E.ESTIMATE_STATUS
              , EI.EMP_NAME
              , J.JOB_NAME
+             , C.EMP_NO
              , E.DISCOUNT_RATE
              , P.PRODUCT_NO
              , P.PRODUCT_NAME
