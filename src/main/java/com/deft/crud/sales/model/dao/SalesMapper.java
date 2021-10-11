@@ -11,13 +11,15 @@ import com.deft.crud.sales.model.dto.TargetPerfomDTO;
 @Mapper
 public interface SalesMapper {
 
-	List<TargetPerfomDTO> empTargetPerformList(int empNo, TargetPerfomDTO targetPerformDate);
+	List<TargetPerfomDTO> empTargetPerformList(TargetPerfomDTO targetPerformDate);
 
-//	int insertTargetSales(TargetPerfomDTO parameters);
+	int insertTargetSales(TargetPerfomDTO parameters);
 
 	List<PerformanceDTO> empPerformList(TargetPerfomDTO parameters);
 
-	List<PerformanceDTO> selectUserPerformDetail(int empNo, CollectBillDTO collectBillDate);
+	List<TargetPerfomDTO> checkedEmpTargetPerformList(TargetPerfomDTO parameters);
+
+	List<PerformanceDTO> selectUserPerformDetail(int empNo, CollectBillDTO parameters);
 
 	List<PerformanceDTO> selectDeptPerformList(CollectBillDTO collectBillDate);
 
@@ -26,5 +28,7 @@ public interface SalesMapper {
 	List<PerformanceDTO> selectPerformForDate(CollectBillDTO parameters);
 
 	List<TargetPerfomDTO> deptTargetPerformList(CollectBillDTO parameters);
+	
+	List<TargetPerfomDTO> checkEmpTargetPerformListForInsert(int empNo);
 	
 }
