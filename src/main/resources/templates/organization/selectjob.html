@@ -57,7 +57,7 @@ xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-spingsecurity5">
 												<td th:text="${job.jobCode}"></td>
 												<td th:text="${job.jobName}"></td>
 												<td th:text="${job.jobStatus}"></td>
-												<td><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#jobModify" id="#jobmodifybtn" >직급관리</button></td>
+												<td><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#jobModify" id="#jobmodifybtn" th:value="${job.jobCode}" >직급관리</button></td>
 											</tr>
 										</tbody>
 									</table>
@@ -109,8 +109,8 @@ xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-spingsecurity5">
 				</div>
 				</form>
 				<!-- 직급 수정 -->
-				<form th:action="@{organization/selectjob/jobmodify}"  method="post">
-						<div class="modal fade" id="jobModify" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+				<form th:action="@{jobmodify}"  method="post">
+						<div class="modal fade" id="jobModify" tabindex="-1" role="dialog" aria-hidden="true">
 					<div class="modal-dialog" role="document">
 						<div class="modal-content">
 							<div class="modal-header">
@@ -118,13 +118,13 @@ xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-spingsecurity5">
 									<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>						
 								</div>
 									<div class="modal-body">
-										<div class="form-group">
+										<div class="form-group" >
 											<label>직급 코드</label>
-											<input type="text" class="form-control" name="jobCode" value="${ jobDTO.jobCode }" th:readonly="readonly">
+											<input type="text" class="form-control" th:value="${ jobDTO.jobCode }" name="jobCode"  th:readonly="readonly">
 										</div> 
-									    <div class="form-group">
+									    <div class="form-group" >
 											<label>직급명</label>
-											<input type="text" class="form-control" value="${ jobDTO.jobName }" name="jobName">
+											<input type="text" class="form-control" th:value="${ jobDTO.jobName }" name="jobName">
 										</div>
 									<div class="custom-control custom-radio" >
 										 <input type="radio" id="customRadio5" name="jobStatus" class="custom-control-input" value="Y">
@@ -142,13 +142,12 @@ xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-spingsecurity5">
 						</div>
 					</div>  
 				</form>
-				
-		<!-- Script -->
-		<th:block th:replace="@{/common/script} :: script"></th:block>
-		 	<!-- Page level plugins -->
+	<!-- Script -->
+	<th:block th:replace="@{/common/script} :: script"></th:block>
+	<!-- Page level plugins -->
 	<script src="/vendor/datatables/jquery.dataTables.min.js"></script>
 	<script src="/vendor/datatables/dataTables.bootstrap4.min.js"></script>
-		<script>
+	<script>
 	$("#updatebtn").click(function(){
 		if(confirm("수정하시겠습니까?") == true){
 			alert("수정되었습니다.")
@@ -156,7 +155,7 @@ xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-spingsecurity5">
 		else{
 			return;
 		}
-	})
+	});
 	</script>
 </body>
 

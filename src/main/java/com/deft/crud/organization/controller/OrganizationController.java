@@ -143,9 +143,11 @@ public class OrganizationController {
 	public ModelAndView jobModify(ModelAndView mv, @RequestParam String jobCode) {
 		
 		JobDTO jobDTO = organizationService.jobModifyForm(jobCode);
+		System.out.println("............................."+ jobDTO);
 		
 		mv.setViewName("organization/jobmodify");
 		mv.addObject("jobDTO", jobDTO);
+		
 		
 		return mv;
 	}
