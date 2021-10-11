@@ -60,17 +60,22 @@
                             <tbody th:align="center">
                                 <tr th:each="customer : ${ customerCompanyList }" >
                                     <td th:each="cus : ${ customer.customerList }"
-                                        th:text="${ cus.extCustomerDetail.customerStatus }"></td>
-                                    <td th:text="${ customer.businessStatus }"></td>
-                                    <td th:text="${ customer.companyName }"></td>
+                                        th:text="${ cus.extCustomerDetail.customerStatus }"
+                                        style="width: 110px"></td>
+                                    <td th:text="${ customer.businessStatus }"
+                                        style="width: 110px"></td>
+                                    <td th:text="${ customer.companyName }"
+                                        style="width: 150px"></td>
                                     <td th:each="cus : ${ customer.customerList }"
-                                        th:text="${ cus.customerName }"></td>
+                                        th:text="${ cus.customerName }"
+                                        style="width: 80px"></td>
                                     <td th:each="cus : ${ customer.customerList }"
-                                        th:text="${ cus.empInfo.empName }"></td>
+                                        th:text="${ cus.empInfo.empName }"
+                                        style="width: 90px"></td>
                                     <td th:each="cus, i : ${ customer.customerList }"
                                         th:text="${ cus.customerProductList[i.index].product.productName }"></td>
                                     <td th:each="cus : ${ customer.customerList }">
-                                        <a class="btn btn-dark btn-icon-split"
+                                        <a class="btn btn-dark btn-icon-split" style="width: 126px"
                                                 th:href="@{/customer/anainfo(customerNo=${ cus.customerNo })}">
                                             <span class="icon text-white-50">
                                                             <i class="fas fa-clipboard-list"></i>

@@ -100,4 +100,7 @@ public interface CustomerMapper {
 
     /* 상품 구매 내역 조회 */
     List<OrderChargeDTO> selectChargeByCustomerNo(int customerNo);
+
+    /* 고객 정렬 조회 */
+    List<CustomerCompanyDTO> selectCustomerByStatus(String customerStatus);
 }

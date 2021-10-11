@@ -2,9 +2,11 @@ package com.deft.crud.customer.controller;
 
 import com.deft.crud.customer.model.dto.*;
 import com.deft.crud.customer.model.service.CustomerService;
+import com.deft.crud.member.model.service.UserImpl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -18,10 +20,13 @@ import java.util.List;
 public class CustomerController {
 
     private final CustomerService customerService;
+    private final ObjectMapper objectMapper;
 
     @Autowired
-    public CustomerController(CustomerService customerService) {
+    public CustomerController(CustomerService customerService, ObjectMapper objectMapper) {
+
         this.customerService = customerService;
+        this.objectMapper = objectMapper;
     }
 
     /* 전체 고객 조회 */
@@ -428,6 +433,23 @@ public class CustomerController {
         if(customerResult > 0 && detailResult > 0 && productResult > 0) {
             mv.setViewName("redirect:/customer/ana");
         }
+
+        return mv;
+    }
+
+    /* 고객 상태별 정렬 조회 */
+    @GetMapping("/selectExt")
+    public ModelAndView selectCustomerByStatus(ModelAndView mv,
+                                               HttpServletResponse response,
+                                               @RequestParam String customerStatus,
+                                               @AuthenticationPrincipal UserImpl userInfo) {
+
+        response.setContentType("application/json; charset=UTF-8");
+
+        List<CustomerCompanyDTO> customerCompanyList = customerService.selectCustomerByStatus(customerStatus);
+
+        mv.addObject("customerCompanyList", customerCompanyList);
+        mv.setViewName("jsonView");
 
         return mv;
     }

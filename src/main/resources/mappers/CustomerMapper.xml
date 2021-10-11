@@ -660,4 +660,32 @@
            AND C.COLLECT_BILL_STATUS = '수금'
          ORDER BY C.CHARGE_NO DESC
     </select>
+
+    <!-- 고객 정렬 조회 -->
+    <select id="selectCustomerByStatus"
+            parameterType="string"
+            resultMap="customerCompanyResultMap">
+        SELECT /* com.deft.crud.customer.model.dao.CustomerMapper#selectCustomerByStatus() */
+               C.CUSTOMER_NAME
+             , CP.COMPANY_NAME
+             , E.EMP_NAME
+             , EX.CUSTOMER_STATUS
+             , CP.BUSINESS_STATUS
+             , EX.CUSTOMIZATION_DATE
+             , C.CUSTOMER_NO
+          FROM TBL_CUSTOMER C
+          LEFT JOIN TBL_CUSTOMER_COMPANY CP ON (C.CUSTOMER_COMPANY_NO = CP.CUSTOMER_COMPANY_NO)
+          LEFT JOIN TBL_EMP_INFO E ON (C.EMP_NO = E.EMP_NO)
+          LEFT JOIN TBL_EXT_CUSTOMER_DETAIL EX ON (C.CUSTOMER_NO = EX.CUSTOMER_NO)
+         WHERE EX.CUSTOMER_STATUS IS NOT NULL
+        <choose>
+            <when test="customerStatus == 'existing">
+                AND EX.CUSTOMER_STATUS = '기존고객'
+            </when>
+            <when test="customerStatus == 'termination">
+                AND EX.CUSTOMER_STATUS = '해지고객'
+            </when>
+        </choose>
+         ORDER BY C.CUSTOMER_NO DESC
+    </select>
 </mapper>
