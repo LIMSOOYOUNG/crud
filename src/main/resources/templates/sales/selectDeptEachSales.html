@@ -84,13 +84,10 @@
 
             let collectBillDate = $("#collectBillDate h3").text();
             
-//             console.log(collectBillDate);
             
             let collectBillYear = collectBillDate.substring(0, 4);
             let collectBillMonth = collectBillDate.substring(5);
 
-//             console.log(collectBillYear);
-//             console.log(collectBillMonth);
             
             let data = {"collectBillYear": collectBillYear, "collectBillMonth": collectBillMonth};
             
@@ -103,12 +100,10 @@
                     const deptTargetPerformList = JSON.parse(data.deptTargetPerformList);
 					console.table(deptTargetPerformList);
                     
-                    // console.log(deptTargetPerformList[0].targetSales);
                     
                     const $table = $("#deptPerformEachTable tbody");
 					console.table($table);
                     
-//                     console.log($table.children().length);
                     
                     for(let i = 0; i < deptTargetPerformList.length; i++) {
                     	let empNoFortargetPerform = deptTargetPerformList[i].empNo;             // 목표실적 테이블에 있는 사원번호
@@ -117,7 +112,6 @@
                     	let performYear = deptTargetPerformList[i].performYear;
                     	let performMonth = deptTargetPerformList[i].performMonth;
                     	
-                    	//3, 5 index
                     	for(let j = 0; j < $table.children().length; j++) {
 
                             let empNoForPerform = $table.children().eq(j).children().eq(0).text();   // 실적 테이블에 있는 사원번호
@@ -162,7 +156,7 @@
             console.log(collectBillMonth);
             console.log(empNo);
 
-            location.href = "/sales/dept/emp/select?empNo=" + empNo + "&collectBillYear=" + collectBillYear + "&collectBillMonth=" + collectBillMonth;
+            location.href = "/sales/select?empNo=" + empNo + "&collectBillYear=" + collectBillYear + "&collectBillMonth=" + collectBillMonth;
         });
  
 </script>

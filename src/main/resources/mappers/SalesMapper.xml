@@ -102,7 +102,7 @@
 	    	 , T.PERFORM_MONTH
 		  FROM TBL_EMP_TARGET_PERFOM T
 		 WHERE T.EMP_NO = #{ empNo }
-		   AND T.PERFORM_YEAR = #{ targetPerformDate.performYear }
+		   AND T.PERFORM_YEAR = #{ performYear }
 		 ORDER BY T.PERFORM_YEAR DESC, T.PERFORM_MONTH DESC
 	</select>
 	
@@ -129,7 +129,7 @@
 	</select>
 	
 	<!-- 사원 실적 상세조회 -->
-	<select id="selectUserPerformDetail" resultMap="performResultMap"> 
+	<select id="selectUserPerformDetail" resultMap="performResultMap" parameterType="com.deft.crud.sales.model.dto.CollectBillDTO"> 
 		SELECT /*com.deft.crud.product.model.dao.SalesMapper#selectUserPerformDetail()*/	   
 			   C.CHARGE_NO
 			 , C.CHARGE_DATE		     
@@ -140,25 +140,39 @@
 		  JOIN TBL_CHARGE C ON (C.CHARGE_NO = B.CHARGE_NO)
 		  JOIN TBL_PURCHASE_ORDER O ON (O.ORDER_NO = C.ORDER_NO)
 		 WHERE P.EMP_NO = #{ empNo }
-		   AND EXTRACT(YEAR FROM C.CHARGE_DATE) = #{ collectBillDate.collectBillYear }
-		   AND EXTRACT(MONTH FROM C.CHARGE_DATE) = #{ collectBillDate.collectBillMonth }
+		   AND EXTRACT(YEAR FROM C.CHARGE_DATE) = #{ parameters.collectBillYear }
+		   AND EXTRACT(MONTH FROM C.CHARGE_DATE) = #{ parameters.collectBillMonth }
 			   
 	</select>
-
+	
+	<!-- 한 사원이 목표실적 등록하기 전 한 달에 한번만 등록할 수 있도록 목표실적 이력을 조회 -->
+	<select id="checkEmpTargetPerformListForInsert" resultMap="targetPerformResultMap">
+		SELECT /*com.deft.crud.product.model.dao.SalesMapper#empTargetPerformListForInsert()*/
+			   T.TARGET_NO
+	    	 , T.EMP_NO
+	    	 , T.TARGET_SALES
+	    	 , T.TARGET_CONTRACT
+	    	 , T.PERFORM_YEAR
+	    	 , T.PERFORM_MONTH
+		  FROM TBL_EMP_TARGET_PERFOM T
+		 WHERE T.EMP_NO = #{ empNo }
+		 ORDER BY T.PERFORM_YEAR DESC, T.PERFORM_MONTH DESC
+	</select>
+	
 	<!-- 사원 목표실적 등록 -->
-<!-- 	<insert id="insertTargetSales" parameterType="com.deft.crud.sales.model.dto.TargetPerfomDTO"> -->
-<!-- 		INSERT /*com.deft.crud.product.model.dao.SalesMapper#insertTargetSales()*/ -->
-<!-- 		  INTO TBL_EMP_TARGET_PERFOM T -->
-<!-- 	    ( -->
-<!-- 		  T.TARGET_NO, T.EMP_NO, T.TARGET_SALES, T.TARGET_CONTRACT,  -->
-<!-- 		  T.PERFORM_YEAR, PERFORM_MONTH  -->
-<!-- 		)	 -->
-<!-- 		VALUES -->
-<!-- 		( -->
-<!-- 		  SEQ_TARGET_NO.NEXTVAL, #{ empNo }, #{ targetSales }, #{ targetContract } -->
-<!-- 		, #{ performYear }, #{ performMonth } -->
-<!-- 		) -->
-<!-- 	</insert> -->
+	<insert id="insertTargetSales" parameterType="com.deft.crud.sales.model.dto.TargetPerfomDTO">
+		INSERT /*com.deft.crud.product.model.dao.SalesMapper#insertTargetSales()*/
+		  INTO TBL_EMP_TARGET_PERFOM T
+	    (
+		  T.TARGET_NO, T.EMP_NO, T.TARGET_SALES, T.TARGET_CONTRACT, 
+		  T.PERFORM_YEAR, PERFORM_MONTH 
+		)	
+		VALUES
+		(
+		  SEQ_TARGET_NO.NEXTVAL, #{ empNo }, #{ targetSales }, #{ targetContract }
+		, #{ performYear }, #{ performMonth }
+		)
+	</insert>
 	
 	<!-- 부서별 실적 조회 -->
 	<select id="selectDeptPerformList" resultMap="performResultMap">
@@ -185,6 +199,7 @@
 	
 	</select>
 	
+	<!-- 한 부서에 대한 사원들의 영업실적 조회 -->
 	<select id="selectDeptEachPerformList" resultMap="performResultMap">
 		SELECT /*com.deft.crud.product.model.dao.SalesMapper#empPerformList()*/
 			   EXTRACT(YEAR FROM B.COLLECT_BILL_DATE)  "COLLECT_BILL_YEAR"
@@ -236,6 +251,7 @@
 	     ORDER BY D.DEPT_CODE ASC
 	</select>
 	
+	<!-- 한 부서에 대한 사원들의 연도와 월에 맞게 목표실적을 조회하는 리스트  -->
 	<select id="deptTargetPerformList" resultMap="targetPerformResultMap">
 		SELECT /*com.deft.crud.product.model.dao.SalesMapper#selectPerformForDate()*/
 	           T.TARGET_NO
