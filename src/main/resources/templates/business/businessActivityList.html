@@ -31,30 +31,32 @@
 					<div class="row">
 					
 					<!-- DataTable with Hover -->
-						<div class="col-lg-4" style="padding-left: 50px;">
+						<div class="col-lg-4">
 							<div style="background: lightgray;">
 								<div th:align="center"
 									style="font-size: 20px; font-weight: bold;">담당중인 고객 리스트</div>
 							</div>
 								<div class="card mb-4">
-									<div class="table-responsive p-3" style="overflow-y: scroll; height: 700px;">
-										<table class="table align-items-center table-flush table-hover"	id="table_activity">
+									<div class="table-responsive p-3" style="overflow-y: scroll; height: 650px; width: 100%;">
+										<table class="table align-items-center table-flush table-hover"	id="table_activity"
+												style="font-size: 13px;">
 											<thead th:align="center" class="thead-light">
 												<tr>
-													<th>고객번호</th>
-													<th>고객명</th>
-													<th>관리</th>
+													<th style="width: 50%;">고객명</th>
+													<th style="width: 50%;">관리</th>
 												</tr>
 											</thead>
-											<tbody align="center">
+											<tbody align="center" style="font-size: 6px;">
 												<tr th:each="activityList : ${businessActivityList}">
-													<td th:text="${activityList.activityNo}"></td>
-													<td th:text="${activityList.empName}"></td>
-													<td><a class="btn-sm btn-info activityDetail"
-													       id="activityDetail" 
-													       th:value="${ activityList.activityNo }">
-															<span class="text text-black">상세정보</span>
-														</a>
+													<td class="col-lg-6" th:text="|[${activityList.customerNo}] ${activityList.customerName}|"></td>
+													
+													<td class="col-lg-6"><button type="button" class="btn btn-sm btn-info btn-icon-split"
+										   	 			   id="insertActivity"
+										   	 			   th:value="${ activityList.customerNo }"
+										   	 			   th:data-customer-no="${ activityList.customerNo }">
+														<span class="icon text-white"><i class="fas fa-edit" style="margin-right: 7px;"></i></span>
+														<span class="text-xs text-white insertActivity">영업활동등록</span>
+														</button>
 													</td>
 												</tr>
 											</tbody>
@@ -70,39 +72,39 @@
 								<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
 									<h6 class="m-0 font-weight-bold text-primary">영업 활동 현황</h6>
 									<div>
-										<a class="btn btn-info btn-icon-split"
-											th:onclick="location.href=''">
+										 <a class="btn btn-info btn-icon-split"
+										    id="insertActivity">
 											<span class="icon text-white"><i class="fas fa-edit"></i></span>
 											<span class="text text-white">영업활동등록</span>
 										</a>
 									</div>
 								</div>
 								<div class="table-responsive p-3">
-									<table class="table align-items-center table-flush table-hover"	id="dataTableHover">
+									<table class="table align-items-center table-flush table-hover"	id="activityTable"
+											style="font-size: 13px;">
 										<thead align="center" class="thead-light">
 											<tr>
-												<th>활동이력번호</th>
-												<th>고객명</th>
-												<th>활동주제</th>
-												<th>담당자</th>
-												<th>등록일</th>
-												<th>관리</th>
+												<th style="width: 15%;">활동번호</th>
+												<th style="width: 15%;">고객명</th>
+												<th style="width: 15%;">활동주제</th>
+												<th style="width: 10%;">담당자</th>
+												<th style="width: 20%;">등록일</th>
+												<th style="width: 15%;">관리</th>
 											</tr>
 										</thead>
 										<tbody th:align="center">
 											<tr th:each="activityList : ${businessActivityList}">
-												<td th:text="${activityList.activityNo}"></td>
-												<td th:text="${activityList.customerName}"></td>
+												<td id="activityNo" th:text="${activityList.activityNo}"></td>
+												<td th:text="|[${activityList.customerNo}] ${activityList.customerName}|"></td>
 												<td th:text="${activityList.businessSubject}"></td>
 												<td th:text="${activityList.empName}"></td>
 												<td th:text="${activityList.writingTime}"></td>
-												<td><a class="btn btn-light btn-icon-split"
-													th:href="@{/business/selectBasicInfo(activityNo=${ activityList.activityNo })}">
-														<span class="icon text-black-50">
-															<i class="fas fa-clipboard-list"></i>
-														</span>
-														<span class="text text-black">상세정보</span>
-													</a>
+												<td><button type="button" class="btn-sm btn-success btn-icon-split"
+													   id="activityDetailInfoBtn" onclick="test()">	
+														<span class="icon text-white">
+															<i class="fas fa-info"></i></span>
+														<span class="text-sl text-black">상세정보</span>
+													</button>
 												</td>
 											</tr>
 										</tbody>
@@ -115,8 +117,221 @@
 			</div>
 		</div>
 	</div>
-</div>
+	
+	<!------------- Insert Activity Modal --------------->
+        <div class="modal fade" id="insertActivityModal" role="dialog">
+            <div class="modal-dialog modal-xl">
 
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" style="color: #0da8ee">영업활동 등록</h4>
+                        <button type="button" class="close" data-dismiss="modal"><i class="far fa-times-circle"></i></button>
+                        <div class="row">
+                            <div class="form-group col-lg-12"><input type="hidden" value="emptyRow"></div>
+                        </div>
+                    </div>
+                    <form th:action="@{/customer/ext/activity/insert}" method="post">
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="form-group col-lg-12"><input type="hidden" value="emptyRow"></div>
+                                <input type="hidden" name="customerNo" >
+                                <input type="hidden" name="empNo" >
+                            </div>
+                            <div class="card mb-auto">
+                                <div class="row">
+                                    <div class="form-group col-lg-12"><input type="hidden" value="emptyRow"></div>
+                                </div>
+                                <div class="row" id="insertActivityForm">
+                                    <div class="form-group col-lg-12 row">
+                                        <div class="form-group col-lg-1"><input type="hidden" value="emptyRow"></div>
+                                        <label for="insertBusinessType" class="col-lg-1 form-control-plaintext"
+                                               th:align="center"
+                                               style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">활동주제</label>
+                                        <input type="text" class="form-control col-lg-4"
+                                               id="insertBusinessType" name="businessType">
+                                        <label for="insertBusinessType" class="col-lg-1 form-control-plaintext"
+                                               th:align="center"
+                                               style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">담당자</label>
+                                        <input name="empName"
+                                               id="insertEmpName" type="text" class="form-control col-lg-4" readonly>
+                                    </div>
+                                    <div class="form-group col-lg-12 row">
+                                        <div class="form-group col-lg-1"><input type="hidden" value="emptyRow"></div>
+                                        <label for="insertBusinessType" class="col-lg-1 form-control-plaintext"
+                                               th:align="center"
+                                               style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">고객명</label>
+                                        <input type="text" class="form-control col-lg-4"
+                                               id="insertBusinessType" name="businessType"
+                                               readonly>
+                                        <label for="insertBusinessType" class="col-lg-1 form-control-plaintext"
+                                               th:align="center"
+                                               style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">유형</label>
+                                        <input name="businessType"
+                                               id="insertBusinessType" type="text" class="form-control col-lg-4">
+                                    </div>
+                                    <div class="form-group col-lg-12 row">
+                                        <div class="form-group col-lg-1"><input type="hidden" value="emptyRow"></div>
+                                        <label for="insertBusinessLocation" class="col-lg-1 form-control-plaintext"
+                                               th:align="center"
+                                               style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">장소</label>
+                                        <input name="businessLocation"
+                                               id="insertBusinessLocation" type="text" class="form-control col-lg-9">
+                                    </div>
+                                    <div class="form-group col-lg-12 row">
+                                        <div class="form-group col-lg-1"><input type="hidden" value="emptyRow"></div>
+                                        <label for="insertBusinessPurpose" class="col-lg-1 form-control-plaintext"
+                                               th:align="center"
+                                               style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">목적</label>
+                                        <input name="businessPurpose"
+                                               id="insertBusinessPurpose" type="text" class="form-control col-lg-9">
+                                    </div>
+                                    <div class="form-group col-lg-12 row">
+                                        <div class="form-group col-lg-1"><input type="hidden" value="emptyRow"></div>
+                                        <label for="insertBusinessContents" class="col-lg-1 form-control-plaintext"
+                                               style="color: #109EDE; background-color: #DEE5FF; padding-top: 85px; padding-bottom: 85px;">활동내용</label>
+                                        <textarea name="businessContents" style="resize: none; height: 200px;"
+                                                  id="insertBusinessContents" type="text" class="form-control col-lg-9"></textarea>
+                                    </div>
+                                    <div class="form-group col-lg-12 row">
+                                        <div class="form-group col-lg-1"><input type="hidden" value="emptyRow"></div>
+                                        <label for="insertActivityStartTime" class="col-lg-1 form-control-plaintext"
+                                               th:align="center"
+                                               style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">시작시간</label>
+                                        <input name="activityStartTime"
+                                               id="insertActivityStartTime" type="datetime-local" class="form-control col-lg-9">
+                                    </div>
+                                    <div class="form-group col-lg-12 row">
+                                        <div class="form-group col-lg-1"><input type="hidden" value="emptyRow"></div>
+                                        <label for="insertActivityEndTime" class="col-lg-1 form-control-plaintext"
+                                               th:align="center"
+                                               style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">종료시간</label>
+                                        <input name="activityEndTime"
+                                               id="insertActivityEndTime" type="datetime-local" class="form-control col-lg-9">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="submit" id="successInsert" class="btn btn-primary">영업활동 등록</button>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="count" value="1"></div>
+                </div>
+            </div>
+        </div>
+	
+	<!------------- activity DetailInfo Modal --------------->
+	 <div class="modal fade" id="activityDetailInfoModal" role="dialog">
+            <div class="modal-dialog modal-xl">
+
+                <!-- Modal content-->
+     <div class="modal-content">
+	 <div class="modal-header">
+        <div class="row col-sm-12">
+            <h4 class="modal-title" style="color: #0da8ee; padding: 10px">영업활동 상세정보</h4>
+            <button type="button" class="close" data-dismiss="modal"><i class="far fa-times-circle"></i></button>
+        </div>
+        <div class="row">
+            <div class="form-group col-sm-12"><input type="hidden" value="emptyRow"></div>
+        </div>
+
+        <div class="row">
+            <div class="form-group col-sm-12"><input type="hidden" value="emptyRow"></div>
+        </div>
+
+    </div>
+    <form id="modifyForm" th:action="@{/customer/ext/activity/insert}" method="post">
+                        <div class="modal-body">
+                                <div class="form-group col-lg-12"><input type="hidden" value="emptyRow"></div>
+                                <input type="hidden" id="customerNo" name="customerNo" >
+                                <input type="hidden" id="empNo" name="empNo" >
+                                    <div th:align="right" class="form-group col-lg-12 row">
+                                    <input type="hidden" value="emptyRow">
+                                    <div class="form-group col-lg-9"></div>
+                                    
+                                    <label for="writingTime" th:align="center" style="margin-right: 10px;">작성일시 :</label>
+                                    <span id="writingTime" th:align="center"></span>
+                                    </div>
+                            <div class="card mb-auto">
+                                <div class="row">
+                                    <div class="form-group col-lg-12"><input type="hidden" value="emptyRow"></div>
+                                </div>
+                                <div class="row" id="insertActivityForm">
+                                    <div class="form-group col-lg-12 row">
+                                        <div class="form-group col-lg-1"><input type="hidden" value="emptyRow"></div>
+                                        <label for="insertBusinessSubject" class="col-lg-1 form-control-plaintext"
+                                               th:align="center"
+                                               style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">활동주제</label>
+                                        <input id="insertBusinessSubject" type="text" class="form-control col-lg-9"
+                                               name="businessSubject" readonly>
+                                    </div>
+                                    <div class="form-group col-lg-12 row">
+                                        <div class="form-group col-lg-1"><input type="hidden" value="emptyRow"></div>
+                                        <label for="customerName" class="col-lg-1 form-control-plaintext"
+                                               th:align="center"
+                                               style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">고객명</label>
+                                        <input type="text" class="form-control col-lg-4"
+                                               id="customerName" name="customerName" readonly>
+                                              
+                                        <label for="insertBusinessType" class="col-lg-1 form-control-plaintext"
+                                               th:align="center"
+                                               style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">유형</label>
+                                        <input name="businessType"
+                                               id="businessType" type="text" class="form-control col-lg-4"  readonly>
+                                    </div>
+                                    <div class="form-group col-lg-12 row">
+                                        <div class="form-group col-lg-1"><input type="hidden" value="emptyRow"></div>
+                                        <label for="insertBusinessLocation" class="col-lg-1 form-control-plaintext"
+                                               th:align="center"
+                                               style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">장소</label>
+                                        <input name="businessLocation"
+                                               id="businessLocation" type="text" class="form-control col-lg-9" readonly>
+                                    </div>
+                                    <div class="form-group col-lg-12 row">
+                                        <div class="form-group col-lg-1"><input type="hidden" value="emptyRow"></div>
+                                        <label for="insertBusinessPurpose" class="col-lg-1 form-control-plaintext"
+                                               th:align="center"
+                                               style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">목적</label>
+                                        <input name="businessPurpose"
+                                               id="businessPurpose" type="text" class="form-control col-lg-9" readonly>
+                                    </div>
+                                    <div class="form-group col-lg-12 row">
+                                        <div class="form-group col-lg-1"><input type="hidden" value="emptyRow"></div>
+                                        <label for="insertBusinessContents" class="col-lg-1 form-control-plaintext"
+                                               style="color: #109EDE; background-color: #DEE5FF; padding-top: 85px; padding-bottom: 85px;">활동내용</label>
+                                        <textarea name="businessContents" style="resize: none; height: 200px;"
+                                                  id="businessContents" type="text" class="form-control col-lg-9" disabled></textarea>
+                                    </div>
+                                    <div class="form-group col-lg-12 row">
+                                        <div class="form-group col-lg-1"><input type="hidden" value="emptyRow"></div>
+                                        <label for="insertActivityStartTime" class="col-lg-1 form-control-plaintext"
+                                               th:align="center"
+                                               style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">시작시간</label>
+                                        <input name="activityStartTime"
+                                               id="activityStartTime" type="datetime-local" class="form-control col-lg-9" readonly>
+                                    </div>
+                                    <div class="form-group col-lg-12 row">
+                                        <div class="form-group col-lg-1"><input type="hidden" value="emptyRow"></div>
+                                        <label for="insertActivityEndTime" class="col-lg-1 form-control-plaintext"
+                                               th:align="center"
+                                               style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">종료시간</label>
+                                        <input name="activityEndTime"
+                                               id="activityEndTime" type="datetime-local" class="form-control col-lg-9" readonly>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+        <div class="modal-footer">
+            <button type="button" id="modifyActivity" class="btn btn-primary">영업활동 수정</button>
+            <input type="hidden" >
+            <button type="button" id="deleteActivity" class="btn btn-danger">영업활동 삭제</button>
+        </div>
+        <div id="count" value="1"></div>
+	</div>
+	</div>
+</div>	
 	<!-- Script -->
 	<th:block th:replace="@{/common/script} :: script"></th:block>
 
@@ -125,9 +340,163 @@
 	<!-- Page level custom scripts -->
 	<script>
     $(document).ready(function () {
-      $('#dataTable').DataTable(); // ID From dataTable 
-      $('#dataTableHover').DataTable(); // ID From dataTable with Hover
+      $("#dataTable").DataTable(); // ID From dataTable 
+      $("#activityTable").DataTable(); // ID From activityTable
+      $("#table_activity").DataTable(); // ID From table_activity
     });
+    
+    $(".insertActivity").click(function () {
+    	
+    	/* 영업활동등록 버튼 클릭 시 영업활동 등록 폼 입력값 초기화 */
+    	$("#insertActivityForm").find('input').each(function(){ $(this).val(''); });
+    	$("#insertActivityForm").find('textarea').each(function(){ $(this).val(''); });
+
+    	/* 영업활동 등록 모달창 실행 */
+        $("#insertActivityModal").modal();
+    });
+    
+    
+    
+    /* 영업활동 상세정보 모달창이 실행될때 동작 */
+    $('#activityDetailInfoModal').on('show.bs.modal', function(event) {
+    	
+    	const activityNo = $('#activityNo').text();
+	 	console.log(activityNo);
+	 	
+	 	$.ajax({
+	 		url: "/business/activity/selectDetailInfo",
+	 		type: "GET",
+	 		data: {activityNo: activityNo},
+	 		success: function(data, status, xhr) {
+	 			
+	 			const activityInfo = JSON.parse(data.activityInfo);
+	 			console.log(activityInfo);
+	 			
+	 			let activityStartTime = activityInfo.activityStartTime;
+	 			let activityEndTime = activityInfo.activityEndTime;
+	 			
+	 			console.log(activityStartTime);
+	 			console.log(activityEndTime);
+	 			
+	 			$('#writingTime').text(activityInfo.writingTime); 
+	 			$('#insertBusinessSubject').val(activityInfo.businessSubject); 
+	 			$('#customerName').val(activityInfo.customerName); 
+	 			$('#businessType').val(activityInfo.businessType); 
+	 			$('#businessLocation').val(activityInfo.businessLocation); 
+	 			$('#businessPurpose').val(activityInfo.businessPurpose); 
+	 			$('#businessContents').val(activityInfo.businessContents); 
+	 			$('#businessPurpose').val(activityInfo.businessPurpose); 
+	 			$('#activityStartTime').val(activityStartTime); 
+	 			$('#activityEndTime').val(activityEndTime); 
+	 			
+	 		},
+	 		error: function(xhr, status, error) {
+				console.log(xhr);
+			}
+	 	});
+    	
+    });
+    
+    function test() {
+    	
+    	const activityNo = $('#activityNo').text();
+    	console.log(activityNo);
+    	$('#activityDetailInfoModal').modal();
+    	
+    }
+    
+    /* 영업활동 수정 버튼 클릭 시 동작(readonly 해제 및 아래 버튼 변경) */
+    $(document).on('click', '#modifyActivity', function () {
+
+        $('input').attr('readonly', false);
+        $('textarea').attr('disabled', false);
+
+        var text = $('#modifyActivity').text();
+        if(text == '영업활동 수정') {
+
+            $('#modifyActivity').text('수정 완료');
+            $('#modifyActivity').attr('id', 'successModifyActivity');
+
+            $('#deleteActivity').text('돌아가기');
+            $('#deleteActivity').attr('id', 'backToDetail');
+
+            var startTime = $('#insertActivityStartTime').val().replace(' ', 'T');
+            var endTime = $('#insertActivityEndTime').val().replace(' ', 'T');
+
+            $('#insertActivityStartTime').attr('value', startTime);
+            $('#insertActivityStartTime').attr('type', 'datetime-local');
+
+            $('#insertActivityEndTime').attr('value', endTime);
+            $('#insertActivityEndTime').attr('type', 'datetime-local');
+        }
+
+        $(document).on('click', '#successModifyActivity', function () {
+            $('#modifyForm').attr('action', '/customer/activity/modify');
+            $('#modifyForm').attr('method', 'post');
+            $('#modifyForm').submit();
+        });
+
+        /* 돌아가기 버튼 클릭시 동작(readonly 사용 ) */
+        $(document).on('click', '#backToDetail', function () {
+	
+        	 $('input').attr('readonly', true);
+             $('textarea').attr('disabled', true);
+
+             var text = $('#successModifyActivity').text();
+             if(text == '수정 완료') {
+
+                 $('#successModifyActivity').text('영업활동 수정');
+                 $('#successModifyActivity').attr('id', 'modifyActivity');
+
+                 $('#backToDetail').text('영업활동 삭제');
+                 $('#backToDetail').attr('id', 'deleteActivity');
+
+                 var startTime = $('#insertActivityStartTime').val().replace(' ', 'T');
+                 var endTime = $('#insertActivityEndTime').val().replace(' ', 'T');
+
+                 $('#insertActivityStartTime').attr('value', startTime);
+                 $('#insertActivityStartTime').attr('type', 'datetime-local');
+
+                 $('#insertActivityEndTime').attr('value', endTime);
+                 $('#insertActivityEndTime').attr('type', 'datetime-local');
+                 
+                 const activityNo = $('#activityNo').text();
+                 
+             	$.ajax({
+        	 		url: "/business/activity/selectDetailInfo",
+        	 		type: "GET",
+        	 		data: {activityNo: activityNo},
+        	 		success: function(data, status, xhr) {
+        	 			
+        	 			const activityInfo = JSON.parse(data.activityInfo);
+        	 			
+        	 			let activityStartTime = activityInfo.activityStartTime;
+        	 			let activityEndTime = activityInfo.activityEndTime;
+        	 			
+        	 			$('#writingTime').text(activityInfo.writingTime); 
+        	 			$('#insertBusinessSubject').val(activityInfo.businessSubject); 
+        	 			$('#customerName').val(activityInfo.customerName); 
+        	 			$('#businessType').val(activityInfo.businessType); 
+        	 			$('#businessLocation').val(activityInfo.businessLocation); 
+        	 			$('#businessPurpose').val(activityInfo.businessPurpose); 
+        	 			$('#businessContents').val(activityInfo.businessContents); 
+        	 			$('#businessPurpose').val(activityInfo.businessPurpose); 
+        	 			$('#activityStartTime').val(activityStartTime); 
+        	 			$('#activityEndTime').val(activityEndTime); 
+        	 			
+        	 		},
+        	 		error: function(xhr, status, error) {
+        				console.log(xhr);
+        			}
+        	 	});
+
+             }
+        	
+            });
+
+    });
+
+    
   </script>
   
 </body>

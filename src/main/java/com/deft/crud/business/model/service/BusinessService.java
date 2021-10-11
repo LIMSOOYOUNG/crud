@@ -72,6 +72,13 @@ public class BusinessService {
 		return businessActivityList;
 	}
 
+	public BusinessActivityDTO selectActivityDetailInfoByNo(int activityNo) {
+
+		BusinessActivityDTO activityInfo = businessMapper.selectActivityDetailInfoByNo(activityNo);
+		
+		return activityInfo;
+	}
+
 	
 
 	

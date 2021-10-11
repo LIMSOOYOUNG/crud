@@ -197,6 +197,7 @@
 		     , B.EMP_NO
 		     , B.MANAGER_NO
 		     , C.CUSTOMER_NAME
+		     , C.CUSTOMER_NO
 		     , A.WRITING_TIME
 		     , A.ACTIVITY_START_TIME
 		     , A.ACTIVITY_END_TIME
@@ -213,5 +214,29 @@
 		</choose>
 		ORDER BY A.WRITING_TIME DESC
 	</select>
+
+	<select id="selectActivityDetailInfoByNo" resultMap="businessActivityResultMap" parameterType="_int">
+		
+		SELECT /* com.deft.crud.business.model.dao.BusinessMapper#selectActivityDetailInfoByNo */
+		       A.ACTIVITY_NO
+		     , A.BUSINESS_SUBJECT
+		     , A.WRITING_TIME
+		     , A.ACTIVITY_START_TIME
+		     , A.ACTIVITY_END_TIME
+		     , A.BUSINESS_PURPOSE
+		     , A.BUSINESS_CONTENTS
+		     , A.BUSINESS_TYPE
+		     , A.BUSINESS_LOCATION
+		     , B.EMP_NAME
+		     , B.EMP_NO
+		     , B.MANAGER_NO
+		     , C.CUSTOMER_NAME
+		     , C.CUSTOMER_NO
+		  FROM TBL_BUSINESS_ACTIVITY A
+		  LEFT JOIN TBL_CUSTOMER C ON(A.CUSTOMER_NO = C.CUSTOMER_NO)
+		  LEFT JOIN TBL_EMP_INFO B ON(C.EMP_NO = B.EMP_NO)
+		 WHERE A.ACTIVITY_NO = #{ activityNo } 
+	</select>
+
 
 </mapper>

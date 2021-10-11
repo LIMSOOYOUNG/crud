@@ -255,7 +255,7 @@
     	  		url: "/stock/request/selectOne",
     	  		type: "GET",
     	  		data: {reqNo: reqNo},
-    	  		success(data, status, xhr) {
+    	  		success: function(data, status, xhr) {
     	  			
     	  			const receivingReqInfo = JSON.parse(data.receivingReqInfo);
     	  			const receivingReqProduct = JSON.parse(data.receivingReqProductList);
@@ -357,13 +357,11 @@
 				
 				const $table = $("#receivingTable tbody");
 				
-				
 				$table.html("");
 				
 				for(let index in receivingReqList) {
 					
 					let receivingReq = receivingReqList[index];
-		
 					
 					$tr = $("<tr>");
 					$receivingReqNoTd = $("<td>").text(receivingReq.receivingReqHistoryDTO.receivingReqNo);

@@ -24,6 +24,8 @@ public interface BusinessMapper {
 
 	List<BusinessChanceDTO> selectBusinessChanceByStatus(String businessChanceStatus, UserImpl userInfo);
 
+	BusinessActivityDTO selectActivityDetailInfoByNo(int activityNo);
+
 
 
 
