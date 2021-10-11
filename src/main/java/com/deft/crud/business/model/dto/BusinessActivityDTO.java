@@ -17,7 +17,6 @@ import lombok.ToString;
 public class BusinessActivityDTO implements Serializable {
 
 	private int activityNo;
-	private String activityName;
 	private String customerName;
 	private int customerNo;
 	private String empName;
