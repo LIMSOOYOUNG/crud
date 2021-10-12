@@ -101,11 +101,9 @@ public class CustomerController {
                                           @RequestParam int activityNo) throws JsonProcessingException {
         response.setContentType("application/json; charser=UTF-8");
 
-        ObjectMapper mapper = new ObjectMapper();
-
         BusinessActivityDTO businessActivity = customerService.selectBusinessActivityByActivityNo(activityNo);
 
-        mv.addObject("activityOne", mapper.writeValueAsString(businessActivity));
+        mv.addObject("activityOne", objectMapper.writeValueAsString(businessActivity));
 
         return mv;
     }
