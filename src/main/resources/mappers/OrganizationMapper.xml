@@ -19,6 +19,8 @@
 		SELECT
                D.DEPT_CODE
              , D.DEPT_NAME
+             , D.DEPT_FAX
+             , D.DEPT_TEL
              , D.DEPT_STATUS
 		  FROM TBL_DEPARTMENT D
 	</select>
@@ -74,7 +76,7 @@
 	         , D.DEPT_FAX = #{ deptFax }
 	         , D.DEPT_TEL = #{ deptTel}
 	         , D.DEPT_STATUS = #{ deptStatus }
-	     WHRER D.DEPT_CODE = #{ deptCode }   
+	     WHERE D.DEPT_CODE = #{ deptCode }   
 	</update>
 
 	<update id="jobModify" parameterType="com.deft.crud.organization.model.dto.JobDTO">
@@ -82,22 +84,9 @@
 		       TBL_JOB J
 	       SET J.JOB_NAME = #{ jobName }
 	         , J.JOB_STATUS = #{ jobStatus }
-	     WHRER J.JOB_CODE = #{ jobCode }   
+	     WHERE J.JOB_CODE = #{ jobCode }   
 	</update>
 	
-	<update id="departmentDisabled" parameterType="com.deft.crud.organization.model.dto.DepartmentDTO">
-		UPDATE 
-		       TBL_DEPARTMENT D
-	       SET D.DEPT_STATUS = #{ deptStatus }
-	      WHRER D.DEPT_CODE = #{ deptCode }   
-	</update>
-	
-	<update id="jobDisabled" parameterType="com.deft.crud.organization.model.dto.JobDTO">
-		UPDATE 
-		       TBL_JOB J
-	       SET J.JOB_STATUS = #{ jobStatus }
-	     WHRER J.JOB_CODE = #{ jobCode }   
-	</update>
 	
 	<select id="jobModifyForm" parameterType="_int" resultType="com.deft.crud.organization.model.dto.JobDTO">
 		SELECT
@@ -111,6 +100,8 @@
 		SELECT
                D.DEPT_CODE
              , D.DEPT_NAME
+             , D.DEPT_FAX
+             , D.DEPT_TEL
              , D.DEPT_STATUS
 		  FROM TBL_DEPARTMENT D
 	     WHERE D.DEPT_CODE = #{ deptCode } 

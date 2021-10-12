@@ -33,7 +33,7 @@ public class OrganizationController {
 	public ModelAndView selectOrganization(ModelAndView mv) {
 		
 		List<DepartmentDTO> departmentList = organizationService.selectOrganization();
-		
+		System.out.println("1111111111" + departmentList);
 		mv.setViewName("organization/selectdepartment");
 		mv.addObject("departmentList", departmentList);
 		
@@ -58,8 +58,8 @@ public class OrganizationController {
 	public void departmentInsert() {}
 	
 	@PostMapping("departmentinsert")
-	public ModelAndView departmentInsertForm(ModelAndView mv, RedirectAttributes rttr
-										     , @RequestParam String deptName, @RequestParam String deptFax, @RequestParam String deptTel, @RequestParam String deptStatus) {
+	public ModelAndView departmentInsertForm(ModelAndView mv, @RequestParam String deptName
+			, @RequestParam String deptFax, @RequestParam String deptTel, @RequestParam String deptStatus) {
 		
 		DepartmentDTO departDTO = new DepartmentDTO();
 		
@@ -111,6 +111,8 @@ public class OrganizationController {
 		
 		DepartmentDTO deptDTO = organizationService.deptModifyForm(deptCode);
 		
+		System.out.println(".1.1.1.1.1.1" + deptDTO);
+		
 		mv.setViewName("organization/departmentmodify");
 		mv.addObject("deptDTO", deptDTO);
 		
@@ -128,11 +130,13 @@ public class OrganizationController {
 		departmentDTO.setDeptTel(deptTel);
 		departmentDTO.setDeptStatus(deptStatus);
 		
+		System.out.println("............" + departmentDTO);
+		
 		int result = organizationService.departmentModify(departmentDTO);
 		
 		if(result > 0) {
 			
-			mv.setViewName("redirect:/organization/departmentmodify?deptCode=" + deptCode);
+			mv.setViewName("redirect:/organization/selectdepartment");
 		}
 		
 		return mv;
@@ -168,7 +172,7 @@ public class OrganizationController {
 		
 		if(result > 0) {
 			
-			mv.setViewName("redirect:/organization/jobmodify?jobCode=" + jobCode);
+			mv.setViewName("redirect:/organization/selectjob");
 		}
 		
 		
