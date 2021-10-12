@@ -39,6 +39,13 @@ public class SalesService {
 		return salesMapper.checkedEmpTargetPerformList(parameters);
 	}
 	
+	/* 전 달 부서 평균 실적 조회 */
+	public PerformanceDTO selectDeptAvgPeform(String deptCode, CollectBillDTO collectBillDate) {
+
+		return salesMapper.selectDeptAvgPeform(deptCode, collectBillDate);
+	}
+
+	
 	/* 목표실적 등록하는 메소드*/
 	@Transactional
 	public int insertTargetSales(TargetPerfomDTO parameters, UserImpl loginInfo) {
@@ -102,7 +109,20 @@ public class SalesService {
 		return salesMapper.deptTargetPerformList(parameters);
 	}
 
+	public PerformanceDTO selectEmpPeformLastMonth(int empNo, CollectBillDTO collectBillDate) {
 
-	
+		return salesMapper.selectEmpPeformLastMonth(empNo, collectBillDate);
+	}
+
+	public List<PerformanceDTO> selectProductPerformList(CollectBillDTO collectBillDate) {
+
+		return salesMapper.selectProductPerformList(collectBillDate);
+	}
+
+	public List<PerformanceDTO> selectProductPeformForDate(CollectBillDTO parameters) {
+
+		return salesMapper.selectProductPeformForDate(parameters);
+	}
+
 
 }

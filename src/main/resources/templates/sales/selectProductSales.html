@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="ko"
+	xmlns:th="https://www.thymeleaf.org">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<head>
+	<th:block th:replace="@{common/config} :: config"></th:block>
+	<link href="/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+</head>
+<body id="page-top">
+	<div id="wrapper"> 
+        <!-- Sidebar -->
+		<th:block th:replace="@{/common/sidebar} :: sidebar"></th:block>
+
+		<div id="content-wrapper" class="d-flex flex-column">
+			<div id="content">
+				<!-- Header -->
+				<th:block th:replace="@{/common/header} :: header"></th:block>
+
+				<!-- Content -->
+				<div class="container-fluid" id="container-wrapper">
+					<div class="d-sm-flex align-items-center justify-content-between mb-4">
+						<h1 class="h3 mb-0 text-gray-800">부서별 실적조회</h1>
+						<ol class="breadcrumb">
+							<li class="breadcrumb-item"><a href="./">Home</a></li>
+							<li class="breadcrumb-item">Tables</li>
+							<li class="breadcrumb-item active" aria-current="page">영업그룹별 실적 조회</li>
+						</ol>
+                    </div>
+                    
+                    <!-- Row -->
+					<div class="row">
+                        <!-- DataTable with Hover -->
+                        
+                        <div class="card mb-4">
+                            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                <h4 class="m-0 font-weight-bold text-primary">전체 부서 실적</h4>
+                            </div>
+                            <div class="row ml-3">
+                                <div class="form-group col-lg-2">
+                                    <label for="collectBillYear">연도</label>
+                                    <select class="form-control" id="collectBillYear" name="collectBillYear">
+                                        <option th:selected="${collectBillYear} == '2021'">2021</option>
+                                        <option th:selected="${collectBillYear} == '2020'">2020</option>
+                                        <option th:selected="${collectBillYear} == '2019'">2019</option>
+                                        <option th:selected="${collectBillYear} == '2018'">2018</option>
+                                        <option th:selected="${collectBillYear} == '2017'">2017</option>
+                                    </select>
+                                </div>
+                                <div class="form-group col-lg-2">
+                                    <label for="collectBillMonth">월</label>
+                                    <select class="form-control" id="collectBillMonth" name="collectBillMonth">
+                                        <option th:selected="${collectBillMonth} == '1'">1</option>
+                                        <option th:selected="${collectBillMonth} == '2'">2</option>
+                                        <option th:selected="${collectBillMonth} == '3'">3</option>
+                                        <option th:selected="${collectBillMonth} == '4'">4</option>
+                                        <option th:selected="${collectBillMonth} == '5'">5</option>
+                                        <option th:selected="${collectBillMonth} == '6'">6</option>
+                                        <option th:selected="${collectBillMonth} == '7'">7</option>
+                                        <option th:selected="${collectBillMonth} == '8'">8</option>
+                                        <option th:selected="${collectBillMonth} == '9'">9</option>
+                                        <option th:selected="${collectBillMonth} == '10'">10</option>
+                                        <option th:selected="${collectBillMonth} == '11'">11</option>
+                                        <option th:selected="${collectBillMonth} == '12'">12</option>
+                                    </select>
+                                </div>
+                                <div class="form-group col-lg-2">
+                                    <button type="button" class="btn btn-outline-primary my-4" id="selectPerformButton">확인</button>
+                                </div>
+                                <div class="table-responsive p-3">
+                                    <table class="table align-items-center table-flush table-hover" id="productPerform">
+                                        <thead th:align="center" class="thead-light">
+                                            <tr>
+                                                <th>카테고리(중)</th>
+                                                <th>카테고리(소)</th>
+                                                <th>상품명</th>
+                                                <th>청구건수</th>
+                                                <th>실적</th>
+                                                <th>상세보기</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody th:align="center">
+                                            <tr th:each="producList : ${selectProductPerformList}" >
+                                                <td th:text = "${producList.purchaseOrder.productList[0].category.refCategoryName}"></td>
+                                                <td th:text = "${producList.purchaseOrder.productList[0].category.categoryName}"></td>
+                                                <td th:text = "${producList.purchaseOrder.productList[0].productName}"></td>
+                                                <td th:text = "${producList.purchaseOrder.productList[0].chargeCount}"></td>
+                                                <td th:text = "${producList.collect.collectBillAmount}"></td>
+                                                <td>
+                                                    <button class="btn btn-primary" th:value="${producList.purchaseOrder.productList[0].productNo}">상세보기</button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div> 
+            </div>
+        </div>        
+    </div>
+    <!-- Script -->
+    <th:block th:replace="@{/common/script} :: script"></th:block>
+
+	<!-- Page level custom scripts -->
+	<script>
+    $(document).ready(function () {
+      $('#productPerform').DataTable(); // ID From dataTable 
+    });
+
+    $(document).on('click', '#selectPerformButton', function() {
+
+        let collectBillYear = $('#collectBillYear').val();
+    	let collectBillMonth = $('#collectBillMonth').val();
+    	
+    	console.log(collectBillYear);
+    	console.log(collectBillMonth);
+
+        let data = {"collectBillYear" : collectBillYear, "collectBillMonth" : collectBillMonth};
+
+        $.ajax({
+            url: "/sales/select/product/peform/date",
+            data: data,
+            success: function(data, status, xhr) {
+                console.log(data);
+            },
+           
+            error: function(xhr, status, error) {
+                console.log(error);
+            }
+        });
+    });
+    
+    </script>
+</body>
+</html>

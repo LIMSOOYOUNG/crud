@@ -41,7 +41,7 @@
 							<div class="card mb-4">
 								<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
 									<h6 class="m-0 font-weight-bold text-primary">사원실적조회</h6>
-									<input type="button" id="insertProduct" class="btn btn-primary" data-toggle="modal" data-target="#insertSalesTarget" value="목표실적등록">
+									<input type="button" id="insertTarget" class="btn btn-primary" data-toggle="modal" data-target="#insertSalesTarget" value="목표실적등록">
 								</div>
 								<div class="row ml-3">
 									<div class="form-group col-lg-2">
@@ -96,9 +96,10 @@
 		</div>
 	</div>
 
+
 	<div class="modal fade" id="insertSalesTarget" tabindex="-1" role="dialog"
 		aria-labelledby="insertSalesTargetCenterTitle" aria-hidden="true">
-		<div class="modal-dialog modal-dialog-centered modal-md" role="document"> 
+		<div class="modal-dialog modal-dialog-centered modal-" role="document"> 
 			<div class="modal-content">
 				<div class="modal-header">
 					<h4 class="modal-title row col-lg-5" id="insertSalesTargetCenterTitle" style="color: #6777EF;">매출목표 등록</h4>
@@ -144,7 +145,7 @@
 						<div class="form-group row col-lg-12">
 							<label for="departmentSales" class="col-sm-5 col-form-label">전월 부서 평균 실적</label>
 							<div class="col-sm-7">
-								<label class="form-control" id="departmentSales">80000000원/13건</label>
+								<label class="form-control" id="departmentSales"></label>
 							</div>
 						</div>
 					</div>
@@ -152,7 +153,7 @@
 						<div class="form-group row col-lg-12">
 							<label for="mySales" class="col-sm-5 col-form-label">전월 나의 실적</label>
 							<div class="col-sm-7">
-								<label class="form-control" id="mySales">3000000원/5건</label>
+								<label class="form-control" id="mySales"></label>
 							</div>
 						</div>
 					</div>
@@ -305,6 +306,38 @@
 				}); 
 			}); 
 			
+			/* 전월 부서 평균 실적과 내 실적 조회*/
+			$(document).on('click', "#insertTarget", function() {
+				
+				$("#insertSalesTarget").modal();
+				
+				$.ajax({
+					url: "/sales/last/month/perform/select",
+					success: function(data, status, xhr) {
+						
+						deptAvgPeform = JSON.parse(data.selectDeptAvgPeform);
+						empPeformLastMonth = JSON.parse(data.selectEmpPeformLastMonth);
+						
+
+						console.table(deptAvgPeform);
+						console.table(empPeformLastMonth);
+
+						dept
+						
+						$departmentSales = $("#departmentSales");
+						$mySales = $("#mySales");
+
+						$departmentSales.html("");
+						$mySales.html("");
+
+
+
+					}
+
+				});
+			})
+
+			/* 상세보기 페이지 */
 			$(document).on('click', "button[name='detailButton']", function () {   
 				
 				let collectBillYear = $("#performYear option:selected").val();
@@ -315,11 +348,11 @@
 				console.log(collectBillMonth);
 				console.log(empNo);
 
-
 				location.href = "/sales/select?empNo=" + empNo + "&collectBillYear=" + collectBillYear + "&collectBillMonth=" + collectBillMonth;
 
 			});
-    
+    	
+		/* 유효성 검사 */
 		function check() {
 
 		if($("#inputTargetSales").val() == "") {

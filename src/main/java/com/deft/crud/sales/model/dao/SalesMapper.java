@@ -30,5 +30,13 @@ public interface SalesMapper {
 	List<TargetPerfomDTO> deptTargetPerformList(CollectBillDTO parameters);
 	
 	List<TargetPerfomDTO> checkEmpTargetPerformListForInsert(int empNo);
+
+	PerformanceDTO selectDeptAvgPeform(String deptCode, CollectBillDTO collectBillDate);
+
+	PerformanceDTO selectEmpPeformLastMonth(int empNo, CollectBillDTO collectBillDate);
+
+	List<PerformanceDTO> selectProductPerformList(CollectBillDTO collectBillDate);
+
+	List<PerformanceDTO> selectProductPeformForDate(CollectBillDTO parameters);
 	
 }
