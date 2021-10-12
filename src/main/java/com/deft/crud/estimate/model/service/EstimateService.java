@@ -75,8 +75,25 @@ public class EstimateService {
 	}
 
 	@Transactional
-	public int insertEstimate(EstimateDTO estimateInfo) {
+	public boolean insertEstimate(EstimateDTO estimateInfo) {
 		
-		return estimateMapper.insertEstimate(estimateInfo);
+		int result1 = estimateMapper.insertEstimate(estimateInfo);
+		int result2 = 0;
+		
+		List<EstimateProductDTO> productList = estimateInfo.getEstimateProductList();
+		
+		for(EstimateProductDTO product : productList) {
+			product.setEstimateNo(estimateInfo.getEstimateNo());
+			
+			result2 = estimateMapper.insertEstimateProduct(product);
+		}
+		
+		boolean result = false; 
+		
+		if(result1 + result2 > 0) {
+			result = true;
+		}
+		
+		return result;
 	}
 }

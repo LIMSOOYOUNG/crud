@@ -143,4 +143,44 @@
           FROM USER_SEQUENCES
          WHERE SEQUENCE_NAME = 'SEQ_ESTIMATE_NO'
 	</select>
+	
+	<insert id="insertEstimate" parameterType="com.deft.crud.estimate.model.dto.EstimateDTO">
+        INSERT /* com.deft.crud.estimate.model.dao.EstimateMapper#insertEstimate() */
+          INTO TBL_ESTIMATE E
+        (
+          E.ESTIMATE_NO
+        , E.ESTIMATE_DATE
+        , E.DISCOUNT_RATE
+        , E.PROVIDER_REGIST_NO
+        , E.CUSTOMER_NO
+        , E.ESTIMATE_STATUS
+        , E.ESTIMATE_TITLE
+        )
+        VALUES
+        (
+          SUBSTR(#{ estimateNo }, -3) + LPAD(SEQ_ESTIMATE_NO.NEXTVAL, 3, 0)
+        , #{ estimateDate }
+        , #{ discountRate }
+        , '110-01-12345'
+        , #{ customerNo }
+        , #{ estimateStatus }
+        , #{ estimateTitle }
+        )
+	</insert>
+	
+	<insert id="insertEstimateProduct" parameterType="com.deft.crud.estimate.model.dto.EstimateProductDTO">
+        INSERT
+          INTO TBL_ESTIMATE_PRODUCT EP
+        (
+          EP.ESTIMATE_NO
+        , EP.PRODUCT_NO
+        , EP.PRODUCT_AMOUNT
+        )
+        VALUES
+        (
+          #{ estimateNo }
+        , #{ productNo }
+        , #{ productAmount }
+        )
+	</insert>
 </mapper>

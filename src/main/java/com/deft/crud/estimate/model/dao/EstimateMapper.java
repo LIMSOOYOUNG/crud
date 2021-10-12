@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.deft.crud.estimate.model.dto.EstimateDTO;
+import com.deft.crud.estimate.model.dto.EstimateProductDTO;
 
 @Mapper
 public interface EstimateMapper {
@@ -18,4 +19,6 @@ public interface EstimateMapper {
 	String selectLastEstimateSeq();
 
 	int insertEstimate(EstimateDTO estimateInfo);
+
+	int insertEstimateProduct(EstimateProductDTO product);
 }
