@@ -220,7 +220,7 @@
                                 </div>
                             </div>
                             <div class="modal-footer">
-                                <button type="submit" id="successInsert" class="btn btn-primary">영업활동 등록</button>
+                                <button type="submit" id="successInsertBtn" class="btn btn-primary">영업활동 등록</button>
                             </div>
                         </div>
                     </form>
@@ -393,9 +393,14 @@
         $('#insertEmpNo').val(empNo);
         $('#insertEmpName').val(empName);
         
-        $('#insertActivity').submit();		//영업활동 추가 컨트롤러로 이동
+        /* insertModal 영업활동등록버튼 클릭시  */
+        $('#successInsertBtn').on('click', function test() {
+        if(!confirm("영업활동을 등록하시겠습니까?")) {
+        	return false;
+        }	
+        	$('#insertActivity').submit();		//영업활동 추가 컨트롤러로 이동
+        });
     });
-
     
     /* [상세정보] 버튼 클릭 시 동작 */
     $('.activityDetailInfoBtn').on('click', function test() {
@@ -412,9 +417,6 @@
            success: function(data, status, xhr) {
               
               const activityInfo = JSON.parse(data.activityInfo);
-              
-   		      console.log("영업활동 시작시간 : " + activityInfo.activityStartTime);
-   		      console.log("영업활동 종료시간 : " + activityInfo.activityEndTime);
    		      
    			  $('#activityNoForm').val(activityInfo.activityNo);
               $('#customerNo').val(activityInfo.customerNo); 
@@ -441,9 +443,11 @@
     
     /* [영업활동 삭제] 버튼 클릭시 동작 */
     $(document).on('click', '#deleteActivity', function () {
-        $('#modifyForm').attr('action', '/business/activity/delete');
-        $('#modifyForm').attr('method', 'post');
-        $('#modifyForm').submit();
+    	if(confirm("영업활동 삭제 하시겠습니까?")) {
+            $('#modifyForm').attr('action', '/business/activity/delete');
+        	$('#modifyForm').attr('method', 'post');
+        	$('#modifyForm').submit();
+    	}
     });  
     
     /* [영업활동 수정] 버튼 클릭 시 동작(readonly 해제 및 아래쪽 버튼 변경) */
@@ -464,19 +468,21 @@
             var startTime = $('#activityStartTime').val().replace(' ', 'T');
             var endTime = $('#activityEndTime').val().replace(' ', 'T');
 
-            $('#activityStartTime').attr('value', startTime);
             $('#activityStartTime').attr('type', 'datetime-local');
+            $('#activityStartTime').val(startTime);
 
-            $('#activityEndTime').attr('value', endTime);
             $('#activityEndTime').attr('type', 'datetime-local');
+            $('#activityEndTime').val(endTime);
         };
 
         /* [수정완료] 버튼 클릭시 동작 */
         $(document).on('click', '#successModifyActivity', function () {
         	
-            $('#modifyForm').attr('action', '/business/activity/modify');
-            $('#modifyForm').attr('method', 'post');
-            $('#modifyForm').submit();
+        	if(confirm("영업활동 내용을 수정하시겠습니까?")) {
+            	$('#modifyForm').attr('action', '/business/activity/modify');
+            	$('#modifyForm').attr('method', 'post');
+            	$('#modifyForm').submit();
+        	}
         });
 
         /* [돌아가기] 버튼 클릭시 동작(readonly 적용) */
@@ -497,10 +503,7 @@
                  var startTime = $('#activityStartTime').val().replace(' ', 'T');
                  var endTime = $('#activityEndTime').val().replace(' ', 'T');
 
-                 $('#activityStartTime').attr('value', startTime);
                  $('#activityStartTime').attr('type', 'text');
-
-                 $('#activityEndTime').attr('value', endTime);
                  $('#activityEndTime').attr('type', 'text');
                  
                  const activityNo = $(this).data('activity-no')

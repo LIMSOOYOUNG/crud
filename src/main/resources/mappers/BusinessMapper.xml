@@ -312,28 +312,36 @@
         )
         VALUES
         (
-        SEQ_ACTIVITY_NO.NEXTVAL
+          SEQ_ACTIVITY_NO.NEXTVAL
         , #{ customerNo }, #{ businessSubject }, #{ businessType }
         , #{ businessLocation }, #{ businessPurpose }, #{ businessContents }
         , SYSDATE, TO_DATE(REPLACE(#{ activityStartTime },'T',' '), 'YYYY-MM-DD HH24:MI:SS')
         , TO_DATE(REPLACE(#{ activityEndTime },'T',' '), 'YYYY-MM-DD HH24:MI:SS')
         )
     </insert>
-
 	
 	<!-- 영업 활동 수정 -->
     <update id="modifyActivity" parameterType="com.deft.crud.customer.model.dto.BusinessActivityDTO">
         UPDATE /* com.deft.crud.business.model.dao.BusinessMapper#modifyActivity() */
-        TBL_BUSINESS_ACTIVITY
-        SET BUSINESS_SUBJECT = #{ businessSubject }
-        , BUSINESS_TYPE = #{ businessType }
-        , BUSINESS_LOCATION = #{ businessLocation }
-        , BUSINESS_PURPOSE = #{ businessPurpose }
-        , BUSINESS_CONTENTS = #{ businessContents }
-        , WRITING_TIME = SYSDATE
-        , ACTIVITY_START_TIME = TO_DATE(REPLACE(#{ activityStartTime },'T',' '), 'YYYY-MM-DD HH24:MI:SS')
-        , ACTIVITY_END_TIME = TO_DATE(REPLACE(#{ activityEndTime },'T',' '), 'YYYY-MM-DD HH24:MI:SS')
-        WHERE ACTIVITY_NO = #{ activityNo }
+        TBL_BUSINESS_ACTIVITY A
+        SET 
+            A.BUSINESS_SUBJECT = #{ businessSubject }
+          , A.BUSINESS_TYPE = #{ businessType }
+          , A.BUSINESS_LOCATION = #{ businessLocation }
+          , A.BUSINESS_PURPOSE = #{ businessPurpose }
+          , A.BUSINESS_CONTENTS = #{ businessContents }
+          , A.WRITING_TIME = SYSDATE
+          , A.ACTIVITY_START_TIME = TO_DATE(REPLACE(#{ activityStartTime },'T',' '), 'YYYY-MM-DD HH24:MI:SS')
+          , A.ACTIVITY_END_TIME = TO_DATE(REPLACE(#{ activityEndTime },'T',' '), 'YYYY-MM-DD HH24:MI:SS')
+        WHERE A.ACTIVITY_NO = #{ activityNo }
     </update>
+
+	<!-- 영업 활동 삭제 -->
+    <delete id="deleteActivity" parameterType="_int">
+        DELETE /* com.deft.crud.customer.model.dao.BusinessMapper#deleteActivity() */
+        FROM TBL_BUSINESS_ACTIVITY
+        WHERE ACTIVITY_NO = #{ activityNo }
+    </delete>
+
 
 </mapper>

@@ -43,6 +43,9 @@ public interface BusinessMapper {
 	/* 영업활동 내용수정 */
 	int modifyActivity(BusinessActivityDTO parameters);
 
+	/* 영업활동 삭제 */
+	int deleteActivity(int activityNo);
+
 
 
 

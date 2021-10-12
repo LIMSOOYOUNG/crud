@@ -166,16 +166,40 @@ public class BusinessController {
 		  
 		  String message = "";
 		  
-		  if(result) { message = "영업활동내용 수정완료"; } else { message = "영업활동내용 수정실패!"; }
+		  if(result) { 
+			  message = "영업활동내용 수정완료";
+		  } else { 
+			  message = "영업활동내용 수정실패!";
+		  }
 		  
 		  rttr.addFlashAttribute("message", message);
 		  mv.setViewName("redirect:/business/activity/selectAll");
-		 
 		
 		return mv;
 	}
 	
-	
+	/* 영업 활동 삭제 */
+    @PostMapping("activity/delete")
+    public ModelAndView deleteDetailActivity(ModelAndView mv, RedirectAttributes rttr,
+    										 @ModelAttribute BusinessActivityDTO parameters) {
+
+        int activityNo = parameters.getActivityNo();
+
+        boolean result = businessService.deleteActivity(activityNo);
+
+        String message = "";
+		  
+		  if(result) { 
+			  message = "영업활동 삭제완료";
+		  } else { 
+			  message = "영업활동 삭제실패!";
+		  }
+
+		  rttr.addFlashAttribute("message", message);
+		  mv.setViewName("redirect:/business/activity/selectAll");
+
+        return mv;
+    }
 
 }
 

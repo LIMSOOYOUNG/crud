@@ -112,6 +112,19 @@ public class BusinessService {
 		
 		return result > 0? true: false;
 	}
+
+	/* 영업활동 삭제 */
+	public boolean deleteActivity(int activityNo) {
+		
+		int result = 0;
+		int insertResult = businessMapper.deleteActivity(activityNo);
+		
+		if (insertResult > 0) {
+			result = 1;
+		}
+		
+		return result > 0? true: false;
+	}
 	
 	
 
