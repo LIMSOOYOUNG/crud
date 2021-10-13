@@ -7,11 +7,13 @@
 
 <body id="page-top">
 	<div id="wrapper">
+
 		<!-- Sidebar -->
 		<th:block th:replace="@{/common/sidebar} :: sidebar"></th:block>
 
 		<div id="content-wrapper" class="d-flex flex-column">
 			<div id="content">
+
 				<!-- Header -->
 				<th:block th:replace="@{/common/header} :: header"></th:block>
 
@@ -28,13 +30,14 @@
 
 					<div class="row">
 						<div class="col-lg-12" th:align="center">
-							<form th:action="@{/estimate/insert}" method="POST">
+							<form th:action="@{/estimate/insert}" method="POST" onsubmit="return insertEstimate();">
+
 								<!-- EstimateInfo -->
 								<div class="card mb-4">
 									<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
 										<h6 class="m-0 font-weight-bold text-primary" id="tableTitle">견적서 작성</h6>
 									</div>
-									<div class="card-body" th:object="${newEstimate}">
+									<div class="card-body" th:object="${estimate}">
 										<div class="form-group row mb-2" th:align="right">
 												<label for="estimateTitle" class="col-form-label col-lg-1">제목</label>
 												<input type="text" class="form-control col-lg-10" th:field="*{estimateTitle}" required>
@@ -91,7 +94,8 @@
 											<h5 class="col-lg-4" id="estimateTotalKor" th:align="left"></h5>
 										</div>
 									</div>
-								</div>		<!-- End EstimateInfo -->
+								</div>
+								<!-- End EstimateInfo -->
 
 								<!-- EstimateProductList -->
 								<div class="card mb-4">
@@ -114,7 +118,7 @@
 													<th></th>
 												</tr>
 											</thead>
-											<tbody th:align="center" th:object="${estimateProductList}">
+											<tbody th:align="center">
 											</tbody>
 											<tfoot>
 												<tr id="addProductBtn">
@@ -129,13 +133,14 @@
 											</tfoot>
 										</table>
 									</div>
-								</div>		<!-- End EstimateProductList -->
-
+								</div>
 								<div class="mb-4" th:align="center">
 									<button type="submit" class="btn btn-primary mx-2">등록</button>
 									<button type="reset" class="btn btn-outline-danger mx-2"
-											th:onclick="history.back()">취소</button>
+									th:onclick="history.back()">취소</button>
 								</div>
+								<!-- End EstimateProductList -->
+
 							</form>
 						</div>
 					</div>
@@ -191,7 +196,8 @@
 								</div>
 							</div>
 						</div>
-					</div>		End CustomerModal
+					</div>
+					<!-- End CustomerModal -->
 
 					<!-- StockModal -->
 					<div class="modal fade" id="stockModal" tabindex="-1" role="dialog" aria-labelledby="stockModalLabel"
@@ -254,7 +260,9 @@
 								</div>
 							</div>
 						</div>
-					</div>		<!-- End StockModal -->
+					</div>
+					<!-- End StockModal -->
+
 				</div>
 			</div>
 		</div>
@@ -431,6 +439,55 @@
 			}
 
 			return "일금 " + result + "원";
+		}
+
+		/* 입력된 견적서 정보를 post 방식으로 전송 */
+		function insertEstimate() {
+			const $estimateProduct = $("#estimateProductTable tbody");
+			let productList = [];
+
+			if($estimateProduct.children().length == 0) {
+				alert("등록된 상품이 없습니다.");
+				return false;
+			}
+
+			for(let i = 0; i < $estimateProduct.children().length; i++) {
+				productNo = $estimateProduct.children().eq(i).children().eq(0).text();
+				qty = $estimateProduct.children().eq(i).children().eq(6).text();
+				
+				const product = {"productNo": productNo, "productAmount": qty};
+				productList.push(product);
+			}
+
+			const estimate = {"estimateTitle" : $("#estimateTitle").val(),
+							"estimateNo" : $("#estimateNo").val(),
+							"estimateDate" : $("#estimateDate").val(),
+							"discountRate" : $("#discountRate").val(),
+							"customerNo" : $("#customerNo").val(),
+							"estimateStatus" : $("#estimateStatus option:selected").text(),
+							"estimateProductList" : productList};
+
+			console.log(estimate);
+
+			if(confirm("견적서를 등록하시겠습니까?")) {
+				$.ajax({
+					url: "/estimate/insert",
+					type: "POST",
+					data: JSON.stringify(estimate),
+					contentType: "application/json; charset=UTF-8",
+					success: function(data, status, xhr) {
+						if(data) {
+							alert("견적서가 등록되었습니다.");
+						} else {
+							alert("견적서 등록에 실패하였습니다.");
+						}
+					},
+					error: function(xhr, status, error) {
+						alert("예기치 못한 에러가 발생하였습니다.");
+						console.log(error);
+					}
+				});
+			}
 		}
 	</script>
 </body>

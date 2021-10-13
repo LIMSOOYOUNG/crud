@@ -10,8 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
@@ -19,6 +19,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.deft.crud.customer.model.dto.ExtCustomerDTO;
 import com.deft.crud.customer.model.service.CustomerService;
 import com.deft.crud.estimate.model.dto.EstimateDTO;
+import com.deft.crud.estimate.model.dto.EstimateProductDTO;
 import com.deft.crud.estimate.model.service.EstimateService;
 import com.deft.crud.member.model.service.UserImpl;
 import com.deft.crud.stock.model.dto.StorageDTO;
@@ -88,14 +89,14 @@ public class EstimateController {
 	public ModelAndView insertEstimate(ModelAndView mv) {
 		
 		/* 새로운 견적번호 및 일자 입력 */
-		EstimateDTO newEstimate = new EstimateDTO();
+		EstimateDTO estimate = new EstimateDTO();
 		LocalDate newEstimateLocalDate = LocalDate.now();
 		String newEstimateDate= newEstimateLocalDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 		
 		String newEstimateNo = estimateService.selectEstimateNo(newEstimateDate);
 		
-		newEstimate.setEstimateNo(newEstimateNo);
-		newEstimate.setEstimateDate(newEstimateDate);
+		estimate.setEstimateNo(newEstimateNo);
+		estimate.setEstimateDate(newEstimateDate);
 		
 		/* 고객 목록 조회 */
 		List<ExtCustomerDTO> extCustomerList = customerService.selectExtCustomerList();
@@ -103,7 +104,7 @@ public class EstimateController {
 		/* 상품 목록 조회 */
 		List<StorageDTO> stockList = stockService.selectSellableProductAll();
 		
-		mv.addObject("newEstimate", newEstimate);
+		mv.addObject("estimate", estimate);
 		mv.addObject("customerList", extCustomerList);
 		mv.addObject("stockList", stockList);
 		mv.setViewName("estimate/insertEstimate");
@@ -112,11 +113,14 @@ public class EstimateController {
 	}
 	
 	@PostMapping("/insert")
-	public ModelAndView insertEstimate(ModelAndView mv, @ModelAttribute EstimateDTO estimateInfo) {
+	public ModelAndView insertEstimate(ModelAndView mv, HttpServletResponse response,
+			@RequestBody EstimateDTO estimate) {
+		response.setContentType("application/json; charset=UTF-8");
 		
-		System.out.println("estimateInfo : " + estimateInfo);
+		boolean result = estimateService.insertEstimate(estimate);
 		
-//		int result = estimateService.insertEstimate(estimateInfo);
+		mv.addObject("result", result);
+		mv.setViewName("redirect:/estimate/insertEstimate");
 		
 		return mv;
 	}
