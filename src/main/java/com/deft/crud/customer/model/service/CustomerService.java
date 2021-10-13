@@ -226,8 +226,9 @@ public class CustomerService {
         return customerMapper.selectChargeByCustomerNo(customerNo);
     }
 
-	public boolean deleteActivity(int customerNo) {
-		// TODO Auto-generated method stub
-		return false;
-	}
+    /* 고객 정렬 조회 */
+    public List<CustomerCompanyDTO> selectCustomerByStatus(String customerStatus) {
+
+        return customerMapper.selectCustomerByStatus(customerStatus);
+    }
 }
