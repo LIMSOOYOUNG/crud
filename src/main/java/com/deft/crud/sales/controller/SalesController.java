@@ -362,11 +362,11 @@ public class SalesController {
 		
 		response.setContentType("UTF-8");
 		
-		List<PerformanceDTO> selectCategoryPerformForDate = salesService.selectCategoryPerformForDate(parameters, refCategoryCode);
+//		List<PerformanceDTO> selectCategoryPerformForDate = salesService.selectCategoryPerformForDate(parameters, refCategoryCode);
 		
-		System.out.println("selectCategoryPerformForDate : " + selectCategoryPerformForDate);
+//		System.out.println("selectCategoryPerformForDate : " + selectCategoryPerformForDate);
 		
-		mv.addObject("selectCategoryPerformForDate", objectMapper.writeValueAsString(selectCategoryPerformForDate));
+//		mv.addObject("selectCategoryPerformForDate", objectMapper.writeValueAsString(selectCategoryPerformForDate));
 		mv.setViewName("jsonView");
 		return null;
 	}
