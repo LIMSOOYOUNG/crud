@@ -42,7 +42,7 @@
 
 								<div class="table-responsive p-3">
 									<table class="table align-items-center table-flush table-hover"
-										id="dataTableHover">
+										id="notice">
 										<thead align="center" class="thead-light">
 											<tr>
 												<th>글번호</th>
@@ -80,8 +80,11 @@
 	<!-- Script -->
 	<th:block th:replace="@{/common/script} :: script"></th:block>
 	 	<!-- Page level plugins -->
-	<script src="/vendor/datatables/jquery.dataTables.min.js"></script>
-	<script src="/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+	<!-- Page level custom scripts -->
+   <script>
+    $(document).ready(function () {
+      $('#notice').DataTable(); // ID From dataTable 
+    });
+    </script>
 </body>
-
 </html>

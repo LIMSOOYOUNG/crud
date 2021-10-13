@@ -43,7 +43,7 @@ xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-spingsecurity5">
 								</div>
 
 								<div class="table-responsive p-3">
-									<table class="table align-items-center table-flush table-hover" id="dataTableHover">
+									<table class="table align-items-center table-flush table-hover" id="jobtable">
 										<thead align="center" class="thead-light">
 											<tr>
 												<th>직급코드</th>
@@ -177,9 +177,12 @@ xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-spingsecurity5">
 		}
 		
 	});
-	
-	
 	</script>
+		<script>
+    $(document).ready(function () {
+      $('#jobtable').DataTable(); // ID From dataTable 
+    });
+    </script>
 </body>
 
 </html>

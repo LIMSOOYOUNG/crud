@@ -43,7 +43,7 @@
 
 								<div class="table-responsive p-3">
 									<table class="table align-items-center table-flush table-hover"
-										id="dataTableHover">
+										id="department">
 										<thead align="center" class="thead-light">
 											<tr>
 												<th>부서코드</th>
@@ -179,8 +179,6 @@
 	<!-- Script -->
 	<th:block th:replace="@{/common/script} :: script"></th:block>
 	 	<!-- Page level plugins -->
-	<script src="/vendor/datatables/jquery.dataTables.min.js"></script>
-	<script src="/vendor/datatables/dataTables.bootstrap4.min.js"></script>
 	<script>
 	$('[name="deptmodifybtn"]').click(function(){
 		const deptCode = $(this).data('dept-code')
@@ -202,10 +200,12 @@
 		}
 		
 	});
-	
-	
-	
 	</script>
+		<script>
+    $(document).ready(function () {
+      $('#department').DataTable(); // ID From dataTable 
+    });
+    </script>
 </body>
 
 </html>
