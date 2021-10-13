@@ -125,6 +125,14 @@ public class BusinessService {
 		
 		return result > 0? true: false;
 	}
+
+	/* 고객 기본정보 조회 */
+	public BusinessChanceDTO selectCustomerBasicInfo(int customerNo) {
+		
+		BusinessChanceDTO customerInfo = businessMapper.selectCustomerBasicInfo(customerNo);
+		
+		return customerInfo;
+	}
 	
 	
 

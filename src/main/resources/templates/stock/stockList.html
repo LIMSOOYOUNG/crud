@@ -410,7 +410,7 @@ input {
 		$('#table_activity').DataTable({
 			 order:[]
 		}); 								// ID From dataTable with Hover
-		$('#stockManagerModal').on('show.bs.modal', function(event) {   //영업활동 모달창이 보여질때 동작
+		$('#stockManagerModal').on('show.bs.modal', function(event) {   //입고요청서 작성 모달창이 보여질때 동작
 
 			const productNo = $(event.relatedTarget).data('product-no');
 
@@ -522,7 +522,6 @@ input {
 				
 				if(orderCount <= 0)
 					return alert("요청 수량을 확인해주세요.")
-				
 					
 				const data = {stockProductNo: existProductNo, productStock: orderCount, orderContent: orderContent, orderTitle: orderTitle};	
 				request.push(data);

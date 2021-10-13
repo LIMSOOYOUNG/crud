@@ -77,7 +77,7 @@ public class BusinessController {
 										    @RequestParam("customerNo") int customerNo,
 										    @RequestParam("businessChanceNo") int businessChanceNo) {
 		
-		/* 선택한 영업기회의 내용 변경내역*/
+		/* 선택한 영업기회의 내용 변경내역 */
 		List<BusinessChanceHistoryDTO> chanceHistoryList = businessService.selectChanceHistoryByNo(businessChanceNo);
 		
 		/* 선택한 엽업기회의 정보 */
@@ -89,7 +89,7 @@ public class BusinessController {
 		/* 선택한 영업기회 대상 고객의 상세정보 */
 		CustomerCompanyDTO customerInfo = customerService.selectCustomerInfo(customerNo);
 		
-		System.out.println("고객상세정보 : " + customerInfo);
+		System.out.println("@@@고객상세정보 : " + businessChanceInfo);
 		
 		mv.addObject("chanceHistoryList", chanceHistoryList);			//영업기회변경이력
 		mv.addObject("businessChanceInfo", businessChanceInfo); 	    //영업기회정보
@@ -199,6 +199,38 @@ public class BusinessController {
 		  mv.setViewName("redirect:/business/activity/selectAll");
 
         return mv;
+    }
+    
+    /* 담당중인 고객리스트 */
+    @GetMapping("myCustomer/selectAll")
+    public ModelAndView selectMyCustomer(ModelAndView mv, HttpServletResponse response,
+    									@AuthenticationPrincipal UserImpl userInfo) throws JsonProcessingException {
+    	
+    	response.setContentType("application/json; charset=UTF-8");
+    	
+    	List<CustomerDTO> customerList = businessService.selectMyCustomerList(userInfo);
+    	
+    	
+    	mv.addObject("customerList", objectMapper.writeValueAsString(customerList));
+		mv.setViewName("jsonView");
+    	
+		return mv;
+    }
+    
+    /* 고객 기본정보 조회 */
+    @PostMapping("customerInfo/select")
+    public ModelAndView selectCustomerBasicInfo(ModelAndView mv, HttpServletResponse response,
+    											@RequestParam int customerNo) throws JsonProcessingException {
+    	
+    	response.setContentType("application/json; charset=UTF-8");
+    	
+    	BusinessChanceDTO customerInfo = businessService.selectCustomerBasicInfo(customerNo);
+    	System.out.println("@@@고객정보 :  " + customerInfo);
+    	
+    	mv.addObject("customerInfo", objectMapper.writeValueAsString(customerInfo));
+		mv.setViewName("jsonView");
+    	
+    	return mv;
     }
 
 }

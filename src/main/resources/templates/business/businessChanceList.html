@@ -4,6 +4,12 @@
 <head>
 <th:block th:replace="@{common/config} :: config"></th:block>
 <link href="/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+<style>
+.form-control {
+	text-align: center;
+}
+</style>
+
 </head>
 
 <body id="page-top">
@@ -37,10 +43,12 @@
 							<div class="card mb-4">
 								<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
 									<h6 class="m-0 font-weight-bold text-primary" id="tableTitle">영업기회 현황 (전체)</h6>
-									<div><a class="btn btn-info btn-icon-split" th:onclick="location.href=''">
+									<div><button id="insertBusinessChnace" name="insertBusinessChnace" class="btn btn-info btn-icon-split"
+												 data-toggle="modal"
+                                               	 data-target="#insertBusinessChanceModal">
 											<span class="icon text-white"><i class="fas fa-edit"></i></span>
 											<span class="text text-white">영업기회등록</span>
-										</a>
+										</button>
 									</div>
 								</div>
 								
@@ -113,6 +121,159 @@
 		</div>
 	</div>
 
+	<!------------- 영업기회등록 Modal --------------->
+	<div class="modal fade" id="insertBusinessChanceModal" role="dialog">
+		<div class="modal-dialog modal-center"
+			style="font-size: 13px; max-height: 100%; height: 200px; max-width: 100%; width: 75%; display: table;">
+
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title" style="color: #0da8ee">영업기회 등록</h4>
+					<button type="button" id="modalCloseBtn" class="close"
+						data-dismiss="modal">
+						<i class="far fa-times-circle"></i>
+					</button>
+					<div class="row">
+						<div class="form-group col-lg-12">
+							<input type="hidden" value="emptyRow">
+						</div>
+					</div>
+				</div>
+				<div class="modal-body">
+					<div class="row">
+						<div class="col-lg-5">
+							<div class="card mb-4">
+								<div
+									class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+									<h6 class="m-0 font-weight-bold text-primary">담당중인 고객리스트</h6>
+								</div>
+								<div class="table-responsive p-3"
+									style="overflow-y: scroll; height: 400px;">
+									<table id="customerListTable"
+										class="table align-items-center table-flush table-hover">
+										<thead th:align="center" class="thead-light">
+											<tr>
+												<th>고객명</th>
+												<th>관리</th>
+											</tr>
+										</thead>
+										<tbody th:align="center">
+
+										</tbody>
+										<tfoot align="center">
+										</tfoot>
+									</table>
+								</div>
+							</div>
+						</div>
+						<div class="col-lg-7">
+							<div class="col-lg-12" th:align="center">
+								<div class="col-lg-12">
+									<div style="background: lightgray;">
+										<div th:align="center"
+											 style="font-size: 25px; font-weight: bold; padding-top: 5px; padding-bottom: 5px;">영업기회</div>
+									</div>
+									<div class="card mb-4">
+										<form id="insertBusinessForm" class="form-group"
+											  style="margin-left: 30px; margin-right: 30px; margin-top: 15px;">
+											<div class="row">
+												<div class="form-group col-xl-3">
+													<label for="customerNo">고객번호</label>
+													<input id="customerNo" name="customerNo" class="form-control" readonly>
+												</div>
+												<div class="form-group col-xl-3">
+													<label for="customerManager">고객담당사원</label>
+													<input id="customerManager" name="customerManager" class="form-control" readonly>
+														   
+												</div>
+												<div class="form-group col-xl-1"></div>
+												<div class="form-group col-xl-5">
+													<label for="chanceTitle">영업기회명</label>
+													<input id="chanceTitle" name="chanceTitle" class="form-control"
+														   placeholder="내용을 입력해주세요">
+												</div>
+											</div>
+											<div class="row">
+												<div class="form-group col-xl-3">
+													<label for="customerCompany">고객사</label>
+													<input
+														id="customerCompany" name="customerCompany"
+														class="form-control" readonly>
+												</div>
+												<div class="form-group col-xl-3">
+													<label for="customerName">고객측담당자</label> <input
+														id="customerName" name="customerName" class="form-control"
+														readonly>
+												</div>
+												<div class="form-group col-xl-1"></div>
+												<div class="form-group col-xl-2">
+													<label for="level">영업단계</label> <select id="level"
+														name="posibillity" class="form-control">
+														<option value="ing" selected>진행중</option>
+														<option value="success">성공</option>
+														<option value="failed">실패</option>
+														<option value="hold">보류중</option>
+													</select>
+												</div>
+												<div class="form-group col-xl-1"></div>
+												<div class="form-group col-xl-2">
+													<label for="posibillity">성공가능성</label> <select
+														id="posibillity" name="posibillity" class="form-control">
+														<option value=10>10%</option>
+														<option value=20>20%</option>
+														<option value=30>30%</option>
+														<option value=40>40%</option>
+														<option value=50>50%</option>
+														<option value=60>60%</option>
+														<option value=70>70%</option>
+														<option value=80>80%</option>
+														<option value=90>90%</option>
+														<option value=100>100%</option>
+													</select>
+												</div>
+											</div>
+											<div class="row">
+												<div class="form-group col-xl-6">
+													<label for="productName">관심상품</label>
+													<div id="productName" name="productName" readonly
+														style="overflow-x: scroll; width: 330px; height: 80px; border: 1px solid lightgray;">
+													</div>
+												</div>
+
+												<div class="form-group col-xl-1"></div>
+												<div class="form-group col-xl-5">
+													<label for="dueDate">마감예정일(유효기간)</label> <input type="date"
+														id="dueDate" name="dueDate" class="form-control">
+												</div>
+											</div>
+											<br>
+											<div class="form-group col-xl-12" th:align="center"
+												style="margin-top: 10px;">
+												<button type="button" class="btn btn-primary"
+													id="insertBusinessChanceBtn" name="insertBusinessChanceBtn">영업기회등록</button>
+											</div>
+
+										</form>
+
+
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer"></div>
+			<div id="count" value="1"></div>
+		</div>
+	</div>
+
+
+
+
+
+
 	<!-- Script -->
 	<th:block th:replace="@{/common/script} :: script"></th:block>
 
@@ -123,6 +284,12 @@ $(document).ready(function () {
 	$('#businessChanceTable').DataTable({     
 		order:[]
 	});
+
+	$('#customerListTable').DataTable({     
+		order:[]
+	});
+	
+	
 });
 	/* 메세지 출력 */
 	const message = '[[${ message }]]';
@@ -133,7 +300,7 @@ $(document).ready(function () {
 	
  
     
- // 테이블 (진행상태)별 검색 결과 
+ 	// 테이블 (진행상태)별 검색 결과 
     $(document).on('click', "a[name=status]",  function() {
     	
     	let businessChanceStatus = $(this).attr('value');
@@ -210,6 +377,7 @@ $(document).ready(function () {
 		});
     });
     
+ 	/* 영업기회 상세보기 버튼 클릭 시 동작 */
     $(document).on("click", "button[name='businessChanceDetailBtn']", function() {
 		const businessChanceNo = $(this).parent().parent().children().eq(0).text();
 		const customerNo = $(this).parent().parent().children().eq(2).text();
@@ -217,8 +385,116 @@ $(document).ready(function () {
 		location.href="/business/chance/selectBasicInfo?businessChanceNo=" + businessChanceNo + "&customerNo=" + customerNo;
 	});
     
+    /* 영업기회등록버튼(영업기회등록 form(modal 실행) */
+    $("button[name='insertBusinessChnace']").on("click", function() {
+		
+    	
+		$("#insertBusinessForm").find('input').each(function(){ $(this).val(''); });
+		
+		$('#productName').html("");
+		
+    	$('#level').val("ing");			//모달창 실행 시 영업단계 기본값
+    	$('#posibillity').val("10");	//모달창 실행 시 성공가능성 기본값 
+    	/* $('#dueDate').val("");		//모달창 실행 시 마감예정일 기본값(오늘날짜) */
+    	
+	
+	});
+
+    $("button[name='insertBusinessChanceBtn']").on("click", function() {
+		
+    	console.log($('#chanceTitle').val());
+    	
+    	if($('#customerNo').val() == "") {
+    		alert("영업기회 대상고객을 선택해주세요.")
+    		return false;
+    		
+    	} else if($('#chanceTitle').val() == "") {
+    		alert("영업기회명을 입력해주세요.")
+    		return false;
+    		
+    	} else if($('#dueDate').val() == "") {
+    		
+    		alert("마감 예정일을 입력해주세요");
+    		return false;
+    	} 
+    	
+		if(!confirm("입력하신 내용으로 영업기회를 등록하시겠습니까?")){
+    		return false;
+    	}
+
+    	
+    	 console.log("form 데이터 전송");
+	
+	});
     
     
+    /* 영업기회등록 모달창 실행 시 동작 */
+    $('#insertBusinessChanceModal').on('show.bs.modal', function(event) {
+		
+		$.ajax({
+			url: "/business/myCustomer/selectAll",
+			type: "GET",
+			success: function(data, status, xhr) {
+				
+				const customerList = JSON.parse(data.customerList);
+				
+				const $table = $('#customerListTable tbody');
+				
+				$table.html("");
+				
+				for(let index in customerList) {
+					
+					let customer = customerList[index];
+					
+					console.log(customer);
+					
+					$tr = $("<tr>");
+					$cNoTd = $("<td>").text(customer.customerNo).attr('hidden', true);
+					$customerNameTd = $("<td>").text([customer.customerNo] + customer.customerName);
+					$btnIcon = $("<i>").addClass("far fa-check-square");
+					$btnIconSpan = $("<span>").addClass("icon text-white-50").append($btnIcon);
+					$btnTextSpan = $("<span>").addClass("text text-white").text("선택");
+					$detailBtn = $("<button>").addClass("btn btn-sm btn-dark btn-icon-split")
+											  .attr('id', 'addBtn')
+									          .attr("data-customer-no", customer.customerNo)
+								          	  .attr("name", "addBtn").append($btnIconSpan).append($btnTextSpan);
+					$detailTd = $("<td>").append($detailBtn);
+					
+					$tr.append($cNoTd);
+					$tr.append($customerNameTd);
+					$tr.append($detailTd);
+					
+					$table.append($tr);
+				}
+			}
+		});
+    });
+    
+    
+    /* 추가버튼 눌렀을시 동작 */
+	$(document).on("click", "button[name='addBtn']", function() {
+		
+		let customerNo = $(this).parent().siblings().eq(0).text();
+
+		console.log(customerNo);
+		
+		$.ajax({
+			url:"/business/customerInfo/select",
+			type:"POST",
+			data: {"customerNo" : customerNo},
+			success: function(data, status, xhr) {
+				
+				const customerInfo = JSON.parse(data.customerInfo);
+				
+				$('#customerNo').val(customerInfo.customerNo);
+				$('#customerManager').val(customerInfo.empName);
+				$('#customerCompany').val(customerInfo.customerCompanyName);
+				$('#customerName').val(customerInfo.customerName);
+				$('#productName').text(customerInfo.productName);
+			}
+		});
+	});
+
     
   </script>
 </body>
