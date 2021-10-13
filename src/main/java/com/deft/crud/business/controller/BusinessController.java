@@ -8,17 +8,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.deft.crud.business.model.dto.BusinessActivityDTO;
 import com.deft.crud.business.model.dto.BusinessChanceDTO;
 import com.deft.crud.business.model.dto.BusinessChanceHistoryDTO;
 import com.deft.crud.business.model.service.BusinessService;
 import com.deft.crud.customer.model.dto.CustomerCompanyDTO;
+import com.deft.crud.customer.model.dto.CustomerDTO;
 import com.deft.crud.customer.model.service.CustomerService;
 import com.deft.crud.member.model.service.UserImpl;
+import com.deft.crud.stock.model.dto.approval.ApprovalModifyDTO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -95,14 +100,16 @@ public class BusinessController {
 		return mv;
 	}
 	
-	/* 영업활동 목록조회 (담당자 or 사원)*/
+	/* 영업활동 목록조회 + 담당중인 고객목록조회 (담당자 or 사원)*/
 	@GetMapping("/activity/selectAll")
 	public ModelAndView selectActivityAll(ModelAndView mv,
 										  @AuthenticationPrincipal UserImpl userInfo) {
 		
 		List<BusinessActivityDTO> businessActivityList = businessService.selectActivityAll(userInfo);
+		List<CustomerDTO> customerList = businessService.selectMyCustomerList(userInfo);
 		
-		mv.addObject("businessActivityList", businessActivityList);
+		mv.addObject("businessActivityList", businessActivityList);		// 전체영업활동 내역
+		mv.addObject("customerList", customerList);		// 담당중인 고객 리스트
 		mv.setViewName("business/businessActivityList");
 		
 		return mv;
@@ -111,7 +118,8 @@ public class BusinessController {
 	/* 선택한 영업활동의 상세정보 조회 */
 	@GetMapping("activity/selectDetailInfo")
 	public ModelAndView selectActivityDetailInfoByNo(ModelAndView mv, HttpServletResponse response,
-													 @RequestParam("activityNo") int activityNo) throws JsonProcessingException {
+													 @RequestParam("activityNo") int activityNo)
+													 throws JsonProcessingException {
 		
 		response.setContentType("application/json; charset=UTF-8");
 		
@@ -121,6 +129,77 @@ public class BusinessController {
 		mv.setViewName("jsonView");
 		return mv;
 	}
+	
+	/* 영업활동 등록 */
+	@PostMapping("activity/insert")
+	public ModelAndView insertActivity(ModelAndView mv, RedirectAttributes rttr,
+									   @ModelAttribute BusinessActivityDTO parameters) {
+		
+		System.out.println(parameters);
+		
+		
+		boolean result = businessService.insertActivity(parameters);
+		
+		String message = "";
+		
+		if(result) {
+			message = "영업활동 등록완료";
+		} else {
+			message = "영업활동 등록실패!";
+		}
+		
+		rttr.addFlashAttribute("message", message);
+		mv.setViewName("redirect:/business/activity/selectAll");
+		
+		return mv;
+	}
+	
+	/* 영업활동 내용 수정 */
+	@PostMapping("activity/modify")
+	public ModelAndView modifyActivity(ModelAndView mv, RedirectAttributes rttr,
+									   @ModelAttribute BusinessActivityDTO parameters) {
+		
+		System.out.println(parameters);
+		
+		
+		  boolean result = businessService.modifyActivity(parameters);
+		  
+		  String message = "";
+		  
+		  if(result) { 
+			  message = "영업활동내용 수정완료";
+		  } else { 
+			  message = "영업활동내용 수정실패!";
+		  }
+		  
+		  rttr.addFlashAttribute("message", message);
+		  mv.setViewName("redirect:/business/activity/selectAll");
+		
+		return mv;
+	}
+	
+	/* 영업 활동 삭제 */
+    @PostMapping("activity/delete")
+    public ModelAndView deleteDetailActivity(ModelAndView mv, RedirectAttributes rttr,
+    										 @ModelAttribute BusinessActivityDTO parameters) {
+
+        int activityNo = parameters.getActivityNo();
+
+        boolean result = businessService.deleteActivity(activityNo);
+
+        String message = "";
+		  
+		  if(result) { 
+			  message = "영업활동 삭제완료";
+		  } else { 
+			  message = "영업활동 삭제실패!";
+		  }
+
+		  rttr.addFlashAttribute("message", message);
+		  mv.setViewName("redirect:/business/activity/selectAll");
+
+        return mv;
+    }
 
 }
 

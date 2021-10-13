@@ -171,13 +171,9 @@ public class StockService {
 
 				result = 1;
 			}
-
 		}
 
 		return result > 0? true: false;
-
 	}
-
-
 
 }

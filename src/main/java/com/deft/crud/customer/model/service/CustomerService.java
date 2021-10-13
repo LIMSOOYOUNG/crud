@@ -225,4 +225,9 @@ public class CustomerService {
 
         return customerMapper.selectChargeByCustomerNo(customerNo);
     }
+
+	public boolean deleteActivity(int customerNo) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }

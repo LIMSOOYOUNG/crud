@@ -10,6 +10,7 @@ import com.deft.crud.business.model.dto.BusinessActivityDTO;
 import com.deft.crud.business.model.dto.BusinessChanceDTO;
 import com.deft.crud.business.model.dto.BusinessChanceHistoryDTO;
 import com.deft.crud.customer.model.dao.CustomerMapper;
+import com.deft.crud.customer.model.dto.CustomerDTO;
 import com.deft.crud.member.model.service.UserImpl;
 
 @Service
@@ -44,7 +45,6 @@ public class BusinessService {
 		
 		List<BusinessChanceHistoryDTO> chanceHistoryList = businessMapper.selectChanceHistoryByNo(businessChanceNo);
 		
-		
 		return chanceHistoryList;
 	}
 	
@@ -56,7 +56,7 @@ public class BusinessService {
 		return businessChanceInfo;
 	}
 	
-	/* 고객번호에 대한 영업활동기록 목록조회*/
+	/* 고객번호에 대한 영업활동기록 목록조회 */
 	public List<BusinessActivityDTO> selectActivityListByNo(int customerNo) {
 		
 		List<BusinessActivityDTO> businessActivityList = businessMapper.selectActivityListByNo(customerNo);
@@ -78,6 +78,55 @@ public class BusinessService {
 		
 		return activityInfo;
 	}
+	
+	/* 담당중인 고객 리스트 */
+	public List<CustomerDTO> selectMyCustomerList(UserImpl userInfo) {
+		
+		List<CustomerDTO> customerList = businessMapper.selectMyCustomerList(userInfo);
+		
+		return customerList;
+	}
+
+	/* 영업활동 등록 */
+	public boolean insertActivity(BusinessActivityDTO parameters) {
+
+		int result = 0;
+		int insertResult = businessMapper.insertActivity(parameters);
+		
+		if (insertResult > 0) {
+			result = 1;
+		}
+		
+		return result > 0? true: false;
+	}
+
+	/* 영업활동 수정 */
+	public boolean modifyActivity(BusinessActivityDTO parameters) {
+		
+		int result = 0;
+		int insertResult = businessMapper.modifyActivity(parameters);
+		
+		if (insertResult > 0) {
+			result = 1;
+		}
+		
+		return result > 0? true: false;
+	}
+
+	/* 영업활동 삭제 */
+	public boolean deleteActivity(int activityNo) {
+		
+		int result = 0;
+		int insertResult = businessMapper.deleteActivity(activityNo);
+		
+		if (insertResult > 0) {
+			result = 1;
+		}
+		
+		return result > 0? true: false;
+	}
+	
+	
 
 	
 
