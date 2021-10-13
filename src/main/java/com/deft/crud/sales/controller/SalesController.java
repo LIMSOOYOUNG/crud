@@ -17,6 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.deft.crud.member.model.service.UserImpl;
+import com.deft.crud.product.model.dto.ProductCategoryDTO;
 import com.deft.crud.sales.model.dto.CollectBillDTO;
 import com.deft.crud.sales.model.dto.PerformanceDTO;
 import com.deft.crud.sales.model.dto.TargetPerfomDTO;
@@ -319,6 +320,55 @@ public class SalesController {
 		mv.addObject("selectProductPeformForDate", objectMapper.writeValueAsString(selectProductPeformForDate));
 		mv.setViewName("jsonView");
 		return mv;
+	}
+	
+	/* 카테고리 실적조회 첫화면 연도와 월별로 전체 실적 조회를 한다. */
+	@GetMapping("/category/selectAll")
+	public ModelAndView selectCategorySalesAll(ModelAndView mv) {
+		
+		/* 초기화면에 현재 연도와 날짜의 상품을 조회하기 위해 LocalDate로 현재 연도와 월의 정보를 가지고 온다. */
+		LocalDate productPeformDate = LocalDate.now();
+
+		String collectBillYear = Integer.toString(productPeformDate.getYear());				
+		String collectBillMonth = Integer.toString(productPeformDate.getMonthValue());
+		
+		CollectBillDTO collectBillDate = new CollectBillDTO();
+		collectBillDate.setCollectBillYear(collectBillYear);
+		collectBillDate.setCollectBillMonth(collectBillMonth);
+		
+		List<PerformanceDTO> selectCategoryPerformList = salesService.selectCategoryPerformList(collectBillDate);
+		
+		/* 상위 카테고리 조회 셀렉트박스에 조회하기 위해서*/
+		List<ProductCategoryDTO> selectRefCategoryList = salesService.selectRefCategoryList(); 
+		
+		System.out.println("selectCategoryPerformList : " + selectCategoryPerformList);
+		System.out.println("selectRefCategoryList : " + selectRefCategoryList);
+		
+		mv.addObject("collectBillYear", collectBillYear);
+		mv.addObject("collectBillMonth", collectBillMonth);
+		mv.addObject("selectCategoryPerformList", selectCategoryPerformList);
+		mv.addObject("selectRefCategoryList", selectRefCategoryList);
+		mv.setViewName("/sales/selectCategorySalesAll");
+		return mv;
+	}
+	
+	/* 폼에서 선택한 카테고리와 날짜를 기준으로 실적조회 */
+	@PostMapping("/select/category/peform/date") 
+	public ModelAndView selectCategoryPeformForDate(ModelAndView mv, HttpServletResponse response,
+			@ModelAttribute CollectBillDTO parameters, @RequestParam int refCategoryCode) throws JsonProcessingException {
+		
+		System.out.println("  parameters : " +  parameters);
+		System.out.println("  refCategoryCode : " +  refCategoryCode);
+		
+		response.setContentType("UTF-8");
+		
+		List<PerformanceDTO> selectCategoryPerformForDate = salesService.selectCategoryPerformForDate(parameters, refCategoryCode);
+		
+		System.out.println("selectCategoryPerformForDate : " + selectCategoryPerformForDate);
+		
+		mv.addObject("selectCategoryPerformForDate", objectMapper.writeValueAsString(selectCategoryPerformForDate));
+		mv.setViewName("jsonView");
+		return null;
 	}
 	
 }

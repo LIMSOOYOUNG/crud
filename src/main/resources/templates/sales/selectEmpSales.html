@@ -78,7 +78,7 @@
 												<td th:text="${targetPerform.targetContract}"></td>
 												<td></td>
 												<td></td>
-												<td th:text="${targetPerform.targetSales}"></td>
+												<td th:text="|${targetPerform.targetSales}|"></td>
 												<td></td>
 												<td></td>
 												<td>
@@ -207,7 +207,7 @@
 								let salesPercent = (collectBillAmount / targetSales * 100).toFixed(1);
 								
 								
-								$table.children().eq(j).children().eq(2).text(performanceCount);
+								$table.children().eq(j).children().eq(2).text(performanceCount + "건");
 								$table.children().eq(j).children().eq(3).text(contractPercent);
 								$table.children().eq(j).children().eq(5).text(collectBillAmount);
 								$table.children().eq(j).children().eq(6).text(salesPercent);
@@ -253,6 +253,8 @@
 							let targetSales = empTargetPerformList[i].targetSales;
 							let empNo = empTargetPerformList[i].empNo;
 							let detailButtonForAppend = $("<button>").addClass("btn btn-primary").text("상세보기").attr('value', empNo).attr('name', 'detailButton');
+							
+							
 
 							$tr = $("<tr>");
 							$performMonth = $("<td>").text(performMonth);             
