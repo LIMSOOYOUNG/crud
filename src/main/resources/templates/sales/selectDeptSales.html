@@ -83,7 +83,7 @@
                                             <tr th:each="deptPerformList : ${selectDeptPerformList}">
                                                 <td th:text="|${deptPerformList.employeeInfo.dept.deptName}|"></td>
                                                 <td th:text="|${deptPerformList.charge.chargeCount}건 |"></td>
-                                                <td th:text="|${#numbers.formatDecimal(deptPerformList.collect.collectBillAmount, 0, 'COMMA', 0, 'POINT')}&#8361|" ></td>
+                                                <td th:text="|${#numbers.formatDecimal(deptPerformList.collect.collectBillAmount, 0, 'COMMA', 0, 'POINT')}" ></td>
                                                 <td>
                                                     <button type="button" name="detailButton" th:value="${deptPerformList.employeeInfo.dept.deptCode}" class="btn btn-primary">상세보기</button>
                                                 </td>

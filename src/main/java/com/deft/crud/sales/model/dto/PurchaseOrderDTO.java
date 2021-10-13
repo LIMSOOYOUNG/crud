@@ -1,6 +1,7 @@
 package com.deft.crud.sales.model.dto;
 
 import java.sql.Date;
+import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -26,4 +27,5 @@ public class PurchaseOrderDTO {
 	private int providerRegistNo;
 	private int sumPrice;
 	
+	List<ProductDTO> productList;
 }

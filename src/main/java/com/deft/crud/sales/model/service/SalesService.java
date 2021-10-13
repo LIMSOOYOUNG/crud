@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.deft.crud.member.model.service.UserImpl;
+import com.deft.crud.product.model.dto.ProductCategoryDTO;
 import com.deft.crud.sales.model.dao.SalesMapper;
 import com.deft.crud.sales.model.dto.CollectBillDTO;
 import com.deft.crud.sales.model.dto.PerformanceDTO;
@@ -38,6 +39,13 @@ public class SalesService {
 
 		return salesMapper.checkedEmpTargetPerformList(parameters);
 	}
+	
+	/* 전 달 부서 평균 실적 조회 */
+	public PerformanceDTO selectDeptAvgPeform(String deptCode, CollectBillDTO collectBillDate) {
+
+		return salesMapper.selectDeptAvgPeform(deptCode, collectBillDate);
+	}
+
 	
 	/* 목표실적 등록하는 메소드*/
 	@Transactional
@@ -101,8 +109,53 @@ public class SalesService {
 
 		return salesMapper.deptTargetPerformList(parameters);
 	}
-
-
 	
+	
+	public PerformanceDTO selectEmpPeformLastMonth(int empNo, CollectBillDTO collectBillDate) {
+
+		return salesMapper.selectEmpPeformLastMonth(empNo, collectBillDate);
+	}
+	
+	/* 상품 실적 조회 */
+	public List<PerformanceDTO> selectProductPerformList(CollectBillDTO collectBillDate) {
+
+		return salesMapper.selectProductPerformList(collectBillDate);
+	}
+	
+	/* 날짜별로 상품 실적 조회 */
+	public List<PerformanceDTO> selectProductPeformForDate(CollectBillDTO parameters) {
+
+		return salesMapper.selectProductPeformForDate(parameters);
+	}
+	
+	/* 카테고리 실적 조회 */
+	public List<PerformanceDTO> selectCategoryPerformList(CollectBillDTO collectBillDate) {
+
+		return salesMapper.selectCategoryPerformList(collectBillDate);
+	}
+	
+	/* 상위 카테고리 조회 */
+	public List<ProductCategoryDTO> selectRefCategoryList() {
+
+		return salesMapper.selectRefCategoryList();
+	}
+//
+//	public List<PerformanceDTO> selectCategoryPerformForDate(CollectBillDTO parameters, int refCategoryCode) {
+//
+//		if(refCategoryCode == 0) {
+//			
+//			List<PerformanceDTO> selectCategoryPerformList = salesMapper.selectCategoryPerformList(parameters);
+//			
+//			return selectCategoryPerformList;
+//		 
+//		} else {
+//			
+//			List<PerformanceDTO> selectCategoryPerformForDate = salesMapper.selectCategoryPerformForDate(parameters, refCategoryCode);
+//			
+//			return selectCategoryPerformForDate;
+//		}
+		
+//	}
+
 
 }

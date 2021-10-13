@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import com.deft.crud.product.model.dto.ProductCategoryDTO;
 import com.deft.crud.sales.model.dto.CollectBillDTO;
 import com.deft.crud.sales.model.dto.PerformanceDTO;
 import com.deft.crud.sales.model.dto.TargetPerfomDTO;
@@ -30,5 +31,19 @@ public interface SalesMapper {
 	List<TargetPerfomDTO> deptTargetPerformList(CollectBillDTO parameters);
 	
 	List<TargetPerfomDTO> checkEmpTargetPerformListForInsert(int empNo);
+
+	PerformanceDTO selectDeptAvgPeform(String deptCode, CollectBillDTO collectBillDate);
+
+	PerformanceDTO selectEmpPeformLastMonth(int empNo, CollectBillDTO collectBillDate);
+
+	List<PerformanceDTO> selectProductPerformList(CollectBillDTO collectBillDate);
+
+	List<PerformanceDTO> selectProductPeformForDate(CollectBillDTO parameters);
+
+	List<PerformanceDTO> selectCategoryPerformList(CollectBillDTO collectBillDate);
+
+	List<ProductCategoryDTO> selectRefCategoryList();
+
+//	List<PerformanceDTO> selectCategoryPerformForDate(CollectBillDTO parameters, int refCategoryCode);
 	
 }
