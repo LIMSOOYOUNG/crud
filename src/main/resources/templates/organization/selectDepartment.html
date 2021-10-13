@@ -2,6 +2,7 @@
 <html lang="ko" xmlns:th="https://www.thymeleaf.org">
 <head>
 <th:block th:replace="@{common/config} :: config"></th:block>
+<link href="/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
 </head>
 
 <body id="page-top">
@@ -42,7 +43,7 @@
 
 								<div class="table-responsive p-3">
 									<table class="table align-items-center table-flush table-hover"
-										id="dataTableHover">
+										id="department">
 										<thead align="center" class="thead-light">
 											<tr>
 												<th>부서코드</th>
@@ -56,7 +57,11 @@
 												<td th:text="${department.deptCode}"></td>
 												<td th:text="${department.deptName}"></td>
 												<td th:text="${department.deptStatus}"></td>
-												<td><button class="btn btn-primary">부서관리</button></td>
+												<td><button type="button" class="btn btn-primary" data-toggle="modal"
+												data-target="#deptModify" name="deptmodifybtn" id="#deptmodifybtn" th:value="${department.deptCode}"
+												th:data-dept-code="${department.deptCode}" th:data-dept-name="${department.deptName}" 
+												th:data-dept-fax="${department.deptFax}" th:data-dept-tel="${department.deptTel}"
+												th:data-dept-status="${department.deptStatus}">부서관리</button></td>
 											</tr>
 										</tbody>
 									</table>
@@ -111,7 +116,61 @@
 						</div>
 					</div>
 				</form>
+				<!-- 부서 수정 -->
+				<form th:action="@{departmentmodify}" method="post">
+					<div class="modal fade modal-md" id="deptModify" tabindex="-1" role="dialog"
+						aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+						<div class="modal-dialog" role="document">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title" id="exampleModalLongTitle"
+										style="color: blue;">부서 수정</h5>
+									<button type="button" class="close" data-dismiss="modal"
+										aria-label="Close">
+										<span aria-hidden="true">&times;</span>
+									</button>
+								</div>
+								<div class="modal-body">
+									<div class="form-group">
+										<label>부서 코드</label>
+										<input type="text" class="form-control" name="deptCode" id="deptCode" th:readonly="readonly">
+									</div>
+									<div class="form-group">
+										<label>부서명</label>
+										<input type="text" class="form-control" name="deptName" id="deptName">
+									</div>
+									<div class="form-group">
+										<label>부서 펙스번호</label>
+										<input type="text" class="form-control" name="deptFax" id="deptFax">
+									</div>
+									<div class="form-group">
+										<label>부서 전화번호</label>
+										<input type="text" class="form-control" name="deptTel" id="deptTel">
+									</div>
+									<div class="form-group">
+										<label>부서 상태</label>
+											<div class="custom-control custom-radio">
+										 		<input type="radio" id="deptStatus1" name="deptStatus" class="custom-control-input" value="Y">
+                        					    <label class="custom-control-label" for="deptStatus1">Y</label>
+											</div>
+									 		<div class="custom-control custom-radio">
+												<input type="radio" id="deptStatus2" name="deptStatus" class="custom-control-input" value="N">
+                        						<label class="custom-control-label" for="deptStatus2">N</label>
+											</div>
+									</div>
+								</div>
+								<div class="modal-footer">
+									<button type="submit" class="btn btn-primary">수정하기</button>
+								</div>
+							</div>
+						</div>
+					</div>
 				
+				
+				
+				
+				
+				</form>
 			</div>
 		</div>
 	</div>
@@ -120,8 +179,33 @@
 	<!-- Script -->
 	<th:block th:replace="@{/common/script} :: script"></th:block>
 	 	<!-- Page level plugins -->
-	<script src="/vendor/datatables/jquery.dataTables.min.js"></script>
-	<script src="/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+	<script>
+	$('[name="deptmodifybtn"]').click(function(){
+		const deptCode = $(this).data('dept-code')
+		const deptName = $(this).data('dept-name')
+		const deptFax = $(this).data('dept-fax')
+		const deptTel = $(this).data('dept-tel')
+		const deptStatus = $(this).data('dept-status')
+		
+		console.log(deptFax)
+		
+		$('#deptCode').val(deptCode)
+		$('#deptName').val(deptName)
+		$('#deptFax').val(deptFax)
+		$('#deptTel').val(deptTel)
+		if(deptStatus == 'Y'){
+			$('#deptStatus1').attr('checked', 'checked')
+		}else{
+			$('#deptStatus2').attr('checked', 'checked')
+		}
+		
+	});
+	</script>
+		<script>
+    $(document).ready(function () {
+      $('#department').DataTable(); // ID From dataTable 
+    });
+    </script>
 </body>
 
 </html>

@@ -13,6 +13,14 @@
 <link href="/css/ruang-admin.min.css" rel="stylesheet">
 </head>
 <body class="bg-gradient-login">
+<div id="wrapper">
+<!-- Sidebar -->
+		<th:block th:replace="@{/common/sidebar} :: sidebar"></th:block>
+
+		<div id="content-wrapper" class="d-flex flex-column">
+			<div id="content">
+				<!-- Header -->
+				<th:block th:replace="@{/common/header} :: header"></th:block>
 	<!-- Employeemodify -->
 	<div class="container-login">
 		<div class="row justify-content-center">
@@ -149,6 +157,11 @@
 			</div>
 		</div>
 	</div>
+	</div>
+	</div>
+	</div>
+	<!-- Script -->
+	<th:block th:replace="@{/common/script} :: script"></th:block>
 	<!-- Register Content -->
 	<script src="/vendor/jquery/jquery.min.js"></script>
 	<script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>

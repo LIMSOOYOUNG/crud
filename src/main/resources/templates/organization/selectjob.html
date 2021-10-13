@@ -43,7 +43,7 @@ xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-spingsecurity5">
 								</div>
 
 								<div class="table-responsive p-3">
-									<table class="table align-items-center table-flush table-hover" id="dataTableHover">
+									<table class="table align-items-center table-flush table-hover" id="jobtable">
 										<thead align="center" class="thead-light">
 											<tr>
 												<th>직급코드</th>
@@ -57,7 +57,9 @@ xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-spingsecurity5">
 												<td th:text="${job.jobCode}"></td>
 												<td th:text="${job.jobName}"></td>
 												<td th:text="${job.jobStatus}"></td>
-												<td><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#jobModify" id="#jobmodifybtn" >직급관리</button></td>
+												<td><button type="button" class="btn btn-primary" data-toggle="modal" 
+												data-target="#jobModify" name="jobmodifybtn" id="#jobmodifybtn" th:value="${job.jobCode}"
+												 th:data-job-code="${job.jobCode}" th:data-job-name="${job.jobName}" th:data-job-status="${job.jobStatus}">직급관리</button></td>
 											</tr>
 										</tbody>
 									</table>
@@ -78,7 +80,7 @@ xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-spingsecurity5">
 						<div class="modal-content">
 							<div class="modal-header">
 								<h5 class="modal-title" id="exampleModalLongTitle"
-									style="color: blue;">직급추가</h5>
+									style="color: blue;">직급 추가</h5>
 								<button type="button" class="close" data-dismiss="modal"
 									aria-label="Close">
 									<span aria-hidden="true">&times;</span>
@@ -109,30 +111,33 @@ xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-spingsecurity5">
 				</div>
 				</form>
 				<!-- 직급 수정 -->
-				<form th:action="@{organization/selectjob/jobmodify}"  method="post">
-						<div class="modal fade" id="jobModify" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+				<form th:action="@{jobmodify}"  method="post">
+					<div class="modal fade" id="jobModify" tabindex="-1" role="dialog" aria-hidden="true">
 					<div class="modal-dialog" role="document">
 						<div class="modal-content">
 							<div class="modal-header">
-								<h5 class="modal-title" id="exampleModalLongTitle" style="color: blue;">직급 관리</h5>
+								<h5 class="modal-title" id="exampleModalLongTitle" style="color: blue;">직급 수정</h5>
 									<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>						
 								</div>
 									<div class="modal-body">
-										<div class="form-group">
+										<div class="form-group" >
 											<label>직급 코드</label>
-											<input type="text" class="form-control" name="jobCode" value="${ jobDTO.jobCode }" th:readonly="readonly">
+											<input type="text" class="form-control" id="jobCode" name="jobCode"  th:readonly="readonly">
 										</div> 
-									    <div class="form-group">
+									    <div class="form-group" >
 											<label>직급명</label>
-											<input type="text" class="form-control" value="${ jobDTO.jobName }" name="jobName">
+											<input type="text" class="form-control" id="jobName" name="jobName">
 										</div>
+									<div class="form-group" >
+									<label>직급 상태</label>
 									<div class="custom-control custom-radio" >
-										 <input type="radio" id="customRadio5" name="jobStatus" class="custom-control-input" value="Y">
-                        				<label class="custom-control-label" for="customRadio5">Y</label>
+										 <input type="radio" id="jobStatus1" name="jobStatus" class="custom-control-input" value="Y">
+                        				<label class="custom-control-label" for="jobStatus1">Y</label>
 									</div>
 									 <div class="custom-control custom-radio" >
-										<input type="radio" id="customRadio6" name="jobStatus" class="custom-control-input" value="N">
-                        				<label class="custom-control-label" for="customRadio6">N</label>
+										<input type="radio" id="jobStatus2" name="jobStatus" class="custom-control-input" value="N">
+                        				<label class="custom-control-label" for="jobStatus2">N</label>
+									</div>
 									</div>
 									</div>
 									<div class="modal-footer">
@@ -142,22 +147,42 @@ xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-spingsecurity5">
 						</div>
 					</div>  
 				</form>
-				
-		<!-- Script -->
-		<th:block th:replace="@{/common/script} :: script"></th:block>
-		 	<!-- Page level plugins -->
+	<!-- Script -->
+	<th:block th:replace="@{/common/script} :: script"></th:block>
+	<!-- Page level plugins -->
 	<script src="/vendor/datatables/jquery.dataTables.min.js"></script>
 	<script src="/vendor/datatables/dataTables.bootstrap4.min.js"></script>
-		<script>
+	<script>
 	$("#updatebtn").click(function(){
 		if(confirm("수정하시겠습니까?") == true){
 			alert("수정되었습니다.")
-		}
-		else{
+		}else{
 			return;
 		}
-	})
+	});
+	
+	$('[name="jobmodifybtn"]').click(function(){
+		const jobCode = $(this).data('job-code')
+		const jobName = $(this).data('job-name')
+		const jobStatus = $(this).data('job-status')
+		
+		console.log(jobStatus)
+		
+		$('#jobCode').val(jobCode)
+		$('#jobName').val(jobName)
+		if(jobStatus == 'Y'){
+		   $('#jobStatus1').attr('checked', 'checked')
+		}else{
+			$('#jobStatus2').attr('checked', 'checked')
+		}
+		
+	});
 	</script>
+		<script>
+    $(document).ready(function () {
+      $('#jobtable').DataTable(); // ID From dataTable 
+    });
+    </script>
 </body>
 
 </html>
