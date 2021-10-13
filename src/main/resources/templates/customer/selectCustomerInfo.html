@@ -35,7 +35,9 @@
                             <ul class="navbar-nav">
                                 <li class="alert alert-light mb-1"
                                     th:each="cg : ${ chargeList }"
-                                    th:text="'청구번호 : ' + ${ cg.charge.chargeNo } + '  청구제목 : ' + ${ cg.orderTitle }"
+                                    th:text="'청구번호 : ' + ${ cg.charge.chargeNo }
+                                    + '&lt;br&gt;'
+                                    + '  청구제목 : ' + ${ cg.orderTitle }"
                                     onclick=""></li>
                             </ul>
                         </div>
