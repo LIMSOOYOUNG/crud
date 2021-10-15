@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.deft.crud.estimate.model.dao.EstimateMapper;
@@ -74,24 +76,25 @@ public class EstimateService {
 		return newEstimateNo;
 	}
 
-	@Transactional
-	public boolean insertEstimate(EstimateDTO estimateInfo) {
+	@Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE,
+				rollbackFor = {Exception.class})
+	public int insertEstimate(EstimateDTO estimateInfo) {
 		
-		int result1 = estimateMapper.insertEstimate(estimateInfo);
-		int result2 = 0;
+		int estimateInfoResult = estimateMapper.insertEstimateInfo(estimateInfo);
 		
 		List<EstimateProductDTO> productList = estimateInfo.getEstimateProductList();
 		
+		int estimateProductResult = 0;
 		for(EstimateProductDTO product : productList) {
 			product.setEstimateNo(estimateInfo.getEstimateNo());
 			
-			result2 = estimateMapper.insertEstimateProduct(product);
+			estimateProductResult = estimateMapper.insertEstimateProduct(product);
 		}
 		
-		boolean result = false; 
+		int result = 0; 
 		
-		if(result1 + result2 > 0) {
-			result = true;
+		if(estimateInfoResult > 0 && estimateProductResult == productList.size()) {
+			result = 1;
 		}
 		
 		return result;
