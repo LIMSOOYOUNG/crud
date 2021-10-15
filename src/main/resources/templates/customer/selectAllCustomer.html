@@ -36,10 +36,10 @@
                                 <a th:href="@{/}" name="status" value="all" class="nav-link active" data-toggle="tab">전체</a>
                             </li>
                             <li class="nav-item">
-                                <a th:href="@{/}" name="status" value="progress" class="nav-link" data-toggle="tab">기존고객</a>
+                                <a th:href="@{/}" name="status" value="existing" class="nav-link" data-toggle="tab">기존고객</a>
                             </li>
                             <li class="nav-item">
-                                <a th:href="@{/}" name="status" value="success" class="nav-link" data-toggle="tab">해지고객</a>
+                                <a th:href="@{/}" name="status" value="termination" class="nav-link" data-toggle="tab">해지고객</a>
                             </li>
                         </ul>
                         <div class="table-responsive p-3">
@@ -58,7 +58,8 @@
                                 <tbody th:align="center">
                                     <tr th:each="customer : ${ customerCompanyList }" >
                                         <td th:each="cus : ${ customer.customerList }"
-                                            th:text="${ cus.extCustomerDetail.customerStatus }"></td>
+                                            th:text="${ cus.extCustomerDetail.customerStatus }"
+                                            th:value="${ cus.customerNo }"></td>
                                         <td th:text="${ customer.businessStatus }"></td>
                                         <td th:text="${ customer.companyName }"></td>
                                         <td th:each="cus : ${ customer.customerList }"
@@ -92,10 +93,10 @@
     <script src="/vendor/datatables/dataTables.bootstrap4.min.js"></script>
 
     <script>
-        // $(document).ready(function () {
-        //     $('#dataTable').DataTable(); // ID From dataTable
-        //     $('#table_customer').DataTable(); // ID From dataTable with Hover
-        // });
+        $(document).ready(function () {
+            $('#dataTable').DataTable(); // ID From dataTable
+            $('#table_customer').DataTable(); // ID From dataTable with Hover
+        });
 
         $('a[name=status]').click(function () {
 
@@ -109,29 +110,53 @@
                     const customerList = JSON.parse(data.customerCompanyList);
                     const $table = $('#table_customer tbody');
 
-                    if(customerStatus == 'all') {
-                        $('#tableTitle').html('고객 현황');
-                    } else {
-                        $('#tableTitle').html(customerCompanyList[0].customerList.extCustomerDetail.customerStatus + ' 현황')
-                    }
-
                     $table.html('');
 
-                    for(let index in customerCompanyList) {
-                        let company = customerCompanyList[index];
+                    for(let index in customerList) {
+                        let company = customerList[index];
 
                         $tr = $('<tr>');
-                        $customerNoTd = $('<td>').text(company.customerList.extCustomerDetail.customerStatus);
-                        $businessStatusTd = $('<td>').text(company.customerList.extCustomerDetail.businessStatus);
+
+                        $customerNoTd = $('<td>').text(company.customerList[0].extCustomerDetail.customerStatus);
+                        $businessStatusTd = $('<td>').text(company.businessStatus);
                         $companyNameTd = $('<td>').text(company.companyName);
-                        $customerNameTd = $('<td>').text(company.customerList.customerName);
-                        $empNameTd = $('<td>').text(company.customerList.empInfo.empName);
-                        $customizationDate = $('<td>').text(company.customerList.extCustomerDetail.customizationDate);
+                        $customerNameTd = $('<td>').text(company.customerList[0].customerName);
+                        $empNameTd = $('<td>').text(company.customerList[0].empInfo.empName);
+                        $customizationDate = $('<td>').text(company.customerList[0].extCustomerDetail.customizationDate);
+                        $btnIcon = $("<i>").addClass("fas fa-clipboard-list");
+                        $btnIconSpan = $("<span>").addClass("icon text-white-50").append($btnIcon);
+                        $btnTextSpan = $("<span>").addClass("text text-white").text("상세정보");
+                        $detailBtn = $("<button>").addClass("btn btn-sm btn-dark btn-icon-split")
+                                                  .attr('id', 'detailInfoBtn')
+                                                  .attr('name', 'customerDetailBtn')
+                                                  .attr('value', company.customerList[0].customerNo)
+                                                  .append($btnIconSpan).append($btnTextSpan);
+                        $btnTd = $('<td>').append($detailBtn);
+
+                        $tr.append($customerNoTd);
+                        $tr.append($businessStatusTd);
+                        $tr.append($companyNameTd);
+                        $tr.append($customerNameTd);
+                        $tr.append($empNameTd);
+                        $tr.append($customizationDate);
+                        $tr.append($btnTd);
+
+                        $table.append($tr);
 
                     }
+                },
+                error: function (xhr, status, error) {
+                    console.log(xhr);
                 }
             });
-        })
+        });
+
+        $(document).on("click", "button[name='customerDetailBtn']", function() {
+
+            const customerNo = $(this).val();
+
+            location.href="/customer/cusinfo?customerNo=" + customerNo;
+        });
     </script>
 </body>
 

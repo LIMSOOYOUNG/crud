@@ -14,6 +14,6 @@ public class ExtCustomerDetailDTO implements Serializable {
 
     private int customerNo;
     private String customerStatus;
-    private java.sql.Date customizationDate;
+    private String customizationDate;
 
 }

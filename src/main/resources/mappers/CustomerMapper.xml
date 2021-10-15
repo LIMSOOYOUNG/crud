@@ -656,8 +656,9 @@
              , O.ORDER_TITLE
           FROM TBL_PURCHASE_ORDER O
           LEFT JOIN TBL_CHARGE C ON (O.ORDER_NO = C.ORDER_NO)
+          LEFT JOIN TBL_COLLECT_BILL B ON (C.CHARGE_NO = B.CHARGE_NO)
          WHERE O.CUSTOMER_NO = #{ customerNo }
-           AND C.COLLECT_BILL_STATUS = '수금'
+           AND B.COLLECT_BILL_STATUS = '수금'
          ORDER BY C.CHARGE_NO DESC
     </select>
 
@@ -679,10 +680,10 @@
           LEFT JOIN TBL_EXT_CUSTOMER_DETAIL EX ON (C.CUSTOMER_NO = EX.CUSTOMER_NO)
          WHERE EX.CUSTOMER_STATUS IS NOT NULL
         <choose>
-            <when test="customerStatus == 'existing">
+            <when test="customerStatus == 'existing'">
                 AND EX.CUSTOMER_STATUS = '기존고객'
             </when>
-            <when test="customerStatus == 'termination">
+            <when test="customerStatus == 'termination'">
                 AND EX.CUSTOMER_STATUS = '해지고객'
             </when>
         </choose>

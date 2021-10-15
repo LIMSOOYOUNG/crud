@@ -440,14 +440,28 @@ public class CustomerController {
     public ModelAndView selectCustomerByStatus(ModelAndView mv,
                                                HttpServletResponse response,
                                                @RequestParam String customerStatus,
-                                               @AuthenticationPrincipal UserImpl userInfo) {
+                                               @AuthenticationPrincipal UserImpl userInfo) throws JsonProcessingException {
 
         response.setContentType("application/json; charset=UTF-8");
 
         List<CustomerCompanyDTO> customerCompanyList = customerService.selectCustomerByStatus(customerStatus);
 
-        mv.addObject("customerCompanyList", customerCompanyList);
+        mv.addObject("customerCompanyList", objectMapper.writeValueAsString(customerCompanyList));
         mv.setViewName("jsonView");
+
+        return mv;
+    }
+
+    /* 분석고객 상태별 정렬 조회 */
+    @GetMapping("/selectAna")
+    public ModelAndView selectAnaCustomerByStatus(ModelAndView mv,
+                                                  HttpServletResponse response,
+                                                  @RequestParam String customerStatus,
+                                                  @AuthenticationPrincipal UserImpl userInfo) {
+
+        response.setContentType("application/json; charset=UTF-8");
+
+//        List<CustomerCompanyDTO> customerCompanyList = customerService.selectAnaCustomerByStatus(customerStatus);
 
         return mv;
     }

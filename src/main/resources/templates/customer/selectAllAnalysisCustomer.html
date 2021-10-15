@@ -34,7 +34,7 @@
                 <div class="card mb-4">
                     <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                         <h6 class="m-0 font-weight-bold text-primary">분석 고객 현황</h6>
-                        <div>
+                        <div style="display: inline-block; float: right;">
                             <a class="btn btn-info btn-icon-split"
                                id="insertAnalysis">
                                 <span class="icon text-white">
@@ -44,6 +44,23 @@
                             </a>
                         </div>
                     </div>
+                    <ul class="nav nav-tabs nav-justfied">
+                        <li class="nav-item">
+                            <a th:href="@{/}" name="status" value="all" class="nav-link active" data-toggle="tab">전체</a>
+                        </li>
+                        <li class="nav-item">
+                            <a th:href="@{/}" name="status" value="potential" class="nav-link" data-toggle="tab">잠재고객</a>
+                        </li>
+                        <li class="nav-item">
+                            <a th:href="@{/}" name="status" value="hold" class="nav-link" data-toggle="tab">보류고객</a>
+                        </li>
+                        <li class="nav-item">
+                            <a th:href="@{/}" name="status" value="success" class="nav-link" data-toggle="tab">성공고객</a>
+                        </li>
+                        <li class="nav-item">
+                            <a th:href="@{/}" name="status" value="failed" class="nav-link" data-toggle="tab">실패고객</a>
+                        </li>
+                    </ul>
                     <div class="table-responsive p-3">
                         <table id="table_customer" class="table align-items-center table-flush table-hover">
                             <thead class="thead-light" th:align="center">
@@ -242,6 +259,55 @@
 
         $('#modalInsertProduct').select2({
             placeholder: '관심상품 선택'
+        });
+
+        $('a[name=status]').click(function () {
+
+            let customerStatus = $(this).attr('value');
+
+            $.ajax({
+                url: 'customer/selectAna?customerStatus=' + customerStatus,
+                type: 'GET',
+                success: function (data, status, xhr) {
+
+                    const customerList = JSON.parse(data.customerCompanyList);
+                    const $table = $('#table_customer tbody');
+
+                    $table.html('');
+
+                    for(let index in customerList) {
+                        let company = customerList[index];
+
+                        $tr = $('<tr>');
+
+                        $customerStatusTd = $('<td>').text(company.customerList[0].extCustomerDetail.customerStatus);
+                        $businessStatusTd = $('<td>').text(company.businessStatus);
+                        $companyNameTd = $('<td>').text(company.companyName);
+                        $customerNameTd = $('<td>').text(company.customerList[0].customerName);
+                        $empNameTd = $('<td>').text(company.customerList[0].empInfo.empName);
+                        $productTd = $('<td>').text(company.customerList[0].customerProductList[0].product.productName);
+                        $btnIcon = $("<i>").addClass("fas fa-clipboard-list");
+                        $btnIconSpan = $("<span>").addClass("icon text-white-50").append($btnIcon);
+                        $btnTextSpan = $("<span>").addClass("text text-white").text("상세정보");
+                        $detailBtn = $("<button>").addClass("btn btn-sm btn-dark btn-icon-split")
+                            .attr('id', 'detailInfoBtn')
+                            .attr('name', 'customerDetailBtn')
+                            .attr('value', company.customerList[0].customerNo)
+                            .append($btnIconSpan).append($btnTextSpan);
+                        $btnTd = $('<td>').append($detailBtn);
+
+                        $tr.append($customerStatusTd);
+                        $tr.append($businessStatusTd);
+                        $tr.append($companyNameTd);
+                        $tr.append($customerNameTd);
+                        $tr.append($empNameTd);
+                        $tr.append($productTd);
+                        $tr.append($btnTd);
+
+                        $table.append($tr);
+                    }
+                }
+            });
         });
     </script>
 </body>
