@@ -8,6 +8,7 @@
 .form-control {
 	text-align: center;
 }
+
 </style>
 
 </head>
@@ -98,7 +99,7 @@
 												</td>
 												<td th:text="${chanceList.empName}"></td>
 												<td th:text="${chanceList.salesLevel}"></td>
-												<td th:text="${chanceList.dueDate}"></td>
+												<td th:text="${chanceList.writeDate}"></td>
 												<td><a class="btn btn-sm btn-dark btn-icon-split" 
 													   th:href="@{/business/chance/selectBasicInfo(customerNo=${ chanceList.customerNo }, businessChanceNo=${ chanceList.businessChanceNo })}">
 													<span class="icon text-white-50"><i class="fas fa-clipboard-list"></i></span>
@@ -142,14 +143,14 @@
 				</div>
 				<div class="modal-body">
 					<div class="row">
-						<div class="col-lg-5">
-							<div class="card mb-4">
+						<div class="col-lg-4">
+							<div class="card mb-4" th:align="center">
 								<div
 									class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
 									<h6 class="m-0 font-weight-bold text-primary">담당중인 고객리스트</h6>
 								</div>
 								<div class="table-responsive p-3"
-									style="overflow-y: scroll; height: 400px;">
+									style="overflow-y: scroll; height: 405px;">
 									<table id="customerListTable"
 										class="table align-items-center table-flush table-hover">
 										<thead th:align="center" class="thead-light">
@@ -167,7 +168,7 @@
 								</div>
 							</div>
 						</div>
-						<div class="col-lg-7">
+						<div class="col-lg-8">
 							<div class="col-lg-12" th:align="center">
 								<div class="col-lg-12">
 									<div style="background: lightgray;">
@@ -175,7 +176,8 @@
 											 style="font-size: 25px; font-weight: bold; padding-top: 5px; padding-bottom: 5px;">영업기회</div>
 									</div>
 									<div class="card mb-4">
-										<form id="insertBusinessForm" class="form-group"
+										<form id="insertBusinessChanceForm" class="form-group"
+											  th:action="@{/business/chance/insert}" method="post"
 											  style="margin-left: 30px; margin-right: 30px; margin-top: 15px;">
 											<div class="row">
 												<div class="form-group col-xl-3">
@@ -184,13 +186,14 @@
 												</div>
 												<div class="form-group col-xl-3">
 													<label for="customerManager">고객담당사원</label>
-													<input id="customerManager" name="customerManager" class="form-control" readonly>
+													<input id="customerManager" name="empName" class="form-control" readonly>
+													<input id="customerManagerNo" name="empNo" class="form-control" readonly hidden="hidden">
 														   
 												</div>
 												<div class="form-group col-xl-1"></div>
 												<div class="form-group col-xl-5">
 													<label for="chanceTitle">영업기회명</label>
-													<input id="chanceTitle" name="chanceTitle" class="form-control"
+													<input id="chanceTitle" name="businessTitle" class="form-control"
 														   placeholder="내용을 입력해주세요">
 												</div>
 											</div>
@@ -198,7 +201,7 @@
 												<div class="form-group col-xl-3">
 													<label for="customerCompany">고객사</label>
 													<input
-														id="customerCompany" name="customerCompany"
+														id="customerCompany" name="customerCompanyName"
 														class="form-control" readonly>
 												</div>
 												<div class="form-group col-xl-3">
@@ -208,18 +211,19 @@
 												</div>
 												<div class="form-group col-xl-1"></div>
 												<div class="form-group col-xl-2">
-													<label for="level">영업단계</label> <select id="level"
-														name="posibillity" class="form-control">
-														<option value="ing" selected>진행중</option>
-														<option value="success">성공</option>
-														<option value="failed">실패</option>
-														<option value="hold">보류중</option>
+													<label for="level">영업단계</label>
+													<select id="level" name="salesLevel" class="form-control">
+														<option value="offer" selected>거래제의</option>
+														<option value="estimate">견적</option>
+														<option value="order">발주</option>
+														<option value="charge">청구</option>
+														<option value="collect">수금</option>
 													</select>
 												</div>
 												<div class="form-group col-xl-1"></div>
 												<div class="form-group col-xl-2">
-													<label for="posibillity">성공가능성</label> <select
-														id="posibillity" name="posibillity" class="form-control">
+													<label for="posibillity">성공가능성</label>
+													<select id="posibillity" name="successPosibillity" class="form-control">
 														<option value=10>10%</option>
 														<option value=20>20%</option>
 														<option value=30>30%</option>
@@ -264,15 +268,9 @@
 					</div>
 				</div>
 			</div>
-			<div class="modal-footer"></div>
 			<div id="count" value="1"></div>
 		</div>
 	</div>
-
-
-
-
-
 
 	<!-- Script -->
 	<th:block th:replace="@{/common/script} :: script"></th:block>
@@ -318,8 +316,6 @@ $(document).ready(function () {
 				
 				const businessChanceList = JSON.parse(data.businessChanceList);
 				
-				console.table(businessChanceList);
-				
 				const $table = $('#businessChanceTable tbody');
 				
 				$table.html("");		//기존 테이블데이터(body내용) 초기화
@@ -344,7 +340,7 @@ $(document).ready(function () {
 					$progressStatusTd = $("<td>").append($badgeSpan);
 					$empNameTd = $("<td>").text(businessChance.empNo + " " + businessChance.empName);
 					$salesLevelTd = $("<td>").text(businessChance.salesLevel);
-					$dueDateTd = $("<td>").text(businessChance.dueDate);
+					$writeDateTd = $("<td>").text(businessChance.writeDate);
 					$btnIcon = $("<i>").addClass("fas fa-clipboard-list");
 					$btnIconSpan = $("<span>").addClass("icon text-white-50").append($btnIcon);
 					$btnTextSpan = $("<span>").addClass("text text-white").text("상세정보");
@@ -361,10 +357,9 @@ $(document).ready(function () {
 					$tr.append($progressStatusTd);
 					$tr.append($empNameTd);
 					$tr.append($salesLevelTd);
-					$tr.append($dueDateTd);
 					$tr.append($empNameTd);
 					$tr.append($salesLevelTd);
-					$tr.append($dueDateTd);
+					$tr.append($writeDateTd);
 					$tr.append($detailTd);
 					
 					$table.append($tr);
@@ -387,22 +382,19 @@ $(document).ready(function () {
     
     /* 영업기회등록버튼(영업기회등록 form(modal 실행) */
     $("button[name='insertBusinessChnace']").on("click", function() {
-		
     	
-		$("#insertBusinessForm").find('input').each(function(){ $(this).val(''); });
+		$("#insertBusinessChanceForm").find('input').each(function(){ $(this).val(''); });
 		
 		$('#productName').html("");
 		
-    	$('#level').val("ing");			//모달창 실행 시 영업단계 기본값
+    	$('#level').val("offer");			//모달창 실행 시 영업단계 기본값
     	$('#posibillity').val("10");	//모달창 실행 시 성공가능성 기본값 
-    	/* $('#dueDate').val("");		//모달창 실행 시 마감예정일 기본값(오늘날짜) */
     	
 	
 	});
 
+    /* 영업기회등록 form 안의 영업기회 등록 버튼을 눌렀을경우 동작 */
     $("button[name='insertBusinessChanceBtn']").on("click", function() {
-		
-    	console.log($('#chanceTitle').val());
     	
     	if($('#customerNo').val() == "") {
     		alert("영업기회 대상고객을 선택해주세요.")
@@ -423,7 +415,7 @@ $(document).ready(function () {
     	}
 
     	
-    	 console.log("form 데이터 전송");
+		$('#insertBusinessChanceForm').submit();
 	
 	});
     
@@ -445,8 +437,6 @@ $(document).ready(function () {
 				for(let index in customerList) {
 					
 					let customer = customerList[index];
-					
-					console.log(customer);
 					
 					$tr = $("<tr>");
 					$cNoTd = $("<td>").text(customer.customerNo).attr('hidden', true);
@@ -476,8 +466,6 @@ $(document).ready(function () {
 		
 		let customerNo = $(this).parent().siblings().eq(0).text();
 
-		console.log(customerNo);
-		
 		$.ajax({
 			url:"/business/customerInfo/select",
 			type:"POST",
@@ -488,6 +476,7 @@ $(document).ready(function () {
 				
 				$('#customerNo').val(customerInfo.customerNo);
 				$('#customerManager').val(customerInfo.empName);
+				$('#customerManagerNo').val(customerInfo.empNo);
 				$('#customerCompany').val(customerInfo.customerCompanyName);
 				$('#customerName').val(customerInfo.customerName);
 				$('#productName').text(customerInfo.productName);

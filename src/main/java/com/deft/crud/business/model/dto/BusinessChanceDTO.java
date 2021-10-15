@@ -21,6 +21,7 @@ public class BusinessChanceDTO implements Serializable {
 	private int successPosibillity;
 	private String businessTitle;
 	private String dueDate;
+	private String writeDate;
 	private String empName;
 	private int empNo;
 	private String customerName;

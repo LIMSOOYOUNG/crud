@@ -11,30 +11,38 @@
 
 		<div id="content-wrapper" class="d-flex flex-column">
 			<div id="content">
-				
+
 				<!-- Header -->
 				<th:block th:replace="@{/common/header} :: header"></th:block>
 
 				<!-- Container Fluid-->
 				<div class="container-fluid" id="container-wrapper">
-					<div class="d-sm-flex align-items-center justify-content-between mb-4">
+					<div
+						class="d-sm-flex align-items-center justify-content-between mb-4">
 						<h1 class="h3 mb-0 text-gray-800">영업기회</h1>
-						<div class="d-sm-flex align-items-center justify-content-between mb-4" style="float: right; margin-right: 3%;">
-						  <button type="button" id="btnBack" class="close"><i class="far fa-times-circle fa-3x"></i></button>
+						<div
+							class="d-sm-flex align-items-center justify-content-between mb-4"
+							style="float: right; margin-right: 3%;">
+							<button type="button" id="btnBack" class="close">
+								<i class="far fa-times-circle fa-3x"></i>
+							</button>
 						</div>
 					</div>
-					
+
 					<!-- Row -->
 					<div class="row">
-					
+
 						<!-- DataTable with Hover -->
-						<div class="col-lg-3" style="padding-left: 50px;">
+						<div class="col-lg-4" style="padding-left: 50px;">
 							<div style="background: lightgray;">
 								<div th:align="center"
 									style="font-size: 20px; font-weight: bold; padding-top: 5px; padding-bottom: 5px;">영업기회 상태변경 이력</div>
+									
 							</div>
-							<div class="card mb-4" style="overflow-y: scroll; width: 100%; height: 400px;">
-								<div th:align="center" style="margin-left: 4px; margin-right: 4px; margin-top: 15px; margin-bottom: 15px;">
+							<div class="card mb-4"
+								style="overflow-y: scroll; width: 100%; height: 400px;">
+								<div th:align="center"
+									style="margin-left: 4px; margin-right: 4px; margin-top: 15px; margin-bottom: 15px;">
 									<ul class="navbar-nav"
 										th:each="chanceHistory : ${chanceHistoryList}">
 										<li class="alert alert-light mb-1">
@@ -49,584 +57,736 @@
 								</div>
 							</div>
 						</div>
-						
-						<div class="col-lg-9" th:align="center">
-							<div class="col-lg-10">
+
+						<div class="col-lg-8" th:align="center">
+							<div class="col-lg-11">
 								<div style="background: lightgray;">
 									<div th:align="center"
 										style="font-size: 25px; font-weight: bold; padding-top: 5px; padding-bottom: 5px;">영업기회정보</div>
 								</div>
 								<div class="card mb-4">
-										<div class="form-group"
-											style="margin-left: 30px; margin-right: 30px; margin-top: 15px;">
-											<div class="row">
-												<div class="form-group col-xl-1">
-													<label>No</label>
-													<div id="businessChanceNo" name="businessChanceNo" class="form-control"
-														th:text="${businessChanceInfo.businessChanceNo}">
-													</div>
-												</div>
-												<div class="form-group col-xl-5">
-													<label>영업기회명</label>
-													<div id="businessTitle" name="businessTitle" class="form-control"
-														th:text="${businessChanceInfo.businessTitle}">
-													</div>
-												</div>
-												<div class="form-group col-xl-1">
-												</div>
-												<div class="form-group col-xl-2">
-													<label>진행상태</label>
-													<div id="progressStatus" name="progressStatus" class="form-control"
-														th:text="${businessChanceInfo.progressStatus}">
-													</div>
-												</div>
-												<div class="form-group col-xl-1">
-												</div>
-												<div class="form-group col-xl-2">
-													<label>담당사원</label>
-													<div id="empName" name="empName" class="form-control"
-														th:text="${businessChanceInfo.empName}">
-													</div>
-												</div>
+									<form id="modifyChanceInfoForm" th:action="@{/business/chance/modify}" method="post"
+										  class="form-group"
+										style="margin-left: 30px; margin-right: 30px; margin-top: 15px;">
+										<div class="row">
+											<div class="form-group col-xl-1">
+												<label>No</label> <input id="businessChanceNo"
+													name="businessChanceNo" class="form-control"
+													th:value="${businessChanceInfo.businessChanceNo}" readonly>
 											</div>
-											<div class="row">
-												<div class="form-group col-xl-3">
-													<label>고객사</label>
-													<div id="customerCompanyName" name="customerCompanyName" class="form-control"
-														th:text="${businessChanceInfo.customerCompanyName}">
-													</div>
-												</div>
-												<div class="form-group col-xl-3">
-													<label>고객측담당자</label>
-													<div id="customerName" name="customerName" class="form-control"
-														th:text="${businessChanceInfo.customerName}">
-													</div>
-												</div>
+											<div class="form-group col-xl-5">
+												<label>영업기회명</label> <input id="businessTitle"
+													name="businessTitle" class="form-control"
+													th:value="${businessChanceInfo.businessTitle}" readonly>
+											</div>
+											<div class="form-group col-xl-1"></div>
+											<div class="form-group col-xl-2">
+												<label>진행상태</label>
+												<select id="progressStatus" name="progressStatus" class="form-control" disabled>
+													<option th:selected="${businessChanceInfo.progressStatus} == '진행중'">진행중</option>
+													<option th:selected="${businessChanceInfo.progressStatus} == '성공'">성공</option>
+													<option th:selected="${businessChanceInfo.progressStatus} == '실패'">실패</option>
+													<option th:selected="${businessChanceInfo.progressStatus} == '보류중'">보류중</option>
+												</select>
+											</div>
+											<div class="form-group col-xl-1"></div>
+											<div class="form-group col-xl-2">
+												<label>담당사원</label> <input id="empName" name="empName"
+													class="form-control"
+													th:value="${businessChanceInfo.empName}" readonly>
+											</div>
+										</div>
+										<div class="row">
+											<div class="form-group col-xl-3">
+												<label>고객사</label> <input id="customerCompanyName"
+													name="customerCompanyName" class="form-control"
+													th:value="${businessChanceInfo.customerCompanyName}"
+													readonly>
+											</div>
+											<div class="form-group col-xl-3">
+												<label>고객측담당자</label> <input id="customerName"
+													name="customerName" class="form-control"
+													th:value="${businessChanceInfo.customerName}" readonly>
+											</div>
 
-												<div class="form-group col-xl-1"></div>
-												<div class="form-group col-xl-2">
-													<label>영업단계</label>
-													<div id="salesLevel" name="salesLevel" class="form-control"
-														th:text="${businessChanceInfo.salesLevel}">
-													</div>
-												</div>
-												<div class="form-group col-xl-1"></div>
-												<div class="form-group col-xl-2">
-													<label>성공가능성</label>
-													<div id="successPosibillity" name="successPosibillity" class="form-control"
-														th:text="${businessChanceInfo.successPosibillity}+'%'">
-													</div>
+											<div class="form-group col-xl-1"></div>
+											<div class="form-group col-xl-2">
+												<label>영업단계</label>
+												<select id="salesLevel" name="salesLevel"
+													class="form-control" disabled>
+													<option th:selected="${businessChanceInfo.salesLevel} == '거래제의'">거래제의</option>
+													<option th:selected="${businessChanceInfo.salesLevel} == '견적'">견적</option>
+													<option th:selected="${businessChanceInfo.salesLevel} == '발주'">발주</option>
+													<option th:selected="${businessChanceInfo.salesLevel} == '청구'">청구</option>
+													<option th:selected="${businessChanceInfo.salesLevel} == '수금'">수금</option>
+												</select>
+													
+											</div>
+											<div class="form-group col-xl-1"></div>
+											<div class="form-group col-xl-2">
+												<label>성공가능성</label>
+												<select id="successPosibillity" name="successPosibillity" class="form-control" disabled>
+													<option th:selected="${businessChanceInfo.successPosibillity} == '10'" value=10>10%</option>
+													<option th:selected="${businessChanceInfo.successPosibillity} == '20'" value=20>20%</option>
+													<option th:selected="${businessChanceInfo.successPosibillity} == '30'" value=30>30%</option>
+													<option th:selected="${businessChanceInfo.successPosibillity} == '40'" value=40>40%</option>
+													<option th:selected="${businessChanceInfo.successPosibillity} == '50'" value=50>50%</option>
+													<option th:selected="${businessChanceInfo.successPosibillity} == '60'" value=60>60%</option>
+													<option th:selected="${businessChanceInfo.successPosibillity} == '70'" value=70>70%</option>
+													<option th:selected="${businessChanceInfo.successPosibillity} == '80'" value=80>80%</option>
+													<option th:selected="${businessChanceInfo.successPosibillity} == '90'" value=90>90%</option>
+													<option th:selected="${businessChanceInfo.successPosibillity} == '100'" value=100>100%</option>
+												</select>
+											</div>
+										</div>
+										<div class="row">
+											<div class="form-group col-xl-6">
+												<label>관심상품</label>
+												<div
+													style="white-space: nowrap; overflow-x: auto; width: auto; height: 50px; border: 1px solid lightgray;
+															background-color: #F6F2FB;">
+													<div id="productName" name="productName"
+														th:text="${businessChanceInfo.productName}"></div>
 												</div>
 											</div>
-											<div class="row">
-												<div class="form-group col-xl-6">
-													<label>관심상품</label>
-													<div style="white-space: nowrap; overflow-x: auto; width: auto; height: 50px; border: 1px solid lightgray;">
-														<div id="productName" name="productName"
-															th:text="${businessChanceInfo.productName}">
-														</div>
-													</div>
-												</div>
-												<div class="form-group col-xl-1"></div>
-												<div class="form-group col-xl-5">
-													<label>마감일</label>
-													<div id="dueDate" name="dueDate" class="form-control"
-														th:text="${businessChanceInfo.dueDate}">
-													</div>
-												</div>
+											<div class="form-group col-xl-1"></div>
+											<div class="form-group col-xl-5">
+												<label>마감예정일</label> <input type="text" id="dueDate"
+													name="dueDate" class="form-control"
+													th:value="${businessChanceInfo.dueDate}" readonly>
 											</div>
-											<div class="row">
-												<div class="form-group col-xl-12" th:align="center">
-													<a class="btn btn-dark btn-icon-split"
-													   id="modifyBtn"
-													   style="margin-right: 1%; margin-top: 2%">
-														<span class="icon text-white-50">
-															<i class="fas fa-edit"></i>
-														</span>
-														<span class="text text-white">수정하기</span>
-													</a>
-													<a class="btn btn-success btn-icon-split" 
-													   id="detailInfo" 
-													   style="margin-left: 1%; margin-top: 2%">
-														<span class="icon text-white-50">
-															<i class="fas fa-info-circle"></i>
-														</span>
-														<span class="text text-white">고객상세정보</span>
-													</a>
-												</div>
-											</div>
+										</div>
+									</form>
+									<div class="row">
+										<div class="form-group col-xl-12" th:align="center">
+											<button type="button" class="btn btn-warning"
+												    id="modifyChanceInfoBtn"
+													style="margin-right: 1%; margin-top: 2%">수정하기</button>
+											
+											<button type="button" class="btn btn-success"
+											 id="detailInfo" style="margin-left: 1%; margin-top: 2%">고객상세정보</button>
+											
 										</div>
 									</div>
 								</div>
 							</div>
-						</div>
-
-					<!-- Row -->
-					<div class="row">
-
-						<!-- DataTable with Hover -->
-						<div class="col-lg-4"></div>
-						<div class="col-lg-7">
-								<div class="card mb-4" style="background: #F6F2FB;">
-									<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between"
-										style="background: lightgray;">
-										<h6 class="m-0 font-weight-bold text-primary">영업활동내역</h6>
-										<div>
-											<a class="btn btn-info btn-icon-split"
-												th:onclick="location.href=''">
-												<span class="icon text-white">
-													<i class="fas fa-edit"></i>
-												</span>
-												<span class="text text-white">활동이력등록</span>
-											</a>
-										</div>
-									</div>
-									<div class="table-responsive p-3" style="overflow-y: scroll; height: 450px;">
-										<table class="table align-items-center table-flush table-hover"	id="table_activity">
-											<thead th:align="center" class="thead-light">
-												<tr>
-													<th>활동이력번호</th>
-													<th>활동주제</th>
-													<th>담당자</th>
-													<th>등록일</th>
-													<th>관리</th>
-												</tr>
-											</thead>
-											<tbody align="center">
-												<tr th:each="activityList : ${businessActivityList}">
-													<td th:text="${activityList.activityNo}"></td>
-													<td th:text="${activityList.businessSubject}"></td>
-													<td th:text="${activityList.empName}"></td>
-													<td th:text="${activityList.writingTime}"></td>
-													<td><a class="btn btn-light btn-icon-split activityDetail"
-													       id="activityDetail" 
-													       th:value="${ activityList.activityNo }">
-															<span class="icon text-black-50">
-																<i class="fas fa-clipboard-list"></i>
-															</span>
-															<span class="text text-black">상세정보</span>
-														</a>
-													</td>
-												</tr>
-											</tbody>
-										</table>
-									</div>
-								</div>
-							</div>
-						<div class="col-lg-1">
 						</div>
 					</div>
 				</div>
-				
-				<!-- End ContainerFluid -->
+
+				<!-- Row -->
+				<div class="row">
+
+					<!-- DataTable with Hover -->
+					<div class="col-lg-4"></div>
+					<div class="col-lg-8">
+						<div class="card mb-4" style="background: #F6F2FB; margin-left:30px; margin-right: 30px;">
+							<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between"
+								 style="background: lightgray;">
+								<h6 class="m-0 font-weight-bold text-primary">영업활동내역</h6>
+								<div>
+									<button type="button" class="btn btn-info btn-icon-split" 
+										    th:onclick="|location.href='@{/business/activity/selectAll}'|">
+										<span class="icon text-white"><i class="fas fa-edit"></i></span>
+									 	<span class="text text-white">활동이력등록</span>
+									</button>
+								</div>
+							</div>
+							<div class="table-responsive p-3"
+								style="overflow-y: scroll; height: 450px;">
+								<table class="table align-items-center table-flush table-hover"
+									   id="table_activity">
+									<thead th:align="center" class="thead-light">
+										<tr>
+											<th>활동이력번호</th>
+											<th>활동주제</th>
+											<th>담당자</th>
+											<th>등록일</th>
+											<th>관리</th>
+										</tr>
+									</thead>
+									<tbody align="center">
+										<tr th:each="activityList : ${businessActivityList}">
+											<td th:text="${activityList.activityNo}"></td>
+											<td th:text="${activityList.businessSubject}"></td>
+											<td th:text="${activityList.empName}"></td>
+											<td th:text="${activityList.writingTime}"></td>
+											<td><a
+												class="btn btn-light btn-icon-split activityDetail"
+												id="activityDetail" th:value="${ activityList.activityNo }">
+													<span class="icon text-black-50"> <i
+														class="fas fa-clipboard-list"></i>
+												</span> <span class="text text-black">상세정보</span>
+											</a></td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+					<!-- <div class="col-lg-1"></div> -->
+				</div>
+			</div>
+
+			<!-- End ContainerFluid -->
+		</div>
+	</div>
+
+	<!------------- 고객상세 정보 Modal --------------->
+	<div class="modal fade" id="detailModal" role="dialog">
+		<div class="modal-dialog modal-xl modal-dialog-centered">
+
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title" style="color: #0da8ee">고객 상세정보</h4>
+					<button type="button" class="close" data-dismiss="modal">
+						<i class="far fa-times-circle"></i>
+					</button>
+					<div class="row">
+						<div class="form-group col-lg-12">
+							<input type="hidden" value="emptyRow">
+						</div>
+					</div>
+				</div>
+				<div class="modal-body">
+					<span style="font-size: x-large; color: #2e2f37;"
+						th:text="${ customerInfo.companyName }"></span>
+					<div class="row">
+						<div class="form-group col-lg-12">
+							<input type="hidden" value="emptyRow">
+						</div>
+					</div>
+					<div class="card mb-auto">
+						<div class="row">
+							<div class="form-group col-lg-12">
+								<input type="hidden" value="emptyRow">
+							</div>
+						</div>
+						<div class="row">
+							<div class="form-group col-lg-6 row">
+								<div class="form-group col-lg-1">
+									<input type="hidden" value="emptyRow">
+								</div>
+								<label for="modalCustomerNo"
+									class="col-lg-4 form-control-plaintext" th:align="center"
+									style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">고객번호</label>
+								<input th:disabled="${customerInfo.customerList[0].customerNo}"
+									id="modalCustomerNo" type="text" class="form-control col-lg-7"
+									th:value="${customerInfo.customerList[0].customerNo}">
+							</div>
+							<div class="form-group col-lg-6 row">
+								<div class="form-group col-lg-1">
+									<input type="hidden" value="emptyRow">
+								</div>
+								<label for="modalCustomerName"
+									class="col-lg-4 form-control-plaintext" th:align="center"
+									style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">고객측담당자</label>
+								<input
+									th:disabled="${customerInfo.customerList[0].customerName}"
+									id="modalCustomerName" type="text"
+									class="form-control col-lg-7"
+									th:value="${customerInfo.customerList[0].customerName}">
+							</div>
+						</div>
+						<div class="row">
+							<div class="form-group col-lg-6 row">
+								<div class="form-group col-lg-1">
+									<input type="hidden" value="emptyRow">
+								</div>
+								<label for="modalRegistNo"
+									class="col-lg-4 form-control-plaintext" th:align="center"
+									style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">사업자등록번호</label>
+								<input th:disabled="${customerInfo.companyRegistNo}"
+									id="modalRegistNo" type="text" class="form-control col-lg-7"
+									th:value="${customerInfo.companyRegistNo}">
+							</div>
+							<div class="form-group col-lg-6 row">
+								<div class="form-group col-lg-1">
+									<input type="hidden" value="emptyRow">
+								</div>
+								<label for="modalCustomerPhone"
+									class="col-lg-4 form-control-plaintext" th:align="center"
+									style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">담당자
+									전화번호</label> <input
+									th:disabled="${customerInfo.customerList[0].customerPhone}"
+									id="modalCustomerPhone" type="text"
+									class="form-control col-lg-7"
+									th:value="${customerInfo.customerList[0].customerPhone}">
+							</div>
+						</div>
+						<div class="row">
+							<div class="form-group col-lg-6 row">
+								<div class="form-group col-lg-1">
+									<input type="hidden" value="emptyRow">
+								</div>
+								<label for="modalBusinessStatus"
+									class="col-lg-4 form-control-plaintext" th:align="center"
+									style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">업태</label>
+								<input th:disabled="${customerInfo.businessStatus}"
+									id="modalBusinessStatus" type="text"
+									class="form-control col-lg-7"
+									th:value="${customerInfo.businessStatus}">
+							</div>
+							<div class="form-group col-lg-6 row">
+								<div class="form-group col-lg-1">
+									<input type="hidden" value="emptyRow">
+								</div>
+								<label for="modalCustomerEmail"
+									class="col-lg-4 form-control-plaintext" th:align="center"
+									style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">담당자이메일</label>
+								<input type="text" class="form-control col-lg-7"
+									   th:disabled="${customerInfo.customerList[0].customerEmail}"
+									   id="modalCustomerEmail" name="modalCustomerEmail"
+									   th:value="${customerInfo.customerList[0].customerEmail}">
+							</div>
+						</div>
+						<div class="row">
+							<div class="form-group col-lg-6 row">
+								<div class="form-group col-lg-1">
+									<input type="hidden" value="emptyRow">
+								</div>
+								<label for="modalBusinessType"
+									class="col-lg-4 form-control-plaintext" th:align="center"
+									style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">종목</label>
+								<input th:disabled="${customerInfo.businessType}"
+									id="modalBusinessType" type="text"
+									class="form-control col-lg-7"
+									th:value="${customerInfo.businessType}">
+							</div>
+							<div class="form-group col-lg-6 row">
+								<div class="form-group col-lg-1">
+									<input type="hidden" value="emptyRow">
+								</div>
+								<label for="modalAddress"
+									class="col-lg-4 form-control-plaintext" th:align="center"
+									style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">주소</label>
+								<input
+									th:disabled="${customerInfo.customerList[0].customerAddress}"
+									id="modalAddress" type="text" class="form-control col-lg-7"
+									th:value="${customerInfo.customerList[0].customerAddress}">
+							</div>
+						</div>
+						<div class="row">
+							<div class="form-group col-lg-6 row">
+								<div class="form-group col-lg-1">
+									<input type="hidden" value="emptyRow">
+								</div>
+								<label for="modalNumberOfEmp"
+									class="col-lg-4 form-control-plaintext" th:align="center"
+									style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">직원수(명)</label>
+								<input th:disabled="${customerInfo.numberOfEmployees}"
+									id="modalNumberOfEmp" type="text" class="form-control col-lg-7"
+									th:value="${customerInfo.numberOfEmployees}">
+							</div>
+							<div class="form-group col-lg-6 row">
+								<div class="form-group col-lg-1">
+									<input type="hidden" value="emptyRow">
+								</div>
+								<label for="modalCustomizationDate"
+									class="col-lg-4 form-control-plaintext" th:align="center"
+									style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">고객화일자</label>
+								<input
+									th:disabled="${customerInfo.customerList[0].extCustomerDetail.customizationDate}"
+									id="modalCustomizationDate" type="text"
+									class="form-control col-lg-7"
+									th:value="${customerInfo.customerList[0].extCustomerDetail.customizationDate}">
+							</div>
+						</div>
+						<div class="row">
+							<div class="form-group col-lg-6 row">
+								<div class="form-group col-lg-1">
+									<input type="hidden" value="emptyRow">
+								</div>
+								<label for="modalRevenue"
+									class="col-lg-4 form-control-plaintext" th:align="center"
+									style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">연매출액(만원)</label>
+								<input th:disabled="${customerInfo.companyRevenue}"
+									id="modalRevenue" type="text" class="form-control col-lg-7"
+									th:value="${customerInfo.companyRevenue}">
+							</div>
+							<div class="form-group col-lg-6 row">
+								<input type="hidden" value="emptyRow">
+							</div>
+						</div>
+						<div class="row">
+							<div class="form-group col-lg-6 row">
+								<div class="form-group col-lg-1">
+									<input type="hidden" value="emptyRow">
+								</div>
+								<label for="modalWebsite"
+									class="col-lg-4 form-control-plaintext" th:align="center"
+									style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">웹사이트</label>
+								<input th:disabled="${customerInfo.homepage}" id="modalWebsite"
+									type="text" class="form-control col-lg-7"
+									th:value="${customerInfo.homepage}">
+							</div>
+							<div class="form-group col-lg-6 row">
+								<input type="hidden" value="emptyRow">
+							</div>
+						</div>
+						<div class="row">
+							<div class="form-group col-lg-6 row">
+								<div class="form-group col-lg-1">
+									<input type="hidden" value="emptyRow">
+								</div>
+								<label for="modalFax" class="col-lg-4 form-control-plaintext"
+									th:align="center"
+									style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">팩스</label>
+								<input th:disabled="${customerInfo.customerList[0].customerFax}"
+									id="modalFax" type="text" class="form-control col-lg-7"
+									th:value="${customerInfo.customerList[0].customerFax}">
+							</div>
+							<div class="form-group col-lg-6 row">
+								<input type="hidden" value="emptyRow">
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div id="count" value="1"></div>
 			</div>
 		</div>
 	</div>
-	
-	        <!------------- 고객상세 정보 Modal --------------->
-        <div class="modal fade" id="detailModal" role="dialog">
-            <div class="modal-dialog modal-xl modal-dialog-centered">
 
-                <!-- Modal content-->
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title" style="color: #0da8ee">고객 상세정보</h4>
-                        <button type="button" class="close" data-dismiss="modal"><i class="far fa-times-circle"></i></button>
-                        <div class="row">
-                            <div class="form-group col-lg-12"><input type="hidden" value="emptyRow"></div>
-                        </div>
-                    </div>
-                    <div class="modal-body">
-                        <span style="font-size: x-large; color: #2e2f37;" th:text="${ customerInfo.companyName }"></span>
-                        <div class="row">
-                            <div class="form-group col-lg-12"><input type="hidden" value="emptyRow"></div>
-                        </div>
-                        <div class="card mb-auto">
-                            <div class="row">
-                                <div class="form-group col-lg-12"><input type="hidden" value="emptyRow"></div>
-                            </div>
-                            <div class="row">
-                                <div class="form-group col-lg-6 row">
-                                    <div class="form-group col-lg-1"><input type="hidden" value="emptyRow"></div>
-                                    <label for="modalCustomerNo" class="col-lg-4 form-control-plaintext"
-                                           th:align="center"
-                                           style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">고객번호</label>
-                                    <input th:disabled="${customerInfo.customerList[0].customerNo}"
-                                           id="modalCustomerNo" type="text" class="form-control col-lg-7"
-                                           th:value="${customerInfo.customerList[0].customerNo}">
-                                </div>
-                                <div class="form-group col-lg-6 row">
-                                    <div class="form-group col-lg-1"><input type="hidden" value="emptyRow"></div>
-                                    <label for="modalCustomerName" class="col-lg-4 form-control-plaintext"
-                                           th:align="center"
-                                           style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">고객측담당자</label>
-                                    <input th:disabled="${customerInfo.customerList[0].customerName}"
-                                           id="modalCustomerName" type="text" class="form-control col-lg-7"
-                                           th:value="${customerInfo.customerList[0].customerName}">
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="form-group col-lg-6 row">
-                                    <div class="form-group col-lg-1"><input type="hidden" value="emptyRow"></div>
-                                    <label for="modalRegistNo" class="col-lg-4 form-control-plaintext"
-                                           th:align="center"
-                                           style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">사업자등록번호</label>
-                                    <input th:disabled="${customerInfo.companyRegistNo}"
-                                           id="modalRegistNo" type="text" class="form-control col-lg-7"
-                                           th:value="${customerInfo.companyRegistNo}">
-                                </div>
-                                <div class="form-group col-lg-6 row">
-                                    <div class="form-group col-lg-1"><input type="hidden" value="emptyRow"></div>
-                                    <label for="modalCustomerPhone" class="col-lg-4 form-control-plaintext"
-                                           th:align="center"
-                                           style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">담당자 전화번호</label>
-                                    <input th:disabled="${customerInfo.customerList[0].customerPhone}"
-                                           id="modalCustomerPhone" type="text" class="form-control col-lg-7"
-                                           th:value="${customerInfo.customerList[0].customerPhone}">
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="form-group col-lg-6 row">
-                                    <div class="form-group col-lg-1"><input type="hidden" value="emptyRow"></div>
-                                    <label for="modalBusinessStatus" class="col-lg-4 form-control-plaintext"
-                                           th:align="center"
-                                           style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">업태</label>
-                                    <input th:disabled="${customerInfo.businessStatus}"
-                                           id="modalBusinessStatus" type="text" class="form-control col-lg-7"
-                                           th:value="${customerInfo.businessStatus}">
-                                </div>
-                                <div class="form-group col-lg-6 row">
-                                    <div class="form-group col-lg-1"><input type="hidden" value="emptyRow"></div>
-                                    <label for="modalCustomerEmail" class="col-lg-4 form-control-plaintext"
-                                           th:align="center"
-                                           style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">담당자 이메일</label>
-                                    <input th:disabled="${customerInfo.customerList[0].customerEmail}"
-                                           id="modalCustomerEmail" type="text" class="form-control col-lg-7"
-                                           th:value="${customerInfo.customerList[0].customerEmail}">
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="form-group col-lg-6 row">
-                                    <div class="form-group col-lg-1"><input type="hidden" value="emptyRow"></div>
-                                    <label for="modalBusinessType" class="col-lg-4 form-control-plaintext"
-                                           th:align="center"
-                                           style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">종목</label>
-                                    <input th:disabled="${customerInfo.businessType}"
-                                           id="modalBusinessType" type="text" class="form-control col-lg-7"
-                                           th:value="${customerInfo.businessType}">
-                                </div>
-                                <div class="form-group col-lg-6 row">
-                                    <div class="form-group col-lg-1"><input type="hidden" value="emptyRow"></div>
-                                    <label for="modalAddress" class="col-lg-4 form-control-plaintext"
-                                           th:align="center"
-                                           style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">주소</label>
-                                    <input th:disabled="${customerInfo.customerList[0].customerAddress}"
-                                           id="modalAddress" type="text" class="form-control col-lg-7"
-                                           th:value="${customerInfo.customerList[0].customerAddress}">
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="form-group col-lg-6 row">
-                                    <div class="form-group col-lg-1"><input type="hidden" value="emptyRow"></div>
-                                    <label for="modalNumberOfEmp" class="col-lg-4 form-control-plaintext"
-                                           th:align="center"
-                                           style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">직원수(명)</label>
-                                    <input th:disabled="${customerInfo.numberOfEmployees}"
-                                           id="modalNumberOfEmp" type="text" class="form-control col-lg-7"
-                                           th:value="${customerInfo.numberOfEmployees}">
-                                </div>
-                                <div class="form-group col-lg-6 row">
-                                    <div class="form-group col-lg-1"><input type="hidden" value="emptyRow"></div>
-                                    <label for="modalCustomizationDate" class="col-lg-4 form-control-plaintext"
-                                           th:align="center"
-                                           style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">고객화일자</label>
-                                    <input th:disabled="${customerInfo.customerList[0].extCustomerDetail.customizationDate}"
-                                           id="modalCustomizationDate" type="text" class="form-control col-lg-7"
-                                           th:value="${customerInfo.customerList[0].extCustomerDetail.customizationDate}">
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="form-group col-lg-6 row">
-                                    <div class="form-group col-lg-1"><input type="hidden" value="emptyRow"></div>
-                                    <label for="modalRevenue" class="col-lg-4 form-control-plaintext"
-                                           th:align="center"
-                                           style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">연매출액(만원)</label>
-                                    <input th:disabled="${customerInfo.companyRevenue}"
-                                           id="modalRevenue" type="text" class="form-control col-lg-7"
-                                           th:value="${customerInfo.companyRevenue}">
-                                </div>
-                                <div class="form-group col-lg-6 row">
-                                    <input type="hidden" value="emptyRow">
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="form-group col-lg-6 row">
-                                    <div class="form-group col-lg-1"><input type="hidden" value="emptyRow"></div>
-                                    <label for="modalWebsite" class="col-lg-4 form-control-plaintext"
-                                           th:align="center"
-                                           style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">웹사이트</label>
-                                    <input th:disabled="${customerInfo.homepage}"
-                                           id="modalWebsite" type="text" class="form-control col-lg-7"
-                                           th:value="${customerInfo.homepage}">
-                                </div>
-                                <div class="form-group col-lg-6 row">
-                                    <input type="hidden" value="emptyRow">
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="form-group col-lg-6 row">
-                                    <div class="form-group col-lg-1"><input type="hidden" value="emptyRow"></div>
-                                    <label for="modalFax" class="col-lg-4 form-control-plaintext"
-                                           th:align="center"
-                                           style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">팩스</label>
-                                    <input th:disabled="${customerInfo.customerList[0].customerFax}"
-                                           id="modalFax" type="text" class="form-control col-lg-7"
-                                           th:value="${customerInfo.customerList[0].customerFax}">
-                                </div>
-                                <div class="form-group col-lg-6 row">
-                                    <input type="hidden" value="emptyRow">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div id="count" value="1"></div>
-                </div>
-            </div>
-        </div>
-	
-	
-		<!------------- 영활동 상세정보 Modal --------------->
-        <div class="modal fade" id="activityModal" role="dialog">
-            <div class="modal-dialog modal-xl">
 
-               <!-- Modal content-->
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <div class="row col-sm-12">
-                            <h4 class="modal-title" style="color: #0da8ee; padding: 10px">영업활동 상세정보</h4>
-                            <button type="button" class="close" data-dismiss="modal"><i class="far fa-times-circle"></i></button>
-                        </div>
-                        <div class="row">
-                            <div class="form-group col-sm-12"><input type="hidden" value="emptyRow"></div>
-                        </div>
+	<!------------- 영활동 상세정보 Modal --------------->
+	<div class="modal fade" id="activityModal" role="dialog">
+		<div class="modal-dialog modal-xl">
 
-                        <div class="row">
-                            <div class="form-group col-sm-12"><input type="hidden" value="emptyRow"></div>
-                        </div>
-                    </div>
-                    <div class="modal-body">
-                        <span style="font-size: x-large; color: #2e2f37; padding: 20px"
-                              th:text="${ customerInfo.companyName }"></span>
-                        <span style="padding: 330px;"></span>
-                       <div class="row">
-                            <div class="form-group col-lg-12"><input type="hidden" value="emptyRow"></div>
-                        </div>
-                        <div class="card mb-auto">
-                            <div class="row">
-                                <div class="form-group col-lg-12"><input type="hidden" value="emptyRow"></div>
-                            </div>
-                            <div class="row">
-                                <div class="form-group col-lg-6 row">
-                                    <div class="form-group col-lg-1"><input type="hidden" value="emptyRow"></div>
-                                    <label for="modalCustomerNo" class="col-lg-4 form-control-plaintext"
-                                           th:align="center"
-                                           style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">고객번호</label>
-                                    <input th:disabled="${customerInfo.customerList[0].customerNo}"
-                                           id="modalCustomerNo" type="text" class="form-control col-lg-7"
-                                           th:value="${customerInfo.customerList[0].customerNo}">
-                                </div>
-                                <div class="form-group col-lg-6 row">
-                                    <div class="form-group col-lg-1"><input type="hidden" value="emptyRow"></div>
-                                    <label for="modalCustomerName" class="col-lg-4 form-control-plaintext"
-                                           th:align="center"
-                                           style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">담당자</label>
-                                    <input th:disabled="${customerInfo.customerList[0].customerName}"
-                                           id="modalCustomerName" type="text" class="form-control col-lg-7"
-                                           th:value="${customerInfo.customerList[0].customerName}">
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="form-group col-lg-6 row">
-                                    <div class="form-group col-lg-1"><input type="hidden" value="emptyRow"></div>
-                                    <label for="modalRegistNo" class="col-lg-4 form-control-plaintext"
-                                           th:align="center"
-                                           style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">사업자등록번호</label>
-                                    <input th:disabled="${customerInfo.companyRegistNo}"
-                                           id="modalRegistNo" type="text" class="form-control col-lg-7"
-                                           th:value="${customerInfo.companyRegistNo}">
-                                </div>
-                                <div class="form-group col-lg-6 row">
-                                    <div class="form-group col-lg-1"><input type="hidden" value="emptyRow"></div>
-                                    <label for="modalCustomerPhone" class="col-lg-4 form-control-plaintext"
-                                           th:align="center"
-                                           style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">담당자 전화번호</label>
-                                    <input th:disabled="${customerInfo.customerList[0].customerPhone}"
-                                           id="modalCustomerPhone" type="text" class="form-control col-lg-7"
-                                           th:value="${customerInfo.customerList[0].customerPhone}">
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="form-group col-lg-6 row">
-                                    <div class="form-group col-lg-1"><input type="hidden" value="emptyRow"></div>
-                                    <label for="modalBusinessStatus" class="col-lg-4 form-control-plaintext"
-                                           th:align="center"
-                                           style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">업태</label>
-                                    <input th:disabled="${customerInfo.businessStatus}"
-                                           id="modalBusinessStatus" type="text" class="form-control col-lg-7"
-                                           th:value="${customerInfo.businessStatus}">
-                                </div>
-                                <div class="form-group col-lg-6 row">
-                                    <div class="form-group col-lg-1"><input type="hidden" value="emptyRow"></div>
-                                    <label for="modalCustomerEmail" class="col-lg-4 form-control-plaintext"
-                                           th:align="center"
-                                           style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">담당자 이메일</label>
-                                    <input th:disabled="${customerInfo.customerList[0].customerEmail}"
-                                           id="modalCustomerEmail" type="text" class="form-control col-lg-7"
-                                           th:value="${customerInfo.customerList[0].customerEmail}">
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="form-group col-lg-6 row">
-                                    <div class="form-group col-lg-1"><input type="hidden" value="emptyRow"></div>
-                                    <label for="modalBusinessType" class="col-lg-4 form-control-plaintext"
-                                           th:align="center"
-                                           style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">종목</label>
-                                    <input th:disabled="${customerInfo.businessType}"
-                                           id="modalBusinessType" type="text" class="form-control col-lg-7"
-                                           th:value="${customerInfo.businessType}">
-                                </div>
-                                <div class="form-group col-lg-6 row">
-                                    <div class="form-group col-lg-1"><input type="hidden" value="emptyRow"></div>
-                                    <label for="modalAddress" class="col-lg-4 form-control-plaintext"
-                                           th:align="center"
-                                           style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">주소</label>
-                                    <input th:disabled="${customerInfo.customerList[0].customerAddress}"
-                                           id="modalAddress" type="text" class="form-control col-lg-7"
-                                           th:value="${customerInfo.customerList[0].customerAddress}">
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="form-group col-lg-6 row">
-                                    <div class="form-group col-lg-1"><input type="hidden" value="emptyRow"></div>
-                                    <label for="modalNumberOfEmp" class="col-lg-4 form-control-plaintext"
-                                           th:align="center"
-                                           style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">직원수(명)</label>
-                                    <input th:disabled="${customerInfo.numberOfEmployees}"
-                                           id="modalNumberOfEmp" type="text" class="form-control col-lg-7"
-                                           th:value="${customerInfo.numberOfEmployees}">
-                                </div>
-                                <div class="form-group col-lg-6 row">
-                                    <div class="form-group col-lg-1"><input type="hidden" value="emptyRow"></div>
-                                    <label for="modalCustomizationDate" class="col-lg-4 form-control-plaintext"
-                                           th:align="center"
-                                           style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">고객화일자</label>
-                                    <input th:disabled="${customerInfo.customerList[0].extCustomerDetail.customizationDate}"
-                                           id="modalCustomizationDate" type="text" class="form-control col-lg-7"
-                                           th:value="${customerInfo.customerList[0].extCustomerDetail.customizationDate}">
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="form-group col-lg-6 row">
-                                    <div class="form-group col-lg-1"><input type="hidden" value="emptyRow"></div>
-                                    <label for="modalRevenue" class="col-lg-4 form-control-plaintext"
-                                           th:align="center"
-                                           style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">연매출액(만원)</label>
-                                    <input th:disabled="${customerInfo.companyRevenue}"
-                                           id="modalRevenue" type="text" class="form-control col-lg-7"
-                                           th:value="${customerInfo.companyRevenue}">
-                                </div>
-                                <div class="form-group col-lg-6 row">
-                                    <input type="hidden" value="emptyRow">
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="form-group col-lg-6 row">
-                                    <div class="form-group col-lg-1"><input type="hidden" value="emptyRow"></div>
-                                    <label for="modalWebsite" class="col-lg-4 form-control-plaintext"
-                                           th:align="center"
-                                           style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">웹사이트</label>
-                                    <input th:disabled="${customerInfo.homepage}"
-                                           id="modalWebsite" type="text" class="form-control col-lg-7"
-                                           th:value="${customerInfo.homepage}">
-                                </div>
-                                <div class="form-group col-lg-6 row">
-                                    <input type="hidden" value="emptyRow">
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="form-group col-lg-6 row">
-                                    <div class="form-group col-lg-1"><input type="hidden" value="emptyRow"></div>
-                                    <label for="modalFax" class="col-lg-4 form-control-plaintext"
-                                           th:align="center"
-                                           style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">팩스</label>
-                                    <input th:disabled="${customerInfo.customerList[0].customerFax}"
-                                           id="modalFax" type="text" class="form-control col-lg-7"
-                                           th:value="${customerInfo.customerList[0].customerFax}">
-                                </div>
-                                <div class="form-group col-lg-6 row">
-                                    <input type="hidden" value="emptyRow">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" id="modifyDetailInfo" class="btn btn-primary">상세정보수정</button>
-                    </div>
-                    <div id="count" value="1"></div>
-                </div>
-            </div>
-        </div> 
-	
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header">
+					<div class="row col-sm-12">
+						<h4 class="modal-title" style="color: #0da8ee; padding: 10px">영업활동
+							상세정보</h4>
+						<button type="button" class="close" data-dismiss="modal">
+							<i class="far fa-times-circle"></i>
+						</button>
+					</div>
+					<div class="row">
+						<div class="form-group col-sm-12">
+							<input type="hidden" value="emptyRow">
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="form-group col-sm-12">
+							<input type="hidden" value="emptyRow">
+						</div>
+					</div>
+				</div>
+				<div class="modal-body">
+					<span style="font-size: x-large; color: #2e2f37; padding: 20px"
+						th:text="${ customerInfo.companyName }"></span> <span
+						style="padding: 330px;"></span>
+					<div class="row">
+						<div class="form-group col-lg-12">
+							<input type="hidden" value="emptyRow">
+						</div>
+					</div>
+					<div class="card mb-auto">
+						<div class="row">
+							<div class="form-group col-lg-12">
+								<input type="hidden" value="emptyRow">
+							</div>
+						</div>
+						<div class="row">
+							<div class="form-group col-lg-6 row">
+								<div class="form-group col-lg-1">
+									<input type="hidden" value="emptyRow">
+								</div>
+								<label for="modalCustomerNo"
+									class="col-lg-4 form-control-plaintext" th:align="center"
+									style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">고객번호</label>
+								<input th:disabled="${customerInfo.customerList[0].customerNo}"
+									id="modalCustomerNo" type="text" class="form-control col-lg-7"
+									th:value="${customerInfo.customerList[0].customerNo}">
+							</div>
+							<div class="form-group col-lg-6 row">
+								<div class="form-group col-lg-1">
+									<input type="hidden" value="emptyRow">
+								</div>
+								<label for="modalCustomerName"
+									class="col-lg-4 form-control-plaintext" th:align="center"
+									style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">담당자</label>
+								<input
+									th:disabled="${customerInfo.customerList[0].customerName}"
+									id="modalCustomerName" type="text"
+									class="form-control col-lg-7"
+									th:value="${customerInfo.customerList[0].customerName}">
+							</div>
+						</div>
+						<div class="row">
+							<div class="form-group col-lg-6 row">
+								<div class="form-group col-lg-1">
+									<input type="hidden" value="emptyRow">
+								</div>
+								<label for="modalRegistNo"
+									class="col-lg-4 form-control-plaintext" th:align="center"
+									style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">사업자등록번호</label>
+								<input th:disabled="${customerInfo.companyRegistNo}"
+									id="modalRegistNo" type="text" class="form-control col-lg-7"
+									th:value="${customerInfo.companyRegistNo}">
+							</div>
+							<div class="form-group col-lg-6 row">
+								<div class="form-group col-lg-1">
+									<input type="hidden" value="emptyRow">
+								</div>
+								<label for="modalCustomerPhone"
+									class="col-lg-4 form-control-plaintext" th:align="center"
+									style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">담당자
+									전화번호</label> <input
+									th:disabled="${customerInfo.customerList[0].customerPhone}"
+									id="modalCustomerPhone" type="text"
+									class="form-control col-lg-7"
+									th:value="${customerInfo.customerList[0].customerPhone}">
+							</div>
+						</div>
+						<div class="row">
+							<div class="form-group col-lg-6 row">
+								<div class="form-group col-lg-1">
+									<input type="hidden" value="emptyRow">
+								</div>
+								<label for="modalBusinessStatus"
+									class="col-lg-4 form-control-plaintext" th:align="center"
+									style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">업태</label>
+								<input th:disabled="${customerInfo.businessStatus}"
+									id="modalBusinessStatus" type="text"
+									class="form-control col-lg-7"
+									th:value="${customerInfo.businessStatus}">
+							</div>
+							<div class="form-group col-lg-6 row">
+								<div class="form-group col-lg-1">
+									<input type="hidden" value="emptyRow">
+								</div>
+								<label for="modalCustomerEmail"
+									class="col-lg-4 form-control-plaintext" th:align="center"
+									style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">담당자
+									이메일</label> <input
+									th:disabled="${customerInfo.customerList[0].customerEmail}"
+									id="modalCustomerEmail" type="text"
+									class="form-control col-lg-7"
+									th:value="${customerInfo.customerList[0].customerEmail}">
+							</div>
+						</div>
+						<div class="row">
+							<div class="form-group col-lg-6 row">
+								<div class="form-group col-lg-1">
+									<input type="hidden" value="emptyRow">
+								</div>
+								<label for="modalBusinessType"
+									class="col-lg-4 form-control-plaintext" th:align="center"
+									style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">종목</label>
+								<input th:disabled="${customerInfo.businessType}"
+									id="modalBusinessType" type="text"
+									class="form-control col-lg-7"
+									th:value="${customerInfo.businessType}">
+							</div>
+							<div class="form-group col-lg-6 row">
+								<div class="form-group col-lg-1">
+									<input type="hidden" value="emptyRow">
+								</div>
+								<label for="modalAddress"
+									class="col-lg-4 form-control-plaintext" th:align="center"
+									style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">주소</label>
+								<input
+									th:disabled="${customerInfo.customerList[0].customerAddress}"
+									id="modalAddress" type="text" class="form-control col-lg-7"
+									th:value="${customerInfo.customerList[0].customerAddress}">
+							</div>
+						</div>
+						<div class="row">
+							<div class="form-group col-lg-6 row">
+								<div class="form-group col-lg-1">
+									<input type="hidden" value="emptyRow">
+								</div>
+								<label for="modalNumberOfEmp"
+									class="col-lg-4 form-control-plaintext" th:align="center"
+									style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">직원수(명)</label>
+								<input th:disabled="${customerInfo.numberOfEmployees}"
+									id="modalNumberOfEmp" type="text" class="form-control col-lg-7"
+									th:value="${customerInfo.numberOfEmployees}">
+							</div>
+							<div class="form-group col-lg-6 row">
+								<div class="form-group col-lg-1">
+									<input type="hidden" value="emptyRow">
+								</div>
+								<label for="modalCustomizationDate"
+									class="col-lg-4 form-control-plaintext" th:align="center"
+									style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">고객화일자</label>
+								<input
+									th:disabled="${customerInfo.customerList[0].extCustomerDetail.customizationDate}"
+									id="modalCustomizationDate" type="text"
+									class="form-control col-lg-7"
+									th:value="${customerInfo.customerList[0].extCustomerDetail.customizationDate}">
+							</div>
+						</div>
+						<div class="row">
+							<div class="form-group col-lg-6 row">
+								<div class="form-group col-lg-1">
+									<input type="hidden" value="emptyRow">
+								</div>
+								<label for="modalRevenue"
+									class="col-lg-4 form-control-plaintext" th:align="center"
+									style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">연매출액(만원)</label>
+								<input th:disabled="${customerInfo.companyRevenue}"
+									id="modalRevenue" type="text" class="form-control col-lg-7"
+									th:value="${customerInfo.companyRevenue}">
+							</div>
+							<div class="form-group col-lg-6 row">
+								<input type="hidden" value="emptyRow">
+							</div>
+						</div>
+						<div class="row">
+							<div class="form-group col-lg-6 row">
+								<div class="form-group col-lg-1">
+									<input type="hidden" value="emptyRow">
+								</div>
+								<label for="modalWebsite"
+									class="col-lg-4 form-control-plaintext" th:align="center"
+									style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">웹사이트</label>
+								<input th:disabled="${customerInfo.homepage}" id="modalWebsite"
+									type="text" class="form-control col-lg-7"
+									th:value="${customerInfo.homepage}">
+							</div>
+							<div class="form-group col-lg-6 row">
+								<input type="hidden" value="emptyRow">
+							</div>
+						</div>
+						<div class="row">
+							<div class="form-group col-lg-6 row">
+								<div class="form-group col-lg-1">
+									<input type="hidden" value="emptyRow">
+								</div>
+								<label for="modalFax" class="col-lg-4 form-control-plaintext"
+									th:align="center"
+									style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF">팩스</label>
+								<input th:disabled="${customerInfo.customerList[0].customerFax}"
+									id="modalFax" type="text" class="form-control col-lg-7"
+									th:value="${customerInfo.customerList[0].customerFax}">
+							</div>
+							<div class="form-group col-lg-6 row">
+								<input type="hidden" value="emptyRow">
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" id="modifyDetailInfo" class="btn btn-primary">상세정보수정</button>
+				</div>
+				<div id="count" value="1"></div>
+			</div>
+		</div>
+	</div>
+
 
 	<!-- Script -->
 	<th:block th:replace="@{/common/script} :: script"></th:block>
 	<script src="/vendor/datatables/jquery.dataTables.min.js"></script>
-    <script src="/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+	<script src="/vendor/datatables/dataTables.bootstrap4.min.js"></script>
 
 	<script>
-        $(document).ready(function () {
-            $('#dataTable').DataTable(); // ID From dataTable
-            $('#table_activity').DataTable(); // ID From dataTable with Hover
-        });
+		$(document).ready(function() {
+			$('#dataTable').DataTable(); // ID From dataTable
+			$('#table_activity').DataTable(); // ID From dataTable with Hover
+		});
 
-        $('#detailInfo').click(function () {
-           $('#detailModal').modal();
-        });
+		/* 영업기회 현황 목록에서 상세정보 버튼 클릭 시 동작 */
+		$(document).on('click', '#detailInfo', function() {
+			$('#detailModal').modal();
+		});
+	
+		/* 뒤로가기 X 버튼 */
+		$('#btnBack').click(function() {
+			window.history.back();
+		});
 
-        
-        $('#modifyBtn').click(function () {
-            $('#modifyFormModal').modal();
-         });
-        
-        
-        /* 뒤로가기 X 버튼 */
-        $('#btnBack').click(function () {
-           window.history.back();
-        });
+		/* 영업기회목록에서 상세정보 버튼 클릭 시 동작 */
+		$(document).on('click', '.activityDetail', function() {
+			$.ajax({
+				url : "customer/activity/select",
+				type : "GET",
+				data : {
+					activityNo : $("#activityDetail").val()
+				},
+				success : function(data, status, xhr) {
 
-        /* 영업기회목록에서 상세정보 버튼 클릭 시 동작 */
-        $('.activityDetail').click(function() {
-            $.ajax({
-               url: "customer/activity/select",
-               type: "GET",
-               data: { activityNo : $("#activityDetail").val() },
-                success: function (data, status, xhr) {
+					const activity = JSON.parse(data.activityOne);
 
-                   const activity = JSON.parse(data.activityOne);
+					console.log(activity);
+				},
+				error : function(xhr, status, error) {
+					console.log(error);
+				}
+			});
+			
+			$('#activityModal').modal();
+		});
 
-                   console.log(activity);
-                },
-                error: function (xhr, status, error) {
-                   console.log(error);
-                }
-            });
-            $('#activityModal').modal();
-        });
-        
-       
-        
-     
-    </script>
+		/* 수정하기 버튼 눌렀을경우 동작 */
+		$(document).on('click', '#modifyChanceInfoBtn', function() {
+			
+			 $('#businessTitle').attr('readonly', false);
+			 $('#progressStatus').attr('disabled', false);
+			 $('#salesLevel').attr('disabled', false);
+			 $('#successPosibillity').attr('disabled', false);
+			 $('#dueDate').attr('readonly', false);
+
+		        var text = $('#modifyChanceInfoBtn').text();
+		        if(text == '수정하기') {
+
+		            $('#modifyChanceInfoBtn').text('수정완료');
+		            $('#modifyChanceInfoBtn').attr('class', 'btn btn-primary');
+		            $('#modifyChanceInfoBtn').attr('id', 'successmodifyChanceInfoBtn');
+
+		            $('#detailInfo').text('취소');
+		            $('#detailInfo').attr('class', 'btn btn-secondary');
+		            $('#detailInfo').attr('id', 'backToDetail');
+		            
+		            var endTime = $('#dueDate').val();
+
+		            $('#dueDate').attr('type', 'date');
+		            $('#dueDate').val(startTime);
+
+		            $('#activityEndTime').attr('type', 'datetime-local');
+		            $('#activityEndTime').val(endTime);
+		        } 
+		});
+		
+		 /* 취소하기 버튼 클릭 시 동작 */
+		 $(document).on('click', '#backToDetail', function() {
+				
+				$('#businessTitle').attr('readonly', true);
+				$('#progressStatus').attr('disabled', true);
+				$('#salesLevel').attr('disabled', true);
+				$('#successPosibillity').attr('disabled', true);
+				$('#dueDate').attr('readonly', true);
+
+			        var text = $('#successmodifyChanceInfoBtn').text();
+			        if(text == '수정완료') {
+
+			            $('#successmodifyChanceInfoBtn').text('수정하기');
+			            $('#successmodifyChanceInfoBtn').attr('class', 'btn btn-warning');
+			            $('#successmodifyChanceInfoBtn').attr('id', 'modifyChanceInfoBtn');
+
+			            $('#backToDetail').text('고객상세정보');
+			            $('#backToDetail').attr('class', 'btn btn-success');
+			            $('#backToDetail').attr('id', 'detailInfo');
+			            
+			            var endTime = $('#dueDate').val();
+
+			            $('#dueDate').attr('type', 'text');
+			            $('#dueDate').val(startTime);
+			        }
+			});
+		 
+		 /* 수정완료 버튼 클릭 시 동작(form 전송) */
+		 $(document).on('click', '#successmodifyChanceInfoBtn', function() {
+			 
+			 $('#modifyChanceInfoForm').submit();
+		 });
+		
+	</script>
 </body>
 </html>

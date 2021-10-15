@@ -13,6 +13,9 @@ import com.deft.crud.customer.model.dao.CustomerMapper;
 import com.deft.crud.customer.model.dto.CustomerDTO;
 import com.deft.crud.member.model.service.UserImpl;
 
+import ch.qos.logback.core.joran.conditional.IfAction;
+import ch.qos.logback.core.net.SyslogOutputStream;
+
 @Service
 public class BusinessService {
 
@@ -132,6 +135,59 @@ public class BusinessService {
 		BusinessChanceDTO customerInfo = businessMapper.selectCustomerBasicInfo(customerNo);
 		
 		return customerInfo;
+	}
+
+	/* 영업기회 등록 */
+	public Boolean insertBusinessChance(BusinessChanceDTO parameters) {
+		
+		int result = 0;
+		int insertResult = businessMapper.insertBusinessChance(parameters);
+		
+		if (insertResult > 0) {
+			result = 1;
+		}
+		
+		return result > 0? true: false;
+	}
+
+	/* 영업기회 내용 수정 */
+	public Boolean modifyBusinessChance(BusinessChanceDTO parameters) {
+		
+		int result = 0;
+		
+		int businessChanceNo = parameters.getBusinessChanceNo();
+		
+		/* 변경 전 영업기회 내용 조회 */
+		BusinessChanceDTO businessChanceInfo = businessMapper.selectChanceInfoByNo(businessChanceNo);
+		
+		/* 영업기회 내용 변경 */
+		int modifyResult = businessMapper.modifyBusinessChance(parameters);	          
+		
+		if (modifyResult > 0) {
+			
+			if(businessChanceInfo.getProgressStatus().equals(parameters.getProgressStatus())) {
+				parameters.setProgressStatus("");
+				System.out.println("기회번호 동일");
+			}
+			if(businessChanceInfo.getSalesLevel().equals(parameters.getSalesLevel())) {
+				parameters.setSalesLevel("");
+				System.out.println("영업상태 동일");
+			}
+			if(businessChanceInfo.getProgressStatus().equals(parameters.getProgressStatus())) {
+				parameters.setProgressStatus("");
+				System.out.println("진행단계 동일");
+			}
+			
+		/* 영업기회 변경이력 생성 */
+		int insertHistoryResult = businessMapper.insertChanceHistory(parameters);	
+			
+			if(insertHistoryResult > 0) {
+				
+				result = 1;
+			}
+		}
+		
+		return result > 0? true: false;
 	}
 	
 	

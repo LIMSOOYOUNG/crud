@@ -232,11 +232,52 @@ public class BusinessController {
     	
     	return mv;
     }
+    
+    /* 영업기회 등록 */
+    @PostMapping("chance/insert")
+    public ModelAndView insertBusinessChance(ModelAndView mv, RedirectAttributes rttr,
+    										@ModelAttribute BusinessChanceDTO parameters) {
+    	
+    	Boolean result = businessService.insertBusinessChance(parameters);
+    	
+    	String message = "";
+		  
+		  if(result) { 
+			  message = "영업기회 등록완료";
+		  } else { 
+			  message = "영업기회 등록실패!";
+		  }
+
+		  rttr.addFlashAttribute("message", message);
+		  mv.setViewName("redirect:/business/chance/selectAll");
+    	
+    	return mv;
+    }
+    
+    @PostMapping("chance/modify")
+    public ModelAndView modifyBusinessChance(ModelAndView mv, RedirectAttributes rttr,
+											@ModelAttribute BusinessChanceDTO parameters) {
+    
+    	System.out.println("@@@영업수정할 내용 테스트 : " + parameters);
+    	
+    	Boolean result = businessService.modifyBusinessChance(parameters);
+    	
+    	String message = "";
+		  
+		  if(result) { 
+			  message = "영업기회 수정완료";
+		  } else { 
+			  message = "영업기회 수정실패!";
+		  }
+
+		  rttr.addFlashAttribute("message", message);
+		  mv.setViewName("redirect:/business/chance/selectAll");
+		 
+  	return mv;
+    }
+
 
 }
-
-
-
 
 
 
