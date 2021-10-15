@@ -197,6 +197,17 @@
 		 )
 	</insert>
 	
+	<select id="selectOneCategory" resultMap="productCategoryResultMap">
+		SELECT /*com.deft.crud.product.model.dao.ProductMapper#selectOneCategory()*/
+			   C.CATEGORY_CODE
+			 , C.CATEGORY_NAME
+			 , B.CATEGORY_CODE "REF_CATEGORY_CODE"
+			 , B.CATEGORY_NAME "REF_CATEGORY_NAME"
+	      FROM TBL_PRODUCT_CATEGORY C
+	      JOIN TBL_PRODUCT_CATEGORY B ON (B.CATEGORY_CODE = C.REF_CATEGORY_CODE)
+	     WHERE C.CATEGORY_CODE = #{ selectedCategory }
+	</select>
+	
 	
 	
 <!-- 	<select id="selectRefCategoryForUpdate" resultMap="productCategoryResultMap"> -->

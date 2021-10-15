@@ -19,13 +19,89 @@
 				<div class="container-fluid" id="container-wrapper">
 					<h1>Dashboard 화면입니다.</h1>
 					<button onclick="location.href='/member/logout'">로그아웃</button>
+					<div class="row">
+						<div class="row col-4">
+							<canvas id="myChart"></canvas>
+						</div>
+					</div> 
 				</div>
-			</div>
+			</div> 
 		</div>
 	</div>
 
 	<!-- Script -->
     <th:block th:replace="@{/common/script} :: script"></th:block>
-</body>
+	<script th:src="@{/vendor/chart.js/Chart.min.js}"></script>
+	<!-- Page level custom scripts -->
+	<script th:src="@{/js/demo/chart-area-demo.js}"></script>
+	<script th:src="@{/js/demo/chart-pie-demo.js}"></script>
+	<script th:src="@{/js/demo/chart-bar-demo.js}"></script>
+	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+	<script>
+		$(document).ready(function () {
+			var ctx = document.getElementById('myChart');
+			var myChart = new Chart(ctx, {
+				type: 'line',
+				data: {
+					labels: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'],
+					datasets: [{
+						label: '실적',
+						data: [12, 19, 3, 5, 2, 3],
+						backgroundColor: [
+							'rgba(255, 99, 132, 0.2)',
+							'rgba(54, 162, 235, 0.2)',
+							'rgba(255, 206, 86, 0.2)',
+							'rgba(75, 192, 192, 0.2)',
+							'rgba(153, 102, 255, 0.2)',
+							'rgba(255, 159, 64, 0.2)'
+						],
+						borderColor: [
+							'rgba(255, 99, 132, 1)',
+							'rgba(54, 162, 235, 1)',
+							'rgba(255, 206, 86, 1)',
+							'rgba(75, 192, 192, 1)',
+							'rgba(153, 102, 255, 1)',
+							'rgba(255, 159, 64, 1)'
+						],
+						borderWidth: 1
+					}]
+				},
+				options: {
+					scales: {
+						y: {
+							beginAtZero: true
+						}
+					}
+				}
+			});
 
+			var newData = [];
+			$.ajax({
+				url:"/dashboard/emp/sales/selectAll",
+				type: 'GET',
+				success: function(data, status, xhr) {
+
+					console.log(data);
+					
+					const userPerformChart = JSON.parse(data.userPerformChart);
+					for(let index in userPerformChart) {
+						let userPerform = userPerformChart[index];
+
+// 						let collectAmount =  userPerform[0].collect.collectBillAmount;
+// 						console.log(collectAmount);
+
+						// myChart.data.datasets[0].data = [1, 2, 3, 4, 5, 6];
+						// myChart.update();
+					}
+
+				},
+
+				error: function(xhr, status, error) {
+					console.log(error);
+				}
+			});
+		});
+		</script>
+		
+</body>
 </html>

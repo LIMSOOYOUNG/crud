@@ -30,13 +30,13 @@
 		<result property="collectBillDate" column="COLLECT_BILL_DATE"/>
 		<result property="collectBillYear" column="COLLECT_BILL_YEAR"/>
 		<result property="collectBillMonth" column="COLLECT_BILL_MONTH"/>
+		<result property="collectBillStatus" column="COLLECT_BILL_STATUS"/>
 	</resultMap>
 	
 	<resultMap type="com.deft.crud.sales.model.dto.ChargeDTO" id="chargeResultMap">
 		<id property="chargeNo" column="CHARGE_NO"/>
 		<result property="orderNo" column="ORDER_NO"/>
 		<result property="chargeStatus" column="CHARGE_STATUS"/>
-		<result property="collectBillStatus" column="COLLECT_BILL_STATUS"/>
 		<result property="chargeDate" column="CHARGE_DATE"/>
 		<result property="chargeCount" column="CHARGE_COUNT"/>
 	</resultMap>
@@ -145,7 +145,7 @@
           JOIN TBL_COLLECT_BILL B ON (P.COLLECT_BILL_NO = B.COLLECT_BILL_NO)
   		  JOIN TBL_EMP_INFO E ON (P.EMP_NO = E.EMP_NO)
           JOIN TBL_CHARGE C ON (C.CHARGE_NO = B.CHARGE_NO)
- 		 WHERE C.COLLECT_BILL_STATUS = '수금'
+ 		 WHERE B.COLLECT_BILL_STATUS = '수금'
  	     GROUP BY EXTRACT(YEAR FROM B.COLLECT_BILL_DATE)
                 , EXTRACT(MONTH FROM B.COLLECT_BILL_DATE)
                 , P.EMP_NO
@@ -199,7 +199,7 @@
 	      JOIN TBL_DEPARTMENT D ON ( D.DEPT_CODE = E.DEPT_CODE)
 	      JOIN TBL_COLLECT_BILL CO ON ( CO.COLLECT_BILL_NO = P.COLLECT_BILL_NO)
 	      JOIN TBL_CHARGE CH ON (CH.CHARGE_NO = CO.CHARGE_NO)
-	     WHERE CH.COLLECT_BILL_STATUS = '수금'
+	     WHERE CO.COLLECT_BILL_STATUS = '수금'
            AND D.DEPT_CODE = #{ deptCode }
            AND EXTRACT(YEAR FROM CO.COLLECT_BILL_DATE) = #{ collectBillDate.collectBillYear } 
            AND EXTRACT(MONTH FROM CO.COLLECT_BILL_DATE) = #{ collectBillDate.collectBillMonth }
@@ -217,7 +217,7 @@
           JOIN TBL_COLLECT_BILL B ON (P.COLLECT_BILL_NO = B.COLLECT_BILL_NO)
   		  JOIN TBL_EMP_INFO E ON (P.EMP_NO = E.EMP_NO)
           JOIN TBL_CHARGE C ON (C.CHARGE_NO = B.CHARGE_NO)
- 		 WHERE C.COLLECT_BILL_STATUS = '수금'
+ 		 WHERE B.COLLECT_BILL_STATUS = '수금'
            AND P.EMP_NO = #{ empNo }
            AND EXTRACT(YEAR FROM B.COLLECT_BILL_DATE) = #{ collectBillDate.collectBillYear } 
            AND EXTRACT(MONTH FROM B.COLLECT_BILL_DATE) = #{ collectBillDate.collectBillMonth } 
@@ -269,7 +269,7 @@
 	      JOIN TBL_DEPARTMENT D ON ( D.DEPT_CODE = E.DEPT_CODE)
 	      JOIN TBL_COLLECT_BILL CO ON ( CO.COLLECT_BILL_NO = P.COLLECT_BILL_NO)
 	      JOIN TBL_CHARGE CH ON (CH.CHARGE_NO = CO.CHARGE_NO)
-	     WHERE CH.COLLECT_BILL_STATUS = '수금'
+	     WHERE CO.COLLECT_BILL_STATUS = '수금'
 	     GROUP BY EXTRACT(YEAR FROM CO.COLLECT_BILL_DATE) 
 		        , EXTRACT(MONTH FROM CO.COLLECT_BILL_DATE)
 		        , D.DEPT_CODE
@@ -296,7 +296,7 @@
 		  JOIN TBL_JOB J ON (J.JOB_CODE = E.JOB_CODE)
 		  JOIN TBL_CHARGE C ON (C.CHARGE_NO = B.CHARGE_NO)
 		  JOIN TBL_DEPARTMENT D ON (D.DEPT_CODE = E.DEPT_CODE)
-		 WHERE C.COLLECT_BILL_STATUS = '수금'
+		 WHERE B.COLLECT_BILL_STATUS = '수금'
 		   AND D.DEPT_CODE = #{ deptCode } 
 		 GROUP BY EXTRACT(YEAR FROM B.COLLECT_BILL_DATE) 
 		        , EXTRACT(MONTH FROM B.COLLECT_BILL_DATE)
@@ -322,7 +322,7 @@
 	      JOIN TBL_DEPARTMENT D ON ( D.DEPT_CODE = E.DEPT_CODE)
 	      JOIN TBL_COLLECT_BILL CO ON ( CO.COLLECT_BILL_NO = P.COLLECT_BILL_NO)
 	      JOIN TBL_CHARGE CH ON (CH.CHARGE_NO = CO.CHARGE_NO)
-	     WHERE CH.COLLECT_BILL_STATUS = '수금'
+	     WHERE CO.COLLECT_BILL_STATUS = '수금'
 	     GROUP BY EXTRACT(YEAR FROM CO.COLLECT_BILL_DATE) 
 		        , EXTRACT(MONTH FROM CO.COLLECT_BILL_DATE)
 		        , D.DEPT_CODE
@@ -365,7 +365,7 @@
 		  JOIN TBL_PRODUCT P ON ( P.PRODUCT_NO = POP.PRODUCT_NO)
 		  JOIN TBL_PRODUCT_CATEGORY A ON ( A.CATEGORY_CODE = P.CATEGORY_CODE)
 		  JOIN TBL_PRODUCT_CATEGORY B ON (B.CATEGORY_CODE = A.REF_CATEGORY_CODE)
-  		 WHERE CH.COLLECT_BILL_STATUS = '수금'
+  		 WHERE CB.COLLECT_BILL_STATUS = '수금'
     	   AND EXTRACT(YEAR FROM CB.COLLECT_BILL_DATE) = #{ collectBillYear }
     	   AND EXTRACT(MONTH FROM CB.COLLECT_BILL_DATE) = #{ collectBillMonth }
          GROUP BY CB.COLLECT_BILL_DATE
@@ -397,7 +397,7 @@
 		  JOIN TBL_PRODUCT P ON ( P.PRODUCT_NO = POP.PRODUCT_NO)
 		  JOIN TBL_PRODUCT_CATEGORY A ON ( A.CATEGORY_CODE = P.CATEGORY_CODE)
 		  JOIN TBL_PRODUCT_CATEGORY B ON (B.CATEGORY_CODE = A.REF_CATEGORY_CODE)
-  		 WHERE CH.COLLECT_BILL_STATUS = '수금'
+  		 WHERE CB.COLLECT_BILL_STATUS = '수금'
     	   AND EXTRACT(YEAR FROM CB.COLLECT_BILL_DATE) = #{ collectBillYear }
     	   AND EXTRACT(MONTH FROM CB.COLLECT_BILL_DATE) = #{ collectBillMonth }
          GROUP BY CB.COLLECT_BILL_DATE
@@ -428,7 +428,7 @@
 		  JOIN TBL_PRODUCT P ON ( P.PRODUCT_NO = POP.PRODUCT_NO)
 		  JOIN TBL_PRODUCT_CATEGORY A ON ( A.CATEGORY_CODE = P.CATEGORY_CODE)
 		  JOIN TBL_PRODUCT_CATEGORY B ON (B.CATEGORY_CODE = A.REF_CATEGORY_CODE)
-		 WHERE CH.COLLECT_BILL_STATUS = '수금'
+		 WHERE CB.COLLECT_BILL_STATUS = '수금'
 		   AND EXTRACT(YEAR FROM CB.COLLECT_BILL_DATE) = #{ collectBillYear }
 		   AND EXTRACT(MONTH FROM CB.COLLECT_BILL_DATE) = #{ collectBillMonth }
 		 GROUP BY A.REF_CATEGORY_CODE
@@ -438,7 +438,7 @@
 		 ORDER BY A.CATEGORY_CODE ASC
 	</select>
 	
-	
+	<!-- 셀렉트 박스에 상위카테고리 목록을 보여주기 위해 상위 카테고리 목록을 조회한다. -->
 	<select id="selectRefCategoryList" resultMap="productCategoryResultMap">
 		SELECT /*com.deft.crud.product.model.dao.SalesMapper#selectRefCategoryList()*/
 		       C.CATEGORY_CODE "REF_CATEGORY_CODE"
@@ -448,30 +448,57 @@
 	
 	</select>
 	
-<!-- 	<select id="selectCategoryPerformForDate" resultMap="performResultMap" parameterType="com.deft.crud.sales.model.dto.CollectBillDTO"> -->
-<!-- 		SELECT /*com.deft.crud.product.model.dao.SalesMapper#selectCategoryPerformForDate()*/ -->
-<!-- 	           A.REF_CATEGORY_CODE -->
-<!-- 		     , B.CATEGORY_NAME "REF_CATEGORY_NAME" -->
-<!-- 		     , A.CATEGORY_CODE -->
-<!-- 		     , A.CATEGORY_NAME -->
-<!-- 		     , SUM(CB.COLLECT_BILL_AMOUNT) "COLLECT_BILL_AMOUNT" -->
-<!-- 		     , COUNT(P.PRODUCT_NO) "CHARGE_COUNT" -->
-<!-- 		  FROM TBL_PERFORMANCE PE -->
-<!-- 		  JOIN TBL_COLLECT_BILL CB ON (PE.COLLECT_BILL_NO = CB.COLLECT_BILL_NO) -->
-<!-- 		  JOIN TBL_CHARGE CH ON ( CH.CHARGE_NO = CB.CHARGE_NO) -->
-<!-- 		  JOIN TBL_PURCHASE_ORDER PO ON (PO.ORDER_NO = CH.ORDER_NO) -->
-<!-- 		  JOIN TBL_PURCHASE_ORDER_PRODUCT POP ON (POP.ORDER_NO = PO.ORDER_NO) -->
-<!-- 		  JOIN TBL_PRODUCT P ON ( P.PRODUCT_NO = POP.PRODUCT_NO) -->
-<!-- 		  JOIN TBL_PRODUCT_CATEGORY A ON ( A.CATEGORY_CODE = P.CATEGORY_CODE) -->
-<!-- 		  JOIN TBL_PRODUCT_CATEGORY B ON (B.CATEGORY_CODE = A.REF_CATEGORY_CODE) -->
-<!-- 		 WHERE CH.COLLECT_BILL_STATUS = '수금' -->
-<!-- 		   AND EXTRACT(YEAR FROM CB.COLLECT_BILL_DATE) = #{ parameters.collectBillYear } -->
-<!-- 		   AND EXTRACT(MONTH FROM CB.COLLECT_BILL_DATE) = #{ parameters.collectBillMonth } -->
-<!-- 		 GROUP BY A.REF_CATEGORY_CODE -->
-<!-- 		        , A.CATEGORY_CODE -->
-<!-- 		        , A.CATEGORY_NAME -->
-<!-- 		 HAVING A.REF_CATEGORY_CODE = #{ refCategoryCode } -->
-<!-- 		 ORDER BY A.CATEGORY_CODE ASC -->
+	<select id="selectCategoryPerformForDate" resultMap="performResultMap" parameterType="com.deft.crud.sales.model.dto.CollectBillDTO">
+		SELECT /*com.deft.crud.product.model.dao.SalesMapper#selectCategoryPerformForDate()*/
+	           A.REF_CATEGORY_CODE
+		     , B.CATEGORY_NAME "REF_CATEGORY_NAME"
+		     , A.CATEGORY_CODE
+		     , A.CATEGORY_NAME
+		     , SUM(CB.COLLECT_BILL_AMOUNT) "COLLECT_BILL_AMOUNT"
+		     , COUNT(P.PRODUCT_NO) "CHARGE_COUNT"
+		  FROM TBL_PERFORMANCE PE
+		  JOIN TBL_COLLECT_BILL CB ON (PE.COLLECT_BILL_NO = CB.COLLECT_BILL_NO)
+		  JOIN TBL_CHARGE CH ON ( CH.CHARGE_NO = CB.CHARGE_NO)
+		  JOIN TBL_PURCHASE_ORDER PO ON (PO.ORDER_NO = CH.ORDER_NO)
+		  JOIN TBL_PURCHASE_ORDER_PRODUCT POP ON (POP.ORDER_NO = PO.ORDER_NO)
+		  JOIN TBL_PRODUCT P ON ( P.PRODUCT_NO = POP.PRODUCT_NO)
+		  JOIN TBL_PRODUCT_CATEGORY A ON ( A.CATEGORY_CODE = P.CATEGORY_CODE)
+		  JOIN TBL_PRODUCT_CATEGORY B ON (B.CATEGORY_CODE = A.REF_CATEGORY_CODE)
+		 WHERE CB.COLLECT_BILL_STATUS = '수금'
+		   AND EXTRACT(YEAR FROM CB.COLLECT_BILL_DATE) = #{ parameters.collectBillYear }
+		   AND EXTRACT(MONTH FROM CB.COLLECT_BILL_DATE) = #{ parameters.collectBillMonth }
+		 GROUP BY A.REF_CATEGORY_CODE
+		 		, B.CATEGORY_NAME 
+		        , A.CATEGORY_CODE
+		        , A.CATEGORY_NAME
+		 HAVING A.REF_CATEGORY_CODE = #{ refCategoryCode }
+		 ORDER BY A.CATEGORY_CODE ASC
 	
-<!-- 	</select> -->
+	</select>
+	
+	<!-- 카테고리 실적 상세정보 -->
+	<select id="selectCategoryPerformDetail" resultMap="performResultMap" parameterType="com.deft.crud.sales.model.dto.CollectBillDTO">
+		SELECT /*com.deft.crud.product.model.dao.SalesMapper#selectCategoryPerformDetail()*/
+		       CH.CHARGE_NO
+		     , CB.COLLECT_BILL_DATE
+		     , A.CATEGORY_CODE
+		     , PO.ORDER_TITLE
+		     , CB.COLLECT_BILL_AMOUNT
+		     , EI.EMP_NAME
+		  FROM TBL_PERFORMANCE PE
+		  JOIN TBL_EMP_INFO EI ON (EI.EMP_NO = PE.EMP_NO)
+		  JOIN TBL_COLLECT_BILL CB ON (PE.COLLECT_BILL_NO = CB.COLLECT_BILL_NO)
+		  JOIN TBL_CHARGE CH ON ( CH.CHARGE_NO = CB.CHARGE_NO)
+		  JOIN TBL_PURCHASE_ORDER PO ON (PO.ORDER_NO = CH.ORDER_NO)
+		  JOIN TBL_PURCHASE_ORDER_PRODUCT POP ON (POP.ORDER_NO = PO.ORDER_NO)
+		  JOIN TBL_PRODUCT P ON ( P.PRODUCT_NO = POP.PRODUCT_NO)
+		  JOIN TBL_PRODUCT_CATEGORY A ON ( A.CATEGORY_CODE = P.CATEGORY_CODE)
+		  JOIN TBL_PRODUCT_CATEGORY B ON (B.CATEGORY_CODE = A.REF_CATEGORY_CODE)
+		 WHERE CB.COLLECT_BILL_STATUS = '수금'
+		   AND EXTRACT(YEAR FROM CB.COLLECT_BILL_DATE) = #{ parameters.collectBillYear }
+		   AND EXTRACT(MONTH FROM CB.COLLECT_BILL_DATE) = #{ parameters.collectBillMonth }
+		   AND A.CATEGORY_CODE = #{ categoryCode }
+		 ORDER BY CB.COLLECT_BILL_DATE DESC
+	
+	</select>
 </mapper>

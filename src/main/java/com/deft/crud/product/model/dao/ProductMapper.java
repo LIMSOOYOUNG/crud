@@ -40,6 +40,8 @@ public interface ProductMapper {
 	/* 상품 등록 메소드 */
 	int insertProduct(InsertProductDTO parameters);
 
+	ProductCategoryDTO selectOneCategory(int selectedCategory);
+
 //	ProductCategoryDTO selectRefCategoryForUpdate(int refCategoryCode);
 
 }

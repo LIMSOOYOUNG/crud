@@ -97,4 +97,10 @@ public class ProductService {
 		return productMapper.insertProduct(parameters);
 	}
 
+	public ProductCategoryDTO selectOneCategory(int selectedCategory) {
+
+		
+		return productMapper.selectOneCategory(selectedCategory);
+	}
+
 }
