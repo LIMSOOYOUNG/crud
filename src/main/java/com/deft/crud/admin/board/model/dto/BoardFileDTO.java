@@ -1,7 +1,5 @@
 package com.deft.crud.admin.board.model.dto;
 
-import java.util.Date;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,20 +8,16 @@ import lombok.ToString;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
 @Setter
+@Getter
 @ToString
-public class AdminBoardDTO {
+public class BoardFileDTO {
+
 	private int boardNo;
 	private int writeNo;
-	private String boardName;
-	private String empName;
-	private java.util.Date writeDate;
-	private int views;
-	private String contents;
-	private String type;
-	private int empNo;
 	private int boardAttatchNo;
-
-	private BoardFileDTO boardImage;
+	private String originalName;
+	private String savedName;
+	private String savedPath;
+	
 }

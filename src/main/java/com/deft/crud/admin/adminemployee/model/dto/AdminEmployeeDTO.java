@@ -43,5 +43,5 @@ public class AdminEmployeeDTO implements java.io.Serializable{
 	
 	private DepartmentDTO dept;
 	private JobDTO job;
-	
+	private EmployeeImageDTO empImage;
 }

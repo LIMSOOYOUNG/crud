@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.deft.crud.board.model.dto.BoardDTO;
@@ -67,13 +69,16 @@ public class BoardController {
 	
 	@PostMapping("/freeboardinsert")
 	public ModelAndView insertfreeboardForm(ModelAndView mv, @ModelAttribute BoardDTO parameters,
-			@AuthenticationPrincipal UserImpl loginInfo) 
+			@AuthenticationPrincipal UserImpl loginInfo, @RequestParam("freeboardfileUpload") MultipartFile files) 
 					throws Exception {
 		
 	    int loginEmpNo = loginInfo.getEmpNo();
 	    parameters.setEmpNo(loginEmpNo);
 	    
+
+	    
 		int result = boardService.insertFreeboard(parameters);
+		
 		
 		if(result>0) {
 			
