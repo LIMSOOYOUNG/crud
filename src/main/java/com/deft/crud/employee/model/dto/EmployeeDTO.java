@@ -34,6 +34,6 @@ public class EmployeeDTO implements java.io.Serializable {
 	private java.util.Date hireDate;
 	private java.util.Date entDate;
 	
-	
+	private EmployeeImageDTO empImage;
 	
 }
