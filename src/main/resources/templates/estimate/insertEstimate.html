@@ -30,7 +30,7 @@
 
 					<div class="row">
 						<div class="col-lg-12" th:align="center">
-							<form th:action="@{/estimate/insert}" method="POST" onsubmit="return insertEstimate();">
+							<form th:action="@{/estimate/insert}" method="POST" id="insertEstimate">
 
 								<!-- EstimateInfo -->
 								<div class="card mb-4">
@@ -135,7 +135,7 @@
 									</div>
 								</div>
 								<div class="mb-4" th:align="center">
-									<button type="submit" class="btn btn-primary mx-2">등록</button>
+									<button type="button" class="btn btn-primary mx-2" id="registEstimateBtn">등록</button>
 									<button type="reset" class="btn btn-outline-danger mx-2"
 									th:onclick="history.back()">취소</button>
 								</div>
@@ -284,7 +284,7 @@
 				postfix: "%"
 			});
 		});
-		
+
 		/* 고객 목록 중 선택하여 정보 입력 */
 		$("button[name='selectCustomer']").on("click", function() {
 			$td = $(this).parent();
@@ -326,11 +326,11 @@
 				return;
 			}
 			
-			if(Number($stockTr.children().eq(7).text()) < $stockTr.children().eq(8).children().val()) {
-				alert("상품 재고가 부족합니다.");
-				$("input[name='stockQty']").val("");
-				return;
-			}
+			// if(Number($stockTr.children().eq(7).text()) < $stockTr.children().eq(8).children().val()) {
+			// 	alert("상품 재고가 부족합니다.");
+			// 	$("input[name='stockQty']").val("");
+			// 	return;
+			// }
 
 			for(let i = 0; i < $estimateProduct.children().length; i++) {
 				if($estimateProduct.children().eq(i).children().eq(1).text() == $stockTr.children().eq(0).text()) {
@@ -442,7 +442,8 @@
 		}
 
 		/* 입력된 견적서 정보를 post 방식으로 전송 */
-		function insertEstimate() {
+		$(document).on("click", "#registEstimateBtn", function() {
+
 			const $estimateProduct = $("#estimateProductTable tbody");
 			let productList = [];
 
@@ -452,7 +453,7 @@
 			}
 
 			for(let i = 0; i < $estimateProduct.children().length; i++) {
-				productNo = $estimateProduct.children().eq(i).children().eq(0).text();
+				productNo = $estimateProduct.children().eq(i).children().eq(1).text();
 				qty = $estimateProduct.children().eq(i).children().eq(6).text();
 				
 				const product = {"productNo": productNo, "productAmount": qty};
@@ -466,9 +467,7 @@
 							"customerNo" : $("#customerNo").val(),
 							"estimateStatus" : $("#estimateStatus option:selected").text(),
 							"estimateProductList" : productList};
-
-			console.log(estimate);
-
+							
 			if(confirm("견적서를 등록하시겠습니까?")) {
 				$.ajax({
 					url: "/estimate/insert",
@@ -476,11 +475,7 @@
 					data: JSON.stringify(estimate),
 					contentType: "application/json; charset=UTF-8",
 					success: function(data, status, xhr) {
-						if(data) {
-							alert("견적서가 등록되었습니다.");
-						} else {
-							alert("견적서 등록에 실패하였습니다.");
-						}
+						
 					},
 					error: function(xhr, status, error) {
 						alert("예기치 못한 에러가 발생하였습니다.");
@@ -488,7 +483,7 @@
 					}
 				});
 			}
-		}
+		});
 	</script>
 </body>
 

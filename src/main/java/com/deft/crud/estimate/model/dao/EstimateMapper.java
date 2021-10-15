@@ -18,7 +18,7 @@ public interface EstimateMapper {
 	
 	String selectLastEstimateSeq();
 
-	int insertEstimate(EstimateDTO estimateInfo);
+	int insertEstimateInfo(EstimateDTO estimateInfo);
 
 	int insertEstimateProduct(EstimateProductDTO product);
 }

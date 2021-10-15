@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.deft.crud.customer.model.dto.ExtCustomerDTO;
 import com.deft.crud.customer.model.service.CustomerService;
@@ -45,8 +46,10 @@ public class EstimateController {
 		this.objectMapper = objectMapper;
 	}
 	
-	@GetMapping("/selectAll")
+	@GetMapping("selectAll")
 	public ModelAndView selectEstimateList(ModelAndView mv, @AuthenticationPrincipal UserImpl userInfo) {
+		
+		System.out.println("페이지 이동!!");
 		
 		int empNo = userInfo.getEmpNo();
 		
@@ -88,6 +91,7 @@ public class EstimateController {
 	@GetMapping("/insert")
 	public ModelAndView insertEstimate(ModelAndView mv) {
 		
+		System.out.println("견적서 작성!!");
 		/* 새로운 견적번호 및 일자 입력 */
 		EstimateDTO estimate = new EstimateDTO();
 		LocalDate newEstimateLocalDate = LocalDate.now();
@@ -114,13 +118,23 @@ public class EstimateController {
 	
 	@PostMapping("/insert")
 	public ModelAndView insertEstimate(ModelAndView mv, HttpServletResponse response,
-			@RequestBody EstimateDTO estimate) {
+			RedirectAttributes rttr, @RequestBody EstimateDTO estimate) {
+		
 		response.setContentType("application/json; charset=UTF-8");
 		
-		boolean result = estimateService.insertEstimate(estimate);
+//		int result = estimateService.insertEstimate(estimate);
+		int result = 1;
+		String message = "";
 		
-		mv.addObject("result", result);
-		mv.setViewName("redirect:/estimate/insertEstimate");
+		if(result > 0) {
+			message = "견적서가 등록되었습니다.";
+		} else {
+			message = "견적서 등록에 실패하였습니다.";
+		}
+		
+		rttr.addFlashAttribute("message", message);
+		System.out.println("데이터 전송!!");
+		mv.setViewName("redirect:/estimate/selectAll");
 		
 		return mv;
 	}

@@ -144,8 +144,8 @@
          WHERE SEQUENCE_NAME = 'SEQ_ESTIMATE_NO'
 	</select>
 	
-	<insert id="insertEstimate" parameterType="com.deft.crud.estimate.model.dto.EstimateDTO">
-        INSERT /* com.deft.crud.estimate.model.dao.EstimateMapper#insertEstimate() */
+	<insert id="insertEstimateInfo" parameterType="com.deft.crud.estimate.model.dto.EstimateDTO">
+        INSERT /* com.deft.crud.estimate.model.dao.EstimateMapper#insertEstimateInfo() */
           INTO TBL_ESTIMATE E
         (
           E.ESTIMATE_NO
@@ -158,7 +158,7 @@
         )
         VALUES
         (
-          SUBSTR(#{ estimateNo }, -3) + LPAD(SEQ_ESTIMATE_NO.NEXTVAL, 3, 0)
+          REPLACE(#{ estimateNo }, SUBSTR(#{ estimateNo }, -3), LPAD(SEQ_ESTIMATE_NO.NEXTVAL, 3, 0))
         , #{ estimateDate }
         , #{ discountRate }
         , '110-01-12345'
@@ -169,7 +169,7 @@
 	</insert>
 	
 	<insert id="insertEstimateProduct" parameterType="com.deft.crud.estimate.model.dto.EstimateProductDTO">
-        INSERT
+        INSERT /* com.deft.crud.estimate.model.dao.EstimateMapper#insertEstimateProduct() */
           INTO TBL_ESTIMATE_PRODUCT EP
         (
           EP.ESTIMATE_NO
@@ -178,7 +178,7 @@
         )
         VALUES
         (
-          #{ estimateNo }
+          REPLACE(#{ estimateNo }, SUBSTR(#{ estimateNo }, -3), LPAD(SEQ_ESTIMATE_NO.CURRVAL, 3, 0))
         , #{ productNo }
         , #{ productAmount }
         )

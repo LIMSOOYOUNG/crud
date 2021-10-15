@@ -109,6 +109,11 @@
 			});
         });
 
+		const message = '[[${ message }]]';
+		if(message) {
+			alert(message);
+		}
+
 		$(document).on("click", "a[name='status']", function() {
 			let estimateStatus = $(this).attr('value');
 			let estimateStatusKor = $(this).text();
