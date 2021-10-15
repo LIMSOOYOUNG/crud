@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.deft.crud.collection.model.dao.CollectionMapper">
+
+	<resultMap type="com.deft.crud.collection.model.dto.ChargeDTO" id="chargeResultMap">
+		<id property="chargeNo" column="CHARGE_NO"/>
+		<result property="orderNo" column="ORDER_NO"/>
+		<result property="chargeStatus" column="CHARGE_STATUS"/>
+		<result property="chargeDate" column="CHARGE_DATE"/>
+		<result property="chargeYear" column="CHARGE_YEAR"/>
+		<result property="chargemonth" column="CHARGE_MONTH"/>
+		
+		<association property="purchaseOrder" resultMap="purchaseOrderResultMap"/>
+		<association property="customer" resultMap="customerResultMap"/>
+		<collection property="collectBill" resultMap="collectBillResultMap"/>
+		
+	</resultMap>
+	
+	<resultMap type="com.deft.crud.collection.model.dto.PurchaseOrderDTO" id="purchaseOrderResultMap">
+	
+		<id property="orderNo" column="ORDER_NO"/>
+		<result property="orderDate" column="ORDER_DATE"/>
+		<result property="discountDate" column="DUE_DATE"/>
+		<result property="deliveryPlace" column="DELIVERY_PLACE"/>
+		<result property="paymentStatus" column="PAYMENT_STATUS"/>
+		<result property="orderTitle" column="ORDER_TITLE"/>
+		<result property="providerRegistNo" column="PROVIDER_REGIST_NO"/>
+		<result property="sumPrice" column="SUM_PRICE"/>
+	
+	</resultMap>
+	
+	<resultMap type="com.deft.crud.collection.model.dto.CustomerDTO" id="customerResultMap">
+		
+		<id property="customerNo" column="CUSTOMER_NO"/>
+		<result property="customerName" column="CUSTOMER_NAME"/>
+	
+	</resultMap>
+	
+	<resultMap type="com.deft.crud.collection.model.dto.CollectBillDTO" id="collectBillResultMap">
+		
+		<id property="collectBillNo" column="COLLECT_BILL_NO"/>
+		<result property="collectBillAmount" column="COLLECT_BILL_AMOUNT"/>
+		<result property="collectBillDate" column="COLLECT_BILL_DATE"/>
+		<result property="collectBillStatus" column="COLLECT_BILL_STATUS"/>
+		<result property="chargeNo" column="CHARGE_NO"/>
+	
+	</resultMap>
+	
+	<!-- 현재 날짜 월 기준으로 수금현황 조회 -->
+	<select id="selectCollectionAll" resultMap="chargeResultMap" parameterType="com.deft.crud.collection.model.dto.ChargeDTO">
+		SELECT /*com.deft.crud.product.model.dao.CollectionMapper#selectCollectionAll()*/
+		       CH.CHARGE_NO
+		     , CU.CUSTOMER_NAME
+		     , PO.ORDER_TITLE
+		     , CB.COLLECT_BILL_STATUS
+		     , CH.CHARGE_DATE
+		     , CH.CHARGE_NO
+		   FROM TBL_CHARGE CH
+		   JOIN TBL_PURCHASE_ORDER PO ON (PO.ORDER_NO = CH.ORDER_NO)
+		   JOIN TBL_CUSTOMER CU ON (CU.CUSTOMER_NO = PO.CUSTOMER_NO)
+		   JOIN TBL_COLLECT_BILL CB ON (CB.CHARGE_NO = CH.CHARGE_NO)
+		   AND EXTRACT(YEAR FROM CH.CHARGE_DATE) = #{ chargeYear }
+		   AND EXTRACT(MONTH FROM CH.CHARGE_DATE) = #{ chargeMonth }
+		   ORDER BY CH.CHARGE_DATE DESC
+	</select>
+	
+	<!-- 선택한 날짜로 수금현황 조회 -->
+	<select id="selectCollectionForDate" resultMap="chargeResultMap" parameterType="com.deft.crud.collection.model.dto.ChargeDTO" >
+		SELECT /*com.deft.crud.product.model.dao.CollectionMapper#selectCollectionAll()*/
+		       CH.CHARGE_NO
+		     , CU.CUSTOMER_NAME
+		     , PO.ORDER_TITLE
+		     , CB.COLLECT_BILL_STATUS
+		     , CH.CHARGE_DATE
+		     , CH.CHARGE_NO
+		   FROM TBL_CHARGE CH
+		   JOIN TBL_PURCHASE_ORDER PO ON (PO.ORDER_NO = CH.ORDER_NO)
+		   JOIN TBL_CUSTOMER CU ON (CU.CUSTOMER_NO = PO.CUSTOMER_NO)
+		   JOIN TBL_COLLECT_BILL CB ON (CB.CHARGE_NO = CH.CHARGE_NO)
+		   AND EXTRACT(YEAR FROM CH.CHARGE_DATE) = #{ chargeYear }
+		   AND EXTRACT(MONTH FROM CH.CHARGE_DATE) = #{ chargeMonth }
+		   ORDER BY CH.CHARGE_DATE DESC
+	</select>
+
+</mapper>

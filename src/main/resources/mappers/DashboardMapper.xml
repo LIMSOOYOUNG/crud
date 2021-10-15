@@ -1,3 +1,50 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.deft.crud.dashboard.model.dao.DashboardMapper"></mapper>
+<mapper namespace="com.deft.crud.dashboard.model.dao.DashboardMapper">
+	<resultMap type="com.deft.crud.dashboard.model.dto.PerformanceDTO" id="performanceResultMap">
+		<id property="performanceNo" column="PERFORMANCE_NO"/>
+		<association property="empInfo" resultMap="empInfoResultMap"/>	
+		<association property="collect" resultMap="collectBillResultMap"/>	
+	
+	
+	</resultMap>
+	
+	<resultMap type="com.deft.crud.dashboard.model.dto.EmpInfoDTO" id="empInfoResultMap">
+		<id property="empNo" column="EMP_NO"/>
+		<result property="empName" column="EMP_NAME"/>
+		<result property="authority" column="AUTHORITY"/>
+		<association property="department" resultMap="departmentResultMap"/>
+	
+	</resultMap>
+
+	<resultMap type="com.deft.crud.dashboard.model.dto.DepartmentDTO" id="departmentResultMap">
+		<id property="deptCode" column="DEPT_CODE"/>
+		<result property="deptName" column="DEPT_NAME"/>
+	
+	</resultMap>
+
+	<resultMap type="com.deft.crud.dashboard.model.dto.CollectBillDTO" id="collectBillResultMap">
+		<id property="collectBillNo" column="COLLECT_BILL_NO"/>
+		<result property="collectBillAmount" column="COLLECT_BILL_AMOUNT"/>
+		<result property="collectBillYear" column="COLLECT_BILL_YEAR"/>
+		<result property="collectBillMonth" column="COLLECT_BILL_MONTH"/>
+		<result property="cllectBillStatus" column="COLLECT_BILL_STATUS"/>
+	</resultMap>
+	
+	<select id="userPerformChart" resultMap="performanceResultMap">
+		SELECT /*com.deft.crud.product.model.dao.SalesMapper#empPerformList()*/
+               EXTRACT(MONTH FROM B.COLLECT_BILL_DATE) "COLLECT_BILL_MONTH"
+      	     , SUM(B.COLLECT_BILL_AMOUNT) "COLLECT_BILL_AMOUNT"
+		  FROM TBL_PERFORMANCE P
+		  JOIN TBL_COLLECT_BILL B ON (P.COLLECT_BILL_NO = B.COLLECT_BILL_NO)
+		  JOIN TBL_EMP_INFO E ON (P.EMP_NO = E.EMP_NO)
+		 WHERE B.COLLECT_BILL_STATUS = '수금'
+	       AND P.EMP_NO = #{ empNo }
+		   AND EXTRACT(YEAR FROM B.COLLECT_BILL_DATE) = #{ collectBillYear }
+		 GROUP BY EXTRACT(MONTH FROM B.COLLECT_BILL_DATE)
+		 ORDER BY EXTRACT(MONTH FROM B.COLLECT_BILL_DATE) ASC
+	
+	</select>
+
+
+</mapper>

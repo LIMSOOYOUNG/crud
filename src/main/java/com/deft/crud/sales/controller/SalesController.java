@@ -18,6 +18,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.deft.crud.member.model.service.UserImpl;
 import com.deft.crud.product.model.dto.ProductCategoryDTO;
+import com.deft.crud.sales.model.dao.SalesMapper;
 import com.deft.crud.sales.model.dto.CollectBillDTO;
 import com.deft.crud.sales.model.dto.PerformanceDTO;
 import com.deft.crud.sales.model.dto.TargetPerfomDTO;
@@ -149,8 +150,8 @@ public class SalesController {
 		/* LocalDate로 현재 시간 기준으로 연도와 전 달을 가지고 온다 */
 		LocalDate lastMonth = LocalDate.now().minusMonths(1);
 		
-		String collectBillYear = Integer.toString(lastMonth.getYear());
-		String collectBillMonth = Integer.toString(lastMonth.getMonthValue());
+		int collectBillYear = lastMonth.getYear();
+		int collectBillMonth = lastMonth.getMonthValue();
 		
 		/* 현재 연도와 전 달에 대한 값을 dto에 담아준다. */
 		CollectBillDTO collectBillDate = new CollectBillDTO();
@@ -203,8 +204,8 @@ public class SalesController {
 		
 		LocalDate deptPerformDate = LocalDate.now();
 
-		String collectBillYear = Integer.toString(deptPerformDate.getYear());				// 디비에 값 저장을 위해 String 타입으로 형변환(연도)
-		String collectBillMonth = Integer.toString(deptPerformDate.getMonthValue());        // 위와 내용 같음 (월)
+		int collectBillYear = deptPerformDate.getYear(); 										// 디비에 값 저장을 위해 String 타입으로 형변환(연도)
+		int collectBillMonth = deptPerformDate.getMonthValue();								// 위와 내용 같음 (월)
 		
 		CollectBillDTO collectBillDate = new CollectBillDTO();
 		collectBillDate.setCollectBillYear(collectBillYear);
@@ -286,8 +287,8 @@ public class SalesController {
 		/* 초기화면에 현재 연도와 날짜의 상품을 조회하기 위해 LocalDate로 현재 연도와 월의 정보를 가지고 온다. */
 		LocalDate productPeformDate = LocalDate.now();
 
-		String collectBillYear = Integer.toString(productPeformDate.getYear());				
-		String collectBillMonth = Integer.toString(productPeformDate.getMonthValue());
+		int collectBillYear = productPeformDate.getYear(); 										// 디비에 값 저장을 위해 String 타입으로 형변환(연도)
+		int collectBillMonth = productPeformDate.getMonthValue();								// 위와 내용 같음 (월)
 		
 		CollectBillDTO collectBillDate = new CollectBillDTO();
 		collectBillDate.setCollectBillYear(collectBillYear);
@@ -329,8 +330,8 @@ public class SalesController {
 		/* 초기화면에 현재 연도와 날짜의 상품을 조회하기 위해 LocalDate로 현재 연도와 월의 정보를 가지고 온다. */
 		LocalDate productPeformDate = LocalDate.now();
 
-		String collectBillYear = Integer.toString(productPeformDate.getYear());				
-		String collectBillMonth = Integer.toString(productPeformDate.getMonthValue());
+		int collectBillYear = productPeformDate.getYear(); 										// 디비에 값 저장을 위해 String 타입으로 형변환(연도)
+		int collectBillMonth = productPeformDate.getMonthValue();								// 위와 내용 같음 (월)
 		
 		CollectBillDTO collectBillDate = new CollectBillDTO();
 		collectBillDate.setCollectBillYear(collectBillYear);
@@ -362,13 +363,31 @@ public class SalesController {
 		
 		response.setContentType("UTF-8");
 		
-//		List<PerformanceDTO> selectCategoryPerformForDate = salesService.selectCategoryPerformForDate(parameters, refCategoryCode);
+		List<PerformanceDTO> selectCategoryPerformForDate = salesService.selectCategoryPerformForDate(parameters, refCategoryCode);
 		
-//		System.out.println("selectCategoryPerformForDate : " + selectCategoryPerformForDate);
+		System.out.println("selectCategoryPerformForDate : " + selectCategoryPerformForDate);
 		
-//		mv.addObject("selectCategoryPerformForDate", objectMapper.writeValueAsString(selectCategoryPerformForDate));
+		mv.addObject("selectCategoryPerformForDate", objectMapper.writeValueAsString(selectCategoryPerformForDate));
 		mv.setViewName("jsonView");
-		return null;
+		return mv;
 	}
 	
+	/* 카테고리 상세보기 페이지*/
+	@GetMapping("/category/select")
+	public ModelAndView selectCategoryPerformDetail(ModelAndView mv, @RequestParam int categoryCode,
+			@ModelAttribute CollectBillDTO parameters) {
+		
+		System.out.println("categoryCode : " + categoryCode);
+		System.out.println("parameters : " + parameters);
+		
+		/* 카테고리 상세 보기 언제 청구 됐고 어떤 사원이 얼마의 실적을 냈는지 조회한다.*/
+		List<PerformanceDTO> selectCategoryPerformDetail = salesService.selectCategoryPerformDetail(categoryCode, parameters);
+		System.out.println("selectCategoryPerformDetail : " + selectCategoryPerformDetail);
+		
+		mv.addObject("parameters", parameters);
+		mv.addObject("selectCategoryPerformDetail", selectCategoryPerformDetail);
+		mv.setViewName("/sales/selectCategorySalesDetail");
+		return mv;
+		
+	}
 }

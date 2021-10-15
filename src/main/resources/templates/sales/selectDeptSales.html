@@ -41,12 +41,12 @@
 									<div class="form-group col-lg-2">
 										<label for="collectBillYear">연도</label>
 										<select class="form-control" id="collectBillYear" name="collectBillYear">
-											<option th:selected="${collectBillYear} == '2021'">2021</option>
-											<option th:selected="${collectBillYear} == '2020'">2020</option>
-											<option th:selected="${collectBillYear} == '2019'">2019</option>
-											<option th:selected="${collectBillYear} == '2018'">2018</option>
-											<option th:selected="${collectBillYear} == '2017'">2017</option>
-										</select>
+                                            <option th:selected="${collectBillYear}" th:text="${collectBillYear}"></option>
+                                            <option th:text="${collectBillYear} - 1"></option>
+                                            <option th:text="${collectBillYear} - 2"></option>
+                                            <option th:text="${collectBillYear} - 3"></option>
+                                            <option th:text="${collectBillYear} - 4"></option>
+                                        </select>
 									</div>
 									<div class="form-group col-lg-2">
 										<label for="collectBillMonth">월</label>

@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="ko"
+	xmlns:th="https://www.thymeleaf.org">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<head>
+	<th:block th:replace="@{common/config} :: config"></th:block>
+	<link href="/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+</head>
+<body id="page-top">
+	<div id="wrapper"> 
+        <!-- Sidebar -->
+		<th:block th:replace="@{/common/sidebar} :: sidebar"></th:block>
+
+		<div id="content-wrapper" class="d-flex flex-column">
+			<div id="content">
+				<!-- Header -->
+				<th:block th:replace="@{/common/header} :: header"></th:block>
+
+				<!-- Content -->
+				<div class="container-fluid" id="container-wrapper">
+					<div class="d-sm-flex align-items-center justify-content-between mb-4">
+						<h1 class="h3 mb-0 text-gray-800">수금현황</h1>
+						<ol class="breadcrumb">
+							<li class="breadcrumb-item"><a href="./">Home</a></li>
+							<li class="breadcrumb-item">Tables</li>
+							<li class="breadcrumb-item active" aria-current="page">수금현황</li>
+						</ol>
+                    </div>
+                    
+                    <!-- Row -->
+					<div class="row">
+                        <!-- 상품실적 테이블 -->
+                        <div class="col lg-12">
+                            <div class="card mb-4">
+                                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                    <h4 class="m-0 font-weight-bold text-primary">수금 현황</h4>
+                                </div>
+                                <div class="row mx-3">
+                                    <div class="form-group col-lg-2">
+                                        <label for="chargeYear">연도</label>
+                                        <select class="form-control" id="chargeYear" name="chargeYear">
+                                            <option th:selected="${chargeYear}" th:text="${chargeYear}"></option>
+                                            <option th:text="${chargeYear} - 1"></option>
+                                            <option th:text="${chargeYear} - 2"></option>
+                                            <option th:text="${chargeYear} - 3"></option>
+                                            <option th:text="${chargeYear} - 4"></option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-lg-2">
+                                        <label for="chargeMonth">월</label>
+                                        <select class="form-control" id="chargeMonth" name="chargeMonth">
+                                            <option th:selected="${chargeMonth} == '1'">1</option>
+                                            <option th:selected="${chargeMonth} == '2'">2</option>
+                                            <option th:selected="${chargeMonth} == '3'">3</option>
+                                            <option th:selected="${chargeMonth} == '4'">4</option>
+                                            <option th:selected="${chargeMonth} == '5'">5</option>
+                                            <option th:selected="${chargeMonth} == '6'">6</option>
+                                            <option th:selected="${chargeMonth} == '7'">7</option>
+                                            <option th:selected="${chargeMonth} == '8'">8</option>
+                                            <option th:selected="${chargeMonth} == '9'">9</option>
+                                            <option th:selected="${chargeMonth} == '10'">10</option>
+                                            <option th:selected="${chargeMonth} == '11'">11</option>
+                                            <option th:selected="${chargeMonth} == '12'">12</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-lg-2">
+                                        <button type="button" class="btn btn-outline-primary my-4" id="selectCollectButton">확인</button>
+                                    </div>
+                                    <div class="table-responsive p-3">
+                                        <table class="table align-items-center table-flush table-hover" id="collectionTable">
+                                            <thead th:align="center" class="thead-light">
+                                                <tr>
+                                                    <th>청구번호</th>
+                                                    <th>고객명</th>
+                                                    <th>제목</th>
+                                                    <th>수금상태</th>
+                                                    <th>청구일자</th>
+                                                    <th>상세보기</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody th:align="center">
+                                                <tr th:each="collectionList : ${selectCollectionAll}" >
+                                                    <td th:text = "${collectionList.chargeNo}"></td>
+                                                    <td th:text = "${collectionList.customer.customerName}"></td>
+                                                    <td th:text = "${collectionList.purchaseOrder.orderTitle}"></td>
+                                                    <td th:text = "${collectionList.collectBill[0].collectBillStatus}"></td>
+                                                    <td th:text = "${collectionList.chargeDate}"></td>
+                                                    <td>
+                                                        <button type="button" id="detailButton" name="detailButton" class="btn btn-primary" th:value="${collectionList.chargeNo}">상세보기</button>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>    
+                        </div>
+                    </div>
+                </div> 
+            </div>
+        </div>        
+    </div>
+    <!-- Script -->
+    <th:block th:replace="@{/common/script} :: script"></th:block>
+    <!-- Page level custom scripts -->
+	<script>
+
+    $(document).ready(function () {
+        $('#collectionTable').DataTable({           // ID From dataTable 
+            order:[]
+        }); 
+    });
+
+    $(document).on('click', '#selectCollectButton', function() {
+
+        let chargeYear = $('#chargeYear').val();
+    	let chargeMonth = $('#chargeMonth').val();
+    	
+    	console.log(chargeYear);
+    	console.log(chargeMonth);
+
+        let data = {"chargeYear" : chargeYear, "chargeMonth" : chargeMonth};
+
+        /* 날짜별 실적 확인 */
+        $.ajax({
+            url: "/collection/select/date",
+            data: data, 
+            type: "GET",
+            success: function(data, status, xhr) {
+                const selectCollectionForDate = JSON.parse(data.selectCollectionForDate);
+                console.log(selectCollectionForDate);
+
+                const $table = $("#collectionTable tbody");
+
+                $table.html("");
+
+                for(let index in selectCollectionForDate) {
+                    let collectionForDate = selectCollectionForDate[index];
+
+                    $tr = $("<tr>");
+                    $chargeNo = $("<td>").text(collectionForDate.chargeNo);
+                    $customerName = $("<td>").text(collectionForDate.customer.customerName);
+                    $orderTitle = $("<td>").text(collectionForDate.purchaseOrder.orderTitle);
+                    $collectBillStatus = $("<td>").text(collectionForDate.collectBill[0].collectBillStatus);
+                    $chargeDate = $("<td>").text(collectionForDate.chargeDate);
+                    $detailButtonTd =$("<td>")
+                    $detailButton =  $("<button>").addClass("btn btn-primary mt-2").text("상세정보").attr('value', collectionForDate.chargeNo).attr('name', 'detailButton');
+                    $detailButtonTd.append($detailButton);
+                    
+                    $tr.append($chargeNo);
+                    $tr.append($customerName);
+                    $tr.append($orderTitle);
+                    $tr.append($collectBillStatus);
+                    $tr.append($chargeDate);
+                    $tr.append($detailButtonTd);
+                    
+                    $table.append($tr);
+                }
+            },
+
+            error: function(xhr, status, error) {
+                console.log(error);
+            }
+        });
+    });
+
+    </script>
+</body>
+</html>

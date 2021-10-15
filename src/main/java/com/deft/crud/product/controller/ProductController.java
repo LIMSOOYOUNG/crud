@@ -274,5 +274,25 @@ public class ProductController {
 		return mv;
 	}
 	
+	@GetMapping("/editCategory")
+	public ModelAndView editCategory(ModelAndView mv, HttpServletResponse response, @RequestParam int selectedCategory)throws JsonProcessingException {
+		
+		response.setContentType("application/json; 	charset=UTF-8");
+		
+		System.out.println(selectedCategory);
+		System.out.println(selectedCategory);
+		System.out.println(selectedCategory);
+		System.out.println(selectedCategory);
+		System.out.println(selectedCategory);
+
+		ProductCategoryDTO selectOneCategory = productService.selectOneCategory(selectedCategory);
+		
+		mv.addObject("selectOneCategory", selectOneCategory);
+		mv.setViewName("jsonView");
+		return mv;
+		
+
+	}
+	
 	
 }

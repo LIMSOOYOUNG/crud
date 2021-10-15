@@ -19,10 +19,10 @@
 				<!-- Content -->
 				<div class="container-fluid" id="container-wrapper">
 					<div class="d-sm-flex align-items-center justify-content-between mb-4">
-						<h1 class="h3 mb-0 text-gray-800">실적상세조회</h1>
+						<h1 class="h3 mb-0 text-gray-800">카테고리별 실적</h1>
 						<ol class="breadcrumb">
 							<li class="breadcrumb-item"><a href="./">Home</a></li>
-							<li class="breadcrumb-item active" aria-current="page">사원실적조회</li>
+							<li class="breadcrumb-item active" aria-current="page">카테고리 실적조회</li>
 							<li class="breadcrumb-item active" aria-current="page">상세조회</li>
 						</ol>
 					</div>
@@ -35,27 +35,29 @@
 						<div class="col-lg-8">
 							<div class="card mb-4">
 								<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-									<h4 class="m-0 font-weight-bold text-primary" th:text="|${parameters.CollectBillYear}년 ${parameters.collectBillMonth}월|"></h4>
+									<h4 class="m-0 font-weight-bold text-primary" th:text="|${parameters.collectBillYear}년 ${parameters.collectBillMonth}월|"></h4>
 								</div>
 								<div class="table-responsive p-3">
                                     <table class="table align-items-center table-flush table-hover" id="userPerformTable">
 										<thead th:align="center" class="thead-light">
                                             <tr>
-                                                <th>청구번호</th> 
-                                                <th>청구일자</th>
+                                                <th>청구서번호</th>
+                                                <th>수금일자</th>
                                                 <th>청구서제목</th>
                                                 <th>매출</th>
-                                                <th>상세정보</th>
+                                                <th>담당사원</th>
+                                                <th>상세보기</th>
                                             </tr>
                                         </thead>
                                         <tbody th:align="center">
-                                            <tr th:each = "userPerformDetail : ${selectUserPerformDetail}">
-                                                <td th:text = "${userPerformDetail.charge.chargeNo}"></td>
-                                                <td th:text = "${userPerformDetail.charge.chargeDate}"></td>
-                                                <td th:text = "${userPerformDetail.purchaseOrder.orderTitle}"></td>
-                                                <td th:text = "${userPerformDetail.collect.collectBillAmount}"></td>
+                                            <tr th:each = "categoryPerformDetail : ${selectCategoryPerformDetail}">
+                                                <td th:text = "${categoryPerformDetail.charge.chargeNo}"></td>
+                                                <td th:text = "${categoryPerformDetail.collect.collectBillDate}"></td>
+                                                <td th:text = "${categoryPerformDetail.purchaseOrder.orderTitle}"></td>
+                                                <td th:text = "|${#numbers.formatDecimal(categoryPerformDetail.collect.collectBillAmount, 0, 'COMMA', 0, 'POINT')}"></td>
+                                                <td th:text = "${categoryPerformDetail.employeeInfo.empName}"></td>
                                                 <td>
-													<button type="button" id="detailButton" name="detailButton" class="btn btn-primary" th:value="${userPerformDetail.charge.chargeNo}">청구서 상세보기</button>
+													<button type="button" id="detailButton" name="detailButton" class="btn btn-primary" th:value="${categoryPerformDetail.charge.chargeNo}">청구서 상세보기</button>
 												</td>
                                             </tr>
                                         </tbody>
@@ -78,5 +80,5 @@
             }); 
         });  
         </script>
-</html>
 </body>
+</html>

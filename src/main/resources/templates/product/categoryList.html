@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html> -->
 <html lang="ko"
 	xmlns:th="https://www.thymeleaf.org">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
@@ -93,14 +93,15 @@
 											</tr>
 										</thead>
 										<tbody th:align="center"> 
-											<tr th:each= "categoryList : ${allCategoryList}" th:if="${categoryList.refCategoryCode} != 0">
+											<tr th:each= "categoryList,num : ${allCategoryList}" th:if="${categoryList.refCategoryCode} != 0">
 												<td th:text= "${categoryList.refCategoryName}"></td>
 												<td th:text= "${categoryList.categoryName}"></td>
 												<td th:text= "${categoryList.categoryCode}"></td>
 												<td>
-													<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#updateCategoryModal"
+													
+													<button th:id="'categoryNo'+ ${num.count}" type="button" class="btn btn-primary" data-toggle="modal" data-target="#updateCategoryModal"
 													   		th:data-category-no="${categoryList.categoryCode}" th:data-ref-category-no="${categoryList.refCategoryCode}"
-															th:data-ref-category-list="${refCategoryList}">수정하기</button>
+															th:data-ref-category-list="${refCategoryList}"><input id="categoryMidNo" th:value="${categoryList.categoryCode}" hidden="hidden" ></input>수정하기</button>
 												</td>
 											</tr>
 										</tbody>
@@ -255,6 +256,7 @@
 	<!-- 카테고리(중) 수정 끝-->
 
 	<!-- 카테고리(소) 수정 -->
+	<form action="" method="post">
 	<div class="modal fade" id="updateCategoryModal" tabindex="-1" role="dialog"
             aria-labelledby="updateCategoryModalCenterTitle" aria-hidden="true">
 		<div class="modal-dialog modal-dialog-centered" role="document">
@@ -270,11 +272,15 @@
 						<div class="form-group col-lg-12 row">
 						   <label for="refCategoryList" class="col-sm-3 col-form-label" th:align="center">카테고리(중)</label>
 						   <select class="form-control col-sm-9" id="refCategoryList" name="refCategoryCode">
+						   		<option id="selectedCategory"></option>
 							   <option th:each="refCategoryList : ${refCategoryList}" 
 									  
 							   		   th:text="${refCategoryList.refCategoryName}" th:value="${refCategoryList.refCategoryCode}">
 							   </option> 
 						   </select>
+						   <br><br>
+							   <label for="selectCategoryName" class="col-sm-3 col-form-label" th:align="center">하위 카테고리명</label>
+							   <input id="selectCategoryName" class="form-control col-sm-9">
 						</div>	   
                 	</div>
                 	<div class="modal-footer">
@@ -285,7 +291,7 @@
 			</div>
 		</div>
 	</div> 
-    <!-- 카테고리(소) 수정 -->
+</form>    <!-- 카테고리(소) 수정 -->
 	
 	<!-- Script -->  
     <th:block th:replace="@{/common/script} :: script"></th:block>
@@ -293,57 +299,37 @@
 	<script src="/vendor/datatables/jquery.dataTables.min.js"></script>
 	<script src="/vendor/datatables/dataTables.bootstrap4.min.js"></script>
 
-	<!-- Page level custom scripts -->
 	<script>
+	/* 하위카테고리 수정시 현재 상위카테고리가 어떤건지 보여주기 위해 ajax로 호출*/
+	$("[id^=categoryNo]").click(function(){
+		  console.log("카테고리 번호 호출");
+		  const categoryCode = $(this).find('#categoryMidNo').val();
+		  console.log(categoryCode);
+		  $.ajax({
+			  type:"get",
+			  url: "/product/editCategory",
+			  data:{"selectedCategory" : categoryCode},
+			  success: function(data,status,xhr){
+				  
+				  console.log(data);
+				  const $selectedCategory = $('#selectedCategory');
+				  const $selectCategoryName = $('#selectCategoryName');
+				  $selectedCategory.html("");
+				  $selectCategoryName.html("");
+				  $selectedNo = $selectedCategory.text("현재 상위 카테고리 : " + data["selectOneCategory"].refCategoryName).val(data["selectOneCategory"].refCategoryCode);
+				  $selectedCategoryName = $selectCategoryName.val(data["selectOneCategory"].categoryName);
+			  },
+			  error: function(xhr, status,error){
+				  
+			  }
+		  });
+
+	});
+	
     $(document).ready(function() {
       $('#categoryM').DataTable(); // ID From dataTable with Hover
       $('#categoryS').DataTable(); // ID From dataTable with Hover
 
-	  $('#updateCategoryModal').on('show.bs.modal', function(e){
-		  const categoryCode = $(e.relatedTarget).data('category-no');
-		  const refCategoryCode = $(e.relatedTarget).data('ref-category-no');
-		  const refCategoryList =$(e.relatedTarget).data('ref-category-list');
-		//   refCategoryList = JSON.parse(refCategoryList);
-		  
-		  
-		  //   console.log(categoryCode);
-		  //   console.log(refCategoryCode);
-		  console.log($("#refCategoryList option").val()); 
-		  console.log(refCategoryList);
-		  
-		  const x = $("#refCategoryList option");
-		  console.log(x);
-
-
-		//   for(let index in refCategoryList) {
-			//   console.log(refCategoryList[index]);
-			for(let index in x) {
-				console.log(x[index].value);
-				if(refCategoryCode == x[index].value) {
-					// x[index].attr('selected', 'selected'); 
-				} 
-			}
-  
-		//   }   
- 
-			// $.ajax({
-			// 	url: "/product/category/small/selectAll",
-			// 	success: function(data, status, xhr) { 
-			// 		console.table(data);
-					
-			// 		for(let index in data) {
-						
-			// 		}
-					 
-			// 	},
-					
-			// 	error: function(xhr, stauts, error) {
-			// 		console.log(error);
-			// 	}
-					
-			// });
-		  
-		});
     }); 
 	
 	function checkRefCategory() {

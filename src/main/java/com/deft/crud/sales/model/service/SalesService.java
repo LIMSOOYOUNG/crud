@@ -139,23 +139,28 @@ public class SalesService {
 
 		return salesMapper.selectRefCategoryList();
 	}
-//
-//	public List<PerformanceDTO> selectCategoryPerformForDate(CollectBillDTO parameters, int refCategoryCode) {
-//
-//		if(refCategoryCode == 0) {
-//			
-//			List<PerformanceDTO> selectCategoryPerformList = salesMapper.selectCategoryPerformList(parameters);
-//			
-//			return selectCategoryPerformList;
-//		 
-//		} else {
-//			
-//			List<PerformanceDTO> selectCategoryPerformForDate = salesMapper.selectCategoryPerformForDate(parameters, refCategoryCode);
-//			
-//			return selectCategoryPerformForDate;
-//		}
+
+	public List<PerformanceDTO> selectCategoryPerformForDate(CollectBillDTO parameters, int refCategoryCode) {
+
+		if(refCategoryCode == 0) {
+			
+			List<PerformanceDTO> selectCategoryPerformList = salesMapper.selectCategoryPerformList(parameters);
+			
+			return selectCategoryPerformList;
+		 
+		} else {
+			
+			List<PerformanceDTO> selectCategoryPerformForDate = salesMapper.selectCategoryPerformForDate(parameters, refCategoryCode);
+			
+			return selectCategoryPerformForDate;
+		}
 		
-//	}
+	}
+
+	public List<PerformanceDTO> selectCategoryPerformDetail(int categoryCode, CollectBillDTO parameters) {
+
+		return salesMapper.selectCategoryPerformDetail(categoryCode, parameters);
+	}
 
 
 }
