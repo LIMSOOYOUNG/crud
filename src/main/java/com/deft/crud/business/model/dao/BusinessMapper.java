@@ -45,6 +45,18 @@ public interface BusinessMapper {
 
 	/* 영업활동 삭제 */
 	int deleteActivity(int activityNo);
+	
+	/* 고객 기본정보 조회 */
+	BusinessChanceDTO selectCustomerBasicInfo(int customerNo);
+
+	/* 영업기회 등록 */
+	int insertBusinessChance(BusinessChanceDTO parameters);
+
+	/* 영업기회 내용 수정 */
+	int modifyBusinessChance(BusinessChanceDTO parameters);
+
+	/* 영업기회 변경 이력 생성 */
+	int insertChanceHistory(BusinessChanceDTO parameters);
 
 
 
