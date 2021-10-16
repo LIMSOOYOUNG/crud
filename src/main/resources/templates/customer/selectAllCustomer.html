@@ -98,6 +98,7 @@
             $('#table_customer').DataTable(); // ID From dataTable with Hover
         });
 
+        /* 고객 상태별 정렬 */
         $('a[name=status]').click(function () {
 
             let customerStatus = $(this).attr('value');
@@ -151,6 +152,7 @@
             });
         });
 
+        /* 비동기로 생성된 버튼 이벤트 설정 */
         $(document).on("click", "button[name='customerDetailBtn']", function() {
 
             const customerNo = $(this).val();
