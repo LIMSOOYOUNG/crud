@@ -47,9 +47,11 @@
 										th:each="chanceHistory : ${chanceHistoryList}">
 										<li class="alert alert-light mb-1">
 											<span th:text="|[${chanceHistory.empName}] 님이|"></span><br>
-											<span th:text="|진행단계를 [${chanceHistory.progressStatus}] 으로|"></span><br>
-											<span th:text="|영업단계를 [${chanceHistory.salesLevel}] 로|"></span><br>
-											<span th:text="|성공가능성을 [${chanceHistory.successPosibillity} %]로 |"></span><br>
+											<span th:if="${chanceHistory.businessTitle} != null" th:utext="|영업기회명을 [${chanceHistory.businessTitle}] 로 &lt;br /&gt;|"></span>
+											<span th:if="${chanceHistory.progressStatus} != null" th:utext="|진행단계를 [${chanceHistory.progressStatus}] 상태로 &lt;br /&gt;|"></span>
+											<span th:if="${chanceHistory.salesLevel} != null" th:utext="|영업단계를 [${chanceHistory.salesLevel}] 상태로 &lt;br /&gt;|"></span>
+											<span th:if="${chanceHistory.successPosibillity} != 999" th:utext="|성공가능성을 [${chanceHistory.successPosibillity}%]로 &lt;br /&gt;|"></span>
+											<span th:if="${chanceHistory.dueDate} != null" th:utext="|마감예정일을 [${chanceHistory.dueDate}]로 &lt;br /&gt;|"></span>
 											<span th:text="변경하였습니다."></span><br>
 											<span th:text="${chanceHistory.businessChanceChangeDate}"></span><br>
 										</li>
@@ -727,11 +729,17 @@
 		/* 수정하기 버튼 눌렀을경우 동작 */
 		$(document).on('click', '#modifyChanceInfoBtn', function() {
 			
-			 $('#businessTitle').attr('readonly', false);
-			 $('#progressStatus').attr('disabled', false);
-			 $('#salesLevel').attr('disabled', false);
-			 $('#successPosibillity').attr('disabled', false);
-			 $('#dueDate').attr('readonly', false);
+			const beforeTitle = $('#businessTitle').val();
+			const beforeStatus = $('#progressStatus').val();
+			const beforeLevel = $('#salesLevel').val();
+			const beforePosibillity = $('#successPosibillity').val();
+			const beforeDate = $('#dueDate').val();
+			
+			$('#businessTitle').attr('readonly', false);
+			$('#progressStatus').attr('disabled', false);
+			$('#salesLevel').attr('disabled', false);
+			$('#successPosibillity').attr('disabled', false);
+			$('#dueDate').attr('readonly', false);
 
 		        var text = $('#modifyChanceInfoBtn').text();
 		        if(text == '수정하기') {
@@ -747,11 +755,27 @@
 		            var endTime = $('#dueDate').val();
 
 		            $('#dueDate').attr('type', 'date');
-		            $('#dueDate').val(startTime);
+		            $('#dueDate').val(endTime);
 
-		            $('#activityEndTime').attr('type', 'datetime-local');
-		            $('#activityEndTime').val(endTime);
 		        } 
+		        
+		        
+		        /* 수정완료 버튼 클릭 시 동작(form 전송) */
+				 $(document).on('click', '#successmodifyChanceInfoBtn', function() {
+					
+					if(beforeTitle == $('#businessTitle').val() && beforeStatus == $('#progressStatus').val() &&
+					   beforeLevel == $('#salesLevel').val() && beforePosibillity == $('#successPosibillity').val() &&
+					   beforeDate == $('#dueDate').val()) {
+						
+						alert("변경된 내용이 없습니다.");
+						
+					} else {
+						
+					   $('#modifyChanceInfoForm').submit(); 
+					}
+											
+					 
+				 });
 		});
 		
 		 /* 취소하기 버튼 클릭 시 동작 */
@@ -777,15 +801,11 @@
 			            var endTime = $('#dueDate').val();
 
 			            $('#dueDate').attr('type', 'text');
-			            $('#dueDate').val(startTime);
+			            $('#dueDate').val(endTime);
 			        }
 			});
 		 
-		 /* 수정완료 버튼 클릭 시 동작(form 전송) */
-		 $(document).on('click', '#successmodifyChanceInfoBtn', function() {
-			 
-			 $('#modifyChanceInfoForm').submit();
-		 });
+		
 		
 	</script>
 </body>

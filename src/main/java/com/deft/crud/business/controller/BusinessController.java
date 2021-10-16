@@ -89,8 +89,6 @@ public class BusinessController {
 		/* 선택한 영업기회 대상 고객의 상세정보 */
 		CustomerCompanyDTO customerInfo = customerService.selectCustomerInfo(customerNo);
 		
-		System.out.println("@@@고객상세정보 : " + businessChanceInfo);
-		
 		mv.addObject("chanceHistoryList", chanceHistoryList);			//영업기회변경이력
 		mv.addObject("businessChanceInfo", businessChanceInfo); 	    //영업기회정보
 		mv.addObject("businessActivityList", businessActivityList);		//영업활동목록
@@ -135,9 +133,6 @@ public class BusinessController {
 	public ModelAndView insertActivity(ModelAndView mv, RedirectAttributes rttr,
 									   @ModelAttribute BusinessActivityDTO parameters) {
 		
-		System.out.println(parameters);
-		
-		
 		boolean result = businessService.insertActivity(parameters);
 		
 		String message = "";
@@ -158,9 +153,6 @@ public class BusinessController {
 	@PostMapping("activity/modify")
 	public ModelAndView modifyActivity(ModelAndView mv, RedirectAttributes rttr,
 									   @ModelAttribute BusinessActivityDTO parameters) {
-		
-		System.out.println(parameters);
-		
 		
 		  boolean result = businessService.modifyActivity(parameters);
 		  
@@ -210,7 +202,6 @@ public class BusinessController {
     	
     	List<CustomerDTO> customerList = businessService.selectMyCustomerList(userInfo);
     	
-    	
     	mv.addObject("customerList", objectMapper.writeValueAsString(customerList));
 		mv.setViewName("jsonView");
     	
@@ -257,8 +248,8 @@ public class BusinessController {
     @PostMapping("chance/modify")
     public ModelAndView modifyBusinessChance(ModelAndView mv, RedirectAttributes rttr,
 											@ModelAttribute BusinessChanceDTO parameters) {
-    
-    	System.out.println("@@@영업수정할 내용 테스트 : " + parameters);
+    	
+    	System.out.println("@@@ : " + parameters);
     	
     	Boolean result = businessService.modifyBusinessChance(parameters);
     	

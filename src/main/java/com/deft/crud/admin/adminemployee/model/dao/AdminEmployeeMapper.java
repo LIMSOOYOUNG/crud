@@ -7,8 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 import com.deft.crud.admin.adminemployee.model.dto.AdminEmployeeDTO;
 import com.deft.crud.admin.adminemployee.model.dto.DepartmentDTO;
 import com.deft.crud.admin.adminemployee.model.dto.JobDTO;
-
-
+import com.deft.crud.member.model.dto.MemberDTO;
 
 @Mapper
 public interface AdminEmployeeMapper {
@@ -31,4 +30,18 @@ public interface AdminEmployeeMapper {
 	/* manager List 불러오기*/
 	List<AdminEmployeeDTO> managerList();
 
+	/* 아이디 중복여부 확인 */
+	int checkUserId(String empId);
+
+	/* 사원 등록 */
+	int insertMember(MemberDTO member);
+
+	List<MemberDTO> selectJobList();
+
+	List<MemberDTO> selectDeptList();
+
+	List<MemberDTO> selectAuthorityList();
+
+	List<MemberDTO> selectManagerList(String deptCode);
+	
 }
