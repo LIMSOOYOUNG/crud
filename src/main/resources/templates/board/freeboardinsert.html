@@ -49,8 +49,7 @@ xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-spingsecurity5">
                             	</div>
                             		<div class="form-group">
                      					<div class="custom-file">
-                        					<input type="file" class="custom-file-input" id="customFile" name="freeboardfileUpload">
-                        					<label class="custom-file-label" for="customFile">Choose file</label>
+                     						<input type="file" name="multiFiles" class="form-control" multiple >
                       					</div>
                    					</div>
                             		<br>
@@ -68,6 +67,27 @@ xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-spingsecurity5">
 
 	<!-- Script -->
 	<th:block th:replace="@{/common/script} :: script"></th:block>
+	<script type="text/javascript">
+    $(document).ready(function() {
+        $("a[name='file-delete']").on("click", function(e) {
+            e.preventDefault();
+            deleteFile($(this));
+        });
+    })
+ 
+    function addFile() {
+        var str = "<div class='file-group'><input type='file' name='file'><a href='#this' name='file-delete'>삭제</a></div>";
+        $("#file-list").append(str);
+        $("a[name='file-delete']").on("click", function(e) {
+            e.preventDefault();
+            deleteFile($(this));
+        });
+    }
+ 
+    function deleteFile(obj) {
+        obj.parent().remove();
+    }
+</script>
 </body>
 
 </html>
