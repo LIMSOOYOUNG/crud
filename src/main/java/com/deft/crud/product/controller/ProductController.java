@@ -5,6 +5,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.deft.crud.member.model.service.UserImpl;
 import com.deft.crud.product.model.dto.AccountDTO;
 import com.deft.crud.product.model.dto.InsertProductDTO;
 import com.deft.crud.product.model.dto.ManufacturerDTO;
@@ -42,12 +44,11 @@ public class ProductController {
 	@GetMapping("/selectAll")
 	public ModelAndView productList(ModelAndView mv) {
 		
-		
 		List<ProductDTO> allProductList = productService.allProductList();
+		
 		
 		mv.addObject("allProductList", allProductList);
 		mv.setViewName("product/productList");
-		
 		return mv;
 	}
 	
@@ -253,7 +254,6 @@ public class ProductController {
 		
 		rttr.addFlashAttribute("message", message);
 		mv.setViewName("redirect:/product/category/selectAll");
-
 		return mv;
 	}
 	

@@ -1,17 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.deft.crud.dashboard.model.dao.DashboardMapper">
+
+	<resultMap type="com.deft.crud.sales.model.dto.TargetPerfomDTO" id="targetPerformResultMap">
+		<id property="targetNo" column="TARGET_NO"/>
+		<result property="empNo" column="EMP_NO"/>
+		<result property="targetSales" column="TARGET_SALES"/>
+		<result property="targetContract" column="TARGET_CONTRACT"/>
+		<result property="performYear" column="PERFORM_YEAR"/>
+		<result property="performMonth" column="PERFORM_MONTH"/>
+		
+	</resultMap>
+	
+
 	<resultMap type="com.deft.crud.dashboard.model.dto.PerformanceDTO" id="performanceResultMap">
 		<id property="performanceNo" column="PERFORMANCE_NO"/>
 		<association property="empInfo" resultMap="empInfoResultMap"/>	
 		<association property="collect" resultMap="collectBillResultMap"/>	
-	
 	
 	</resultMap>
 	
 	<resultMap type="com.deft.crud.dashboard.model.dto.EmpInfoDTO" id="empInfoResultMap">
 		<id property="empNo" column="EMP_NO"/>
 		<result property="empName" column="EMP_NAME"/>
+		<result property="deptCode" column="DEPT_CODE"/>
 		<result property="authority" column="AUTHORITY"/>
 		<association property="department" resultMap="departmentResultMap"/>
 	
@@ -31,8 +43,9 @@
 		<result property="cllectBillStatus" column="COLLECT_BILL_STATUS"/>
 	</resultMap>
 	
+	<!-- 사원 실적 그래프 -->
 	<select id="userPerformChart" resultMap="performanceResultMap">
-		SELECT /*com.deft.crud.product.model.dao.SalesMapper#empPerformList()*/
+		SELECT /*com.deft.crud.dashboard.model.dao.DashBoardMapper#userPerformChart()*/
                EXTRACT(MONTH FROM B.COLLECT_BILL_DATE) "COLLECT_BILL_MONTH"
       	     , SUM(B.COLLECT_BILL_AMOUNT) "COLLECT_BILL_AMOUNT"
 		  FROM TBL_PERFORMANCE P
@@ -43,6 +56,38 @@
 		   AND EXTRACT(YEAR FROM B.COLLECT_BILL_DATE) = #{ collectBillYear }
 		 GROUP BY EXTRACT(MONTH FROM B.COLLECT_BILL_DATE)
 		 ORDER BY EXTRACT(MONTH FROM B.COLLECT_BILL_DATE) ASC
+	
+	</select>
+	
+	<!-- 사원 목표실적 그래프 -->
+	<select id="userTargetPerformChart" resultMap="targetPerformResultMap">
+		SELECT /*com.deft.crud.dashboard.model.dao.DashBoardMapper#userPerformChart()*/
+	    	   T.TARGET_NO
+	    	 , T.EMP_NO
+	    	 , T.TARGET_SALES
+	    	 , T.TARGET_CONTRACT
+	    	 , T.PERFORM_MONTH
+		  FROM TBL_EMP_TARGET_PERFOM T
+		 WHERE T.EMP_NO = #{ empNo }
+		   AND T.PERFORM_YEAR = #{ collectBillYear }
+		 ORDER BY T.PERFORM_MONTH ASC
+		
+	</select>
+	
+	<!-- 부서 실적 그래프 -->
+	<select id="deptPerformChart" resultMap="performanceResultMap" parameterType="com.deft.crud.dashboard.model.dto.EmpInfoDTO">
+		SELECT /*com.deft.crud.product.model.dao.SalesMapper#selectDeptPerformList()*/
+		       EXTRACT(MONTH FROM CO.COLLECT_BILL_DATE) "COLLECT_BILL_MONTH"
+		     , SUM(CO.COLLECT_BILL_AMOUNT) "COLLECT_BILL_AMOUNT"
+		  FROM TBL_PERFORMANCE P
+		  JOIN TBL_EMP_INFO E ON ( E.EMP_NO = P.EMP_NO)
+		  JOIN TBL_DEPARTMENT D ON ( D.DEPT_CODE = E.DEPT_CODE)
+		  JOIN TBL_COLLECT_BILL CO ON ( CO.COLLECT_BILL_NO = P.COLLECT_BILL_NO)
+		 WHERE CO.COLLECT_BILL_STATUS = '수금'
+		   AND EXTRACT(YEAR FROM CO.COLLECT_BILL_DATE) = #{ collectBillYear }
+		   AND D.DEPT_CODE = #{ empInfo.deptCode }
+		 GROUP BY EXTRACT(MONTH FROM CO.COLLECT_BILL_DATE)
+		 ORDER BY EXTRACT(MONTH FROM CO.COLLECT_BILL_DATE) ASC
 	
 	</select>
 

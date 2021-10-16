@@ -20,8 +20,11 @@
 					<h1>Dashboard 화면입니다.</h1>
 					<button onclick="location.href='/member/logout'">로그아웃</button>
 					<div class="row">
-						<div class="row col-4">
-							<canvas id="myChart"></canvas>
+						<div class="row col-lg-6">
+							<canvas id="empPerformanceChart"></canvas>
+						</div>
+						<div class="row col-lg-6">
+							<canvas id="deptPerformanceChart"></canvas>
 						</div>
 					</div> 
 				</div>
@@ -39,68 +42,163 @@
 	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 	<script>
 		$(document).ready(function () {
-			var ctx = document.getElementById('myChart');
-			var myChart = new Chart(ctx, {
-				type: 'line',
-				data: {
-					labels: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'],
-					datasets: [{
-						label: '실적',
-						data: [12, 19, 3, 5, 2, 3],
-						backgroundColor: [
-							'rgba(255, 99, 132, 0.2)',
-							'rgba(54, 162, 235, 0.2)',
-							'rgba(255, 206, 86, 0.2)',
-							'rgba(75, 192, 192, 0.2)',
-							'rgba(153, 102, 255, 0.2)',
-							'rgba(255, 159, 64, 0.2)'
-						],
-						borderColor: [
-							'rgba(255, 99, 132, 1)',
-							'rgba(54, 162, 235, 1)',
-							'rgba(255, 206, 86, 1)',
-							'rgba(75, 192, 192, 1)',
-							'rgba(153, 102, 255, 1)',
-							'rgba(255, 159, 64, 1)'
-						],
-						borderWidth: 1
-					}]
-				},
-				options: {
-					scales: {
-						y: {
-							beginAtZero: true
-						}
-					}
-				}
-			});
-
-			var newData = [];
+			var ctx = document.getElementById('empPerformanceChart');
+			
 			$.ajax({
 				url:"/dashboard/emp/sales/selectAll",
 				type: 'GET',
 				success: function(data, status, xhr) {
-
-					console.log(data);
 					
 					const userPerformChart = JSON.parse(data.userPerformChart);
-					for(let index in userPerformChart) {
-						let userPerform = userPerformChart[index];
-
-// 						let collectAmount =  userPerform[0].collect.collectBillAmount;
-// 						console.log(collectAmount);
-
-						// myChart.data.datasets[0].data = [1, 2, 3, 4, 5, 6];
-						// myChart.update();
+					const userTargetPerformChart = JSON.parse(data.userTargetPerformChart);
+					console.table(userTargetPerformChart);
+					
+					let collectBillAmount = new Array();
+					let targetSales = new Array();
+					
+					for(var i = 0; i < userPerformChart.length; i++) {
+						collectBillAmount[i] = userPerformChart[i].collect.collectBillAmount;
 					}
+					
+					for(var j = 0; j < userTargetPerformChart.length; j++) {
+						targetSales[j] = userTargetPerformChart[j].targetSales;
+					}
+					
+					
+					var config = {
+							
+						type: 'line',
+						data: {
+								labels: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'],
+								datasets: [{
+									label: '내 실적',
+									data: [collectBillAmount[0], 
+											collectBillAmount[1], 
+											collectBillAmount[2], 
+											collectBillAmount[3], 
+											collectBillAmount[4], 
+											collectBillAmount[5], 
+											collectBillAmount[6], 
+											collectBillAmount[7],
+											collectBillAmount[8],
+											collectBillAmount[9],
+											collectBillAmount[10],
+											collectBillAmount[11],
+										   ],
+									backgroundColor: ['rgba(54, 162, 235, 0.2)'],
+									borderColor: ['rgba(54, 162, 235, 1)'],
+									borderWidth: 1,
+								
+							}, {									   
+									label: '내 목표 실적',
+									data: [targetSales[0], 
+											targetSales[1], 
+											targetSales[2], 
+											targetSales[3], 
+											targetSales[4], 
+											targetSales[5], 
+											targetSales[6], 
+											targetSales[7],
+											targetSales[8],
+											targetSales[9],
+											targetSales[10],
+											targetSales[11],
+										   ],
+									backgroundColor: ['rgba(255, 99, 132, 0.2)'],
+									borderColor: ['rgba(255, 99, 132, 1)'],
+								    borderWidth: 1
+							}]
+						},
+						options: {
+							scales: {
+								y: {
+									beginAtZero: true
+								}
+							}
+						}
+					};
+						
+					var empPerformanceChart = new Chart(ctx, config);
 
 				},
 
 				error: function(xhr, status, error) {
 					console.log(error);
 				}
+			
+			});
+			
+		});
+		
+		$(document).ready(function () {
+		
+			var ctx = document.getElementById('deptPerformanceChart');
+			
+			$.ajax({
+				url:"/dashboard/dept/sales/selectAll",
+				type: 'GET',
+				success: function(data, status, xhr) {
+					
+					console.log(data);
+					
+					const deptPerformChart = JSON.parse(data.deptPerformChart);
+					
+					let collectBillAmount = new Array();
+					
+					for(var i = 0; i < deptPerformChart.length; i++) {
+						collectBillAmount[i] = deptPerformChart[i].collect.collectBillAmount;
+					}
+					
+					var config = {
+							
+						type: 'bar',
+						data: {
+							labels: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'],
+							datasets: [{
+								label: '부서 실적',
+								data: [collectBillAmount[0], 
+										collectBillAmount[1], 
+										collectBillAmount[2], 
+										collectBillAmount[3], 
+										collectBillAmount[4], 
+										collectBillAmount[5], 
+										collectBillAmount[6], 
+										collectBillAmount[7],
+										collectBillAmount[8],
+										collectBillAmount[9],
+										collectBillAmount[10],
+										collectBillAmount[11]
+									   ], 
+								backgroundColor: ['rgba(255, 99, 132, 0.2)'],
+								borderColor: ['rgba(255, 99, 132, 1)'],
+								borderWidth: 1
+							}]
+						},
+						options: {
+							scales: {
+								y: {
+									beginAtZero: true
+								}
+							}
+						}
+					};
+						
+					var deptPerformanceChart = new Chart(ctx, config);
+
+				},
+
+				error: function(xhr, status, error) {
+					console.log(error);
+				}
+			
 			});
 		});
+		
+		
+		
+		
+		
+		
 		</script>
 		
 </body>

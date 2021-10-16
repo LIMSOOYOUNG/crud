@@ -118,20 +118,7 @@
 		<result property="refCategoryCode" column="REF_CATEGORY_CODE"/>
 		<result property="categoryStatus" column="CATEGORY_STATUS"/>
 	</resultMap>
-	<!-- 사원 목표실적 조회 -->
-	<select id="empTargetPerformList" resultMap="targetPerformResultMap">
-		SELECT /*com.deft.crud.product.model.dao.SalesMapper#empTargetPerformList()*/
-	    	   T.TARGET_NO
-	    	 , T.EMP_NO
-	    	 , T.TARGET_SALES
-	    	 , T.TARGET_CONTRACT
-	    	 , T.PERFORM_YEAR
-	    	 , T.PERFORM_MONTH
-		  FROM TBL_EMP_TARGET_PERFOM T
-		 WHERE T.EMP_NO = #{ empNo }
-		   AND T.PERFORM_YEAR = #{ performYear }
-		 ORDER BY T.PERFORM_YEAR DESC, T.PERFORM_MONTH DESC
-	</select>
+	
 	
 	<!-- 사원 실적 조회 -->
 	<select id="empPerformList" resultMap="performResultMap">
@@ -140,19 +127,33 @@
     		 , EXTRACT(MONTH FROM B.COLLECT_BILL_DATE) "COLLECT_BILL_MONTH"
      	     , SUM(B.COLLECT_BILL_AMOUNT) "COLLECT_BILL_AMOUNT"
      	     , COUNT(P.PERFORMANCE_NO) "PERFORMANCE_COUNT"
-     	     , P.EMP_NO
+     	     , P.EMP_NO 
   		  FROM TBL_PERFORMANCE P
           JOIN TBL_COLLECT_BILL B ON (P.COLLECT_BILL_NO = B.COLLECT_BILL_NO)
   		  JOIN TBL_EMP_INFO E ON (P.EMP_NO = E.EMP_NO)
           JOIN TBL_CHARGE C ON (C.CHARGE_NO = B.CHARGE_NO)
- 		 WHERE B.COLLECT_BILL_STATUS = '수금'
+ 		 WHERE B.COLLECT_BILL_STATUS = '수금' 
  	     GROUP BY EXTRACT(YEAR FROM B.COLLECT_BILL_DATE)
                 , EXTRACT(MONTH FROM B.COLLECT_BILL_DATE)
                 , P.EMP_NO
         HAVING EXTRACT(YEAR FROM B.COLLECT_BILL_DATE) = #{ performYear }
            AND P.EMP_NO = #{ empNo }
         ORDER BY EXTRACT(YEAR FROM B.COLLECT_BILL_DATE) DESC, EXTRACT(MONTH FROM B.COLLECT_BILL_DATE) DESC
+	</select>
 		
+	<!-- 사원 목표실적 조회 -->
+	<select id="empTargetPerformList" resultMap="targetPerformResultMap">
+		SELECT /*com.deft.crud.product.model.dao.SalesMapper#empTargetPerformList()*/
+	    	   T.TARGET_NO
+	    	 , T.EMP_NO
+	    	 , T.TARGET_SALES
+	    	 , T.TARGET_CONTRACT 
+	    	 , T.PERFORM_YEAR
+	    	 , T.PERFORM_MONTH
+		  FROM TBL_EMP_TARGET_PERFOM T
+		 WHERE T.EMP_NO = #{ empNo }
+		   AND T.PERFORM_YEAR = #{ collectBillYear }
+		 ORDER BY T.PERFORM_MONTH ASC 
 	</select>
 	
 	<!-- 사원의 모든 목표실적 연도별로 조회 -->

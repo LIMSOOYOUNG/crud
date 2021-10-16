@@ -54,7 +54,7 @@
 												<th>카테고리(중)</th>
 												<th>카테고리(소)</th>
 												<th>판매상태</th>
-												<th>상세보기</th>
+												<th>상품관리</th>
 											</tr>
 										</thead>
 										<tbody th:align="center">
@@ -66,7 +66,7 @@
 												<td th:text = "${productList.sellStatus}"></td>
 												<td>
 													<a th:href="@{/product/select(productNo=${productList.productNo})}">
-														<input type="button" id="detailButton" class="btn btn-primary" value="상세보기">
+														<input type="button" id="detailButton" class="btn btn-primary" value="상품관리">
 													</a>
 												</td>
 											</tr>
