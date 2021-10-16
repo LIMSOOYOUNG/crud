@@ -1,6 +1,10 @@
 package com.deft.crud.admin.adminemployee.controller;
 
+import java.io.File;
 import java.util.List;
+import java.util.UUID;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -10,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.deft.crud.admin.adminemployee.model.dto.AdminEmployeeDTO;
@@ -98,11 +103,35 @@ public class AdminEmployeeController {
 	}
 	
 	@PostMapping("employeeinfomodify")
-	public ModelAndView employeeModify(ModelAndView mv, @ModelAttribute AdminEmployeeDTO parameters) {
+	public ModelAndView employeeModify(ModelAndView mv, @ModelAttribute AdminEmployeeDTO parameters, 
+			@RequestParam MultipartFile imageUpdate,
+			HttpServletRequest request) {
 		
+		String root = request.getSession().getServletContext().getRealPath("resources");
+		
+		String filePath = root;
+		
+		File mkdir = new File(filePath);
+		if(!mkdir.exists()) {
+			mkdir.mkdirs();
+		}
+		
+		String originFileName = imageUpdate.getOriginalFilename();
+		String ext = originFileName.substring(originFileName.lastIndexOf("."));
+		String savedName = UUID.randomUUID().toString().replace("-", "") + ext;
+
+
+		try {
+			imageUpdate.transferTo(new File(filePath + "\\" + savedName));
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			/* 실패시 파일 삭제 */
+			new File(filePath + "\\" + savedName).delete();
+		} 
+
 		
 		int result = adminEmployeeService.employeeModify(parameters);
-		
 		
 		if(result > 0) {
 			
