@@ -16,6 +16,7 @@ public class EmpInfoDTO {
 	private int empNo;
 	private String empName;
 	private String authority;
+	private String deptCode;
 	private DepartmentDTO department;
 	
 }
