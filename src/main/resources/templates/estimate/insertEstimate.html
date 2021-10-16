@@ -475,7 +475,8 @@
 					data: JSON.stringify(estimate),
 					contentType: "application/json; charset=UTF-8",
 					success: function(data, status, xhr) {
-						
+						alert(data.message);
+						location.href="/estimate/selectAll";
 					},
 					error: function(xhr, status, error) {
 						alert("예기치 못한 에러가 발생하였습니다.");

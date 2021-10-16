@@ -32,7 +32,7 @@
 							<div class="card mb-4">
 								<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
 									<h6 class="m-0 font-weight-bold text-primary" id="tableTitle">견적서 상세조회</h6>
-									<button type="button" class="btn btn-info btn-icon-split" id="updateEstimate">
+									<button type="button" class="btn btn-info btn-icon-split" id="modifyEstimate">
 										<span class="icon text-white">
 											<i class="fas fa-edit"></i>
 										</span>
@@ -83,12 +83,12 @@
 										<label class="col-form-label col-lg-1">금액할인</label>
 										<div class="custom-control custom-radio mt-2 col-lg-1">
 											<input type="radio" class="custom-control-input" id="noApplyDiscount" name="discount"
-													th:checked="*{ discountStatus == 'N' }">
+													th:checked="*{ discountStatus == 'N' }" disabled>
 											<label for="noApplyDiscount" class="custom-control-label">미적용</label>
 										</div>
 										<div class="custom-control custom-radio mt-2 col-lg-1">
 											<input type="radio" class="custom-control-input" id="applyDiscount" name="discount"
-													th:checked="*{ discountStatus == 'Y' }">
+													th:checked="*{ discountStatus == 'Y' }" disabled>
 											<label for="applyDiscount" class="custom-control-label">적용</label>
 										</div>
 										<div class="input-group bootstrap-touchspin bootstrap-touchspin-injected col-lg-2">
@@ -98,7 +98,7 @@
 									</div>
 									<div class="form-group row mb-2" th:align="right">
 										<label for="estimateTotal" class="col-form-label col-lg-1">합계금액</label>
-										<input type="text" class="form-control col-lg-4" id="estimateTotal" th:value="*{ total }" readonly>
+										<input type="text" class="form-control col-lg-4" id="estimateTotal" th:value="*{ estimateTotal }" readonly>
 										<h5 class="col-lg-4" id="estimateKoreanTotal" th:align="left"></h5>
 									</div>
 								</div>
@@ -175,8 +175,8 @@
 			$("#estimateKoreanTotal").text("(" + totalKorean + ")");
 		});
 
-		$(document).on("click", "#updateEstimate", function() {
-			location.href = "/estimate/update?estimateNo=" + $("#estimateNo").val();
+		$(document).on("click", "#modifyEstimate", function() {
+			location.href = "/estimate/modify?estimateNo=" + $("#estimateNo").val();
 		});
 
 		/* 금액을 한글로 변경하여 출력 */

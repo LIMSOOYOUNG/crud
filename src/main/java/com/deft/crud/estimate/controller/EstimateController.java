@@ -49,8 +49,6 @@ public class EstimateController {
 	@GetMapping("selectAll")
 	public ModelAndView selectEstimateList(ModelAndView mv, @AuthenticationPrincipal UserImpl userInfo) {
 		
-		System.out.println("페이지 이동!!");
-		
 		int empNo = userInfo.getEmpNo();
 		
 		List<EstimateDTO> estimateList = estimateService.selectEstimateList(empNo);
@@ -91,7 +89,6 @@ public class EstimateController {
 	@GetMapping("/insert")
 	public ModelAndView insertEstimate(ModelAndView mv) {
 		
-		System.out.println("견적서 작성!!");
 		/* 새로운 견적번호 및 일자 입력 */
 		EstimateDTO estimate = new EstimateDTO();
 		LocalDate newEstimateLocalDate = LocalDate.now();
@@ -122,8 +119,7 @@ public class EstimateController {
 		
 		response.setContentType("application/json; charset=UTF-8");
 		
-//		int result = estimateService.insertEstimate(estimate);
-		int result = 1;
+		int result = estimateService.insertEstimate(estimate);
 		String message = "";
 		
 		if(result > 0) {
@@ -132,15 +128,14 @@ public class EstimateController {
 			message = "견적서 등록에 실패하였습니다.";
 		}
 		
-		rttr.addFlashAttribute("message", message);
-		System.out.println("데이터 전송!!");
-		mv.setViewName("redirect:/estimate/selectAll");
+		mv.addObject("message", message);
+		mv.setViewName("jsonView");
 		
 		return mv;
 	}
 	
-	@GetMapping("/update")
-	public ModelAndView updateEstimate(ModelAndView mv, @RequestParam String estimateNo) {
+	@GetMapping("/modify")
+	public ModelAndView modifyEstimate(ModelAndView mv, @RequestParam String estimateNo) {
 		
 		/* 견적서 정보 조회 */
 		EstimateDTO estimate = estimateService.selectEstimateDetail(estimateNo);
@@ -154,7 +149,7 @@ public class EstimateController {
 		mv.addObject("estimate", estimate);
 		mv.addObject("customerList", extCustomerList);
 		mv.addObject("stockList", stockList);
-		mv.setViewName("estimate/updateEstimate");
+		mv.setViewName("estimate/modifyEstimate");
 		
 		return mv;
 	}
