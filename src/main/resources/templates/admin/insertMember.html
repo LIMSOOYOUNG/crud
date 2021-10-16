@@ -26,7 +26,7 @@
 									<div class="text-center">
 										<h1 class="h4 text-gray-900 mb-4">사원등록</h1>
 									</div>
-									<form action="/admin/member/insert" method="post">
+									<form action="/admin/emp/insert" method="post">
 										<div class="row">
 											<div class="col-lg-2" style="margin-top: 60px;">
 												<div align="center">
@@ -40,10 +40,6 @@
 												</div>
 											</div>
 											<div class="col-lg-5">
-												<div class="form-group">
-													<label>사원번호</label> 
-														<input type="text" class="form-control"	name="empNo" placeholder="사원번호">
-												</div>
 												<div class="form-group">
 													<label>ID</label>&nbsp;<span id="checkId"></span> 
 														<input type="text" id="empId" class="form-control" name="empId"	placeholder="ID" required>
@@ -63,21 +59,38 @@
 												<div class="row">
 													<div class="form-group col-xl-6">
 														<label>부서</label> 
-															<input type="text" name="deptNo" class="form-control" required>
+														<select id="deptNmae" name="deptCode" class="form-control">
+															<option selected>-</option>
+															<option th:each="deptList : ${deptList}" 
+																	th:text="${deptList.deptName}" th:value="${deptList.deptCode}"></option>
+														</select>	
 													</div>
 													<div class="form-group col-xl-6">
 														<label>직급</label> 
-															<input type="text" name="jobNo" class="form-control" required>
+														<select id="jobName" name="jobCode" class="form-control">
+															<option selected>-</option>
+															<option th:each="jobList : ${jobList}" 
+																	th:text="${jobList.jobName}" th:value="${jobList.jobCode}"></option>
+														</select>	
 													</div>
 												</div>
 												<div class="row">
 													<div class="form-group col-xl-6">
 														<label>담당자</label> 
-															<input type="text" name="managerNo"	class="form-control" required>
+															<select id="managerName" name="empNo" class="form-control">
+															
+															
+															</select>
 													</div>
 													<div class="form-group col-xl-6">
 														<label>권한</label> 
-															<input type="text" name="authority" class="form-control" required>
+														<select id="authority" name="authority" class="form-control">
+															<option selected>-</option>
+															<option th:text="사원" th:value="사원"></option>
+															<option th:text="담당자" th:value="담당자"></option>
+															<option th:text="master" th:value="master"></option>
+																	
+														</select>	
 													</div>
 												</div>
 											</div>
@@ -94,8 +107,8 @@
 													<div class="form-group col-xl-6">
 														<label>성별</label>
 														<div class="form-control">
-															<input type="radio" name="gender" value="남" required><label>남</label> 
-															<input type="radio" name="gender" value="여" required><label>여</label>
+															<input type="radio" name="empGender" value="남" required><label>남</label> 
+															<input type="radio" name="empGender" value="여" required><label>여</label>
 														</div>
 													</div>
 
@@ -116,8 +129,6 @@
 															<input type="date" class="form-control" name="hireDate" required>
 													</div>
 													<div class="form-group col-xl-6">
-														<label>퇴사일</label> 
-															<input type="date" class="form-control"	name="entDate">
 													</div>
 												</div>
 											</div>

@@ -1,5 +1,9 @@
 package com.deft.crud.business.model.service;
 
+import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,9 +16,6 @@ import com.deft.crud.business.model.dto.BusinessChanceHistoryDTO;
 import com.deft.crud.customer.model.dao.CustomerMapper;
 import com.deft.crud.customer.model.dto.CustomerDTO;
 import com.deft.crud.member.model.service.UserImpl;
-
-import ch.qos.logback.core.joran.conditional.IfAction;
-import ch.qos.logback.core.net.SyslogOutputStream;
 
 @Service
 public class BusinessService {
@@ -165,20 +166,34 @@ public class BusinessService {
 		
 		if (modifyResult > 0) {
 			
+			if(businessChanceInfo.getBusinessTitle().equals(parameters.getBusinessTitle())) {
+				parameters.setBusinessTitle("");
+			}
+
 			if(businessChanceInfo.getProgressStatus().equals(parameters.getProgressStatus())) {
 				parameters.setProgressStatus("");
-				System.out.println("기회번호 동일");
 			}
+			
 			if(businessChanceInfo.getSalesLevel().equals(parameters.getSalesLevel())) {
 				parameters.setSalesLevel("");
-				System.out.println("영업상태 동일");
 			}
+			
 			if(businessChanceInfo.getProgressStatus().equals(parameters.getProgressStatus())) {
 				parameters.setProgressStatus("");
-				System.out.println("진행단계 동일");
+			}
+			
+			if(businessChanceInfo.getSuccessPosibillity() == (parameters.getSuccessPosibillity())) {
+				parameters.setSuccessPosibillity(999);
+			}
+
+			if(businessChanceInfo.getDueDate().equals(parameters.getDueDate())) {
+				parameters.setDueDate(null);
 			}
 			
 		/* 영업기회 변경이력 생성 */
+			
+		LocalDate newEstimateLocalDate = LocalDate.now();
+			
 		int insertHistoryResult = businessMapper.insertChanceHistory(parameters);	
 			
 			if(insertHistoryResult > 0) {

@@ -16,53 +16,99 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.deft.crud.admin.adminemployee.model.dto.AdminEmployeeDTO;
 import com.deft.crud.admin.adminemployee.model.dto.DepartmentDTO;
 import com.deft.crud.admin.adminemployee.model.dto.JobDTO;
 import com.deft.crud.admin.adminemployee.model.service.AdminEmployeeService;
 import com.deft.crud.member.model.dto.MemberDTO;
+import com.deft.crud.organization.model.service.OrganizationService;
 
 @Controller
 @RequestMapping("/admin")
 public class AdminEmployeeController {
 
 	private final AdminEmployeeService adminEmployeeService;
+	private final OrganizationService organizationService;
 	
 	@Autowired
-	public AdminEmployeeController(AdminEmployeeService adminEmployeeService) {
+	public AdminEmployeeController(AdminEmployeeService adminEmployeeService, OrganizationService organizationService) {
 		this.adminEmployeeService = adminEmployeeService;
+		this.organizationService = organizationService;
 	}
 	
 	/* 사원등록 페이지로 이동 */
 	@GetMapping(value = {"/emp/insert"})
 	public ModelAndView insertMember(ModelAndView mv) {
 		
+		/* 부서목록 가져오기 */
+		List<MemberDTO> jobList = adminEmployeeService.selectJobList();
+		
+		/* 직급목록 가져오기 */
+		List<MemberDTO> deptList = adminEmployeeService.selectDeptList();
+		
+		/* 권한목록 가져오기 */
+//		List<MemberDTO> authorityList = adminEmployeeService.selectAuthorityList();
+		
+		mv.addObject("jobList", jobList);
+		mv.addObject("deptList", deptList);
+		
 		mv.setViewName("/admin/insertMember");
 		
 		return mv;
 	}
 	
+	/* 선택한 부서의 담당자 목록 불러오기 */
+	@GetMapping("manager/find")
+	@ResponseBody
+	public List<MemberDTO> selectManagerList(@RequestParam String deptCode) {
+		
+		System.out.println("선택한 부서코드 확인 : " + deptCode);
+		
+		List<MemberDTO> managerList = adminEmployeeService.selectManagerList(deptCode);
+		
+		return managerList;
+	}
+	
 	/* 사원 등록 페이지에서 데이터 가져옴 */
 	@PostMapping(value = "/emp/insert")
 	
-	public String redirectInsertMember(MemberDTO member) {
+	public ModelAndView redirectInsertMember(ModelAndView mv, RedirectAttributes rttr, MemberDTO member) {
 		
 		System.out.println(member);
 		
-//		int result = adminService.insertMember();
+		int result = adminEmployeeService.insertMember(member);
 		
+		 String message = "";
+		  
+		  if(result > 0) { 
+			  message = "영업활동내용 수정완료";
+		  } else { 
+			  message = "영업활동내용 수정실패!";
+		  }
+		  
+		  rttr.addFlashAttribute("message", message);
+		  mv.setViewName("redirect:/employee/selectemployee");
 		
-		return "main/main";
+		return mv;
 	}
 	
-	
+	/* ID 중복여부 체크  */
 	@GetMapping(value = "/emp/checkUserId")
-	@ResponseBody
-	public boolean checkUserId(@RequestParam String empId) {
-		
-		return adminEmployeeService.checkUserId(empId);
-	}
+    @ResponseBody
+    public Boolean checkUserId(@RequestParam String empId) {
+      
+       int result = adminEmployeeService.checkUserId(empId);
+       
+       Boolean idCheckResult = false;
+       
+       if(result == 0) {
+          idCheckResult = true;
+       } 
+       
+       return idCheckResult;
+    }
 	 
 	/* 사원상세 정보 */
 	@GetMapping("employeedetail")

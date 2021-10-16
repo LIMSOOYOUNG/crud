@@ -31,7 +31,9 @@ public class MemberDTO {
 	private String entYn;
 	private String authority;
 	private String jobCode;
+	private String jobName;
 	private String deptCode;
+	private String deptName;
 	private int managerNo;
 	
 	private JobDTO job;

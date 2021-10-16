@@ -10,6 +10,7 @@ const insertMember = {
 		document.getElementById('empId').addEventListener('keyup', insertMember.onKeyupUserIdCheck)
 		document.getElementById('pwd1').addEventListener('keyup', insertMember.onKeyupPassword)
 		document.getElementById('pwd2').addEventListener('keyup', insertMember.equalsPassword)		
+		document.getElementById('deptNmae').addEventListener('change', insertMember.selectManagerName)		
 	},
 	
 	onKeyupUserIdCheck: function(empId) {
@@ -38,10 +39,7 @@ const insertMember = {
 				}
 			}
 		})
-	
-		
 	},
-	
 	
 	onKeyupPassword: function() {
 		const password = document.getElementById('pwd1').value
@@ -98,6 +96,32 @@ const insertMember = {
 			document.getElementById('checkPwd2').innerHTML = "(비밀번호가 일치합니다.)"	
 			return document.getElementById('checkPwd2').style.color = 'green'
 		}
+	},
+	
+	selectManagerName: function() {
+		
+		const deptCode = document.getElementById('deptNmae').value
+		const request = {deptCode: deptCode}
+		
+		let queryString = '?' + $.param(request)
+		
+		$.ajax({
+			type: "GET",
+			url: "/admin/manager/find" + queryString,
+			success: function(managerList) {
+				
+				const $select = $("#managerName");
+				$select.html("");
+				
+				for(let index in managerList) {
+					
+					$select.append("<option value='" + managerList[index].empNo + "'>" + managerList[index].empName + "</option>");
+					
+				}
+		
+			}
+		});
+		
 	}
 	
 }

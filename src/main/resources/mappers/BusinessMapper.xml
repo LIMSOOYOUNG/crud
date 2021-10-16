@@ -17,7 +17,6 @@
 		<result property="productName" column="PRODUCT_NAME" />
 		<result property="customerCompanyName" column="COMPANY_NAME" />
 		<result property="writeDate" column="WRITE_DATE" />
-
 	</resultMap>
 
 	<resultMap type="com.deft.crud.business.model.dto.BusinessActivityDTO"
@@ -43,11 +42,14 @@
 			   id="businessChanceChangeHistoryResultMap">
 		<id property="businessChanceNo" column="BUSINESS_CHANCE_NO" />
 		<result property="businessChanceHisNo" column="BUSINESS_CHANCE_HIS_NO" />
+		<result property="businessTitle" column="BUSINESS_TITLE" />
 		<result property="progressStatus" column="PROGRESS_STATUS" />
 		<result property="salesLevel" column="SALES_LEVEL" />
 		<result property="successPosibillity" column="SUCCESS_POSIBILLITY" />
 		<result property="empName" column="EMP_NAME" />
 		<result property="businessChanceChangeDate" column="BUSINESS_CHANCE_CHANGE_DATE" />
+		<result property="dueDate" column="DUE_DATE" />
+
 	</resultMap>
 	
 	<resultMap id="customerResultMap" type="com.deft.crud.customer.model.dto.CustomerDTO">
@@ -224,13 +226,15 @@
 	<!-- 선택한 영업기회의 내용 변경내역 -->
 	<select id="selectChanceHistoryByNo" resultMap="businessChanceChangeHistoryResultMap">
 		SELECT /* com.deft.crud.business.model.dao.BusinessMapper#selectChanceHistoryByNo() */
-		       TO_DATE(REPLACE(B.BUSINESS_CHANCE_CHANGE_DATE, 'T', ' '), 'YYYY-MM-DD HH24:MI:SS') AS BUSINESS_CHANCE_CHANGE_DATE
+		       B.BUSINESS_CHANCE_CHANGE_DATE
 		     , A.BUSINESS_CHANCE_NO
+		     , A.BUSINESS_TITLE
 		     , B.BUSINESS_CHANCE_HIS_NO
 		     , C.EMP_NAME
 		     , B.PROGRESS_STATUS
 		     , B.SALES_LEVEL
 		     , B.SUCCESS_POSIBILLITY
+		     , TO_CHAR(B.DUE_DATE, 'YYYY-MM-DD') DUE_DATE
 		  FROM TBL_BUSINESS_CHANCE A
 		  JOIN TBL_BUSINESS_CHANCE_HIS B ON(A.BUSINESS_CHANCE_NO =  B.BUSINESS_CHANCE_NO)
 		  JOIN TBL_EMP_INFO C ON(A.EMP_NO = C.EMP_NO)
@@ -376,6 +380,7 @@
 		, A.DUE_DATE
 		, A.EMP_NO
 		, A.CUSTOMER_NO
+		, A.WRITE_DATE
 		)  
 		VALUES
 		(  
@@ -403,6 +408,7 @@
 		, SYSDATE
 		, #{ empNo }
 		, #{ customerNo }
+		, SYSDATE
 		)
 	</insert>
 	
@@ -416,6 +422,7 @@
 		  , A.SALES_LEVEL = #{ salesLevel }
 		  , A.SUCCESS_POSIBILLITY = #{ successPosibillity }
 		  , A.WRITE_DATE = SYSDATE
+		  , A.DUE_DATE = #{ dueDate }
 	  WHERE A.BUSINESS_CHANCE_NO = #{ businessChanceNo }
 	</update>
 
@@ -425,20 +432,31 @@
 		  INTO TBL_BUSINESS_CHANCE_HIS A
 		(
 		  A.BUSINESS_CHANCE_HIS_NO
+		, A.BUSINESS_TITLE 
 		, A.BUSINESS_CHANCE_NO 
 		, A.PROGRESS_STATUS 
 		, A.SALES_LEVEL 
 		, A.SUCCESS_POSIBILLITY 
-		, A.BUSINESS_CHANCE_CHANGE_DATE 
+		, A.BUSINESS_CHANCE_CHANGE_DATE
+		, A.DUE_DATE 
 		)
 		VALUES
 		(
 		  SEQ_BUSINESS_CHANCE_HIS_NO.NEXTVAL
+		, #{ businessTitle }  
 		, #{ businessChanceNo }  
 		, #{ progressStatus }  
 		, #{ salesLevel }  
 		, #{ successPosibillity }  
 		, SYSDATE
+		, <choose>
+			<when test="dueDate == null">
+				null
+			</when>
+			<when test="dueDate != null">
+				#{ dueDate }
+			</when>
+		</choose>
 		)  
 	</insert>
 
