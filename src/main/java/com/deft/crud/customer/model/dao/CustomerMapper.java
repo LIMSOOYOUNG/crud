@@ -103,4 +103,7 @@ public interface CustomerMapper {
 
     /* 고객 정렬 조회 */
     List<CustomerCompanyDTO> selectCustomerByStatus(String customerStatus);
+
+    /* 분석 고객 정렬 조회 */
+    List<CustomerCompanyDTO> selectAnaCustomerByStatus(String customerStatus);
 }

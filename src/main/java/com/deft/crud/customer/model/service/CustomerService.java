@@ -231,4 +231,10 @@ public class CustomerService {
 
         return customerMapper.selectCustomerByStatus(customerStatus);
     }
+
+    /* 분석 고객 정렬 조회 */
+    public List<CustomerCompanyDTO> selectAnaCustomerByStatus(String customerStatus) {
+
+        return customerMapper.selectAnaCustomerByStatus(customerStatus);
+    }
 }
