@@ -209,11 +209,11 @@
             , PRODUCT_NO
            )
            VALUES
-          (
-            SEQ_RECEIVING_REQ_NO.CURRVAL
+           (
+              SEQ_RECEIVING_REQ_NO.CURRVAL
             , #{item.productStock}
             , #{item.stockProductNo}
-          )
+           )
       </foreach>
    </update>
    

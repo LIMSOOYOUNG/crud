@@ -33,8 +33,13 @@
              JOIN TBL_DEPARTMENT D ON (E.DEPT_CODE = D.DEPT_CODE)
 	</select>
 
-
-
+	<update id="modifyPwd" parameterType="com.deft.crud.employee.model.dto.EmployeeDTO">
+		UPDATE /* com.deft.crud.employee.model.dao.EmployeeMapper#modifyPwd() */
+		       TBL_EMP_INFO A
+		   SET A.EMP_PWD = #{ employeePwd }  
+		 WHERE A.EMP_ID = #{ employeeId }
+	</update>
+	
 
 
 

@@ -4,6 +4,7 @@
 
 	<!-- Header -->
 	<th:block th:fragment="header">
+		
 		<!-- Start TopBar -->
 		<nav class="navbar navbar-expand navbar-light bg-navbar topbar mb-4 static-top">
 			<button id="sidebarToggleTop" class="btn btn-link rounded-circle mr-3">
@@ -107,6 +108,11 @@
 							Profile
 						</a>
 						<div class="dropdown-divider"></div>
+						<a class="dropdown-item" href="javascript:void(0);" data-toggle="modal" data-target="#pwdChangeModal">
+							<i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+							비밀번호 변경
+						</a>
+						<div class="dropdown-divider"></div>
 						<a class="dropdown-item" href="javascript:void(0);" data-toggle="modal" data-target="#logoutModal">
 							<i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
 							Logout
@@ -115,6 +121,37 @@
 				</li>
 			</ul>
 		</nav>		<!-- End Topbar -->
+
+		<!-- Start PwdChangeModal -->
+		<div class="modal fade" id="pwdChangeModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabelLogout"
+			aria-hidden="true">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="exampleModalLabelLogout">비밀번호 변경</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<form id="changePwdForm" th:action="@{/employee/pwd/modify}" method="post">
+					<div class="modal-body">
+						<label style="align-content: left;">현재 비밀번호</label><span id="checkPwdSpan"></span>
+						<input type="password" id="pwdCheck" name="pwdCheck" class="form-control col-lg-7" placeholder="현재사용중인 비밀번호" style="text-align: center;">
+						
+						<label style="align-content: left;">변경할 비밀번호</label><span id="checkPwdSpan1"></span>
+						<input type="password" id="pwdCheck1" name="pwdCheck1" class="form-control col-lg-7" placeholder="변경할 비밀번호" style="text-align: center;">
+						
+						<label style="align-content: left;">비밀번호 재확인</label><span id="checkPwdSpan2"></span>
+						<input type="password" id="pwdCheck2" name="pwdCheck2" class="form-control col-lg-7" placeholder="변경할 비밀번호 재확인" style="text-align: center;">
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-outline-primary" data-dismiss="modal">Cancel</button>
+						<button type="button" id="changePwdBtn" class="btn btn-primary">비밀번호 변경</button>
+					</div>
+					</form>
+				</div>
+			</div>
+		</div>		<!-- End LogoutModal -->
 
 		<!-- Start LogoutModal -->
 		<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabelLogout"
@@ -137,6 +174,8 @@
 				</div>
 			</div>
 		</div>		<!-- End LogoutModal -->
+	
+		<script defer src="/js/employee/changePwd.js"></script>	
 	</th:block>
-
+	
 </html>

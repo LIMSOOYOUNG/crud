@@ -11,6 +11,9 @@ public interface EmployeeMapper {
 
 	List<EmployeeDTO> selectEmployee();
 
+	/* 비밀번호 변경 */
+	int modifyPwd(EmployeeDTO empInfo);
+
 	
 
 }
