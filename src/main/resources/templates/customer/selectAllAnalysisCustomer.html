@@ -267,7 +267,7 @@
             let customerStatus = $(this).attr('value');
 
             $.ajax({
-                url: 'customer/selectAna?customerStatus=' + customerStatus,
+                url: '/customer/selectAna?customerStatus=' + customerStatus,
                 type: 'GET',
                 success: function (data, status, xhr) {
 
@@ -307,8 +307,19 @@
 
                         $table.append($tr);
                     }
+                },
+                error: function (xhr, status, error) {
+                    console.log(xhr);
                 }
             });
+        });
+
+        /* 비동기로 생성된 버튼 이벤트 설정 */
+        $(document).on("click", "button[name='customerDetailBtn']", function() {
+
+            const customerNo = $(this).val();
+
+            location.href="/customer/anainfo?customerNo=" + customerNo;
         });
     </script>
 </body>
