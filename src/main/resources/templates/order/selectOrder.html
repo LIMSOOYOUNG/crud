@@ -23,7 +23,7 @@
 						<h1 class="h3 mb-0 text-gray-800">주문서 관리</h1>
 						<ol class="breadcrumb">
 							<li class="breadcrumb-item"><a th:href="@{/}">Home</a></li>
-							<li class="breadcrumb-item"><a th:href="@{/estimate/selectAll}">주문서 조회</a></li>
+							<li class="breadcrumb-item"><a th:href="@{/order/selectAll}">주문서 조회</a></li>
 							<li class="breadcrumb-item active" aria-current="page">주문서 상세조회</li>
 						</ol>
 					</div>
@@ -66,10 +66,10 @@
 										</div>
 									</div>
 									<div class="form-group row mb-2" th:align="right">
-										<label for="orderYn" class="col-form-label col-lg-1">발주상태</label>
+										<label for="orderYn" class="col-form-label col-lg-1">출고상태</label>
 										<select class="form-control col-lg-4" name="orderYn" disabled>
-											<option th:selected="*{orderYn == 'Y'}">발주</option>
-											<option th:selected="*{orderYn == 'N'}">미발주</option>
+											<option th:selected="*{orderYn == 'N'}">미출고</option>
+											<option th:selected="*{orderYn == 'Y'}">출고</option>
 										</select>
 										<label for="resEmpName" class="col-form-label col-lg-2">담당사원</label>
 										<input type="text" class="form-control col-lg-4" id="resEmpName" name="empName"

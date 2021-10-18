@@ -39,7 +39,7 @@ public class EstimateController {
 	
 	@Autowired
 	public EstimateController(EstimateService estimateService, CustomerService customerService,
-			StockService stockService, ObjectMapper objectMapper) {
+							StockService stockService, ObjectMapper objectMapper) {
 		
 		this.estimateService = estimateService;
 		this.customerService = customerService;

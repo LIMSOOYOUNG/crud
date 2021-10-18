@@ -60,4 +60,12 @@ public class OrderService {
 		
 		return order;
 	}
+
+	public String selectOrderNo(String newOrderDate) {
+		
+		String newOrderSeq = orderMapper.selectLastOrderSeq();
+		String newOrderNo = "E" + newOrderDate.replace("-", "") + "-" + newOrderSeq;
+		
+		return newOrderNo;
+	}
 }

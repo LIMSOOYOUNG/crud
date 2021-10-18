@@ -33,7 +33,7 @@
 								<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
 									<h6 class="m-0 font-weight-bold text-primary" id="tableTitle">주문서 조회</h6>
 									<button type="button" class="btn btn-info btn-icon-split" id="insertOrderBtn"
-											th:onclick="|location.href='@{/estimate/insert}'|">
+											th:onclick="|location.href='@{/order/insert}'|">
 										<span class="icon text-white"><i class="fas fa-edit"></i></span>
 										<span class="text text-white">주문서 작성</span>
 									</button>
@@ -49,7 +49,7 @@
 												<th>결제방법</th>
 												<th>주문일</th>
 												<th>납기요청일</th>
-												<th>발주상태</th>
+												<th>출고상태</th>
 												<th></th>
 											</tr>
 										</thead>
@@ -64,8 +64,8 @@
 												<td th:text="*{dueDate}"></td>
 												<td th:switch="*{orderYn}">
 													<h5>
-														<span th:case="Y" class="badge badge-success">발주</span>
-														<span th:case="N" class="badge badge-danger">미발주</span>
+														<span th:case="N" class="badge badge-danger">미출고</span>
+														<span th:case="Y" class="badge badge-success">출고</span>
 													</h5>
 												</td>
 												<td>

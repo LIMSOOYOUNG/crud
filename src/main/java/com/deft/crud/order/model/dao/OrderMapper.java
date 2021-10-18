@@ -12,4 +12,6 @@ public interface OrderMapper {
 	List<OrderDTO> selectOrderList(int empNo);
 
 	OrderDTO selectOrderDetail(String orderNo);
+
+	String selectLastOrderSeq();
 }

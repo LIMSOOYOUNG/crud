@@ -117,4 +117,11 @@
           LEFT JOIN TBL_PRODUCT P ON (OP.PRODUCT_NO = P.PRODUCT_NO)
          WHERE O.ORDER_NO = #{ orderNo }
 	</select>
+	
+	<select id="selectLastOrderSeq" resultType="java.lang.String">
+        SELECT /* com.deft.crud.order.model.dao.OrderMapper#selectLastOrderSeq() */
+               LPAD(LAST_NUMBER, 3, 0)
+          FROM USER_SEQUENCES
+         WHERE SEQUENCE_NAME = 'SEQ_ORDER_NO'
+	</select>
 </mapper>
