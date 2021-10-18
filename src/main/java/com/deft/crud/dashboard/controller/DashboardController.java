@@ -9,9 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.deft.crud.dashboard.model.dto.BusinessChanceDTO;
 import com.deft.crud.dashboard.model.dto.EmpInfoDTO;
 import com.deft.crud.dashboard.model.dto.PerformanceDTO;
 import com.deft.crud.dashboard.model.service.DashBoardService;
@@ -99,10 +101,28 @@ public class DashboardController {
 		return mv;
 	}
 	
-	@GetMapping("")
-	public ModelAndView inductionChart(ModelAndView mv, HttpServletResponse response, @AuthenticationPrincipal UserImpl loginInfo) {
+
+	
+	@GetMapping("/bus/failed")
+	public ModelAndView businessFailChart(ModelAndView mv, HttpServletResponse response,  @AuthenticationPrincipal UserImpl loginInfo) throws JsonProcessingException
+	{
 		
 		response.setCharacterEncoding("UTF-8");
+		
+		LocalDate collectBillDate = LocalDate.now();
+		int collectBillYear = collectBillDate.getYear();
+		
+		int empNo = loginInfo.getEmpNo();
+		
+		EmpInfoDTO empInfo = new EmpInfoDTO();
+		empInfo.setEmpNo(empNo);
+		
+		List<BusinessChanceDTO> failedChart = dashBoardService.failedChart(empNo, collectBillYear);
+		
+		System.out.println("failedChart 나오시면 안되겠습니까?" + failedChart);
+		
+		mv.addObject("failedChart", objectMapper.writeValueAsString(failedChart));
+		mv.setViewName("jsonView");
 		
 		return mv;
 	}

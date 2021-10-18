@@ -43,6 +43,18 @@
 		<result property="cllectBillStatus" column="COLLECT_BILL_STATUS"/>
 	</resultMap>
 	
+	<resultMap type="com.deft.crud.dashboard.model.dto.BusinessChanceDTO" id="businessChanceResultMap">
+		<id property="businessChanceNo" column="BUSINESS_CHANCE_NO"/>
+		<result property="progressStatus" column="PROGRESS_STATUS"/>
+		<result property="salesLevel" column="SALES_LEVEL"/>
+		<result property="successPosibillity" column="SUCCESS_POSIBILLITY"/>
+		<result property="businessTitle" column="BUSINESS_TITLE"/>
+		<result property="dueDate" column="DUE_DATE"/>
+		<result property="empNo" column="EMP_NO"/>
+		<result property="customerNo" column="CUSTOMER_NO"/>
+		<result property="writeDate" column="WRITE_DATE"/>
+	</resultMap>
+	
 	<!-- 사원 실적 그래프 -->
 	<select id="userPerformChart" resultMap="performanceResultMap">
 		SELECT /*com.deft.crud.dashboard.model.dao.DashBoardMapper#userPerformChart()*/
@@ -91,5 +103,11 @@
 	
 	</select>
 
+	<select id="failedChanceChart" resultMap="businessChanceResultMap" parameterType="com.deft.crud.dashboard.model.dto.BusinessChanceDTO">
+		SELECT /* com.deft.crud.dashboard.model.dto.BusinessChanceDTO */
+	           B.WRITE_DATE
+	      FROM TBL_BUSINESS_CHANCE B
+	     WHERE PROGRESS_STATUS = '실패'
+	</select>
 
 </mapper>

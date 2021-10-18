@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.deft.crud.dashboard.model.dao.DashboardMapper;
+import com.deft.crud.dashboard.model.dto.BusinessChanceDTO;
 import com.deft.crud.dashboard.model.dto.EmpInfoDTO;
 import com.deft.crud.dashboard.model.dto.PerformanceDTO;
 import com.deft.crud.sales.model.dto.TargetPerfomDTO;
@@ -37,6 +38,12 @@ public class DashBoardService {
 		
 		return dashBoardMapper.deptPerformChart(empInfo, collectBillYear);
 	}
-	
+
+	public List<BusinessChanceDTO> failedChart(int empNo, int collectBillYear) {
+		
+		return dashBoardMapper.failedChart(empNo, collectBillYear);
+	}
+
+
 
 }
