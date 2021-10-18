@@ -37,10 +37,9 @@ public class EstimateService {
 		
 		EstimateDTO estimate = estimateMapper.selectEstimateDetail(estimateNo);
 		
-		int discountRate = estimate.getDiscountRate();
-		int total = 0;
-		
 		/* 할인 적용 여부 확인 */
+		int discountRate = estimate.getDiscountRate();
+		
 		if(discountRate > 0) {
 			estimate.setDiscountStatus("Y");
 		} else {
@@ -48,6 +47,8 @@ public class EstimateService {
 		}
 		
 		/* 할인 적용한 합계 금액 계산 */
+		int total = 0;
+		
 		for(EstimateProductDTO estimateProduct : estimate.getEstimateProductList()) {
 			int sellingPrice = estimateProduct.getProduct().getSellingPrice();
 			int amount = estimateProduct.getProductAmount();
@@ -120,7 +121,7 @@ public class EstimateService {
 		
 		int result = 0; 
 		
-		if(estimateInfoResult > 0 && deleteProductResult > 0 && updateProductResult == productList.size()) {
+		if(estimateInfoResult > 0 || (deleteProductResult > 0 && updateProductResult == productList.size())) {
 			result = 1;
 		}
 		

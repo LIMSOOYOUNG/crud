@@ -33,11 +33,11 @@
 							<form th:action="@{/estimate/modify}" method="POST" id="modifyEstimate">
 
 								<!-- EstimateInfo -->
-								<div class="card mb-4">
+								<div class="card mb-4" th:object="${estimate}">
 									<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
 										<h6 class="m-0 font-weight-bold text-primary" id="tableTitle">견적서 수정</h6>
 									</div>
-									<div class="card-body" th:object="${estimate}">
+									<div class="card-body">
 										<div class="form-group row mb-2" th:align="right">
 												<label for="estimateTitle" class="col-form-label col-lg-1">제목</label>
 												<input type="text" class="form-control col-lg-10" th:field="*{estimateTitle}" required>
@@ -57,17 +57,17 @@
 													th:field="*{customer.customerName}" readonly>
 											<input type="hidden" class="form-control" id="customerNo" th:field="*{customer.customerNo}">
 											<div class="input-group-btn col-lg-1" th:align="left">
-												<button type="button" class="btn btn-primary" id="searchCustomer"
+												<button type="button" class="btn btn-primary" id="searchCustomerBtn"
 														data-toggle="modal" data-target="#customerModal">검색</button>
 											</div>
 										</div>
 										<div class="form-group row mb-4" th:align="right">
 											<label for="estimateStatus" class="col-form-label col-lg-1">진행상태</label>
 											<select class="form-control col-lg-4" th:field="*{estimateStatus}">
-												<option th:value="progress" th:text="진행중"></option>
-												<option th:value="success" th:text="완료"></option>
-												<option th:value="postpone" th:text="보류"></option>
-												<option th:value="failed" th:text="실패"></option>
+												<option th:value="progress">진행중</option>
+												<option th:value="success">완료</option>
+												<option th:value="postpone">보류</option>
+												<option th:value="failed">실패</option>
 											</select>
 											<label for="resEmpName" class="col-form-label col-lg-2">담당사원</label>
 											<input type="text" class="form-control col-lg-4" id="resEmpName" name="empName"
@@ -89,9 +89,9 @@
 											</div>
 											<div class="input-group bootstrap-touchspin bootstrap-touchspin-injected col-lg-2">
 												<input type="text" class="form-control" id="discountRate" name="discountRate"
-														th:value="*{discountRate}" th:if="*{discountStatus} == 'N'" disabled>
+														th:value="*{discountRate}" th:if="*{discountStatus == 'N'}" disabled>
 												<input type="text" class="form-control" id="discountRate" name="discountRate"
-														th:value="*{discountRate}" th:unless="*{discountStatus} == 'N'">
+														th:value="*{discountRate}" th:if="*{discountStatus == 'Y'}">
 											</div>
 										</div>
 										<div class="form-group row mb-2" th:align="right">
@@ -136,14 +136,14 @@
 													<td th:text="*{product.subtotal}"></td>
 													<td th:text="*{product.tax}"></td>
 													<td>
-														<button class="btn btn-sm btn-outline-dark" name="deleteStockBtn" th:text="삭제"></button>
+														<button type="button" class="btn btn-sm btn-outline-dark" name="deleteStockBtn">삭제</button>
 													</td>
 												</tr>
 											</tbody>
 											<tfoot>
 												<tr id="addProductBtn">
 													<td colspan="10" th:align="center">
-														<button type="button" class="btn btn-sm btn-dark btn-icon-split" id="addProduct"
+														<button type="button" class="btn btn-sm btn-dark btn-icon-split" id="addProductBtn"
 																data-toggle="modal" data-target="#stockModal">
 															<span class="icon text-white-50"><i class="fas fa-search-plus"></i></span>
 															<span class="text text-white">상품 추가</span>
@@ -158,8 +158,8 @@
 
 								<div class="mb-4" th:align="center">
 									<button type="button" class="btn btn-primary mx-2" id="modifyEstimateBtn">수정</button>
-									<button type="reset" class="btn btn-outline-danger mx-2"
-											th:onclick="history.back()">취소</button>
+									<button type="reset" class="btn btn-outline-danger mx-2" id="resetBtn"
+											th:onclick="|location.href='@{/estimate/select(estimateNo=${estimate.estimateNo})}'|">취소</button>
 								</div>
 							</form>
 						</div>
@@ -193,15 +193,15 @@
 															</tr>
 														</thead>
 														<tbody th:align="center">
-															<tr th:each="customer : ${customerList}">
-																<td th:text="${customer.customerNo}"></td>
-																<td th:text="${customer.company.businessStatus}"></td>
-																<td th:text="${customer.company.companyName}"></td>
-																<td th:text="${customer.customerName}"></td>
-																<td th:text="|${customer.empInfo.empName} ${customer.empInfo.job.jobName}|"></td>
+															<tr th:each="customer : ${customerList}" th:object="${customer}">
+																<td th:text="*{customerNo}"></td>
+																<td th:text="*{company.businessStatus}"></td>
+																<td th:text="*{company.companyName}"></td>
+																<td th:text="*{customerName}"></td>
+																<td th:text="|*{empInfo.empName} *{empInfo.job.jobName}|"></td>
 																<td>
-																	<button class="btn btn-sm btn-dark" name="selectCustomer"
-																			th:text="'선택'" data-dismiss="modal"></button>
+																	<button type="button" class="btn btn-sm btn-dark" name="selectCustomerBtn"
+																			data-dismiss="modal">선택</button>
 																</td>
 															</tr>
 														</tbody>
@@ -251,21 +251,21 @@
 															</tr>
 														</thead>
 														<tbody th:align="center">
-															<tr th:each="stock : ${stockList}">
-																<td name="productNo" th:text="${stock.productNo}"></td>
-																<td th:text="${stock.product.category.refCategoryName}"></td>
-																<td th:text="${stock.product.category.categoryName}"></td>
-																<td th:text="${stock.product.productName}"></td>
-																<td th:text="${stock.product.manufacturer.manufacturerName}"></td>
-																<td th:text="${stock.product.sellingPrice}"></td>
-																<td th:text="${stock.product.unit}"></td>
-																<td th:text="${stock.productStock}"></td>
+															<tr th:each="stock : ${stockList}" th:object="${stock}">
+																<td name="productNo" th:text="*{productNo}"></td>
+																<td th:text="*{product.category.refCategoryName}"></td>
+																<td th:text="*{product.category.categoryName}"></td>
+																<td th:text="*{product.productName}"></td>
+																<td th:text="*{product.manufacturer.manufacturerName}"></td>
+																<td th:text="*{product.sellingPrice}"></td>
+																<td th:text="*{product.unit}"></td>
+																<td th:text="*{productStock}"></td>
 																<td>
 																	<input type="number" class="form-control" name="stockQty" min="0">
 																</td>
 																<td>
-																	<button class="btn btn-sm btn-dark" name="selectStockBtn"
-																			th:text="'선택'" data-dismiss="modal"></button>
+																	<button type="button" class="btn btn-sm btn-dark" name="selectStockBtn"
+																			data-dismiss="modal">선택</button>
 																</td>
 															</tr>
 														</tbody>
@@ -309,7 +309,7 @@
 		});
 
 		/* 고객 목록 중 선택하여 정보 입력 */
-		$("button[name='selectCustomer']").on("click", function() {
+		$("button[name='selectCustomerBtn']").on("click", function() {
 			$td = $(this).parent();
 
 			const customerNo = $td.siblings().eq(0).text();

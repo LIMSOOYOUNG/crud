@@ -15,7 +15,7 @@ import lombok.ToString;
 @ToString
 public class PurchaseOrderDTO {
 	
-	private int orderNo;
+	private String orderNo;
 	private LocalDate orderDate;
 	private int discountDate;
 	private LocalDate dueDate;

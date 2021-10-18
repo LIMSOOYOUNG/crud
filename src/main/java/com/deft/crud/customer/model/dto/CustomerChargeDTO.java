@@ -12,7 +12,7 @@ import java.io.Serializable;
 public class CustomerChargeDTO implements Serializable {
 
     private int chargeNo;
-    private int orderNo;
+    private String orderNo;
     private String chargeStatus;
     private String collectBillStatus;
     private String chargeDate;

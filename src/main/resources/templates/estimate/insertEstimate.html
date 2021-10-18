@@ -57,17 +57,17 @@
 													th:field="*{customer.customerName}" readonly>
 											<input type="hidden" class="form-control" th:field="*{customerNo}">
 											<div class="input-group-btn col-lg-1" th:align="left">
-												<button type="button" class="btn btn-primary" id="searchCustomer"
+												<button type="button" class="btn btn-primary" id="searchCustomerBtn"
 														data-toggle="modal" data-target="#customerModal">검색</button>
 											</div>
 										</div>
 										<div class="form-group row mb-4" th:align="right">
 											<label for="estimateStatus" class="col-form-label col-lg-1">진행상태</label>
 											<select class="form-control col-lg-4" th:field="*{estimateStatus}">
-												<option th:value="progress" th:text="진행중"></option>
-												<option th:value="success" th:text="완료"></option>
-												<option th:value="postpone" th:text="보류"></option>
-												<option th:value="failed" th:text="실패"></option>
+												<option th:value="progress">진행중</option>
+												<option th:value="success">완료</option>
+												<option th:value="postpone">보류</option>
+												<option th:value="failed">실패</option>
 											</select>
 											<label for="resEmpName" class="col-form-label col-lg-2">담당사원</label>
 											<input type="text" class="form-control col-lg-4" id="resEmpName" name="empName"
@@ -122,9 +122,9 @@
 											<tbody th:align="center">
 											</tbody>
 											<tfoot>
-												<tr id="addProductBtn">
+												<tr>
 													<td colspan="10" th:align="center">
-														<button type="button" class="btn btn-sm btn-dark btn-icon-split" id="addProduct"
+														<button type="button" class="btn btn-sm btn-dark btn-icon-split" id="addProductBtn"
 																data-toggle="modal" data-target="#stockModal">
 															<span class="icon text-white-50"><i class="fas fa-search-plus"></i></span>
 															<span class="text text-white">상품 추가</span>
@@ -139,8 +139,8 @@
 
 								<div class="mb-4" th:align="center">
 									<button type="button" class="btn btn-primary mx-2" id="registEstimateBtn">등록</button>
-									<button type="reset" class="btn btn-outline-danger mx-2"
-											th:onclick="location.href='/estimate/selectAll'">취소</button>
+									<button type="reset" class="btn btn-outline-danger mx-2" id="resetBtn"
+											th:onclick="|location.href='@{/estimate/selectAll}'|">취소</button>
 								</div>
 							</form>
 						</div>
@@ -181,8 +181,8 @@
 																<td th:text="${customer.customerName}"></td>
 																<td th:text="|${customer.empInfo.empName} ${customer.empInfo.job.jobName}|"></td>
 																<td>
-																	<button class="btn btn-sm btn-dark" name="selectCustomer"
-																			th:text="선택" data-dismiss="modal"></button>
+																	<button type="button" class="btn btn-sm btn-dark" name="selectCustomerBtn"
+																			data-dismiss="modal">선택</button>
 																</td>
 															</tr>
 														</tbody>
@@ -245,8 +245,8 @@
 																	<input type="number" class="form-control" name="stockQty" min="0">
 																</td>
 																<td>
-																	<button class="btn btn-sm btn-dark" name="selectStockBtn"
-																			th:text="선택" data-dismiss="modal"></button>
+																	<button type="button" class="btn btn-sm btn-dark" name="selectStockBtn"
+																			data-dismiss="modal">선택</button>
 																</td>
 															</tr>
 														</tbody>
@@ -287,7 +287,7 @@
 		});
 
 		/* 고객 목록 중 선택하여 정보 입력 */
-		$("button[name='selectCustomer']").on("click", function() {
+		$("button[name='selectCustomerBtn']").on("click", function() {
 			$td = $(this).parent();
 
 			const customerNo = $td.siblings().eq(0).text();

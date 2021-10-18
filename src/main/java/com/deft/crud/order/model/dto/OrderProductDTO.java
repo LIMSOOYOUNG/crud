@@ -1,4 +1,8 @@
-package com.deft.crud.sales.model.dto;
+package com.deft.crud.order.model.dto;
+
+import java.io.Serializable;
+
+import com.deft.crud.product.model.dto.ProductDTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,10 +15,11 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class PurchaseOrderProduct {
+public class OrderProductDTO implements Serializable {
 	
 	private String orderNo;
-	private int productAmount;
 	private int productNo;
+	private int productAmount;
 	
+	private ProductDTO product;
 }

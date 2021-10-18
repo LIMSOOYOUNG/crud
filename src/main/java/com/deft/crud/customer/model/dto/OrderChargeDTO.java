@@ -11,7 +11,7 @@ import java.io.Serializable;
 @ToString
 public class OrderChargeDTO implements Serializable {
 
-    private int orderNo;
+    private String orderNo;
     private String orderDate;
     private int discountRate;
     private String dueDate;

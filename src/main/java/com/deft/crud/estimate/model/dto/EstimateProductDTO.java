@@ -22,5 +22,4 @@ public class EstimateProductDTO implements Serializable {
 	private int productAmount;
 	
 	private ProductDTO product;
-
 }
