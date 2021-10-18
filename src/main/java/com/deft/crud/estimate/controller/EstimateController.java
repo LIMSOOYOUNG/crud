@@ -40,13 +40,14 @@ public class EstimateController {
 	@Autowired
 	public EstimateController(EstimateService estimateService, CustomerService customerService,
 			StockService stockService, ObjectMapper objectMapper) {
+		
 		this.estimateService = estimateService;
 		this.customerService = customerService;
 		this.stockService = stockService;
 		this.objectMapper = objectMapper;
 	}
 	
-	@GetMapping("selectAll")
+	@GetMapping("/selectAll")
 	public ModelAndView selectEstimateList(ModelAndView mv, @AuthenticationPrincipal UserImpl userInfo) {
 		
 		int empNo = userInfo.getEmpNo();
@@ -61,7 +62,8 @@ public class EstimateController {
 	
 	@GetMapping("/selectAll/status")
 	public ModelAndView selectEstimateListByStatus(ModelAndView mv, HttpServletResponse response,
-			@RequestParam String estimateStatus, @AuthenticationPrincipal UserImpl userInfo) throws JsonProcessingException {
+												@RequestParam String estimateStatus,
+												@AuthenticationPrincipal UserImpl userInfo) throws JsonProcessingException {
 		
 		response.setContentType("application/json; charset=UTF-8");
 		
@@ -115,11 +117,11 @@ public class EstimateController {
 	
 	@PostMapping("/insert")
 	public ModelAndView insertEstimate(ModelAndView mv, HttpServletResponse response,
-			RedirectAttributes rttr, @RequestBody EstimateDTO estimate) {
+									@RequestBody EstimateDTO estimateInfo) {
 		
 		response.setContentType("application/json; charset=UTF-8");
 		
-		int result = estimateService.insertEstimate(estimate);
+		int result = estimateService.insertEstimate(estimateInfo);
 		String message = "";
 		
 		if(result > 0) {
@@ -150,6 +152,29 @@ public class EstimateController {
 		mv.addObject("customerList", extCustomerList);
 		mv.addObject("stockList", stockList);
 		mv.setViewName("estimate/modifyEstimate");
+		
+		return mv;
+	}
+	
+	@PostMapping("/modify")
+	public ModelAndView modifyEstimate(ModelAndView mv, HttpServletResponse response,
+									@RequestBody EstimateDTO estimateInfo) {
+		
+		response.setContentType("application/json; charset=UTF-8");
+		
+		System.out.println(estimateInfo);
+		
+		int result = estimateService.modifyEstimate(estimateInfo);
+		String message = "";
+		
+		if(result > 0) {
+			message = "견적서가 수정되었습니다.";
+		} else {
+			message = "견적서 수정에 실패하였습니다.";
+		}
+		
+		mv.addObject("message", message);
+		mv.setViewName("jsonView");
 		
 		return mv;
 	}

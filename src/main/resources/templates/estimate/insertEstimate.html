@@ -2,7 +2,7 @@
 <html lang="ko"
 	xmlns:th="https://www.thymeleaf.org">
 <head>
-	<th:block th:replace="@{common/config} :: config"></th:block>
+	<th:block th:replace="@{/common/config} :: config"></th:block>
 </head>
 
 <body id="page-top">
@@ -70,7 +70,8 @@
 												<option th:value="failed" th:text="실패"></option>
 											</select>
 											<label for="resEmpName" class="col-form-label col-lg-2">담당사원</label>
-											<input type="text" class="form-control col-lg-4" id="resEmpName" th:field="*{customer.empInfo.empName}" readonly>
+											<input type="text" class="form-control col-lg-4" id="resEmpName" name="empName"
+													th:field="*{customer.empInfo.empName}" readonly>
 											<input type="hidden" class="form-control" id="resEmpNo" th:field="*{customer.empNo}">
 										</div>
 
@@ -134,13 +135,13 @@
 										</table>
 									</div>
 								</div>
+								<!-- End EstimateProductList -->
+
 								<div class="mb-4" th:align="center">
 									<button type="button" class="btn btn-primary mx-2" id="registEstimateBtn">등록</button>
 									<button type="reset" class="btn btn-outline-danger mx-2"
-									th:onclick="history.back()">취소</button>
+											th:onclick="location.href='/estimate/selectAll'">취소</button>
 								</div>
-								<!-- End EstimateProductList -->
-
 							</form>
 						</div>
 					</div>
@@ -281,7 +282,7 @@
 				initval: 0,
 				boostat: 5,
 				maxboostedstep: 10,
-				postfix: "%"
+				postfix: '%'
 			});
 		});
 
@@ -467,7 +468,7 @@
 							"customerNo" : $("#customerNo").val(),
 							"estimateStatus" : $("#estimateStatus option:selected").text(),
 							"estimateProductList" : productList};
-							
+
 			if(confirm("견적서를 등록하시겠습니까?")) {
 				$.ajax({
 					url: "/estimate/insert",

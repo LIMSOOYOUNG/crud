@@ -1,3 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.deft.crud.order.model.dao.OrderMapper"></mapper>
+<mapper namespace="com.deft.crud.order.model.dao.OrderMapper">
+	<resultMap type="com.deft.crud.order.model.dto.OrderDTO" id="orderSelectResultMap">
+		<id property="orderNo" column="ORDER_NO"/>
+		<result property="orderTitle" column="ORDER_TITLE"/>
+		<result property="customerNo" column="CUSTOMER_NO"/>
+		<result property="sumPrice" column="SUM_PRICE"/>
+		<result property="discountRate" column="DISCOUNT_RATE"/>
+		<result property="paymentStatus" column="PAYMENT_STATUS"/>
+		<result property="orderDate" column="ORDER_DATE"/>
+		<result property="dueDate" column="DUE_DATE"/>
+		<result property="deliveryPlace" column="DELIVERY_PLACE"/>
+		<result property="providerRegistNo" column="PROVIDER_REGIST_NO"/>
+	</resultMap>
+	
+	<select id="selectOrderList" resultMap="orderSelectResultMap">
+        SELECT /* com.deft.crud.estimate.model.dao.OrderMapper#selectOrderList() */
+               O.ORDER_NO
+             , O.CUSTOMER_NO
+             , O.ORDER_TITLE
+             , O.SUM_PRICE
+             , O.PAYMENT_STATUS
+             , O.ORDER_DATE
+             , O.DUE_DATE
+          FROM TBL_PURCHASE_ORDER O
+	</select>
+</mapper>

@@ -116,6 +116,7 @@
              , E.ESTIMATE_TITLE
              , TO_CHAR(E.ESTIMATE_DATE, 'YYYY-MM-DD') "ESTIMATE_DATE"
              , CC.COMPANY_NAME
+             , E.CUSTOMER_NO
              , C.CUSTOMER_NAME
              , E.ESTIMATE_STATUS
              , EI.EMP_NAME
@@ -179,6 +180,38 @@
         VALUES
         (
           REPLACE(#{ estimateNo }, SUBSTR(#{ estimateNo }, -3), LPAD(SEQ_ESTIMATE_NO.CURRVAL, 3, 0))
+        , #{ productNo }
+        , #{ productAmount }
+        )
+	</insert>
+	
+	<update id="updateEstimateInfo" parameterType="com.deft.crud.estimate.model.dto.EstimateDTO">
+        UPDATE /* com.deft.crud.estimate.model.dao.EstimateMapper#updateEstimateInfo() */
+               TBL_ESTIMATE E
+           SET E.ESTIMATE_TITLE = #{ estimateTitle }
+             , E.CUSTOMER_NO = #{ customerNo }
+             , E.ESTIMATE_STATUS = #{ estimateStatus }
+             , E.DISCOUNT_RATE = #{ discountRate }
+         WHERE E.ESTIMATE_NO = #{ estimateNo }
+	</update>
+	
+	<delete id="deleteEstimateProduct" parameterType="java.lang.String">
+        DELETE
+          FROM TBL_ESTIMATE_PRODUCT EP
+         WHERE EP.ESTIMATE_NO = #{ estimateNo }
+	</delete>
+	
+	<insert id="updateEstimateProduct" parameterType="com.deft.crud.estimate.model.dto.EstimateProductDTO">
+        INSERT /* com.deft.crud.estimate.model.dao.EstimateMapper#updateEstimateProduct() */
+          INTO TBL_ESTIMATE_PRODUCT EP
+        (
+          EP.ESTIMATE_NO
+        , EP.PRODUCT_NO
+        , EP.PRODUCT_AMOUNT
+        )
+        VALUES
+        (
+          #{ estimateNo }
         , #{ productNo }
         , #{ productAmount }
         )
