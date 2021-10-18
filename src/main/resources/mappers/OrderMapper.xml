@@ -10,19 +10,111 @@
 		<result property="paymentStatus" column="PAYMENT_STATUS"/>
 		<result property="orderDate" column="ORDER_DATE"/>
 		<result property="dueDate" column="DUE_DATE"/>
+		<result property="orderYn" column="ORDER_YN"/>
 		<result property="deliveryPlace" column="DELIVERY_PLACE"/>
 		<result property="providerRegistNo" column="PROVIDER_REGIST_NO"/>
+		
+		<association property="customer" resultMap="customerResultMap"/>
+		<association property="provider" resultMap="providerResultMap"/>
+		<collection property="orderProductList" resultMap="orderProductResultMap"/>
+	</resultMap>
+	
+	<resultMap type="com.deft.crud.customer.model.dto.CustomerDTO" id="customerResultMap">
+		<id property="customerNo" column="CUSTOMER_NO"/>
+        <result property="customerName" column="CUSTOMER_NAME"/>
+        <result property="empNo" column="EMP_NO"/>
+		
+		<association property="company" resultMap="companyResultMap"/>
+		<association property="empInfo" resultMap="empInfoResultMap"/>
+	</resultMap>
+	
+	<resultMap type="com.deft.crud.customer.model.dto.CustomerCompanyDTO" id="companyResultMap">
+		<id property="customerCompanyNo" column="CUSTOMER_COMPANY_NO"/>
+		<result property="companyName" column="COMPANY_NAME"/>
+	</resultMap>
+
+	<resultMap type="com.deft.crud.customer.model.dto.EmpInfoDTO" id="empInfoResultMap">
+		<id property="empNo" column="EMP_NO"/>
+        <result property="empName" column="EMP_NAME"/>
+        
+		<association property="job" resultMap="jobResultMap"/>
+	</resultMap>
+	
+	<resultMap type="com.deft.crud.customer.model.dto.JobDTO" id="jobResultMap">
+		<id property="jobCode" column="JOB_CODE"/>
+		<result property="jobName" column="JOB_NAME"/>
+	</resultMap>
+	
+	<resultMap type="com.deft.crud.estimate.model.dto.ProviderDTO" id="providerResultMap">
+		<id property="providerRegistNo" column="PROVIDER_REGIST_NO"/>
+		<result property="providerName" column="PROVIDER_NAME"/>
+		<result property="providerCeo" column="PROVIDER_CEO"/>
+		<result property="providerAddress" column="PROVIDER_ADDRESS"/>
+		<result property="providerBusinessStatus" column="PROVIDER_BUSINESS_STATUS"/>
+		<result property="providerBusinessType" column="PROVIDER_BUSINESS_TYPE"/>
+	</resultMap>
+	
+	<resultMap type="com.deft.crud.order.model.dto.OrderProductDTO" id="orderProductResultMap">
+		<id property="orderNo" column="ORDER_NO"/>
+		<id property="productNo" column="PRODUCT_NO"/>
+		<result property="productAmount" column="PRODUCT_AMOUNT"/>
+		
+		<association property="product" resultMap="productResultMap"/>
+	</resultMap>
+	
+	<resultMap type="com.deft.crud.product.model.dto.ProductDTO" id="productResultMap">
+		<id property="productNo" column="PRODUCT_NO"/>
+		<result property="sellStatus" column="SELL_STATUS"/>
+		<result property="productName" column="PRODUCT_NAME"/>
+		<result property="purchasePrice" column="PURCHASE_PRICE"/>
+		<result property="sellingPrice" column="SELLING_PRICE"/>
+		<result property="unit" column="UNIT"/>
 	</resultMap>
 	
 	<select id="selectOrderList" resultMap="orderSelectResultMap">
         SELECT /* com.deft.crud.estimate.model.dao.OrderMapper#selectOrderList() */
                O.ORDER_NO
              , O.CUSTOMER_NO
+             , C.CUSTOMER_NAME
              , O.ORDER_TITLE
              , O.SUM_PRICE
              , O.PAYMENT_STATUS
-             , O.ORDER_DATE
-             , O.DUE_DATE
+             , TO_CHAR(O.ORDER_DATE, 'YYYY-MM-DD') "ORDER_DATE"
+             , TO_CHAR(O.DUE_DATE, 'YYYY-MM-DD') "DUE_DATE"
+             , O.ORDER_YN
           FROM TBL_PURCHASE_ORDER O
+          LEFT JOIN TBL_CUSTOMER C ON (O.CUSTOMER_NO = C.CUSTOMER_NO)
+         ORDER BY O.ORDER_NO DESC
+	</select>
+	
+	<select id="selectOrderDetail" resultMap="orderSelectResultMap">
+        SELECT /* com.deft.crud.estimate.model.dao.OrderMapper#selectOrderDetail() */
+               O.ORDER_NO
+             , O.ORDER_TITLE
+             , O.CUSTOMER_NO
+             , C.CUSTOMER_NAME
+             , CC.COMPANY_NAME
+             , EI.EMP_NAME
+             , C.EMP_NO
+             , J.JOB_NAME
+             , O.SUM_PRICE
+             , O.DISCOUNT_RATE
+             , O.PAYMENT_STATUS
+             , TO_CHAR(O.ORDER_DATE, 'YYYY-MM-DD') "ORDER_DATE"
+             , TO_CHAR(O.DUE_DATE, 'YYYY-MM-DD') "DUE_DATE"
+             , O.ORDER_YN
+             , P.PRODUCT_NO
+             , P.PRODUCT_NAME
+             , P.SELLING_PRICE
+             , P.UNIT
+             , OP.PRODUCT_AMOUNT
+          FROM TBL_PURCHASE_ORDER O
+          LEFT JOIN TBL_CUSTOMER C ON (O.CUSTOMER_NO = C.CUSTOMER_NO)
+          LEFT JOIN TBL_CUSTOMER_COMPANY CC ON (C.CUSTOMER_COMPANY_NO = CC.CUSTOMER_COMPANY_NO)
+          LEFT JOIN TBL_EMP_INFO EI ON (C.EMP_NO = EI.EMP_NO)
+          LEFT JOIN TBL_JOB J ON (EI.JOB_CODE = J.JOB_CODE)
+          LEFT JOIN TBL_PURCHASE_ORDER_PRODUCT OP ON (O.ORDER_NO = OP.ORDER_NO)
+          LEFT JOIN TBL_PRODUCT P ON (OP.PRODUCT_NO = P.PRODUCT_NO)
+         WHERE O.ORDER_NO = #{ orderNo }
 	</select>
 </mapper>

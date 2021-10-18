@@ -7,8 +7,10 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.deft.crud.estimate.model.dto.EstimateDTO;
 import com.deft.crud.member.model.service.UserImpl;
 import com.deft.crud.order.model.dto.OrderDTO;
 import com.deft.crud.order.model.service.OrderService;
@@ -32,12 +34,19 @@ public class OrderController {
 		
 		List<OrderDTO> orderList = orderService.selectOrderList(empNo);
 		
-		for(OrderDTO order : orderList) {
-			System.out.println(order);
-		}
-		
 		mv.addObject("orderList", orderList);
 		mv.setViewName("order/selectAllOrder");
+		
+		return mv;
+	}
+	
+	@GetMapping("/select")
+	public ModelAndView selectOrderDetail(ModelAndView mv, @RequestParam String orderNo) {
+		
+		OrderDTO order = orderService.selectOrderDetail(orderNo);
+		
+		mv.addObject("order", order);
+		mv.setViewName("order/selectOrder");
 		
 		return mv;
 	}

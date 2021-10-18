@@ -17,7 +17,7 @@ import lombok.ToString;
 public class ChargeDTO {
 
 	private int chargeNo;
-	private int orderNo;
+	private String orderNo;
 	private String chargeStatus;
 	private LocalDate chargeDate;
 	private int chargeYear;

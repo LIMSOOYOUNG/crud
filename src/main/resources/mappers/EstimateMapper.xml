@@ -32,7 +32,7 @@
 		<id property="empNo" column="EMP_NO"/>
         <result property="empName" column="EMP_NAME"/>
         
-		<association property="job" resultMap="jobResultMap"></association>
+		<association property="job" resultMap="jobResultMap"/>
 	</resultMap>
 	
 	<resultMap type="com.deft.crud.customer.model.dto.JobDTO" id="jobResultMap">
@@ -115,13 +115,13 @@
                E.ESTIMATE_NO
              , E.ESTIMATE_TITLE
              , TO_CHAR(E.ESTIMATE_DATE, 'YYYY-MM-DD') "ESTIMATE_DATE"
-             , CC.COMPANY_NAME
              , E.CUSTOMER_NO
              , C.CUSTOMER_NAME
-             , E.ESTIMATE_STATUS
+             , CC.COMPANY_NAME
+             , C.EMP_NO
              , EI.EMP_NAME
              , J.JOB_NAME
-             , C.EMP_NO
+             , E.ESTIMATE_STATUS
              , E.DISCOUNT_RATE
              , P.PRODUCT_NO
              , P.PRODUCT_NAME

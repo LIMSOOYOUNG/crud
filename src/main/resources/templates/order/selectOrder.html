@@ -20,37 +20,37 @@
 				<!-- Content -->
 				<div class="container-fluid" id="container-wrapper">
 					<div class="d-sm-flex align-items-center justify-content-between mb-4">
-						<h1 class="h3 mb-0 text-gray-800">견적서 관리</h1>
+						<h1 class="h3 mb-0 text-gray-800">주문서 관리</h1>
 						<ol class="breadcrumb">
 							<li class="breadcrumb-item"><a th:href="@{/}">Home</a></li>
-							<li class="breadcrumb-item"><a th:href="@{/estimate/selectAll}">견적서 조회</a></li>
-							<li class="breadcrumb-item active" aria-current="page">견적서 상세조회</li>
+							<li class="breadcrumb-item"><a th:href="@{/estimate/selectAll}">주문서 조회</a></li>
+							<li class="breadcrumb-item active" aria-current="page">주문서 상세조회</li>
 						</ol>
 					</div>
 
 					<div class="row">
 						<div class="col-lg-12" th:align="center">
 
-							<!-- EstimateInfo -->
-							<div class="card mb-4" th:object="${estimate}">
+							<!-- OrderInfo -->
+							<div class="card mb-4" th:object="${order}">
 								<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-									<h6 class="m-0 font-weight-bold text-primary" id="tableTitle">견적서 상세조회</h6>
-									<button type="button" class="btn btn-info btn-icon-split" id="modifyEstimateBtn"
-											th:onclick="|location.href='@{/estimate/modify(estimateNo=*{estimateNo})}'|">
+									<h6 class="m-0 font-weight-bold text-primary" id="tableTitle">주문서 상세조회</h6>
+									<button type="button" class="btn btn-info btn-icon-split" id="modifyOrderBtn"
+											th:onclick="|location.href='@{/order/modify(orderNo=*{orderNo})}'|">
 										<span class="icon text-white"><i class="fas fa-edit"></i></span>
-										<span class="text text-white">견적서 수정</span>
+										<span class="text text-white">주문서 수정</span>
 									</button>
 								</div>
 								<div class="card-body">
 									<div class="form-group row mb-2" th:align="right">
-											<label for="estimateTitle" class="col-form-label col-lg-1">제목</label>
-											<input type="text" class="form-control col-lg-10" th:field="*{estimateTitle}" readonly>
+											<label for="orderTitle" class="col-form-label col-lg-1">제목</label>
+											<input type="text" class="form-control col-lg-10" th:field="*{orderTitle}" readonly>
 									</div>
 									<div class="form-group row mb-2" th:align="right">
-										<label for="estimateNo" class="col-form-label col-lg-1">견적번호</label>
-										<input type="text" class="form-control col-lg-4" th:field="*{estimateNo}" readonly>
-										<label for="estimateDate" class="col-form-label col-lg-2">견적일자</label>
-										<input type="text" class="form-control col-lg-4" th:field="*{estimateDate}" readonly>
+										<label for="orderNo" class="col-form-label col-lg-1">주문번호</label>
+										<input type="text" class="form-control col-lg-4" th:field="*{orderNo}" readonly>
+										<label for="orderDate" class="col-form-label col-lg-2">주문일자</label>
+										<input type="text" class="form-control col-lg-4" th:field="*{orderDate}" readonly>
 									</div>
 									<div class="form-group row mb-2" th:align="right">
 										<label for="customerCompany" class="col-form-label col-lg-1">고객사</label>
@@ -65,18 +65,25 @@
 													data-toggle="modal" data-target="#customerModal" hidden>검색</button>
 										</div>
 									</div>
-									<div class="form-group row mb-4" th:align="right">
-										<label for="estimateStatus" class="col-form-label col-lg-1">진행상태</label>
-										<select class="form-control col-lg-4" id="estimateStatus" name="estimateStatus" disabled>
-											<option th:selected="*{estimateStatus == '진행중'}">진행중</option>
-											<option th:selected="*{estimateStatus == '완료'}">완료</option>
-											<option th:selected="*{estimateStatus == '보류'}">보류</option>
-											<option th:selected="*{estimateStatus == '실패'}">실패</option>
+									<div class="form-group row mb-2" th:align="right">
+										<label for="orderYn" class="col-form-label col-lg-1">발주상태</label>
+										<select class="form-control col-lg-4" name="orderYn" disabled>
+											<option th:selected="*{orderYn == 'Y'}">발주</option>
+											<option th:selected="*{orderYn == 'N'}">미발주</option>
 										</select>
 										<label for="resEmpName" class="col-form-label col-lg-2">담당사원</label>
 										<input type="text" class="form-control col-lg-4" id="resEmpName" name="empName"
 												th:value="|*{customer.empInfo.empName} *{customer.empInfo.job.jobName}|" readonly>
 										<input type="hidden" class="form-control" id="resEmpNo" th:field="*{customer.empNo}">
+									</div>
+									<div class="form-group row mb-4" th:align="right">
+										<label for="paymentStatus" class="col-form-label col-lg-1">결제방법</label>
+										<select class="form-control col-lg-4" name="paymentStatus" disabled>
+											<option th:selected="*{paymentStatus == '카드'}">카드</option>
+											<option th:selected="*{paymentStatus == '세금계산서'}">세금계산서</option>
+										</select>
+										<label for="dueDate" class="col-form-label col-lg-2">납기요청일</label>
+										<input type="text" class="form-control col-lg-4" th:field="*{dueDate}" readonly>
 									</div>
 
 									<div class="form-group row mb-2" th:align="right">
@@ -96,21 +103,21 @@
 										</div>
 									</div>
 									<div class="form-group row mb-2" th:align="right">
-										<label for="estimateTotal" class="col-form-label col-lg-1">합계금액</label>
-										<input type="text" class="form-control col-lg-4" th:field="*{estimateTotal}" readonly>
-										<h5 class="col-lg-4" id="estimateTotalKor" th:align="left"></h5>
+										<label for="sumPrice" class="col-form-label col-lg-1">합계금액</label>
+										<input type="text" class="form-control col-lg-4" th:field="*{sumPrice}" readonly>
+										<h5 class="col-lg-4" id="orderTotalKor" th:align="left"></h5>
 									</div>
 								</div>
 							</div>
-							<!-- End EstimateInfo -->
+							<!-- End OrderInfo -->
 
-							<!-- EstimateProductList -->
+							<!-- OrderProductList -->
 							<div class="card mb-4">
 								<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-									<h6 class="m-0 font-weight-bold text-primary" id="tableTitle">견적 품목</h6>
+									<h6 class="m-0 font-weight-bold text-primary" id="tableTitle">주문 품목</h6>
 								</div>
 								<div class="table-responsible">
-									<table class="table align-items-center table-flush" id="estimateProductTable">
+									<table class="table align-items-center table-flush" id="orderProductTable">
 										<thead class="thead-light" th:align="center">
 											<tr>
 												<th>No</th>
@@ -126,7 +133,7 @@
 											</tr>
 										</thead>
 										<tbody th:align="center">
-											<tr th:each="estimateProduct, i : ${estimate.estimateProductList}" th:object="${estimateProduct}">
+											<tr th:each="orderProduct, i : ${order.orderProductList}" th:object="${orderProduct}">
 												<td th:text="${i.count}"></td>
 												<td th:text="*{productNo}"></td>
 												<td th:text="*{product.productName}"></td>
@@ -142,12 +149,12 @@
 									</table>
 								</div>
 							</div>
-							<!-- End EstimateProductList -->
+							<!-- End OrderProductList -->
 							
 							<div class="mb-4">
-								<button type="button" class="btn btn-primary mx-2" id="printEstimateBtn">PDF 출력</button>
+								<button type="button" class="btn btn-primary mx-2" id="printOrderBtn">PDF 출력</button>
 								<button type="button" class="btn btn-outline-danger mx-2" id="resetBtn"
-										th:onclick="|location.href='@{/estimate/selectAll}'|">뒤로가기</button>
+										th:onclick="|location.href='@{/order/selectAll}'|">뒤로가기</button>
 							</div>
 						</div>
 					</div>
@@ -172,8 +179,8 @@
 				postfix: '%'
 			});
 			
-			let total = $("#estimateTotal").val();
-			$("#estimateTotalKor").text("(" + translateKor(total) + ")");
+			let total = $("#sumPrice").val();
+			$("#orderTotalKor").text("(" + translateKor(total) + ")");
 		});
 
 		/* 금액을 한글로 변경하여 출력 */

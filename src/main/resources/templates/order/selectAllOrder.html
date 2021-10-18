@@ -22,7 +22,7 @@
 						<h1 class="h3 mb-0 text-gray-800">주문서 관리</h1>
 						<ol class="breadcrumb">
 							<li class="breadcrumb-item"><a href="/">Home</a></li>
-							<li class="breadcrumb-item active" aria-current="page">주문서 관리</li>
+							<li class="breadcrumb-item active" aria-current="page">주문서 조회</li>
 						</ol>
 					</div>
 
@@ -32,10 +32,9 @@
 							<div class="card mb-4">
 								<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
 									<h6 class="m-0 font-weight-bold text-primary" id="tableTitle">주문서 조회</h6>
-									<button type="button" class="btn btn-info btn-icon-split" th:onclick="|location.href='@{/estimate/insert}'|">
-										<span class="icon text-white">
-											<i class="fas fa-edit"></i>
-										</span>
+									<button type="button" class="btn btn-info btn-icon-split" id="insertOrderBtn"
+											th:onclick="|location.href='@{/estimate/insert}'|">
+										<span class="icon text-white"><i class="fas fa-edit"></i></span>
 										<span class="text text-white">주문서 작성</span>
 									</button>
 								</div>
@@ -49,21 +48,29 @@
 												<th>금액</th>
 												<th>결제방법</th>
 												<th>주문일</th>
-												<th>납기일</th>
+												<th>납기요청일</th>
+												<th>발주상태</th>
 												<th></th>
 											</tr>
 										</thead>
 										<tbody>
 											<tr th:each="order : ${orderList}" th:object="${order}" th:align="center">
 												<td th:text="*{orderNo}"></td>
-												<td th:text="*{customerNo}"></td>
+												<td th:text="*{customer.customerName}"></td>
 												<td th:text="*{orderTitle}"></td>
 												<td th:text="*{sumPrice}"></td>
 												<td th:text="*{paymentStatus}"></td>
 												<td th:text="*{orderDate}"></td>
 												<td th:text="*{dueDate}"></td>
+												<td th:switch="*{orderYn}">
+													<h5>
+														<span th:case="Y" class="badge badge-success">발주</span>
+														<span th:case="N" class="badge badge-danger">미발주</span>
+													</h5>
+												</td>
 												<td>
-													<button class="btn btn-sm btn-dark btn-icon-split" name="estimateDetailBtn">
+													<button type="button" class="btn btn-sm btn-dark btn-icon-split" name="orderDetailBtn"
+															th:onclick="|location.href='@{/order/select(orderNo=*{orderNo})}'|">
 														<span class="icon text-white-50"><i class="fas fa-clipboard-list"></i></span>
 														<span class="text text-white">상세정보</span>
 													</button>
