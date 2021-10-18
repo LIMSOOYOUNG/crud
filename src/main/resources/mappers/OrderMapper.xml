@@ -22,6 +22,7 @@
 	<resultMap type="com.deft.crud.customer.model.dto.CustomerDTO" id="customerResultMap">
 		<id property="customerNo" column="CUSTOMER_NO"/>
         <result property="customerName" column="CUSTOMER_NAME"/>
+        <result property="customerPhone" column="CUSTOMER_PHONE"/>
         <result property="empNo" column="EMP_NO"/>
 		
 		<association property="company" resultMap="companyResultMap"/>
@@ -93,6 +94,7 @@
              , O.ORDER_TITLE
              , O.CUSTOMER_NO
              , C.CUSTOMER_NAME
+             , C.CUSTOMER_PHONE
              , CC.COMPANY_NAME
              , EI.EMP_NAME
              , C.EMP_NO
