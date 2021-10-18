@@ -10,6 +10,7 @@ import com.deft.crud.stock.model.dto.RequestStockDTO;
 import com.deft.crud.stock.model.dto.StorageDTO;
 import com.deft.crud.stock.model.dto.approval.ApprovalDocumentDTO;
 import com.deft.crud.stock.model.dto.approval.ApprovalModifyDTO;
+import com.deft.crud.stock.model.dto.approval.PurchaseOrderDTO;
 import com.deft.crud.stock.model.dto.approval.ReceivingReqDTO;
 
 @Mapper
@@ -47,7 +48,9 @@ public interface StockMapper {
 	int insertReceivingReqHistory(ApprovalModifyDTO parameters);			// 결재이력 생성 
 
 	List<ReceivingReqDTO> selectReceivingReqByStatus(String documentStatus  // 요청목록 결재상태 별 조회(담당자 or 사원)
-													, UserImpl userInfo);  
+													, UserImpl userInfo);
+
+	List<PurchaseOrderDTO> selectPurchaseOrderAll();  						// 미완료 상태 주문서 목록조회
 
 
 

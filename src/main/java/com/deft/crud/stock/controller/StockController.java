@@ -22,11 +22,11 @@ import com.deft.crud.stock.model.dto.ProductStockInfoDTO;
 import com.deft.crud.stock.model.dto.RequestStockDTO;
 import com.deft.crud.stock.model.dto.StorageDTO;
 import com.deft.crud.stock.model.dto.approval.ApprovalModifyDTO;
+import com.deft.crud.stock.model.dto.approval.PurchaseOrderDTO;
 import com.deft.crud.stock.model.dto.approval.ReceivingReqDTO;
 import com.deft.crud.stock.model.service.StockService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 
 @Controller
 @RequestMapping("/stock/*")
@@ -51,8 +51,12 @@ public class StockController {
 		/* 판매가능 상태인 모든 상품들 */
 		List<StorageDTO> sellableProductList = stockService.selectSellableProductAll();
 		
-		System.out.println("@@@@@@@@@@@@@@@@@@판매중인 상품 목록 : " + sellableProductList);
+		/* 미완료 상태 주문서 목록 */
+		List<PurchaseOrderDTO> purchaseOrderList = stockService.selectPurchaseOrderAll();
 		
+		System.out.println("@@@@@@@@@@@@@@@@@@미완료상태 주문서 목록 : " + purchaseOrderList);
+		
+		mv.addObject("purchaseOrderList", purchaseOrderList);
 		mv.addObject("stockList", stockList);
 		mv.addObject("sellableProductList", sellableProductList);
 		mv.setViewName("stock/stockList");

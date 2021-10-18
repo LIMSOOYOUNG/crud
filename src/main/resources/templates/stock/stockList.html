@@ -259,27 +259,29 @@ input {
 						<div class="col-lg-6">
 							<div class="card mb-4">
 								<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-									<h6 class="m-0 font-weight-bold text-primary">청구서 목록</h6>
+									<h6 class="m-0 font-weight-bold text-primary">주문서 목록</h6>
 								</div>
 								<div class="table-responsive p-3" style="overflow-y: scroll; height: 650px;">
 									<table id="orderProductTable" class="table align-items-center table-flush table-hover">
 										<thead th:align="center" class="thead-light">
 											<tr>
-												<th>상품번호</th>
-												<th>카테고리</th>
-												<th>상품명</th>
-												<th>재고수량</th>
-												<th>단위</th>
+												<th>주문서번호</th>
+												<th>고객번호+고객명</th>
+												<th>주문서제목</th>
+												<th>대금결제조건</th>
+												<th>주문완료여부</th>
+												<th>납기일</th>
 												<th></th>
 											</tr>
 										</thead>
 										<tbody th:align="center">
-											<tr th:each="sellableProduct : ${sellableProductList}">
-												<td th:text="${sellableProduct.productNo}"></td>
-												<td th:text="${sellableProduct.product.category.categoryName}"></td>
-												<td th:text="${sellableProduct.product.productName}"></td>
-												<td th:text="${sellableProduct.productStock}"></td>
-												<td th:text="${sellableProduct.product.unit}"></td>
+											<tr th:each="orderList : ${purchaseOrderList}">
+												<td th:text="${orderList.orderProductDTO.productNo}"></td>
+												<td th:text="|${orderList.customerNo} ${orderList.customerName}|"></td>
+												<td th:text="${orderList.orderTitle}"></td>
+												<td th:text="${orderList.paymentStatus}"></td>
+												<td th:text="${orderList.orderYn}"></td>
+												<td th:text="${orderList.dueDate}"></td>
 												<td>
 													<a class="btn btn-white btn-icon-split addBtn">
 														<span class="icon text-black" style="color: #66bb6a;">
