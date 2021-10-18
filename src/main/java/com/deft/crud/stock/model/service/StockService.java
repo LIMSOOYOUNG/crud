@@ -16,6 +16,7 @@ import com.deft.crud.stock.model.dto.RequestStockDTO;
 import com.deft.crud.stock.model.dto.StorageDTO;
 import com.deft.crud.stock.model.dto.approval.ApprovalDocumentDTO;
 import com.deft.crud.stock.model.dto.approval.ApprovalModifyDTO;
+import com.deft.crud.stock.model.dto.approval.PurchaseOrderDTO;
 import com.deft.crud.stock.model.dto.approval.ReceivingReqDTO;
 
 @Service
@@ -174,6 +175,14 @@ public class StockService {
 		}
 
 		return result > 0? true: false;
+	}
+
+	/* 미완료 상태 주문서 목록 조회 */
+	public List<PurchaseOrderDTO> selectPurchaseOrderAll() {
+
+		List<PurchaseOrderDTO> purchaseOrderList = mapper.selectPurchaseOrderAll();
+		
+		return purchaseOrderList;
 	}
 
 }

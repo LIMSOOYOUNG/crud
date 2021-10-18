@@ -99,11 +99,11 @@ public class DashboardController {
 		return mv;
 	}
 	
-	@GetMapping("")
-	public ModelAndView inductionChart(ModelAndView mv, HttpServletResponse response, @AuthenticationPrincipal UserImpl loginInfo) {
-		
-		response.setCharacterEncoding("UTF-8");
-		
-		return mv;
-	}
+//	@GetMapping("")
+//	public ModelAndView inductionChart(ModelAndView mv, HttpServletResponse response, @AuthenticationPrincipal UserImpl loginInfo) {
+//		
+//		response.setCharacterEncoding("UTF-8");
+//		
+//		return mv;
+//	}
 }
