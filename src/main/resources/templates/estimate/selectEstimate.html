@@ -2,16 +2,18 @@
 <html lang="ko"
 	xmlns:th="https://www.thymeleaf.org">
 <head>
-	<th:block th:replace="@{common/config} :: config"></th:block>
+	<th:block th:replace="@{/common/config} :: config"></th:block>
 </head>
 
 <body id="page-top">
 	<div id="wrapper">
+
 		<!-- Sidebar -->
 		<th:block th:replace="@{/common/sidebar} :: sidebar"></th:block>
 
 		<div id="content-wrapper" class="d-flex flex-column">
 			<div id="content">
+
 				<!-- Header -->
 				<th:block th:replace="@{/common/header} :: header"></th:block>
 
@@ -28,6 +30,7 @@
 
 					<div class="row">
 						<div class="col-lg-12" th:align="center">
+
 							<!-- EstimateInfo -->
 							<div class="card mb-4">
 								<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
@@ -39,28 +42,25 @@
 										<span class="text text-white">견적서 수정</span>
 									</button>
 								</div>
-								<div class="card-body" th:object="${ estimate }">
+								<div class="card-body" th:object="${estimate}">
 									<div class="form-group row mb-2" th:align="right">
 											<label for="estimateTitle" class="col-form-label col-lg-1">제목</label>
-											<input type="text" class="form-control col-lg-10" id="estimateTitle" name="estimateTitle"
-													th:value="*{ estimateTitle }" readonly>
+											<input type="text" class="form-control col-lg-10" th:field="*{estimateTitle}" readonly>
 									</div>
 									<div class="form-group row mb-2" th:align="right">
 										<label for="estimateNo" class="col-form-label col-lg-1">견적번호</label>
-										<input type="text" class="form-control col-lg-4" id="estimateNo" name="estimateNo"
-												th:value="*{ estimateNo }" readonly>
+										<input type="text" class="form-control col-lg-4" th:field="*{estimateNo}" readonly>
 										<label for="estimateDate" class="col-form-label col-lg-2">견적일자</label>
-										<input type="text" class="form-control col-lg-4" id="estimateDate" name="estimateDate"
-												th:value="*{ estimateDate }" readonly>
+										<input type="text" class="form-control col-lg-4" th:field="*{estimateDate}" readonly>
 									</div>
 									<div class="form-group row mb-2" th:align="right">
 										<label for="customerCompany" class="col-form-label col-lg-1">고객사</label>
-										<input type="text" class="form-control col-lg-4" id="customerCompany" name="customerCompany"
-												th:value="*{ customer.company.companyName }" readonly>
+										<input type="text" class="form-control col-lg-4" id="customerCompany"
+												th:field="*{customer.company.companyName}" readonly>
 										<label for="customerName" class="col-form-label col-lg-2">고객명</label>
-										<input type="text" class="form-control col-lg-4" id="customerName" name="customerName"
-												th:value="*{ customer.customerName }" readonly>
-										<input type="hidden" class="form-control" id="customerNo" name="customerNo">
+										<input type="text" class="form-control col-lg-4" id="customerName"
+												th:field="*{customer.customerName}" readonly>
+										<input type="hidden" class="form-control" id="customerNo" th:field="*{customer.customerNo}">
 										<div class="input-group-btn col-lg-1" th:align="left">
 											<button type="button" class="btn btn-primary" id="searchCustomer"
 													data-toggle="modal" data-target="#customerModal" hidden>검색</button>
@@ -69,40 +69,41 @@
 									<div class="form-group row mb-4" th:align="right">
 										<label for="estimateStatus" class="col-form-label col-lg-1">진행상태</label>
 										<select class="form-control col-lg-4" id="estimateStatus" name="estimateStatus" disabled>
-											<option th:text="진행중" th:selected="*{ estimateStatus } == '진행중'"></option>
-											<option th:text="완료" th:selected="*{ estimateStatus } == '완료'"></option>
-											<option th:text="보류" th:selected="*{ estimateStatus } == '보류'"></option>
-											<option th:text="실패" th:selected="*{ estimateStatus } == '실패'"></option>
+											<option th:text="진행중" th:selected="*{estimateStatus} == '진행중'"></option>
+											<option th:text="완료" th:selected="*{estimateStatus} == '완료'"></option>
+											<option th:text="보류" th:selected="*{estimateStatus} == '보류'"></option>
+											<option th:text="실패" th:selected="*{estimateStatus} == '실패'"></option>
 										</select>
-										<label for="resEmp" class="col-form-label col-lg-2">담당사원</label>
+										<label for="resEmpName" class="col-form-label col-lg-2">담당사원</label>
 										<input type="text" class="form-control col-lg-4" id="resEmpName" name="empName"
-												th:value="|*{ customer.empInfo.empName } *{ customer.empInfo.job.jobName }|" readonly>
+												th:value="|*{customer.empInfo.empName} *{customer.empInfo.job.jobName}|" readonly>
+										<input type="hidden" class="form-control" id="resEmpNo" th:field="*{customer.empNo}">
 									</div>
 
 									<div class="form-group row mb-2" th:align="right">
-										<label class="col-form-label col-lg-1">금액할인</label>
+										<label for="discountRate" class="col-form-label col-lg-1">금액할인</label>
 										<div class="custom-control custom-radio mt-2 col-lg-1">
-											<input type="radio" class="custom-control-input" id="noApplyDiscount" name="discount"
-													th:checked="*{ discountStatus == 'N' }" disabled>
+											<input type="radio" class="custom-control-input" id="noApplyDiscount" name="discountStatus"
+													th:checked="*{discountStatus == 'N'}" disabled>
 											<label for="noApplyDiscount" class="custom-control-label">미적용</label>
 										</div>
 										<div class="custom-control custom-radio mt-2 col-lg-1">
-											<input type="radio" class="custom-control-input" id="applyDiscount" name="discount"
-													th:checked="*{ discountStatus == 'Y' }" disabled>
+											<input type="radio" class="custom-control-input" id="applyDiscount" name="discountStatus"
+													th:checked="*{discountStatus == 'Y'}" disabled>
 											<label for="applyDiscount" class="custom-control-label">적용</label>
 										</div>
 										<div class="input-group bootstrap-touchspin bootstrap-touchspin-injected col-lg-2">
-											<input type="text" class="form-control" id="discountRate" name="discountRate"
-													th:value="*{ discountRate }" disabled>
+											<input type="text" class="form-control" th:field="*{discountRate}" disabled>
 										</div>
 									</div>
 									<div class="form-group row mb-2" th:align="right">
 										<label for="estimateTotal" class="col-form-label col-lg-1">합계금액</label>
-										<input type="text" class="form-control col-lg-4" id="estimateTotal" th:value="*{ estimateTotal }" readonly>
-										<h5 class="col-lg-4" id="estimateKoreanTotal" th:align="left"></h5>
+										<input type="text" class="form-control col-lg-4" th:field="*{estimateTotal}" readonly>
+										<h5 class="col-lg-4" id="estimateTotalKor" th:align="left"></h5>
 									</div>
 								</div>
-							</div>		<!-- End EstimateInfo -->
+							</div>
+							<!-- End EstimateInfo -->
 
 							<!-- EstimateProductList -->
 							<div class="card mb-4">
@@ -126,27 +127,28 @@
 											</tr>
 										</thead>
 										<tbody th:align="center">
-											<tr th:each="estimateProduct, i : ${ estimate.estimateProductList }" th:object="${ estimateProduct }">
-												<td th:text="${ i.count }"></td>
-												<td th:text="*{ productNo }"></td>
-												<td th:text="*{ product.productName }"></td>
-												<td th:text="*{ product.sellingPrice }"></td>
-												<td th:text="*{ product.discountedPrice }"></td>
-												<td th:text="*{ product.unit }"></td>
-												<td th:text="*{ productAmount }"></td>
-												<td th:text="*{ product.subtotal }"></td>
-												<td th:text="*{ product.tax }"></td>
+											<tr th:each="estimateProduct, i : ${estimate.estimateProductList}" th:object="${estimateProduct}">
+												<td th:text="${i.count}"></td>
+												<td th:text="*{productNo}"></td>
+												<td th:text="*{product.productName}"></td>
+												<td th:text="*{product.sellingPrice}"></td>
+												<td th:text="*{product.discountedPrice}"></td>
+												<td th:text="*{product.unit}"></td>
+												<td th:text="*{productAmount}"></td>
+												<td th:text="*{product.subtotal}"></td>
+												<td th:text="*{product.tax}"></td>
 												<td></td>
 											</tr>
 										</tbody>
 									</table>
 								</div>
-							</div>		<!-- End EstimateProductList -->
-
+							</div>
+							<!-- End EstimateProductList -->
+							
 							<div class="mb-4">
 								<button type="button" class="btn btn-primary mx-2">PDF 출력</button>
-								<button type="button" th:onclick="history.back()"
-										class="btn btn-outline-danger mx-2">뒤로가기</button>
+								<button type="button" th:onclick="location.href='/estimate/selectAll'"
+								class="btn btn-outline-danger mx-2">뒤로가기</button>
 							</div>
 						</div>
 					</div>
@@ -159,8 +161,8 @@
 	<th:block th:replace="@{/common/script} :: script"></th:block>
 	<script>
 		$(document).ready(function() {
-			$('#customerTable').DataTable();
-			$('#stockTable').DataTable();
+			$("#customerTable").DataTable();
+			$("#stockTable").DataTable();
 
 			$("#discountRate").TouchSpin({
 				min: 0,
@@ -171,16 +173,17 @@
 				postfix: '%'
 			});
 			
-			let totalKorean = translateKorean($("#estimateTotal").val());
-			$("#estimateKoreanTotal").text("(" + totalKorean + ")");
+			let total = $("#estimateTotal").val();
+			$("#estimateTotalKor").text("(" + translateKor(total) + ")");
 		});
 
+		/* 견적서 수정 페이지로 이동 */
 		$(document).on("click", "#modifyEstimate", function() {
 			location.href = "/estimate/modify?estimateNo=" + $("#estimateNo").val();
 		});
 
 		/* 금액을 한글로 변경하여 출력 */
-		function translateKorean(number) {
+		function translateKor(number) {
 			const digit = new Array("", "일", "이", "삼", "사", "오", "육", "칠", "팔", "구");
 			const tenUnit = new Array("", "십", "백", "천");
 			const tenThousandUnit = new Array(" ", "만 ", "억 ");

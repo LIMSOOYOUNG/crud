@@ -99,4 +99,31 @@ public class EstimateService {
 		
 		return result;
 	}
+
+	@Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE,
+			rollbackFor = {Exception.class})
+	public int modifyEstimate(EstimateDTO estimateInfo) {
+		
+		int estimateInfoResult = estimateMapper.updateEstimateInfo(estimateInfo);
+		
+		String estimateNo = estimateInfo.getEstimateNo();
+		int deleteProductResult = estimateMapper.deleteEstimateProduct(estimateNo);
+		
+		List<EstimateProductDTO> productList = estimateInfo.getEstimateProductList();
+		
+		int updateProductResult = 0;
+		for(EstimateProductDTO product : productList) {
+			product.setEstimateNo(estimateInfo.getEstimateNo());
+			
+			updateProductResult = estimateMapper.updateEstimateProduct(product);
+		}
+		
+		int result = 0; 
+		
+		if(estimateInfoResult > 0 && deleteProductResult > 0 && updateProductResult == productList.size()) {
+			result = 1;
+		}
+		
+		return result;
+	}
 }

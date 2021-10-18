@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ko"
+	xmlns:th="https://www.thymeleaf.org">
+<head>
+	<th:block th:replace="@{/common/config} :: config"></th:block>
+</head>
+
+<body id="page-top">
+	<div id="wrapper">
+
+		<!-- Sidebar -->
+		<th:block th:replace="@{/common/sidebar} :: sidebar"></th:block>
+
+		<div id="content-wrapper" class="d-flex flex-column">
+			<div id="content">
+				<!-- Header -->
+				<th:block th:replace="@{/common/header} :: header"></th:block>
+
+				<!-- Content -->
+				<div class="container-fluid" id="container-wrapper">
+					<div class="d-sm-flex align-items-center justify-content-between mb-4">
+						<h1 class="h3 mb-0 text-gray-800">주문서 관리</h1>
+						<ol class="breadcrumb">
+							<li class="breadcrumb-item"><a href="/">Home</a></li>
+							<li class="breadcrumb-item active" aria-current="page">주문서 관리</li>
+						</ol>
+					</div>
+
+					<div class="row">
+						<!-- Datatables -->
+						<div class="col-lg-12">
+							<div class="card mb-4">
+								<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+									<h6 class="m-0 font-weight-bold text-primary" id="tableTitle">주문서 조회</h6>
+									<button type="button" class="btn btn-info btn-icon-split" th:onclick="|location.href='@{/estimate/insert}'|">
+										<span class="icon text-white">
+											<i class="fas fa-edit"></i>
+										</span>
+										<span class="text text-white">주문서 작성</span>
+									</button>
+								</div>
+								<div class="table-responsive p-3">
+									<table class="table align-items-center table-flush table-hover" id="orderTable">
+										<thead class="thead-light" th:align="center">
+											<tr>
+												<th>주문번호</th>
+												<th>고객명</th>
+												<th>제목</th>
+												<th>금액</th>
+												<th>결제방법</th>
+												<th>주문일</th>
+												<th>납기일</th>
+												<th></th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr th:each="order : ${orderList}" th:object="${order}" th:align="center">
+												<td th:text="*{orderNo}"></td>
+												<td th:text="*{customerNo}"></td>
+												<td th:text="*{orderTitle}"></td>
+												<td th:text="*{sumPrice}"></td>
+												<td th:text="*{paymentStatus}"></td>
+												<td th:text="*{orderDate}"></td>
+												<td th:text="*{dueDate}"></td>
+												<td>
+													<button class="btn btn-sm btn-dark btn-icon-split" name="estimateDetailBtn">
+														<span class="icon text-white-50"><i class="fas fa-clipboard-list"></i></span>
+														<span class="text text-white">상세정보</span>
+													</button>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- End Content -->
+
+			</div>
+		</div>
+	</div>
+
+	<!-- Script -->
+	<th:block th:replace="@{/common/script} :: script"></th:block>
+
+	<script>
+		$(document).ready(function () {
+        	$("#orderTable").DataTable({
+				order:[]
+			});
+        });
+	</script>
+</body>
+
+</html>

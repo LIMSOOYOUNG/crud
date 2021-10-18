@@ -21,4 +21,10 @@ public interface EstimateMapper {
 	int insertEstimateInfo(EstimateDTO estimateInfo);
 
 	int insertEstimateProduct(EstimateProductDTO product);
+
+	int updateEstimateInfo(EstimateDTO estimateInfo);
+
+	int deleteEstimateProduct(String estimateNo);
+
+	int updateEstimateProduct(EstimateProductDTO product);
 }
