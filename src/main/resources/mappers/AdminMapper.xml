@@ -50,6 +50,7 @@
 		 , A.JOB_CODE  
 		 , A.DEPT_CODE  
 		 , A.MANAGER_NO  
+		 , A.EMP_TEL
 		 ) 
 		  VALUES
 		 (
@@ -66,6 +67,7 @@
 		 , #{jobCode}  
 		 , #{deptCode}  
 		 , #{empNo}  
+		 , #{empTel}  
 		 )
 	</insert>
 	

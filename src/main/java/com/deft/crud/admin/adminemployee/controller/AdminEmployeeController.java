@@ -83,9 +83,9 @@ public class AdminEmployeeController {
 		 String message = "";
 		  
 		  if(result > 0) { 
-			  message = "영업활동내용 수정완료";
+			  message = "사원등록 완료";
 		  } else { 
-			  message = "영업활동내용 수정실패!";
+			  message = "사원등록 실패!";
 		  }
 		  
 		  rttr.addFlashAttribute("message", message);

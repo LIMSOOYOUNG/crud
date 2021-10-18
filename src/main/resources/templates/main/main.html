@@ -13,7 +13,15 @@
 	<link href="/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css">
 	<link href="/css/ruang-admin.min.css" rel="stylesheet">
 </head>
+<script>
+/* 메세지 출력 */
+const message = '[[${ message }]]';
 
+if(message) {
+	alert(message);
+	location.href="/member/logout"
+}
+</script>
 <body>
 	<th:block sec:authorize="isAnonymous()">
 		<script>
@@ -30,6 +38,9 @@
 	<script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 	<script src="/vendor/jquery-easing/jquery.easing.min.js"></script>
 	<script src="/js/ruang-admin.min.js"></script>
+
+
 </body>
+
 
 </html>
