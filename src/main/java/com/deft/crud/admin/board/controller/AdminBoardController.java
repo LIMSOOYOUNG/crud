@@ -46,7 +46,7 @@ public class AdminBoardController {
 	
 	@PostMapping("noticeinsert")
 	public ModelAndView noticeInsertForm(ModelAndView mv, @ModelAttribute BoardDTO parameters,
-			@AuthenticationPrincipal UserImpl loginInfo, @RequestParam List<MultipartFile> freeboardfileUpload,
+			@AuthenticationPrincipal UserImpl loginInfo, @RequestParam  List<MultipartFile> freeboardfileUpload,
 			HttpServletRequest request) 
 					throws Exception{
 		
@@ -63,6 +63,9 @@ public class AdminBoardController {
 	}
 	
 	/* 공지사항 수정 */
+	/* GET방식과 POST방식을 쓴 이유는 페이지에 GET방식으로 writeNo를 전달하고  
+	 * POST방식으로 수정된 값을 전달하기위해 썻습니다
+	 * */
 	@GetMapping("noticemodify")
 	public ModelAndView noticeModify(ModelAndView mv, @RequestParam int writeNo) {
 		
@@ -80,8 +83,7 @@ public class AdminBoardController {
 	public ModelAndView noticeModifyForm(ModelAndView mv, @ModelAttribute BoardDTO parameters
 			,@AuthenticationPrincipal UserImpl loginInfo) {
 		
-		System.out.println("DTO 입니다: " + parameters);
-		
+		/* parameters를 서비스에 전달한다. */
 		int result = adminBoardService.noticeModify(parameters);
 		
 		if(result > 0) {
@@ -103,9 +105,12 @@ public class AdminBoardController {
 	@PostMapping("noticedelete")
 	public ModelAndView deleteNotice(ModelAndView mv, @ModelAttribute BoardDTO parameters) throws Exception {
 		
+		/* parameters에 writeNo값을 받아온다. */
 		int writeNo = adminBoardService.deleteNotice(parameters.getWriteNo());
 		
+		/* /board/selectnotice로 페이지 이동값을 지정한다. */
 		mv.setViewName("redirect:/board/selectnotice");
+		
 		mv.addObject("writeNo", writeNo);
 		
 		return mv;

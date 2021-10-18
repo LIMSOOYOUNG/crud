@@ -3,6 +3,7 @@ package com.deft.crud.board.model.dao;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.deft.crud.board.model.dto.BoardDTO;
 
@@ -17,7 +18,7 @@ public interface BoardMapper {
 	List<BoardDTO> selectNotice();
 	
 	/* 자유게시글 등록*/
-	int insertFreeboard(BoardDTO board);
+	int insertFreeboard(BoardDTO board, List<MultipartFile> freeboardfileUpload);
 
 	/* 자유게시글 보기*/
 	BoardDTO freeboardDetail(int writeNo);

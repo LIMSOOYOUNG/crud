@@ -17,7 +17,7 @@ spring:
 # multipartResolver
   servlet:    multipart:
        enabled: true
-       location:        max-file-size: 1024MB
+       location: resources/**/       max-file-size: 1024MB
        max-request-size: 1024MB        
 
 # mybatis config

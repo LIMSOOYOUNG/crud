@@ -27,12 +27,14 @@ public class EmployeeController {
    @GetMapping("/selectemployee")
    public ModelAndView selectEmployee(ModelAndView mv) {
       
-      List<EmployeeDTO>employeeList = employeeService.selectEmployee();
+	  /* EmployeeDTO를 리스트로 서비스에 값을 전달한다. */
+      List<EmployeeDTO> employeeList = employeeService.selectEmployee();
       
+      /* 페이지 이동값을 employee/selectemployee 지정한다.*/
       mv.setViewName("employee/selectemployee");
-      mv.addObject("employeeList", employeeList);
       
-      System.out.println(employeeList);
+      /* key값과 value값을 지정한다.*/
+      mv.addObject("employeeList", employeeList);
       
       return mv;
    }
