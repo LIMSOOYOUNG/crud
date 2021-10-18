@@ -187,23 +187,23 @@ public class ProductController {
 		System.out.println("$%$%$%$%$%$%$%");
 		System.out.println("productThumbNail : " + productThumbNail);
 		
-		String root = request.getSession().getServletContext().getRealPath("resources");
+		String root = request.getSession().getServletContext().getRealPath("");
 		
 		System.out.println("root : " + root);
 		
-		String fileUploadDirectory = root + "\\upload\\original";
-		String thumbnailDirectory = root + "\\upload\\thumbnail";
-		
-		
-		File directory = new File(fileUploadDirectory);
-		File directory2 = new File(thumbnailDirectory);
-		
-		if(!directory.exists() || !directory2.exists()) {
+//		String fileUploadDirectory = root + "\\upload\\original";
+//		String thumbnailDirectory = root + "\\upload\\thumbnail";
+//		
+//		
+//		File directory = new File(fileUploadDirectory);
+//		File directory2 = new File(thumbnailDirectory);
+//		
+//		if(!directory.exists() || !directory2.exists()) {
+//			
+//			System.out.println("폴더생성 : " + directory.mkdirs());
+//			System.out.println("폴더생성 : " + directory2.mkdirs());
 			
-			System.out.println("폴더생성 : " + directory.mkdirs());
-			System.out.println("폴더생성 : " + directory2.mkdirs());
-			
-		}
+//		}
 		
 		return null;
 	}
