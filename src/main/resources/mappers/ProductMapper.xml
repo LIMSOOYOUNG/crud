@@ -208,15 +208,15 @@
 	     WHERE C.CATEGORY_CODE = #{ selectedCategory }
 	</select>
 	
+	<update id="updateCategory" parameterType="com.deft.crud.product.model.dto.ProductCategoryDTO">
+		UPDATE /*com.deft.crud.product.model.dao.ProductMapper#updateCategory()*/
+			   TBL_PRODUCT_CATEGORY P
+		   SET CATEGORY_NAME = #{ categoryName }
+         	 , REF_CATEGORY_CODE = #{ refCategoryCode }
+             , P.CATEGORY_STATUS = #{ categoryStatus }
+         WHERE CATEGORY_CODE = #{ categoryCode }
+	</update>
 	
 	
-<!-- 	<select id="selectRefCategoryForUpdate" resultMap="productCategoryResultMap"> -->
-<!-- 		SELECT /*com.deft.crud.product.model.dao.ProductMapper#selectRefCategoryForUpdate()*/ -->
-<!--        		   C.CATEGORY_CODE "REF_CATEGORY_CODE" -->
-<!-- 		     , C.CATEGORY_NAME "REF_CATEGORY_NAME" -->
-<!-- 		     , C.CATEGORY_STATUS -->
-<!-- 		  FROM TBL_PRODUCT_CATEGORY C -->
-<!-- 		 WHERE C.REF_CATEGORY_CODE IS NULL -->
-<!-- 		   AND C.CATEGORY_CODE = #{ refCategoryCode } -->
-<!-- 	</select> -->
+	
 </mapper>

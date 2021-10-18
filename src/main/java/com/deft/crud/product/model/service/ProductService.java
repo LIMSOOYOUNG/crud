@@ -103,4 +103,10 @@ public class ProductService {
 		return productMapper.selectOneCategory(selectedCategory);
 	}
 
+	public int updateCategory(ProductCategoryDTO parameters) {
+		
+		return productMapper.updateCategory(parameters);
+	}
+
+
 }
