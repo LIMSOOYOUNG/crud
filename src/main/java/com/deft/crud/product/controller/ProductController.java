@@ -1,8 +1,18 @@
 package com.deft.crud.product.controller;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -13,6 +23,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -166,6 +177,38 @@ public class ProductController {
 		return mv;
 	}
 	
+	@PostMapping("/thumbnail/insert")
+	public ModelAndView insertProductThumbNail(ModelAndView mv, @RequestParam MultipartFile productThumbNail,
+			HttpServletRequest request, RedirectAttributes rttr) {
+		
+		
+		System.out.println("$%$%$%$%$%$%$%");
+		System.out.println("$%$%$%$%$%$%$%");
+		System.out.println("$%$%$%$%$%$%$%");
+		System.out.println("productThumbNail : " + productThumbNail);
+		
+		String root = request.getSession().getServletContext().getRealPath("resources");
+		
+		System.out.println("root : " + root);
+		
+		String fileUploadDirectory = root + "\\upload\\original";
+		String thumbnailDirectory = root + "\\upload\\thumbnail";
+		
+		
+		File directory = new File(fileUploadDirectory);
+		File directory2 = new File(thumbnailDirectory);
+		
+		if(!directory.exists() || !directory2.exists()) {
+			
+			System.out.println("폴더생성 : " + directory.mkdirs());
+			System.out.println("폴더생성 : " + directory2.mkdirs());
+			
+		}
+		
+		return null;
+	}
+	
+	
 	
 	/* 카테고리 조회 */
 	@GetMapping("/category/selectAll")
@@ -274,6 +317,7 @@ public class ProductController {
 		return mv;
 	}
 	
+	/* 카테고리(소) 수정을 위해 상위카테고리 정보를 가지고 온다.*/
 	@GetMapping("/editCategory")
 	public ModelAndView editCategory(ModelAndView mv, HttpServletResponse response, @RequestParam int selectedCategory)throws JsonProcessingException {
 		
@@ -294,5 +338,31 @@ public class ProductController {
 
 	}
 	
+	@PostMapping("/category/small/modify")
+	public ModelAndView updateSmallCategory(ModelAndView mv, @ModelAttribute ProductCategoryDTO parameters,
+			RedirectAttributes rttr) {
+		
+		System.out.println("@");
+		System.out.println("@");
+		System.out.println("@");
+		System.out.println(parameters);
+		
+		System.out.println("parameters : " + parameters);
+		
+		int result = productService.updateCategory(parameters);
+		
+		String message = "";
+		
+		if(result > 0) {
+			message = "카테고리 수정에 성공하셨습니다.";
+		} else {
+			message = "카테고리 수정에 실패하셨습니다.";
+		}
+		
+		rttr.addFlashAttribute("message", message);
+		mv.setViewName("redirect:/product/category/selectAll");
+		return mv;
+		
+	}
 	
 }

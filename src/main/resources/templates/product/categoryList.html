@@ -235,11 +235,11 @@
 					<div class="row"> 
 						<div class="row col-lg-12 mt-3">
 							<div class="custom-control custom-radio mx-3">
-								<input type="radio" id="modifyStatusY" name="categoryStatus" class="custom-control-input mb-1" th:value="활성화" checked>
+								<input type="radio" id="modifyRefStatusY" name="categoryStatus" class="custom-control-input mb-1" th:value="활성화" checked>
 								<label class="custom-control-label" for="modifyStatusY">활성화</label>
 							</div>
 							<div class="custom-control custom-radio mx-3">
-								<input type="radio" id="modifyStatusN" name="categoryStatus" class="custom-control-input mb-1" th:value="비활성화">
+								<input type="radio" id="modifyRefStatusN" name="categoryStatus" class="custom-control-input mb-1" th:value="비활성화">
 								<label class="custom-control-label" for="modifyStatusN">비활성화</label>
 							</div> 
 						</div>
@@ -255,7 +255,6 @@
 	<!-- 카테고리(중) 수정 끝-->
 
 	<!-- 카테고리(소) 수정 -->
-	<form action="" method="post">
 	<div class="modal fade" id="updateCategoryModal" tabindex="-1" role="dialog"
             aria-labelledby="updateCategoryModalCenterTitle" aria-hidden="true">
 		<div class="modal-dialog modal-dialog-centered" role="document">
@@ -266,45 +265,45 @@
                     <span aria-hidden="true">&times;</span> 
                   </button>
                 </div>
-                <div class="modal-body">
-					<div class="row">
-						<div class="form-group col-lg-12 row">
-						   <label for="refCategoryList" class="col-sm-3 col-form-label" th:align="center">카테고리(중)</label>
-						   <select class="form-control col-sm-9" id="refCategoryList" name="refCategoryCode">
-						   		<option id="selectedCategory"></option>
-							   <option th:each="refCategoryList : ${refCategoryList}" 
-									  
-							   		   th:text="${refCategoryList.refCategoryName}" th:value="${refCategoryList.refCategoryCode}">
-							   </option> 
-						   </select>
-						   <br><br>
-							   <label for="selectCategoryName" class="col-sm-3 col-form-label" th:align="center">하위 카테고리명</label>
-							   <input id="selectCategoryName" class="form-control col-sm-9">
-						</div>	   
-                	</div>
-					
-					<div class="row"> 
-						<div class="row col-lg-12 mt-3">
-							<div class="custom-control custom-radio mx-3">
-								<input type="radio" id="modifyStatusY" name="categoryStatus" class="custom-control-input mb-1" th:value="활성화" checked>
-								<label class="custom-control-label" for="modifyStatusY">활성화</label>
-							</div>
-							<div class="custom-control custom-radio mx-3">
-								<input type="radio" id="modifyStatusN" name="categoryStatus" class="custom-control-input mb-1" th:value="비활성화">
-								<label class="custom-control-label" for="modifyStatusN">비활성화</label>
-							</div> 
+				<form action="/product/category/small/modify" method="post" onsubmit="return checkModifyCategory()">
+					<div class="modal-body">
+						<div class="row">
+							<div class="form-group col-lg-12 row">
+							<label for="refCategoryList" class="col-sm-3 col-form-label" th:align="center">카테고리(중)</label>
+							<select class="form-control col-sm-9" id="refCategoryList" name="refCategoryCode">
+									<option id="selectedCategory"></option>
+									<option th:each="refCategory : ${refCategoryList}" th:text="${refCategory.refCategoryName}" th:value="${refCategory.refCategoryCode}"></option>
+							</select>
+							<br><br>
+								<label for="categoryNameForModify" class="col-sm-3 col-form-label" th:align="center">하위 카테고리명</label>
+								<input type="text" id="categoryNameForModify" class="form-control col-sm-9" name="categoryName">
+								<input type="hidden" id="selectCategoryCode" name="categoryCode">
+							</div>	   
 						</div>
-					</div>     	
+						
+						<div class="row"> 
+							<div class="row col-lg-12 mt-3">
+								<div class="custom-control custom-radio mx-3">
+									<input type="radio" id="modifyStatusY" name="categoryStatus" class="custom-control-input mb-1" th:value="활성화" checked>
+									<label class="custom-control-label" for="modifyStatusY">활성화</label>
+								</div>
+								<div class="custom-control custom-radio mx-3">
+									<input type="radio" id="modifyStatusN" name="categoryStatus" class="custom-control-input mb-1" th:value="비활성화">
+									<label class="custom-control-label" for="modifyStatusN">비활성화</label>
+								</div> 
+							</div>
+						</div>     	
 
-                	<div class="modal-footer">
-						<button type="button" class="btn btn-outline-primary" data-dismiss="modal">Close</button>
-						<button type="button" class="btn btn-primary">수정하기</button>
-                	</div>
-				</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-outline-primary" data-dismiss="modal">Close</button>
+							<button type="submit" class="btn btn-primary">수정하기</button>
+						</div>
+					</div>
+				</form>
 			</div>
 		</div>
 	</div> 
-</form>    <!-- 카테고리(소) 수정 -->
+
 	
 	<!-- Script -->  
     <th:block th:replace="@{/common/script} :: script"></th:block>
@@ -313,7 +312,14 @@
 	<script src="/vendor/datatables/dataTables.bootstrap4.min.js"></script>
 
 	<script>
-	/* 하위카테고리 수정시 현재 상위카테고리가 어떤건지 보여주기 위해 ajax로 호출*/
+
+	$(document).ready(function() {
+      $('#categoryM').DataTable(); 				// 상위카테고리 테이블
+      $('#categoryS').DataTable(); 				// 하위카테고리 테이블
+
+    });
+	
+	/* 하위카테고리 수정시 현재 상위카테고리가 어떤건지 보여주기 위해 ajax로 데이터 가지고를 온다.*/
 	$("[id^=categoryNo]").click(function(){
 		  console.log("카테고리 번호 호출");
 		  const categoryCode = $(this).find('#categoryMidNo').val();
@@ -326,11 +332,14 @@
 				  
 				  console.log(data);
 				  const $selectedCategory = $('#selectedCategory');
-				  const $selectCategoryName = $('#selectCategoryName');
+				  const $selectCategoryName = $('#categoryNameForModify');
+				  let $selectCategoryCode = $('#selectCategoryCode');
 				  $selectedCategory.html("");
 				  $selectCategoryName.html("");
+				  $selectCategoryCode.html("");
 				  $selectedNo = $selectedCategory.text("현재 상위 카테고리 : " + data["selectOneCategory"].refCategoryName).val(data["selectOneCategory"].refCategoryCode);
 				  $selectedCategoryName = $selectCategoryName.val(data["selectOneCategory"].categoryName);
+				  $selectCategoryCode = $selectCategoryCode.val(data["selectOneCategory"].categoryCode);
 			  },
 			  error: function(xhr, status,error){
 				  
@@ -339,12 +348,7 @@
 
 	});
 	
-    $(document).ready(function() {
-      $('#categoryM').DataTable(); // ID From dataTable with Hover
-      $('#categoryS').DataTable(); // ID From dataTable with Hover
-
-    }); 
-	
+	/* 상위카테고리 등록 정규식 */
 	function checkRefCategory() {
 		
 		if($("#refCategoryName").val() == "") {
@@ -353,7 +357,7 @@
 			return false;
 		} 
 		
-		if(!/^[가-힣|[a-z]|[A-Z]{3,20}$/.test($("#refCategoryName").val())) {
+		if(!/^[가-힣|[a-z]|[A-Z]{3, 20}$/.test($("#refCategoryName").val())) {
 			alert("형식에 맞지 않습니다.");
 			$("#refCategoryName").val("");
 			return false;
@@ -363,13 +367,15 @@
 			}
 		}
 	} 
-
+	
+	/* 뒤로갔을 때 체크했던거 다 초기화 */
 	function goBackRefCategoryModal() {
 		$("#refCategoryName").val("");
 		$("#categoryName").val("");
 		$("#refStatusY").prop("checked", true); 
 	} 
 
+	/* 하위카테고리 등록 정규식 */
 	function checkCategory() {
 		
 		if($("#categoryName").val() == "") {
@@ -378,7 +384,7 @@
 			return false;
 		} 
 		
-		if(!/^[가-힣]{3,20}$/.test($("#categoryName").val())) {
+		if(!/^[가-힣|[a-z]|[A-Z]{3, 20}$/.test($("#categoryName").val())) {
 			alert("형식에 맞지 않습니다.");
 			$("#categoryName").val("");
 			return false;
@@ -386,7 +392,8 @@
 			return false; 
 		}
 	}
-
+	
+	/* 뒤로갔을 때 체크했던거 다 초기화*/
 	function goBackCategoryModal() {
 		
 		$("#refCategoryName").val("");
@@ -394,6 +401,8 @@
 		$("#statusY").prop("checked", true); 
 	}
 	
+	
+	/* 상위 카테고리 수정할 떄 번호를 가지고 온다. */
 	function getRefCategoryCode(refCategoryCode) {
 		
 		console.log(refCategoryCode);
@@ -405,6 +414,7 @@
 		
 	}
 	
+	/* 상위카테고리 수정 정규식*/
 	function checkModifyRefCategory() {
 		
 		if($("#refCategoryNameForModify").val() == "") {
@@ -413,7 +423,7 @@
 			return false;
 		} 
 		
-		if(!/^[가-힣|[a-z]|[A-Z]{3,20}$/.test($("#refCategoryNameForModify").val())) {
+		if(!/^[가-힣|[a-z]|[A-Z]{3, 20}$/.test($("#refCategoryNameForModify").val())) {
 			alert("형식에 맞지 않습니다.");
 			$("#refCategoryNameForModify").val("");
 			return false;
@@ -423,6 +433,28 @@
 			}
 		}
 	} 
+	
+	/* 하위 카테고리 수정 정규식*/
+	function checkModifyCategory() {
+		
+		if($("#categoryNameForModify").val() == "") {
+			alert("수정할 카테고리를 입력해주세요!");
+			$("#refCategoryNameForModify").val("");
+			return false;
+		} 
+		
+		if(!/^[가-힣|[a-z]|[A-Z]{3, 20}$/.test($("#categoryNameForModify").val())) {
+			alert("형식에 맞지 않습니다.");
+			$("#categoryNameForModify").val("");
+			return false;
+		} else {
+			if(!confirm("카테고리를 수정하시겠습니까?")) {
+				return false;
+			}
+		}
+	} 
+	
+	
 	
 	</script>
 </body>

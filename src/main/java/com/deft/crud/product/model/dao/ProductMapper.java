@@ -41,6 +41,9 @@ public interface ProductMapper {
 	int insertProduct(InsertProductDTO parameters);
 
 	ProductCategoryDTO selectOneCategory(int selectedCategory);
+	
+	/* 카테고리(소) 수정*/
+	int updateCategory(ProductCategoryDTO parameters);
 
 //	ProductCategoryDTO selectRefCategoryForUpdate(int refCategoryCode);
 
