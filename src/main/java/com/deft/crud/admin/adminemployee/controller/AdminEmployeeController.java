@@ -114,13 +114,12 @@ public class AdminEmployeeController {
 	@GetMapping("employeedetail")
 	public ModelAndView employeeDetailSelect(ModelAndView mv, @RequestParam int employeeNo)  {
 		
-		System.out.println("너의 정보는 ????" + employeeNo);
-
+		/* employeeDTO를 employeeNo를 담아서 서비스에 전달한다.  */
 		AdminEmployeeDTO employeeDTO = adminEmployeeService.empDetail(employeeNo);
 		
-		System.out.println(employeeDTO);
-		
+		/* 페이지 이동값을 admin/employeedetail 지정한다.*/
 		mv.setViewName("admin/employeedetail");
+		
 		mv.addObject("employeeDTO", employeeDTO);
 		
 		return mv;
@@ -130,12 +129,16 @@ public class AdminEmployeeController {
 	@GetMapping("employeeinfomodify")
 	public ModelAndView employeeModifyForm(ModelAndView mv, @RequestParam int employeeNo) {
 		
+		/* AdminEmployeeDTO를 emplyoeeNo값을 담아서 서비스에 전단한다. */
 		AdminEmployeeDTO employeeDTO = adminEmployeeService.empInfoModify(employeeNo);
 		
+		/* JobDTO를 리스트로 서비스에 전달한다. */
 		List<JobDTO> jobList = adminEmployeeService.jobNameList();
 		
+		/* DepartmentDTO를 리스트로 서비스에 전달한다. */
 		List<DepartmentDTO> deptList = adminEmployeeService.deptNameList();
 		
+		/* AdminEmployeeDTO를 리스트로 서비스에 전달한다. */
 		List<AdminEmployeeDTO> managerList = adminEmployeeService.managerList();
 		
 		mv.setViewName("admin/employeeinfomodify");
@@ -155,7 +158,7 @@ public class AdminEmployeeController {
 		
 		String root = request.getSession().getServletContext().getRealPath("resources");
 		
-		String filePath = root;
+		String filePath = root + "\\employeeupload";
 		
 		File mkdir = new File(filePath);
 		if(!mkdir.exists()) {

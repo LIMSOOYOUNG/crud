@@ -40,9 +40,13 @@ public class BoardController {
 	@GetMapping("/selectfreeboard")
 	public ModelAndView selectFreeboard(ModelAndView mv) {
 		
+		/* BoardDTO를 리스트로 서비스에 값을 전달한다. */
 		List<BoardDTO> freeboardList = boardService.selectFreeboard();
-		System.out.println("freeboardList" + freeboardList);
+		
+		/* 페이지 이동값을 board/selectfreeboard로 지정한다. */
 		mv.setViewName("board/selectfreeboard");
+		
+		/* key값과 value값을 지정한다. */
 		mv.addObject("freeboardList", freeboardList);
 		
 		return mv;
@@ -52,9 +56,13 @@ public class BoardController {
 	@GetMapping("/selectnotice")
 	public ModelAndView selectNotice(ModelAndView mv) {
 		
+		/* BoardDTO에 있는 값을 리스트로 서비스에 전달한다. */
 		List<BoardDTO> noticeList = boardService.selectNotice();
 		
+		/* 페이지 이동값을 board/selectnotice로 지정한다. */
 		mv.setViewName("board/selectnotice");
+		
+		/* key값과 value값을 지정한다. */
 		mv.addObject("noticeList", noticeList);
 		
 		return mv;
@@ -64,11 +72,10 @@ public class BoardController {
 	@GetMapping("/freeboardinsert")
 	public ModelAndView freeboardInsert(ModelAndView mv) {
 		
+		/* writeNo 변수를 생성하여 서비스에 전달한다. */
 		int writeNo = boardService.selectSeqFreeboardNo();
 		
 		mv.addObject("writeNo", writeNo);
-		
-		System.out.println(writeNo);
 		
 		return mv;
 	}
@@ -77,13 +84,13 @@ public class BoardController {
 	@PostMapping("/freeboardinsert")
 	public ModelAndView insertfreeboardForm(ModelAndView mv, @ModelAttribute BoardDTO parameters,
 			@AuthenticationPrincipal UserImpl loginInfo, 
-			@RequestParam List<MultipartFile> freeboardfileUpload,
-			HttpServletRequest request, @RequestParam int boardAttatchNo) 
+			@RequestParam(value="freeboardfileUpload",required = false) List<MultipartFile> freeboardfileUpload,
+			HttpServletRequest request, @RequestParam int boardNo) 
 					throws Exception {
 		
 		String root = request.getSession().getServletContext().getRealPath("resources");
 		
-		String filePath = root + "";
+		String filePath = root + "\\boardupload";
 		
 		File mkdir = new File(filePath);
 		if(!mkdir.exists()) {
@@ -112,6 +119,7 @@ public class BoardController {
 			}
 			
 			
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 			
@@ -127,9 +135,10 @@ public class BoardController {
 	    int loginEmpNo = loginInfo.getEmpNo();
 	    parameters.setEmpNo(loginEmpNo);
 	    
-		int result = boardService.insertFreeboard(parameters);
+	    /* parameters(BoardDTO)를 서비스에 전달한다. */
+		int result = boardService.insertFreeboard(parameters, freeboardfileUpload);
 		
-		
+		/* result값이 0 보다 클때 페이지 이동값을 /board/selectfreeboard 지정한다.*/
 		if(result>0) {
 			
 			mv.setViewName("redirect:/board/selectfreeboard");
@@ -143,11 +152,16 @@ public class BoardController {
 	@GetMapping("/freeboarddetail")
 	public ModelAndView freeboardDetail(ModelAndView mv, @RequestParam int writeNo) {
 		
+		/* writeNo의 값을 서비스에 전달한다. */
 		BoardDTO boardDTO = boardService.freeboardDetail(writeNo); 
 		
+		/* 조회수 카운터 */
 		boardService.freeboardviewCount(writeNo);
 		
+		/* 페이지 이동값을 board/freeboarddetail 지정한다. */
 		mv.setViewName("board/freeboarddetail");
+		
+		/* key값과 value값을 지정한다. */
 		mv.addObject("boardDTO", boardDTO);
 		
 		
@@ -164,20 +178,25 @@ public class BoardController {
 		boardService.noticeviewCount(writeNo);
 		
 		mv.setViewName("board/noticedetail");
+		
 		mv.addObject("boardDTO", boardDTO);
 		
 		return mv;
 	}
 	
 	/* 자유게시글 수정*/
+	/* GET방식과 POST방식을 쓴 이유는 페이지에 GET방식으로 writeNo를 전달하고  
+	 * POST방식으로 수정된 값을 전달하기위해 썻습니다
+	 * */
 	@GetMapping("freeboardmodify")
 	public ModelAndView freeboardModify(ModelAndView mv, @RequestParam int writeNo) throws Exception {
 		
+		/* BoardDTO를 writeNo 값을 담아서 서비스에 전달한다. */
 		BoardDTO boardDTO = boardService.freeboardModifyForm(writeNo);
 		
-		System.out.println("여기는 수정페이지입니다." + boardDTO);
-		
+		/* 페이지 이동값을 board/freeboardmodify 지정한다. */
 		mv.setViewName("board/freeboardmodify");
+		
 		mv.addObject("boardDTO", boardDTO);
 		
 		
@@ -187,17 +206,15 @@ public class BoardController {
 	@PostMapping("freeboardmodify")
 	public ModelAndView freeboardForm(ModelAndView mv, @ModelAttribute BoardDTO parameters,@AuthenticationPrincipal UserImpl loginInfo) {
 		
-		System.out.println("DTO 입니다: " + parameters);
-		
+		/* parameters(BoardDTO)를 서비스에 전달한다. */
 		int result = boardService.freeboardModify(parameters);
 		
-		
+		/* result 값이 1 이상이면 페이지 이동값을 /board/freeboarddetail?writeNo로 지정한다. parameters에 있는 writeNo값을 받아온다.  */
 		if(result > 0) {
 			
 			mv.setViewName("redirect:/board/freeboarddetail?writeNo=" + parameters.getWriteNo());
 			
 		}
-		System.out.println(result);
 		
 		mv.addObject("parameters", parameters);
 		
@@ -211,10 +228,10 @@ public class BoardController {
 	@PostMapping("deletefreeboard")
 	public ModelAndView deletefreeboard(ModelAndView mv, @ModelAttribute BoardDTO parameters)throws Exception {
 		
+		/* parameters(BoardDTO)에 있는 writeNo를 받아온다. */
 		int writeNo = boardService.deleteFreeboard(parameters.getWriteNo());
 		
-		System.out.println("writeNo : " + writeNo);
-		
+		/* 페이지 이동값을 /board/selectfreeboard 지정한다. */
 		mv.setViewName("redirect:/board/selectfreeboard");
 		
 		mv.addObject("writeNo", writeNo);
