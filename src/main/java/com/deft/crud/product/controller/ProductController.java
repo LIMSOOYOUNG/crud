@@ -1,6 +1,7 @@
 package com.deft.crud.product.controller;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -10,12 +11,7 @@ import java.util.UUID;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.disk.DiskFileItemFactory;
-import org.apache.commons.fileupload.servlet.ServletFileUpload;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -27,7 +23,6 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.deft.crud.member.model.service.UserImpl;
 import com.deft.crud.product.model.dto.AccountDTO;
 import com.deft.crud.product.model.dto.InsertProductDTO;
 import com.deft.crud.product.model.dto.ManufacturerDTO;
@@ -36,6 +31,8 @@ import com.deft.crud.product.model.dto.ProductDTO;
 import com.deft.crud.product.model.service.ProductService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import net.coobird.thumbnailator.Thumbnails;
 
 @Controller
 @RequestMapping("/product")
@@ -187,23 +184,51 @@ public class ProductController {
 		System.out.println("$%$%$%$%$%$%$%");
 		System.out.println("productThumbNail : " + productThumbNail);
 		
-		String root = request.getSession().getServletContext().getRealPath("");
+		String root = request.getSession().getServletContext().getRealPath("\\");
 		
 		System.out.println("root : " + root);
 		
-//		String fileUploadDirectory = root + "\\upload\\original";
-//		String thumbnailDirectory = root + "\\upload\\thumbnail";
-//		
-//		
-//		File directory = new File(fileUploadDirectory);
-//		File directory2 = new File(thumbnailDirectory);
-//		
-//		if(!directory.exists() || !directory2.exists()) {
-//			
-//			System.out.println("폴더생성 : " + directory.mkdirs());
-//			System.out.println("폴더생성 : " + directory2.mkdirs());
+		String fileUploadDirectory = root + "\\upload\\original";
+		String thumbnailDirectory = root + "\\upload\\thumbnail";
+		
+		
+		File directory = new File(fileUploadDirectory);
+		File directory2 = new File(thumbnailDirectory);
+		
+		if(!directory.exists() || !directory2.exists()) {
+			System.out.println("폴더생성 : " + directory.mkdirs());
+			System.out.println("폴더생성 : " + directory2.mkdirs());
+		}
+		
+		
+		
+		String originFileName = productThumbNail.getOriginalFilename();
+		String ext = originFileName.substring(originFileName.lastIndexOf("."));
+		String savedName = UUID.randomUUID().toString().replace("-", "") + ext;
+		Map<String, String> fileMap = new HashMap<>();
+		fileMap.put("originFileName", originFileName);
+		fileMap.put("savedName", savedName);
+		fileMap.put("savePath", fileUploadDirectory);
+		
+		int width = 250;
+		int height = 250;
+		
+		try {
+			productThumbNail.transferTo(new File(fileUploadDirectory + "\\" + savedName));
 			
-//		}
+			Thumbnails.of(fileUploadDirectory + savedName)
+					.size(width, height)
+					.toFile(thumbnailDirectory + "thumbnail_" + savedName);
+					
+			fileMap.put("thumbnailPath", "\\webapp\\upload\\thumbnail\\thumbnail_" + savedName);
+	
+		} catch (IllegalStateException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+
+			new File(fileUploadDirectory + "\\" + savedName).delete();
+		}
 		
 		return null;
 	}
