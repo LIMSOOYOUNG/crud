@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.deft.crud.board.model.dto.BoardDTO;
 import com.deft.crud.board.model.service.BoardService;
@@ -83,11 +84,65 @@ public class BoardController {
 	
 	@PostMapping("/freeboardinsert")
 	public ModelAndView insertfreeboardForm(ModelAndView mv, @ModelAttribute BoardDTO parameters,
-			@AuthenticationPrincipal UserImpl loginInfo,  @RequestParam int boardNo) 
+			@AuthenticationPrincipal UserImpl loginInfo,  @RequestParam int boardNo
+			, @RequestParam List<MultipartFile> freeboardUpload
+			,HttpServletRequest request, RedirectAttributes rttr) 
 					throws Exception {
 		
 	    int loginEmpNo = loginInfo.getEmpNo();
 	    parameters.setEmpNo(loginEmpNo);
+	    
+	    String root = request.getSession().getServletContext().getRealPath("\\");
+	    
+	    System.out.println("rrrrrrrrrrerrrrrrrrr" + root);
+	    
+	    String filePath  = root + "\\upload\\original";
+	    
+	    File directory = new File(filePath);
+	    
+	    File mkdir = new File(filePath);
+		if(!mkdir.exists()) {
+			mkdir.mkdirs();
+		}
+
+	    
+	    if(!directory.exists()) {
+	    	
+	    }
+	    
+	    List<Map<String, String>> files = new ArrayList<>();
+	    for(int i = 0; i < freeboardUpload.size(); i++) {
+	    	
+	    	String originFileName = freeboardUpload.get(i).getOriginalFilename();
+	    	String ext = originFileName.substring(originFileName.lastIndexOf("."));
+			String savedName = UUID.randomUUID().toString().replace("-", "") + ext;
+
+			Map<String, String> file = new HashMap<>();
+			file.put("originFileName", originFileName);
+			file.put("savedName", savedName);
+			file.put("filePath", filePath);
+			
+			files.add(file);	
+
+	    }
+	    
+	    try {
+	    	for(int i = 0; i < freeboardUpload.size(); i++) {
+	    		
+	    		Map<String, String> file = files.get(i);
+	    		
+	    		freeboardUpload.get(i).transferTo(new File(filePath + "\\" + file.get("savedName")));
+	    	}
+	    }catch (Exception e) {
+	    	e.printStackTrace();
+	    	
+	    	for(int i = 0; i < freeboardUpload.size(); i++) {
+				Map<String, String> file = files.get(i);
+				
+				new File(filePath + "\\" + file.get("savedName")).delete();
+
+	    	}
+	    }
 	    
 	    /* parameters(BoardDTO)를 서비스에 전달한다. */
 		int result = boardService.insertFreeboard(parameters);
