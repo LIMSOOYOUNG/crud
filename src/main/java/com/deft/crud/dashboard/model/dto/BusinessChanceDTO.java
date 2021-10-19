@@ -28,6 +28,6 @@ public class BusinessChanceDTO implements Serializable {
 	private int customerNo;
 	private String productName;
 	private String customerCompanyName;
-	
+	private int businessChanceMonth;
 
 }

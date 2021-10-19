@@ -18,7 +18,7 @@ public interface BoardMapper {
 	List<BoardDTO> selectNotice();
 	
 	/* 자유게시글 등록*/
-	int insertFreeboard(BoardDTO board, List<MultipartFile> freeboardfileUpload);
+	int insertFreeboard(BoardDTO board);
 
 	/* 자유게시글 보기*/
 	BoardDTO freeboardDetail(int writeNo);

@@ -39,9 +39,9 @@ public class BoardService {
 
 	/* 자유게시글 등록 */
 	@Transactional
-	public int insertFreeboard(BoardDTO board, List<MultipartFile> freeboardfileUpload) {
+	public int insertFreeboard(BoardDTO board) {
 		
-		int result = boardMapper.insertFreeboard(board, freeboardfileUpload);
+		int result = boardMapper.insertFreeboard(board);
 		
 		return result;
 	}
