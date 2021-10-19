@@ -53,6 +53,7 @@
 		<result property="empNo" column="EMP_NO"/>
 		<result property="customerNo" column="CUSTOMER_NO"/>
 		<result property="writeDate" column="WRITE_DATE"/>
+		<result property="businessChanceMonth" column="BUSINESS_CHANCE_MONTH"/>
 	</resultMap>
 	
 	<!-- 사원 실적 그래프 -->
@@ -103,11 +104,15 @@
 	
 	</select>
 
-	<select id="failedChanceChart" resultMap="businessChanceResultMap" parameterType="com.deft.crud.dashboard.model.dto.BusinessChanceDTO">
-		SELECT /* com.deft.crud.dashboard.model.dto.BusinessChanceDTO */
-	           B.WRITE_DATE
-	      FROM TBL_BUSINESS_CHANCE B
-	     WHERE PROGRESS_STATUS = '실패'
+	<select id="failedChart" resultMap="businessChanceResultMap" parameterType="com.deft.crud.dashboard.model.dto.BusinessChanceDTO">
+		SELECT
+       		   EXTRACT(MONTH FROM B.DUE_DATE) "BUSINESS_CHANCE_MONTH"
+             , COUNT(B.DUE_DATE)
+          FROM TBL_BUSINESS_CHANCE B
+         WHERE B.EMP_NO = #{ empNo }
+           AND EXTRACT(YEAR FROM B.DUE_DATE) = 2021
+           AND B.PROGRESS_STATUS = '실패'
+         GROUP BY EXTRACT(MONTH FROM B.DUE_DATE)
+         ORDER BY EXTRACT(MONTH FROM B.DUE_DATE) ASC;
 	</select>
-
 </mapper>

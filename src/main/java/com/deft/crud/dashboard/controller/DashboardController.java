@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.deft.crud.dashboard.model.dto.BusinessChanceDTO;
 import com.deft.crud.dashboard.model.dto.EmpInfoDTO;
 import com.deft.crud.dashboard.model.dto.PerformanceDTO;
 import com.deft.crud.dashboard.model.service.DashBoardService;
@@ -64,7 +65,7 @@ public class DashboardController {
 		mv.addObject("userPerformChart", objectMapper.writeValueAsString(userPerformChart));
 		mv.addObject("userTargetPerformChart", objectMapper.writeValueAsString(userTargetPerformChart));
 		mv.setViewName("jsonView");
-		return mv;
+		return null;
 	}
 
 	/* 로그인된 사원이 속한 부서 실적 그래프 */
@@ -96,14 +97,31 @@ public class DashboardController {
 		
 		mv.addObject("deptPerformChart", objectMapper.writeValueAsString(deptPerformChart));
 		mv.setViewName("jsonView");
-		return mv;
+		return null;
 	}
 	
-//	@GetMapping("")
-//	public ModelAndView inductionChart(ModelAndView mv, HttpServletResponse response, @AuthenticationPrincipal UserImpl loginInfo) {
-//		
-//		response.setCharacterEncoding("UTF-8");
-//		
-//		return mv;
-//	}
+	/* 영업기회 실패 통계 */
+	@GetMapping("/bus/failedChance")
+	public ModelAndView failedChace(ModelAndView mv,  HttpServletResponse response, @AuthenticationPrincipal UserImpl loginInfo) throws JsonProcessingException {
+		
+		response.setCharacterEncoding("UTF-8");
+		
+		LocalDate collectBillDate = LocalDate.now();
+		int collectBillYear = collectBillDate.getYear();
+		
+		int empNo = loginInfo.getEmpNo();
+		
+		List<BusinessChanceDTO> businessChanceFailed = dashBoardService.failedChart(empNo, collectBillYear);
+		
+		System.out.println("dasdasdasdassdasdasdasd"+ businessChanceFailed);
+		
+		mv.addObject("businessChanceFailed", objectMapper.writeValueAsString(businessChanceFailed));
+		mv.setViewName("jsonView");
+		
+		return null;
+	}
+	
+	/* 사원별 영업기회 수 통계 */
+	
+
 }

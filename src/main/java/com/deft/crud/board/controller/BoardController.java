@@ -83,60 +83,14 @@ public class BoardController {
 	
 	@PostMapping("/freeboardinsert")
 	public ModelAndView insertfreeboardForm(ModelAndView mv, @ModelAttribute BoardDTO parameters,
-			@AuthenticationPrincipal UserImpl loginInfo, 
-			@RequestParam(value="freeboardfileUpload",required = false) List<MultipartFile> freeboardfileUpload,
-			HttpServletRequest request, @RequestParam int boardNo) 
+			@AuthenticationPrincipal UserImpl loginInfo,  @RequestParam int boardNo) 
 					throws Exception {
-		
-		String root = request.getSession().getServletContext().getRealPath("resources");
-		
-		String filePath = root + "\\boardupload";
-		
-		File mkdir = new File(filePath);
-		if(!mkdir.exists()) {
-			mkdir.mkdir();
-		}
-		
-		List<Map<String, String>> files = new ArrayList<>();
-		for(int i = 0; i < freeboardfileUpload.size(); i++) {
-			String originFileName = freeboardfileUpload.get(i).getOriginalFilename();
-			String ext = originFileName.substring(originFileName.lastIndexOf("."));
-			String savedName = UUID.randomUUID().toString().replace("-", "") + ext;
-			
-			Map<String, String> file = new HashMap<>();
-			file.put("originFileName", originFileName);
-			file.put("savedName", savedName);
-			file.put("filePath", filePath);
-			
-			files.add(file);	
-		}
-		
-		try {
-			for(int i = 0; i < freeboardfileUpload.size(); i++) {
-				Map<String, String> file = files.get(i);
-				
-				freeboardfileUpload.get(i).transferTo(new File(filePath + "\\" + file.get("savedName")));
-			}
-			
-			
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-			
-			/* 실패시 파일 삭제 */
-			for(int i = 0; i < freeboardfileUpload.size(); i++) {
-				Map<String, String> file = files.get(i);
-				
-				new File(filePath + "\\" + file.get("savedName")).delete();
-			}
-			
-		}
 		
 	    int loginEmpNo = loginInfo.getEmpNo();
 	    parameters.setEmpNo(loginEmpNo);
 	    
 	    /* parameters(BoardDTO)를 서비스에 전달한다. */
-		int result = boardService.insertFreeboard(parameters, freeboardfileUpload);
+		int result = boardService.insertFreeboard(parameters);
 		
 		/* result값이 0 보다 클때 페이지 이동값을 /board/selectfreeboard 지정한다.*/
 		if(result>0) {
