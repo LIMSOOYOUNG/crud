@@ -111,31 +111,13 @@
     </resultMap> 
      
 	<!-- 출고요청서 DTO -->
-	<resultMap type="com.deft.crud.stock.model.dto.approval.PurchaseOrderDTO" id="purchaseOrderResultMap">
-		<id property="orderNo" column="ORDER_NO"/>
-		<result property="orderDate" column="ORDER_DATE" />
-		<result property="discountRate" column="DISCOUNT_RATE" />
-		<result property="dueDate" column="DUE_DATE" />
-		<result property="deliveryPlace" column="DELIVERY_PLACE" />
-		<result property="paymentStatus" column="PAYMENT_STATUS" />
-		<result property="orderTitle" column="ORDER_TITLE" />
-		<result property="customerNo" column="CUSTOMER_NO" />
-		<result property="customerName" column="CUSTOMER_NAME" />
-		<result property="providerRegistNo" column="PROVIDER_REGIST_NO" />
-		<result property="sumPrice" column="SUM_PRICE" />
-		<result property="orderYn" column="ORDER_YN" />
-
-		<association property="orderProductDTO" resultMap="orderProductResultMap"></association>
-	</resultMap>
+	
+	
+	
 	
 	<!-- 출고요청 상품 DTO -->
-	<resultMap type="com.deft.crud.stock.model.dto.approval.PurchaseOrderProductDTO" id="orderProductResultMap">
-		<id property="productNo" column="PRODUCT_NO"/>
-		<result property="productAmount" column="PRODUCT_AMOUNT" />
-		<result property="orderNo" column="ORDER_NO" />
-		<result property="productName" column="PRODUCT_NAME" />
 
-	</resultMap>
+
    
    <!-- 창고에 보관중인 상품리스트 조회 -->
    <select id="selectStorageAll" resultMap="storageResultMap">
@@ -427,7 +409,7 @@
    </insert>
    
    <!-- 미완료 상태 주문서 목록 조회 -->
-   <select id="selectPurchaseOrderAll" resultMap="purchaseOrderResultMap">
+   <!-- <select id="selectPurchaseOrderAll" resultMap="purchaseOrderResultMap">
        SELECT /* com.deft.crud.stock.model.dao.StockMapper#selectPurchaseOrderAll() */
    	          A.ORDER_NO
    	        , A.ORDER_DATE  
@@ -449,7 +431,7 @@
          LEFT JOIN TBL_PURCHASE_ORDER_PRODUCT OP ON(A.ORDER_NO = OP.ORDER_NO)
          LEFT JOIN TBL_PRODUCT P ON(OP.PRODUCT_NO = P.PRODUCT_NO)
         WHERE A.ORDER_YN = 'N' 
-   </select>
+   </select> -->
 </mapper>
 
 

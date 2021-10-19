@@ -17,7 +17,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.deft.crud.admin.adminemployee.model.service.AdminEmployeeService;
+import com.deft.crud.member.model.dto.MemberDTO;
 import com.deft.crud.member.model.service.UserImpl;
+import com.deft.crud.order.model.dto.OrderDTO;
 import com.deft.crud.stock.model.dto.ProductStockInfoDTO;
 import com.deft.crud.stock.model.dto.RequestStockDTO;
 import com.deft.crud.stock.model.dto.StorageDTO;
@@ -33,17 +36,19 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class StockController {
 
 	private final StockService stockService;
+	private final AdminEmployeeService adminEmployeeService;
 	private final ObjectMapper objectMapper;
 	
 	@Autowired
-	public StockController(StockService stockService, ObjectMapper objectMapper) {
+	public StockController(StockService stockService, ObjectMapper objectMapper, AdminEmployeeService adminEmployeeService) {
 		this.stockService = stockService;
 		this.objectMapper = objectMapper;
+		this.adminEmployeeService = adminEmployeeService;
 	}
 
 	/* 창고보유(재고) 상품목록 전체 조회 */
 	@GetMapping("/selectAll")
-	public ModelAndView selectStockAll(ModelAndView mv) {
+	public ModelAndView selectStockAll(ModelAndView mv, @AuthenticationPrincipal UserImpl userInfo) {
 		
 		/* 창고에 보유중인 전체 상품 목록 */
 		List<StorageDTO> stockList = stockService.selectStockAll();
@@ -52,18 +57,24 @@ public class StockController {
 		List<StorageDTO> sellableProductList = stockService.selectSellableProductAll();
 		
 		/* 미완료 상태 주문서 목록 */
-		List<PurchaseOrderDTO> purchaseOrderList = stockService.selectPurchaseOrderAll();
+		int empNo = userInfo.getEmpNo();
 		
-		System.out.println("@@@@@@@@@@@@@@@@@@미완료상태 주문서 목록 : " + purchaseOrderList);
+		List<OrderDTO> orderList = stockService.selectPurchaseOrderAll(empNo);
 		
-		mv.addObject("purchaseOrderList", purchaseOrderList);
+		/* 결재 담당자 목록 */
+		String deptCode = userInfo.getDeptCode();
+		List<MemberDTO> managerList = adminEmployeeService.selectManagerList(deptCode);
+
+		System.out.println(managerList);
+		
+		mv.addObject("managerList", managerList);
+		mv.addObject("orderList", orderList);
 		mv.addObject("stockList", stockList);
 		mv.addObject("sellableProductList", sellableProductList);
 		mv.setViewName("stock/stockList");
 		
 		return mv;
 	}
-	
 	
 	/* 선택한 상품의 재고관련 정보 조회 */
 	@GetMapping("/productInfo/selectOne")
@@ -120,6 +131,22 @@ public class StockController {
 		
 		return mv;
 	}
+	
+	@GetMapping("orderInfo/select")
+	public ModelAndView selectOrderDetail(ModelAndView mv, HttpServletResponse response,
+										  @RequestParam String orderNo) throws JsonProcessingException {
+		
+		response.setContentType("application/json; charset=UTF-8");
+		
+		OrderDTO orderInfo = stockService.selectOrderDetail(orderNo);
+		
+		mv.addObject("orderInfo", objectMapper.writeValueAsString(orderInfo));
+		mv.setViewName("jsonView");
+		
+		return mv;
+	}
+	
+	
 	
 // ----------------------------------요청 목록------------------------------------------------------------------------	
 	

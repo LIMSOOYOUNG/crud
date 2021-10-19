@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.deft.crud.member.model.service.UserImpl;
+import com.deft.crud.order.model.dto.OrderDTO;
 import com.deft.crud.stock.model.dto.ProductStockInfoDTO;
 import com.deft.crud.stock.model.dto.RequestStockDTO;
 import com.deft.crud.stock.model.dto.StorageDTO;
@@ -50,7 +51,7 @@ public interface StockMapper {
 	List<ReceivingReqDTO> selectReceivingReqByStatus(String documentStatus  // 요청목록 결재상태 별 조회(담당자 or 사원)
 													, UserImpl userInfo);
 
-	List<PurchaseOrderDTO> selectPurchaseOrderAll();  						// 미완료 상태 주문서 목록조회
+	List<OrderDTO> selectPurchaseOrderAll(int empNo);  						// 미완료 상태 주문서 목록조회
 
 
 

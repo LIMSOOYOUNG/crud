@@ -204,7 +204,7 @@ input {
 									<div class="form-group col-xl-12" >
 										<label for="orderTitle">요청서제목</label>
 										<input type="text" class="form-control" style="text-align: left;" 
-									      	   id="orderTitle" name="orderTitle" required>
+									      	   id="orderTitle" name="orderTitle" readonly>
 									</div>
 								</div>
 								<div class="form-group row mb-12" th:align="right">
@@ -268,25 +268,21 @@ input {
 												<th>주문서번호</th>
 												<th>고객번호+고객명</th>
 												<th>주문서제목</th>
-												<th>대금결제조건</th>
 												<th>주문완료여부</th>
 												<th>납기일</th>
 												<th></th>
 											</tr>
 										</thead>
 										<tbody th:align="center">
-											<tr th:each="orderList : ${purchaseOrderList}">
-												<td th:text="${orderList.orderProductDTO.productNo}"></td>
-												<td th:text="|${orderList.customerNo} ${orderList.customerName}|"></td>
+											<tr th:each="orderList : ${orderList}">
+												<td th:text="${orderList.orderNo}"></td>
+												<td th:text="|${orderList.customer.customerNo} ${orderList.customer.customerName}|"></td>
 												<td th:text="${orderList.orderTitle}"></td>
-												<td th:text="${orderList.paymentStatus}"></td>
 												<td th:text="${orderList.orderYn}"></td>
 												<td th:text="${orderList.dueDate}"></td>
 												<td>
-													<a class="btn btn-white btn-icon-split addBtn">
-														<span class="icon text-black" style="color: #66bb6a;">
-															<i class="fas fa-cart-plus fa-lg"></i></span>
-													</a>
+													<button type="button" class="btn btn-sm btn-dark"
+													 		name="selectOrderBtn">선택</button>
 												</td>
 											</tr>
 										</tbody>
@@ -297,58 +293,95 @@ input {
 							</div>
 						</div>
 
+							<!-- OrderInfo -->
 						<div class="col-lg-6">
-							<h5 class="m-0 font-weight-bold text-primary" th:align="center">출고요청 내용</h5>
-							<br>
-								<div class="table-group" style="text-align: center; height: 210px; overflow-y: scroll;">
-									<table id="orderProduct" border="1" style="width: 100%;">
-										<thead style="background: lightgray;">
+							<div class="card mb-4" >
+								<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+									<h6 class="m-0 font-weight-bold text-primary" id="tableTitle">출고요청서 내용</h6>
+									<button type="button" class="btn btn-info btn-icon-split" id="modifyOrderBtn">
+										
+										<span class="icon text-white"><i class="fas fa-edit"></i></span>
+										<span class="text text-white">출고요청</span>
+									</button>
+								</div>
+								<div class="card-body">
+									<div class="form-group row mb-2" th:align="right">
+										<label for="titleOrder" class="col-form-label col-lg-1">제목</label>
+										<input type="text" id="titleOrder" name="titleOrder" class="form-control col-lg-5">
+										<label for="approvalManager" class="col-form-label col-lg-2">결재담당자</label>
+										<select type="text" id="approvalManager" class="form-control col-lg-3">
+											<option th:each="managerList : ${ managerList }" th:text="${managerList.empName}" th:value="${managerList.empNo}"></option>
+										</select> 
+												 
+										<input type="hidden" class="form-control" id="customerNo" >
+									</div>
+									<div class="form-group row mb-2" th:align="right">
+										<label for="orderNo" class="col-form-label col-lg-1">주문번호</label>
+										<input type="text" id="orderNo" class="form-control col-lg-4" readonly>
+										<label for="orderDate" class="col-form-label col-lg-2">주문일자</label>
+										<input type="text" id="orderDate" class="form-control col-lg-4" readonly>
+									</div>
+									<div class="form-group row mb-2" th:align="right">
+										<label for="customerCompany" class="col-form-label col-lg-1">고객사</label>
+										<input type="text" id="customerCompany" class="form-control col-lg-4"
+												 readonly>
+										<label for="customerName" class="col-form-label col-lg-2">고객명</label>
+										<input type="text" id="customerName" class="form-control col-lg-4" 
+												 readonly>
+										<input type="hidden" class="form-control" id="customerNo" >
+									</div>
+									<div class="form-group row mb-4" th:align="right">
+										<label for="customerPhone" class="col-form-label col-lg-1">연락처</label>
+										<input type="text" class="form-control col-lg-4" id="customerPhone" name="customerPhone"
+												 readonly>
+										<input type="hidden" class="form-control" id="resEmpNo" >
+										<label for="paymentStatus" class="col-form-label col-lg-2">결제방법</label>
+										<input type="text" class="form-control col-lg-4" id="paymentStatus" name="paymentStatus"
+												 readonly>
+									</div>
+									<div class="form-group row mb-4" th:align="right">
+										<label for="customerAddress" class="col-form-label col-lg-1">주소</label>
+										<input type="text" class="form-control col-lg-4" id="customerAddress" name="customerAddress" readonly>
+										<label for="orderDueDate" class="col-form-label col-lg-2">납기요청일</label>
+										<input type="text" id="orderDueDate" class="form-control col-lg-4"readonly>
+									</div>
+									<div class="form-group col-xl-12">
+										<label>요청사유</label>
+										<textarea id="orderReason" class="form-control" name="orderReason" style="height: 40px; resize: none;" required></textarea>
+									</div>
+								</div>
+							</div>
+							<!-- End OrderInfo -->
+							
+							<!-- OrderProductList -->
+							<div class="card mb-4">
+								<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+									<h6 class="m-0 font-weight-bold text-primary" id="tableTitle">주문 품목</h6>
+								</div>
+								<div class="table-responsible" style="overflow-y: scroll; height: 210px;">
+									<table class="table align-items-center table-flush" id="orderProductListTable">
+										<thead class="thead-light" th:align="center">
 											<tr>
-												<th style="width: 40px;">상품번호</th>
-												<th style="width: 200px;">상품명</th>
-												<th style="width: 60px;">현재창고재고수량</th>
-												<th style="width: 20px;">단위</th>
-												<th style="width: 60px;">추가요청수량</th>
-												<th style="width: 15px;"></th>
+												<th>No</th>
+												<th>상품번호</th>
+												<th>상품명</th>
+												<th>공급가</th>
+												<th>할인가</th>
+												<th>단위</th>
+												<th>수량</th>
+												<th>합계</th>
+												<th>세액</th>
+												<th></th>
 											</tr>
 										</thead>
-										<tbody style="font-size: 18px;">
-
+										<tbody th:align="center">
+											
 										</tbody>
 									</table>
 								</div>
-								<div class="row">
-									<div class="form-group col-xl-12"></div>
-								</div>
-								<div class="row">
-									<div class="form-group col-xl-12" >
-										<label for="orderTitle">요청서제목</label>
-										<input type="text" class="form-control" style="text-align: left;" 
-									      	   id="orderTitle" name="orderTitle" required>
-									</div>
-								</div>
-								<div class="form-group row mb-12" th:align="right">
-									<div class="col-lg-6 col-form-label"></div>
-											<label for="customerName" class="col-lg-2 col-form-label">결재 담당자</label>
-											<span class="form-control col-lg-3" id="ManagerName">
-												<span sec:authentication='principal.managerNo'></span>
-												<span sec:authentication='principal.managerName'></span>
-											</span>
-											<input class="form-control" id="managerNo" name="managerNo" hidden="hidden">
-										</div>
-								<div class="row">
-									<div class="form-group col-xl-12">
-										<label>요청사유</label>
-										<textarea id="orderContent" class="form-control" name="orderContent" style="height: 150px; resize: none;" required></textarea>
-									</div>
-									<div class="form-group col-xl-4"></div>
-									<div class="form-group col-xl-4" th:align="center" style="margin-top: 40px;">
-										<button type="button" class="btn btn-primary"
-												id="receivingProductBtn" onclick="receivingProduct()">출고요청</button>
-									</div>
-									<div class="form-group col-xl-4"></div>
-								</div>
 							</div>
+							<!-- End OrderProductList -->
+							
 						</div>
 					</div>
 				<div id="count" value="1"></div>
@@ -574,15 +607,25 @@ input {
 
 		});
 
-		$('#stockOrderBtn').click(function() { 		//입고요청서작성 버튼
+		/* 입고요청서 작성 버튼 클릭 시 동작 */
+		$('#stockOrderBtn').click(function() { 		
 		
+			const $table = $("#orderProduct tbody");
+			
+			$table.html("");
+			
 			$('#stockOrderModal').modal();
 		
 		});
 
 		
-		$('#releaseRequestBtn').click(function() { 		//입고요청서작성 버튼
-		
+		/* 출고요청서 작성 버튼 클릭시 동작 */
+		$('#releaseRequestBtn').click(function() { 		
+
+			const $table = $("#orderProductListTable tbody");
+			
+			$table.html("");
+			
 			$('#releaseRequestModal').modal();
 		
 		});
@@ -749,8 +792,66 @@ input {
 			}); 
 			
 			return valueStatus;
-
 		}
+		
+		/* 왼쪽 주문서 목록에서 주문서 선택 시 동작 */
+		$("button[name='selectOrderBtn']").on("click", function() {
+			$td = $(this).parent();
+
+			const orderNo = $td.siblings().eq(0).text();
+			
+			console.log(orderNo);
+			
+			const $tbody = $("#orderProductListTable tbody");
+			$tbody.html("");
+			
+			$.ajax({
+				url: "/stock/orderInfo/select",
+				type: "get",
+				data: {orderNo : orderNo},
+				success : function(data, status, xhr) {
+					const orderInfo = JSON.parse(data.orderInfo);
+					
+					console.table(orderInfo);
+					
+					$("#titleOrder").val(orderInfo.orderTitle);
+					$("#orderNo").val(orderInfo.orderNo);
+					$("#orderDate").val(orderInfo.orderDate);
+					$("#customerCompany").val(orderInfo.customer.company.companyName);
+					$("#customerName").val(orderInfo.customer.customerName);
+					$("#customerPhone").val(orderInfo.customer.customerPhone);
+					$("#paymentStatus").val(orderInfo.paymentStatus);
+					$("#orderDueDate").val(orderInfo.dueDate);
+					const managerNo = $("#approvalManager").val();	//결재담당자 번호
+					
+					for(let index in orderInfo.orderProductList) {
+						
+						let orderProduct = orderInfo.orderProductList[index];
+					
+						console.table(orderProduct);
+						
+							let no = ++index;
+					$('#orderProductListTable > tbody:last').append(
+							'<tr><td name="count">' + no + '</td>'
+							+ '<td id="orderProductNo" name="orderProductNo">' + orderProduct.productNo + '</td>'
+							+ '<td name="orderProductName">' + orderProduct.product.productName + '</td>'
+							+ '<td id="sellingPrice" name="sellingPrice">' + orderProduct.product.sellingPrice + '</td>'
+							+ '<td id="discountRate" name="discountRate">' + orderProduct.product.discountedPrice + '</td>'
+							+ '<td id="produtUnit" name="produtUnit">' + orderProduct.product.unit + '</td>'
+							+ '<td id="productAmount" name="productAmount">' + orderProduct.productAmount + '</td>'
+							+ '<td id="subtotal" name="subtotal">' + orderProduct.product.subtotal + '</td>'
+							+ '<td id="tax" name="tax">' + orderProduct.product.tax + '</td>'
+							+ '</tr>');
+					
+					}
+				},
+				error : function(xhr, status, error) {
+					console.log(error);
+				}
+				
+			});
+			
+		});
 	</script>
 
 </body>
