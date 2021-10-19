@@ -65,7 +65,7 @@ public class DashboardController {
 		mv.addObject("userPerformChart", objectMapper.writeValueAsString(userPerformChart));
 		mv.addObject("userTargetPerformChart", objectMapper.writeValueAsString(userTargetPerformChart));
 		mv.setViewName("jsonView");
-		return null;
+		return mv;
 	}
 
 	/* 로그인된 사원이 속한 부서 실적 그래프 */
@@ -97,7 +97,7 @@ public class DashboardController {
 		
 		mv.addObject("deptPerformChart", objectMapper.writeValueAsString(deptPerformChart));
 		mv.setViewName("jsonView");
-		return null;
+		return mv;
 	}
 	
 	/* 영업기회 실패 통계 */
