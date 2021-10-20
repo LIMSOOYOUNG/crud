@@ -36,12 +36,14 @@
 								<div class="card mb-4">
 									<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
 										<h6 class="m-0 font-weight-bold text-primary" id="tableTitle">주문서 작성</h6>
+										<button type="button" class="btn btn-info btn-icon-split" id="searchEstimateBtn"
+												data-toggle="modal" data-target="#estimateModal">
+											<span class="icon text-white"><i class="fas fa-edit"></i></span>
+											<span class="text text-white">견적서 불러오기</span>
+										</button>
+									</button>
 									</div>
 									<div class="card-body" th:object="${order}">
-										<div class="input-group-btn mb-4" th:align="left">
-											<button type="button" class="btn btn-primary" id="searchEstimateBtn"
-													data-toggle="modal" data-target="#estimateModal">견적서 불러오기</button>
-										</div>
 										<div class="form-group row mb-2" th:align="right">
 												<label for="orderTitle" class="col-form-label col-lg-1">제목</label>
 												<input type="text" class="form-control col-lg-10" th:field="*{orderTitle}" required>
@@ -50,7 +52,7 @@
 											<label for="orderNo" class="col-form-label col-lg-1">주문번호</label>
 											<input type="text" class="form-control col-lg-4" th:field="*{orderNo}" readonly>
 											<label for="orderDate" class="col-form-label col-lg-2">주문일자</label>
-											<input type="text" class="form-control col-lg-4" th:field="*{orderDate}" readonly>
+											<input type="date" class="form-control col-lg-4" th:field="*{orderDate}" readonly>
 										</div>
 										<div class="form-group row mb-2" th:align="right">
 											<label for="customerCompany" class="col-form-label col-lg-1">고객사</label>
@@ -76,16 +78,22 @@
 													th:field="*{customer.empInfo.empName}" readonly>
 											<input type="hidden" class="form-control" id="resEmpNo" th:field="*{customer.empNo}">
 										</div>
-										<div class="form-group row mb-4" th:align="right">
-											<label for="paymentStatus" class="col-form-label col-lg-1">결제방법</label>
-											<select class="form-control col-lg-4" name="paymentStatus">
-												<option th:selected="*{paymentStatus == '세금계산서'}">세금계산서</option>
-												<option th:selected="*{paymentStatus == '카드'}">카드</option>
-											</select>
-											<label for="dueDate" class="col-form-label col-lg-2">납기요청일</label>
+										<div class="form-group row mb-2" th:align="right">
+											<label for="dueDate" class="col-form-label col-lg-1">납기요청일</label>
 											<input type="date" class="form-control col-lg-4" th:field="*{dueDate}">
+											<label for="zipCode" class="col-form-label col-lg-2">납품장소</label>
+											<input type="text" class="form-control col-lg-1" id="zipCode" readonly>
+											<input type="text" class="form-control col-lg-3" id="address1" readonly>
+											<div class="input-group-btn col-lg-1" th:align="left">
+												<button type="button" class="btn btn-primary" id="searchAddressBtn">검색</button>
+											</div>
 										</div>
-
+										<div class="form-group row mb-2" th:align="right">
+											<label class="col-lg-7"></label>
+											<input type="text" class="form-control col-lg-4" id="address2">
+										</div>
+										<hr>
+										
 										<div class="form-group row mb-2" th:align="right">
 											<label for="discountRate" class="col-form-label col-lg-1">금액할인</label>
 											<div class="custom-control custom-radio mt-2 col-lg-1">
@@ -99,6 +107,11 @@
 											<div class="input-group bootstrap-touchspin bootstrap-touchspin-injected col-lg-2">
 												<input type="text" class="form-control" id="discountRate" th:field="*{discountRate}" value="0" disabled>
 											</div>
+											<label for="paymentStatus" class="col-form-label col-lg-2">결제방법</label>
+											<select class="form-control col-lg-4" name="paymentStatus">
+												<option th:selected="*{paymentStatus == '세금계산서'}">세금계산서</option>
+												<option th:selected="*{paymentStatus == '카드'}">카드</option>
+											</select>
 										</div>
 										<div class="form-group row mb-2" th:align="right">
 											<label for="sumPrice" class="col-form-label col-lg-1">합계금액</label>
@@ -115,7 +128,7 @@
 										<h6 class="m-0 font-weight-bold text-primary" id="tableTitle">견적 품목</h6>
 									</div>
 									<div class="table-responsible">
-										<table class="table align-items-center table-flush" id="estimateProductTable">
+										<table class="table align-items-center table-flush" id="orderProductTable">
 											<thead class="thead-light" th:align="center">
 												<tr>
 													<th>No</th>
@@ -149,13 +162,67 @@
 								<!-- End OrderProductList -->
 
 								<div class="mb-4" th:align="center">
-									<button type="button" class="btn btn-primary mx-2" id="registEstimateBtn">등록</button>
+									<button type="button" class="btn btn-primary mx-2" id="registOrderBtn">등록</button>
 									<button type="reset" class="btn btn-outline-danger mx-2" id="resetBtn"
-											th:onclick="|location.href='@{/estimate/selectAll}'|">취소</button>
+											th:onclick="|location.href='@{/order/selectAll}'|">취소</button>
 								</div>
 							</form>
 						</div>
 					</div>
+
+					<!-- EstimateModal -->
+					<div class="modal fade" id="estimateModal" tabindex="-1" role="dialog" aria-labelledby="estimateModalLabel"
+							aria-hidden="true">
+						<div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title font-weight-bold" id="estimateModalLabel">견적서 조회(진행중)</h5>
+									<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+										<span aria-hidden="true"><i class="far fa-times-circle"></i></span>
+									</button>
+								</div>
+								<div class="modal-body">
+									<div class="row">
+										<div class="col-lg-12">
+											<div class="card mb-4">
+												<div class="table-responsive p-3" style="height:500px; overflow:auto;">
+													<table class="table align-items-center table-flush table-hover" id="estimateTable">
+														<thead class="thead-light" th:align="center">
+															<tr>
+																<th>견적번호</th>
+																<th>제목</th>
+																<th>고객사</th>
+																<th>고객명</th>
+																<th>등록일</th>
+																<th></th>
+															</tr>
+														</thead>
+														<tbody th:align="center">
+															<tr th:each="estimate : ${estimateList}" th:object="${estimate}">
+																<td th:text="*{estimateNo}"></td>
+																<td th:text="*{estimateTitle}"></td>
+																<td th:text="*{customer.company.companyName}"></td>
+																<td th:text="*{customer.customerName}"></td>
+																<td th:text="*{estimateDate}"></td>
+																<td>
+																	<button type="button" class="btn btn-sm btn-dark" name="selectEstimateBtn"
+																			data-dismiss="modal">선택</button>
+																</td>
+															</tr>
+														</tbody>
+													</table>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="modal-footer mb-6">
+									<button type="button" class="btn btn-outline-primary" data-dismiss="modal">닫기</button>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- End EstimateModal -->
 
 					<!-- CustomerModal -->
 					<div class="modal fade" id="customerModal" tabindex="-1" role="dialog" aria-labelledby="customerModalLabel"
@@ -185,12 +252,12 @@
 															</tr>
 														</thead>
 														<tbody th:align="center">
-															<tr th:each="customer : ${customerList}">
-																<td th:text="${customer.customerNo}"></td>
-																<td th:text="${customer.company.businessStatus}"></td>
-																<td th:text="${customer.company.companyName}"></td>
-																<td th:text="${customer.customerName}"></td>
-																<td th:text="|${customer.empInfo.empName} ${customer.empInfo.job.jobName}|"></td>
+															<tr th:each="customer : ${customerList}" th:object="${customer}">
+																<td th:text="*{customerNo}"></td>
+																<td th:text="*{company.businessStatus}"></td>
+																<td th:text="*{company.companyName}"></td>
+																<td th:text="*{customerName}"></td>
+																<td th:text="|*{empInfo.empName} *{empInfo.job.jobName}|"></td>
 																<td>
 																	<button type="button" class="btn btn-sm btn-dark" name="selectCustomerBtn"
 																			data-dismiss="modal">선택</button>
@@ -243,15 +310,15 @@
 															</tr>
 														</thead>
 														<tbody th:align="center">
-															<tr th:each="stock : ${stockList}">
-																<td name="productNo" th:text="${stock.productNo}"></td>
-																<td th:text="${stock.product.category.refCategoryName}"></td>
-																<td th:text="${stock.product.category.categoryName}"></td>
-																<td th:text="${stock.product.productName}"></td>
-																<td th:text="${stock.product.manufacturer.manufacturerName}"></td>
-																<td th:text="${stock.product.sellingPrice}"></td>
-																<td th:text="${stock.product.unit}"></td>
-																<td th:text="${stock.productStock}"></td>
+															<tr th:each="stock : ${stockList}" th:object="${stock}">
+																<td name="productNo" th:text="*{productNo}"></td>
+																<td th:text="*{product.category.refCategoryName}"></td>
+																<td th:text="*{product.category.categoryName}"></td>
+																<td th:text="*{product.productName}"></td>
+																<td th:text="*{product.manufacturer.manufacturerName}"></td>
+																<td th:text="*{product.sellingPrice}"></td>
+																<td th:text="*{product.unit}"></td>
+																<td th:text="*{productStock}"></td>
 																<td>
 																	<input type="number" class="form-control" name="stockQty" min="0">
 																</td>
@@ -282,10 +349,18 @@
 
 	<!-- Script -->
 	<th:block th:replace="@{/common/script} :: script"></th:block>
+	<script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 	<script>
 		$(document).ready(function() {
-			$("#customerTable").DataTable();
-			$("#stockTable").DataTable();
+			$("#estimateTable").DataTable({
+				"order": [ 0, "desc" ]
+			});
+			$("#customerTable").DataTable({
+				"order": [ 0, "desc" ]
+			});
+			$("#stockTable").DataTable({
+				"order": [ 0, "asc" ]
+			});
 			
 			$("#discountRate").TouchSpin({
 				min: 0,
@@ -297,10 +372,17 @@
 			});
 		});
 
+		$("button[name='selectEstimateBtn']").on("click", function() {
+			$td = $(this).parent();
+
+			const estimateNo = $td.siblings().eq(0).text();
+			console.log(estimateNo);
+		});
+		
 		/* 고객 목록 중 선택하여 정보 입력 */
 		$("button[name='selectCustomerBtn']").on("click", function() {
 			$td = $(this).parent();
-
+			
 			const customerNo = $td.siblings().eq(0).text();
 			const customerCompany = $td.siblings().eq(2).text();
 			const customerName = $td.siblings().eq(3).text();
@@ -310,6 +392,17 @@
 			$("#customerName").val(customerName);
 			$("#customerNo").val(customerNo);
 			$("#resEmpName").val(empName);
+		});
+
+		/* 우편번호, 주소 API(kakao) */
+		$("#searchAddressBtn").on("click", function() {
+			new daum.Postcode({
+				oncomplete: function(data){
+					$("#zipCode").val(data.zonecode);
+					$("#address1").val(data.address);
+					$("#address2").focus();
+				}
+			}).open();
 		});
 		
 		/* 할인 적용에 따라 수치 입력 칸 활성화/비활성화 */
@@ -329,7 +422,7 @@
 			
 		/* 상품 검색 후 리스트에 추가 */
 		$("button[name='selectStockBtn']").on("click", function() {
-			const $estimateProduct = $("#estimateProductTable tbody");
+			const $orderProduct = $("#orderProductTable tbody");
 			const $stockTr = $(this).parent().parent();
 
 			if($stockTr.children().eq(8).children().val() == 0) {
@@ -338,14 +431,14 @@
 				return;
 			}
 			
-			// if(Number($stockTr.children().eq(7).text()) < $stockTr.children().eq(8).children().val()) {
-			// 	alert("상품 재고가 부족합니다.");
-			// 	$("input[name='stockQty']").val("");
-			// 	return;
-			// }
+			if(Number($stockTr.children().eq(7).text()) < $stockTr.children().eq(8).children().val()) {
+				alert("상품 재고가 부족합니다.");
+				$("input[name='stockQty']").val("");
+				return;
+			}
 
-			for(let i = 0; i < $estimateProduct.children().length; i++) {
-				if($estimateProduct.children().eq(i).children().eq(1).text() == $stockTr.children().eq(0).text()) {
+			for(let i = 0; i < $orderProduct.children().length; i++) {
+				if($orderProduct.children().eq(i).children().eq(1).text() == $stockTr.children().eq(0).text()) {
 					alert("이미 선택된 상품입니다.");
 					$("input[name='stockQty']").val("");
 					return;
@@ -353,7 +446,7 @@
 			}
 
 			$tr = $("<tr>");
-			$noTd = $("<td>").text($estimateProduct.children().length + 1);
+			$noTd = $("<td>").text($orderProduct.children().length + 1);
 			$productNoTd = $("<td>").text($stockTr.children().eq(0).text());
 			$productNameTd = $("<td>").text($stockTr.children().eq(3).text());
 			$sellingPriceTd = $("<td>").text($stockTr.children().eq(5).text());
@@ -379,7 +472,7 @@
 			$tr.append($taxTd);
 			$tr.append($deleteStockTd);
 			
-			$estimateProduct.append($tr);
+			$orderProduct.append($tr);
 
 			$("input[name='stockQty']").val("");
 
@@ -390,9 +483,9 @@
 		$(document).on("click", "button[name='deleteStockBtn']", function() {
 			$(this).parent().parent().remove();
 
-			const $estimateProduct = $("#estimateProductTable tbody");
-			for(let i = 0; i < $estimateProduct.children().length; i++) {
-				$estimateProduct.children().eq(i).children().eq(0).text(i + 1);
+			const $orderProduct = $("#orderProductTable tbody");
+			for(let i = 0; i < $orderProduct.children().length; i++) {
+				$orderProduct.children().eq(i).children().eq(0).text(i + 1);
 			}
 
 			calculateTotal();
@@ -400,26 +493,26 @@
 
 		/* 합계 금액 계산 */
 		function calculateTotal() {
-			const $estimateProduct = $("#estimateProductTable tbody");
+			const $orderProduct = $("#orderProductTable tbody");
 			const discountRate = $("#discountRate").val();
 			let total = 0;
 
-			for(let i = 0; i < $estimateProduct.children().length; i++) {
-				let discountPrice = (Number($estimateProduct.children().eq(i).children().eq(3).text())
+			for(let i = 0; i < $orderProduct.children().length; i++) {
+				let discountPrice = (Number($orderProduct.children().eq(i).children().eq(3).text())
 						* (100 - discountRate) / 100).toFixed();
-				let qty = $estimateProduct.children().eq(i).children().eq(6).text();
+				let qty = $orderProduct.children().eq(i).children().eq(6).text();
 				let subtotal = Number(discountPrice) * Number(qty);
 				let tax = Number((subtotal * 0.1).toFixed());
 				
 				total += subtotal + tax;
 
-				$estimateProduct.children().eq(i).children().eq(4).text(discountPrice);
-				$estimateProduct.children().eq(i).children().eq(7).text(subtotal);
-				$estimateProduct.children().eq(i).children().eq(8).text(tax);
+				$orderProduct.children().eq(i).children().eq(4).text(discountPrice);
+				$orderProduct.children().eq(i).children().eq(7).text(subtotal);
+				$orderProduct.children().eq(i).children().eq(8).text(tax);
 			}
 
-			$("#estimateTotal").val(total);
-			$("#estimateTotalKor").text("(" + translateKor(total) + ")");
+			$("#orderTotal").val(total);
+			$("#orderTotalKor").text("(" + translateKor(total) + ")");
 		}
 
 		/* 금액을 한글로 변경하여 출력 */
@@ -454,41 +547,41 @@
 		}
 
 		/* 입력된 견적서 정보를 post 방식으로 전송 */
-		$(document).on("click", "#registEstimateBtn", function() {
+		$(document).on("click", "#registOrderBtn", function() {
 
-			const $estimateProduct = $("#estimateProductTable tbody");
+			const $orderProduct = $("#orderProductTable tbody");
 			let productList = [];
 
-			if($estimateProduct.children().length == 0) {
+			if($orderProduct.children().length == 0) {
 				alert("등록된 상품이 없습니다.");
 				return false;
 			}
 
-			for(let i = 0; i < $estimateProduct.children().length; i++) {
-				productNo = $estimateProduct.children().eq(i).children().eq(1).text();
-				qty = $estimateProduct.children().eq(i).children().eq(6).text();
+			for(let i = 0; i < $orderProduct.children().length; i++) {
+				productNo = $orderProduct.children().eq(i).children().eq(1).text();
+				qty = $orderProduct.children().eq(i).children().eq(6).text();
 				
 				const product = {"productNo": productNo, "productAmount": qty};
 				productList.push(product);
 			}
 
-			const estimate = {"estimateTitle" : $("#estimateTitle").val(),
-							"estimateNo" : $("#estimateNo").val(),
-							"estimateDate" : $("#estimateDate").val(),
+			const order = {"orderTitle" : $("#orderTitle").val(),
+							"orderNo" : $("#orderNo").val(),
+							"orderDate" : $("#orderDate").val(),
 							"discountRate" : $("#discountRate").val(),
 							"customerNo" : $("#customerNo").val(),
-							"estimateStatus" : $("#estimateStatus option:selected").text(),
-							"estimateProductList" : productList};
+							"orderStatus" : $("#orderStatus option:selected").text(),
+							"orderProductList" : productList};
 
 			if(confirm("견적서를 등록하시겠습니까?")) {
 				$.ajax({
-					url: "/estimate/insert",
+					url: "/order/insert",
 					type: "POST",
-					data: JSON.stringify(estimate),
+					data: JSON.stringify(order),
 					contentType: "application/json; charset=UTF-8",
 					success: function(data, status, xhr) {
 						alert(data.message);
-						location.href="/estimate/selectAll";
+						location.href="/order/selectAll";
 					},
 					error: function(xhr, status, error) {
 						alert("예기치 못한 에러가 발생하였습니다.");
