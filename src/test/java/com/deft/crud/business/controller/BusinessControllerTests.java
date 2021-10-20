@@ -5,6 +5,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.forwardedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import org.junit.Ignore;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -38,7 +39,6 @@ public class BusinessControllerTests {
 	
 	/* 전체 영업기회 목록 조회 */
 	@Test
-	@Disabled
 	public void testSelectBusinessChanceAll() throws Exception {
 		
 		mockMvc.perform(get("/business/chance/selectAll"))
@@ -62,6 +62,7 @@ public class BusinessControllerTests {
 	
 	/* 전체사원 영업활동 목록조회 (담당자용)*/
 	@Test
+	@Disabled
 	public void testSelectActivityAll() throws Exception {
 		
 		mockMvc.perform(get("/business//activity/selectAll"))

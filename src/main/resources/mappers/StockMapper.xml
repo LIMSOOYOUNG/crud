@@ -69,8 +69,10 @@
      
   <!-- 입고요청서 DTO  -->
     <resultMap type="com.deft.crud.stock.model.dto.approval.ReceivingReqDTO" id="receivingReqResultMap">
-        <id property="receivingReqNo" column="RECEVING_REQ_NO"/>
+        <id property="receivingReqNo" column="RECEIVING_REQ_NO"/>
         <result property="approvalDocumentNo" column="APPROVAL_DOCUMENT_NO"/>
+        <result property="orderNo" column="ORDER_NO" />
+
 
         <association property="approvalDocumentDTO" resultMap="aoorovalDocumentResultMap"/>
         <association property="receivingReqHistoryDTO" resultMap="receivingReqHistoryResultMap"/>   
@@ -112,9 +114,21 @@
      
 	<!-- 출고요청서 DTO -->
 	
+	<resultMap type="com.deft.crud.stock.model.dto.RequestReleaseDTO" id="requestReleaseResultMap">
+	<id property="orderNo" column="ORDER_NO"/>
+	<result property="orderProductNo" column="PRODUCT_NO" />
+	<result property="empNo" column="EMP_NO" />
+	<result property="productAmount" column="PRODUCT_AMOUNT" />
+	<result property="orderReason" column="REQ_REASON" />
+	<result property="orderTitle" column="APPROVAL_DOCUMENT_NAME" />
+	<result property="managerNo" column="MANAGER_NO" />
+	</resultMap>
 	
-	
-	
+	<!-- ReleaseReqDTO -->
+	<resultMap type="com.deft.crud.stock.model.dto.approval.ReleaseReqDTO" id="ReleaseReqDTOResultMap">
+	<id property="releaseNo" column="RELEASE_REQ_NO" />
+	<result property="orderNo" column="ORDER_NO" />
+	</resultMap>
 	<!-- 출고요청 상품 DTO -->
 
 
@@ -219,20 +233,10 @@
       </foreach>
    </update>
    
-   <!-- 입고요청번호 생성 -->
-   <insert id="insertReceivingReq">
-      INSERT /* com.deft.crud.stock.model.dao.StockMapper#insertReceivingReq() */
-        INTO TBL_RECEIVING_REQ 
-      VALUES
-      (  
-         SEQ_RECEIVING_REQ_NO.NEXTVAL
-       , SEQ_APPROVAL_DOCUMENT_NO.CURRVAL
-      )
-   </insert>
-
+  
    <!-- 입고요청서 내용추가 -->
-   <insert id="insertApprovalDocument" parameterType="com.deft.crud.stock.model.dto.approval.ApprovalDocumentDTO">
-         INSERT /* com.deft.crud.stock.model.dao.StockMapper#insertApprovalDocument() */
+   <insert id="insertStockApprovalDocument" parameterType="com.deft.crud.stock.model.dto.approval.ApprovalDocumentDTO">
+         INSERT /* com.deft.crud.stock.model.dao.StockMapper#insertStockApprovalDocument() */
            INTO TBL_APPROVAL_DOCUMENT 
            (
              APPROVAL_DOCUMENT_NO
@@ -257,9 +261,59 @@
            )
    </insert>
    
+   <!-- 출고요청서 내용추가 -->
+   <insert id="insertReleaseApprovalDocument" parameterType="com.deft.crud.stock.model.dto.approval.ApprovalDocumentDTO">
+         INSERT /* com.deft.crud.stock.model.dao.StockMapper#insertReleaseApprovalDocument() */
+           INTO TBL_APPROVAL_DOCUMENT 
+           (
+             APPROVAL_DOCUMENT_NO
+           , APPROVAL_DOCUMENT_NAME  
+           , APPROVAL_DOCUMENT_TYPE
+           , REQ_REASON
+           , EMP_NO
+           , MANAGER_NO
+           , DOCUMENT_STATUS
+           , DOCUMENT_WRITE_DATE
+           )
+           VALUES
+           (
+              SEQ_APPROVAL_DOCUMENT_NO.NEXTVAL
+            , #{ approvalDocumentName }
+            , '출고요청'
+            , #{ reqReason }
+            , #{ empNo }   
+            , #{ managerNo }  
+            , '대기중' 
+            , SYSDATE       
+           )
+   </insert>
+   
+    <!-- 출고요청번호 생성 -->
+   <insert id="insertReleaseReq" parameterType="String">
+      INSERT /* com.deft.crud.stock.model.dao.StockMapper#insertReleaseReq() */
+        INTO TBL_RELEASE_REQ 
+      VALUES
+      (  
+         SEQ_RELEASE_REQ_NO.NEXTVAL
+       , SEQ_APPROVAL_DOCUMENT_NO.CURRVAL
+       , #{ orderNo }
+      )
+   </insert>
+   
+    <!-- 입고요청번호 생성 -->
+   <insert id="insertReceivingReq">
+      INSERT /* com.deft.crud.stock.model.dao.StockMapper#insertReceivingReq() */
+        INTO TBL_RECEIVING_REQ 
+      VALUES
+      (  
+         SEQ_RECEIVING_REQ_NO.NEXTVAL
+       , SEQ_APPROVAL_DOCUMENT_NO.CURRVAL
+      )
+   </insert>
+   
    <!-- 입고요청번호에 대한 결재 이력생성 -->
-   <insert id="insertReleaseReqHistory">
-        INSERT /* com.deft.crud.stock.model.dao.StockMapper#insertReleaseReqHistory() */
+   <insert id="insertReceivingReqHistory">
+        INSERT /* com.deft.crud.stock.model.dao.StockMapper#insertReceivingReqHistory() */
         INTO TBL_RECEIVING_REQ_HIS 
         (
           RECEIVING_REQ_HIS_NO
@@ -275,6 +329,25 @@
         , SEQ_RECEIVING_REQ_NO.CURRVAL
         )   
    </insert>
+ 
+   <!-- 출고요청번호에 대한 결재 이력생성 -->
+   <insert id="insertReleaseReqHistory">
+        INSERT /* com.deft.crud.stock.model.dao.StockMapper#insertReleaseReqHistory() */
+        INTO TBL_RELEASE_REQ_HIS
+        (
+          RELEASE_REQ_HIS_NO
+        , DOCUMENT_PROCESS_DATE
+        , DOCUMENT_STATUS
+        , RELEASE_REQ_NO
+        )
+        VALUES
+        (
+          SEQ_RELEASE_REQ_HIS_NO.NEXTVAL
+        , SYSDATE
+        , '대기중'
+        , SEQ_RELEASE_REQ_NO.CURRVAL
+        )   
+   </insert>
    
    <!-- 요청목록 전체 조회(담당자 or 사원) -->
    <select id="selectReceivingReqAll" resultMap="receivingReqResultMap" parameterType="com.deft.crud.member.model.service.UserImpl">
@@ -286,12 +359,14 @@
            , A.EMP_NO
            , E.EMP_NAME
            , A.MANAGER_NO
-           , B.RECEIVING_REQ_NO  
            , A.DOCUMENT_WRITE_DATE
            , A.DOCUMENT_STATUS
+           , Q.ORDER_NO
+           , B.RECEIVING_REQ_NO
         FROM TBL_APPROVAL_DOCUMENT A
         LEFT JOIN TBL_EMP_INFO E ON (A.EMP_NO = E.EMP_NO)
         LEFT JOIN TBL_RECEIVING_REQ B ON (A.APPROVAL_DOCUMENT_NO = B.APPROVAL_DOCUMENT_NO)
+        LEFT JOIN TBL_RELEASE_REQ Q ON(A.APPROVAL_DOCUMENT_NO = Q.APPROVAL_DOCUMENT_NO)
       <choose>
       	<when test="authority == '담당자'">
      		 WHERE A.MANAGER_NO = #{ empNo }
@@ -313,12 +388,14 @@
            , A.EMP_NO
            , E.EMP_NAME
            , A.MANAGER_NO
-           , B.RECEIVING_REQ_NO  
            , A.DOCUMENT_WRITE_DATE
            , A.DOCUMENT_STATUS
+           , Q.ORDER_NO
+           , B.RECEIVING_REQ_NO
         FROM TBL_APPROVAL_DOCUMENT A
         LEFT JOIN TBL_EMP_INFO E ON (A.EMP_NO = E.EMP_NO)
         LEFT JOIN TBL_RECEIVING_REQ B ON (A.APPROVAL_DOCUMENT_NO = B.APPROVAL_DOCUMENT_NO)
+        LEFT JOIN TBL_RELEASE_REQ Q ON(A.APPROVAL_DOCUMENT_NO = Q.APPROVAL_DOCUMENT_NO)
        <choose>
       		<when test="userInfo.authority == '담당자'">
      			 WHERE A.MANAGER_NO = #{ userInfo.empNo }
@@ -343,27 +420,46 @@
        ORDER BY A.DOCUMENT_WRITE_DATE DESC
    </select>
    
-   
-   <!-- 선택한 요청서 상세정보 -->
+   <!-- 선택한 입고 요청서 상세정보 -->
    <select id="selectReceivingReqByNo" resultMap="receivingReqResultMap" parameterType="_int">
-      SELECT /* com.deft.crud.stock.model.dao.StockMapper#selectReceivingReqByNo() */
-            A.APPROVAL_DOCUMENT_NO
-          , A.APPROVAL_DOCUMENT_NAME
-          , A.APPROVAL_DOCUMENT_TYPE
-          , A.REQ_REASON
-          , A.EMP_NO
-          , E.EMP_NAME
-          , A.MANAGER_NO
-          , M.EMP_NAME "MANAGER_NAME"
-          , B.RECEIVING_REQ_NO  
-          , A.DOCUMENT_WRITE_DATE
-          , A.DOCUMENT_PROCESS_DATE
-          , A.DOCUMENT_STATUS
-         FROM TBL_APPROVAL_DOCUMENT A
-         LEFT JOIN TBL_EMP_INFO E ON (A.EMP_NO = E.EMP_NO)
-         LEFT JOIN TBL_EMP_INFO M ON (A.MANAGER_NO = M.EMP_NO)
-          LEFT JOIN TBL_RECEIVING_REQ B ON (A.APPROVAL_DOCUMENT_NO = B.APPROVAL_DOCUMENT_NO)
-         WHERE B.RECEIVING_REQ_NO = #{ reqNo } 
+       SELECT /* com.deft.crud.stock.model.dao.StockMapper#selectReceivingReqAll() */
+             A.APPROVAL_DOCUMENT_NO
+           , A.APPROVAL_DOCUMENT_NAME
+           , A.APPROVAL_DOCUMENT_TYPE
+           , A.REQ_REASON
+           , A.EMP_NO
+           , E.EMP_NAME
+           , M.EMP_NAME MANAGER_NAME
+           , A.MANAGER_NO
+           , A.DOCUMENT_WRITE_DATE
+           , A.DOCUMENT_STATUS
+           , A.DOCUMENT_PROCESS_DATE
+           , B.RECEIVING_REQ_NO
+        FROM TBL_APPROVAL_DOCUMENT A
+        LEFT JOIN TBL_EMP_INFO E ON (A.EMP_NO = E.EMP_NO)
+        LEFT JOIN TBL_EMP_INFO M ON (A.MANAGER_NO = M.EMP_NO)
+        LEFT JOIN TBL_RECEIVING_REQ B ON (A.APPROVAL_DOCUMENT_NO = B.APPROVAL_DOCUMENT_NO)
+       WHERE A.APPROVAL_DOCUMENT_NO = #{ approvalNo }  
+   </select>
+   
+   <!-- 선택한 출고 요청서 상세정보 -->
+   <select id="selectReleaseReqByNo" resultMap="receivingReqResultMap" parameterType="_int">
+       SELECT /* com.deft.crud.stock.model.dao.StockMapper#selectReceivingReqAll() */
+             A.APPROVAL_DOCUMENT_NO
+           , A.APPROVAL_DOCUMENT_NAME
+           , A.APPROVAL_DOCUMENT_TYPE
+           , A.REQ_REASON
+           , A.EMP_NO
+           , E.EMP_NAME
+           , A.MANAGER_NO
+           , A.DOCUMENT_WRITE_DATE
+           , A.DOCUMENT_STATUS
+           , Q.ORDER_NO
+           , Q.RELEASE_REQ_NO
+        FROM TBL_APPROVAL_DOCUMENT A
+        LEFT JOIN TBL_EMP_INFO E ON (A.EMP_NO = E.EMP_NO)
+        LEFT JOIN TBL_RELEASE_REQ Q ON(A.APPROVAL_DOCUMENT_NO = Q.APPROVAL_DOCUMENT_NO)
+       WHERE A.APPROVAL_DOCUMENT_NO = #{ approvalNo }  
    </select>
    
    <!-- 요청서 상세내용 중 입고요청상품 목록 -->
@@ -380,17 +476,17 @@
          WHERE A.RECEIVING_REQ_NO = #{ reqNo }   
    </select>
    
-   <!-- 결재문서 상태 변경(결재처리) -->
+   <!-- 입고 요청서 결재 상태 변경(결재처리) -->
    <update id="modifyApprovalStatus" parameterType="com.deft.crud.stock.model.dto.approval.ApprovalModifyDTO">
        UPDATE /* com.deft.crud.stock.model.dao.StockMapper#modifyApprovalStatus() */
               TBL_APPROVAL_DOCUMENT A
           SET A.DOCUMENT_STATUS = #{ approvalStatus }
            , A.DOCUMENT_PROCESS_DATE = TO_DATE(#{ documentProcessDate }, 'YYYY-MM-DD HH24:MI:SS')
-       WHERE APPROVAL_DOCUMENT_NO = #{ approvalDocumentNo }   
+       WHERE A.APPROVAL_DOCUMENT_NO = #{ approvalDocumentNo }   
    </update>
    
    <!-- 결재처리 후 결재이력 생성 -->
-   <insert id="insertReceivingReqHistory" parameterType="com.deft.crud.stock.model.dto.approval.ApprovalModifyDTO">
+   <insert id="insertReceivingReqHistoryParameter" parameterType="com.deft.crud.stock.model.dto.approval.ApprovalModifyDTO">
       INSERT /* com.deft.crud.stock.model.dao.StockMapper#insertReceivingReqHistory() */
         INTO TBL_RECEIVING_REQ_HIS A
         (
@@ -408,30 +504,22 @@
         )
    </insert>
    
-   <!-- 미완료 상태 주문서 목록 조회 -->
-   <!-- <select id="selectPurchaseOrderAll" resultMap="purchaseOrderResultMap">
-       SELECT /* com.deft.crud.stock.model.dao.StockMapper#selectPurchaseOrderAll() */
-   	          A.ORDER_NO
-   	        , A.ORDER_DATE  
-   	        , A.DISCOUNT_RATE  
-   	        , A.DUE_DATE  
-   	        , A.DELIVERY_PLACE  
-   	        , A.PAYMENT_STATUS  
-   	        , A.ORDER_TITLE  
-   	        , A.CUSTOMER_NO  
-   	        , C.CUSTOMER_NAME  
-   	        , A.PROVIDER_REGIST_NO  
-   	        , A.SUM_PRICE  
-   	        , A.ORDER_YN  
-   	        , OP.PRODUCT_NO  
-   	        , OP.PRODUCT_AMOUNT  
-   	        , P.PRODUCT_NAME  
-         FROM TBL_PURCHASE_ORDER A
-         LEFT JOIN TBL_CUSTOMER C ON(A.CUSTOMER_NO = C.CUSTOMER_NO)
-         LEFT JOIN TBL_PURCHASE_ORDER_PRODUCT OP ON(A.ORDER_NO = OP.ORDER_NO)
-         LEFT JOIN TBL_PRODUCT P ON(OP.PRODUCT_NO = P.PRODUCT_NO)
-        WHERE A.ORDER_YN = 'N' 
-   </select> -->
+   <!-- 입고요청서 번호 찾기 -->
+	<select id="selectReceivingNoByApprovalNo" resultType="_int" parameterType="_int">
+	       SELECT
+	              RECEIVING_REQ_NO
+	         FROM TBL_RECEIVING_REQ
+	        WHERE APPROVAL_DOCUMENT_NO = #{ approvalNo }     
+	</select>
+
+   <!-- 출고요청서 번호 찾기 -->
+   <select id="selectorderNoByApprovalNo" resultMap="ReleaseReqDTOResultMap" parameterType="_int">
+	       SELECT
+	              RELEASE_REQ_NO
+	            , ORDER_NO
+	         FROM TBL_RELEASE_REQ
+	        WHERE APPROVAL_DOCUMENT_NO = #{ approvalNo }     
+	</select>
 </mapper>
 
 

@@ -1,4 +1,4 @@
-package com.deft.crud.stock.model.dto.approval;
+package com.deft.crud.stock.model.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,9 +11,13 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class ReleaseReqDTO {
+public class RequestReleaseDTO {
 
-	private int approvalNo;
-	private String approvalType;
 	private String orderNo;
+	private int orderProductNo;
+	private int empNo;
+	private int productAmount;
+	private String orderReason;
+	private String orderTitle;
+	private int managerNo;
 }
