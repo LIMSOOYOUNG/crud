@@ -85,6 +85,7 @@
              , O.ORDER_YN
           FROM TBL_PURCHASE_ORDER O
           LEFT JOIN TBL_CUSTOMER C ON (O.CUSTOMER_NO = C.CUSTOMER_NO)
+         WHERE C.EMP_NO = #{ empNo }
          ORDER BY O.ORDER_NO DESC
 	</select>
 	
