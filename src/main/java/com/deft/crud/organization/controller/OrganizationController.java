@@ -53,20 +53,19 @@ public class OrganizationController {
 	
 	
 	/* 부서 등록 */
-	@GetMapping("departmentinsert")
-	public void departmentInsert() {}
-	
 	@PostMapping("departmentinsert")
 	public ModelAndView departmentInsertForm(ModelAndView mv, @RequestParam String deptName
 			, @RequestParam String deptFax, @RequestParam String deptTel, @RequestParam String deptStatus) {
 		
 		DepartmentDTO departDTO = new DepartmentDTO();
 		
+		/* DTO에 값 전달 */
 		departDTO.setDeptName(deptName);
 		departDTO.setDeptFax(deptFax);
 		departDTO.setDeptTel(deptTel);
 		departDTO.setDeptStatus(deptStatus);
 		
+		/* 서비스에 DTO 전달 */
 		int result = organizationService.departmentInsert(departDTO);
 		
 		if(result>0) {

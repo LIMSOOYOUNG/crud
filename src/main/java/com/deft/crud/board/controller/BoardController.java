@@ -84,19 +84,19 @@ public class BoardController {
 	
 	@PostMapping("/freeboardinsert")
 	public ModelAndView insertfreeboardForm(ModelAndView mv, @ModelAttribute BoardDTO parameters,
-			@AuthenticationPrincipal UserImpl loginInfo,  @RequestParam int boardNo
+			@AuthenticationPrincipal UserImpl loginInfo,  @RequestParam int writeNo
 			, @RequestParam List<MultipartFile> freeboardUpload
 			,HttpServletRequest request, RedirectAttributes rttr) 
 					throws Exception {
+		System.out.println("sasaaaaaaaaaaaaaaaaaa" + freeboardUpload);
 		
 	    int loginEmpNo = loginInfo.getEmpNo();
 	    parameters.setEmpNo(loginEmpNo);
 	    
 	    String root = request.getSession().getServletContext().getRealPath("\\");
-	    
 	    System.out.println("rrrrrrrrrrerrrrrrrrr" + root);
 	    
-	    String filePath  = root + "\\upload\\original";
+	    String filePath  = root + "\\upload\\freeboard";
 	    
 	    File directory = new File(filePath);
 	    
@@ -153,7 +153,7 @@ public class BoardController {
 			mv.setViewName("redirect:/board/selectfreeboard");
 		}
 
-		return mv;
+		return null;
 	}
 	
 

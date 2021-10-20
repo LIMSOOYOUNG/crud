@@ -34,6 +34,7 @@ public class AdminBoardController {
 	
 	
 	/* 공지사항 등록 */
+	/* GET방식을 쓴 이유는 writeNo라는 게시판 시퀀스 번호를 넘겨주기 위해서 썻다. */
 	@GetMapping("noticeinsert")
 	public ModelAndView noticeinsert(ModelAndView mv) {
 		
@@ -44,15 +45,19 @@ public class AdminBoardController {
 		return mv;
 	}
 	
+	/* POST방식을 써서 입력된 값을 DB에 전달 시켜준다. */
 	@PostMapping("noticeinsert")
 	public ModelAndView noticeInsertForm(ModelAndView mv, @ModelAttribute BoardDTO parameters,
-			@AuthenticationPrincipal UserImpl loginInfo, @RequestParam  List<MultipartFile> freeboardfileUpload,
-			HttpServletRequest request) 
+			@AuthenticationPrincipal UserImpl loginInfo) 
 					throws Exception{
 		
+		/* 로그인한 정보 */
 		int loginEmpNo = loginInfo.getEmpNo();
+		
+		/* BoardDTO에 로그인 값을 넣는다. */
 		parameters.setEmpNo(loginEmpNo);
 		
+		/* 서비스에 BoardDTO를 담아서 보내준다. */
 		int result = adminBoardService.noticeInsert(parameters);
 		
 		if(result > 0) {
