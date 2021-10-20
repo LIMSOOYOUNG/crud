@@ -15,6 +15,7 @@ import com.deft.crud.order.model.dto.OrderDTO;
 import com.deft.crud.order.model.dto.OrderProductDTO;
 import com.deft.crud.stock.model.dao.StockMapper;
 import com.deft.crud.stock.model.dto.ProductStockInfoDTO;
+import com.deft.crud.stock.model.dto.RequestReleaseDTO;
 import com.deft.crud.stock.model.dto.RequestStockDTO;
 import com.deft.crud.stock.model.dto.StorageDTO;
 import com.deft.crud.stock.model.dto.approval.ApprovalDocumentDTO;
@@ -97,7 +98,7 @@ public class StockService {
 
 		if(true) {	
 			//결재문서정보 생성
-			if(!stockMapper.insertApprovalDocument(approvalDocument)) {
+			if(!stockMapper.insertStockApprovalDocument(approvalDocument)) {
 				result = false;
 			}
 			//입고요청번호와 결재번호 
@@ -109,12 +110,51 @@ public class StockService {
 				result = false;
 			}
 			//입고요청번호에 대한 결재 이력생성
-			if(!stockMapper.insertReleaseReqHistory()) {
+			if(!stockMapper.insertReceivingReqHistory()) {
 				result = false;
 			}
 		}
 
 		return result;
+	}
+	
+	/* 출고요청서 등록 */
+	public boolean insertReleaseOrder(List<RequestReleaseDTO> request, UserImpl userInfo) {
+		ApprovalDocumentDTO approvalDocument = new ApprovalDocumentDTO();
+		
+		boolean result = true;
+		
+		int empNo = userInfo.getEmpNo();
+		int managerNo = userInfo.getManagerNo();
+		String orderNo = "";
+		
+		for(RequestReleaseDTO requestOrder : request) {
+			approvalDocument.setApprovalDocumentName(requestOrder.getOrderTitle());
+			approvalDocument.setReqReason(requestOrder.getOrderReason());
+			orderNo = requestOrder.getOrderNo();
+		}
+		
+		System.out.println("@@@주문서번호 확인 : " + orderNo);
+		
+		approvalDocument.setEmpNo(empNo);
+		approvalDocument.setManagerNo(managerNo);
+		
+		if(true) {	
+			//결재문서정보 생성
+			if(!stockMapper.insertReleaseApprovalDocument(approvalDocument)) {
+				result = false;
+			}
+			//출고요청번호와 결재번호 + 주문서 번호
+			if(!stockMapper.insertReleaseReq(orderNo)) {
+				result = false;
+			}
+			
+			//출고요청번호에 대한 결재 이력생성
+			if(!stockMapper.insertReleaseReqHistory()) {
+				result = false;
+			}
+		}
+		return false;
 	}
 
 	/* 요청목록 전체 조회 */
@@ -134,16 +174,25 @@ public class StockService {
 		return receivingReqList;
 	}
 	
-	
-	/* 선택한 요청문서 상세조회 */
-	@Transactional
-	public ReceivingReqDTO selectReceivingReqByNo(int reqNo) {
-
-		ReceivingReqDTO receivingReqInfo = stockMapper.selectReceivingReqByNo(reqNo);
-
-		return receivingReqInfo;
+	/* 입고요청서 번호 조회 */
+	public int findReceivingReqNo(int approvalNo) {
+		int receivingNo = stockMapper.selectReceivingNoByApprovalNo(approvalNo);
+		System.out.println("입고요청번호 : " + receivingNo);
+		
+		return receivingNo;
 	}
+	
+	/* 선택한 입고요청서 상세조회 */
+	@Transactional
+	public ReceivingReqDTO selectReceivingReqByNo(int approvalNo) {
 
+		/* 입고요청서 상세정보 조회 */
+		ReceivingReqDTO receivingInfo = stockMapper.selectReceivingReqByNo(approvalNo);
+		
+		System.out.println("@@@@" + receivingInfo);
+		
+		return receivingInfo;
+	}
 
 	/* 선택한 요청문서 상세정보중 요청상품 목록 */
 	@Transactional
@@ -151,6 +200,8 @@ public class StockService {
 
 		List<ReceivingReqDTO> receivingReqProductList = stockMapper.selectReceivingReqProductByReqNo(reqNo);
 
+		System.out.println(receivingReqProductList);
+		
 		return receivingReqProductList;
 	}
 
@@ -161,6 +212,8 @@ public class StockService {
 		LocalDateTime sysDateLocalDateTime = LocalDateTime.now();
 
 		String sysDate= sysDateLocalDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss"));
+		
+		System.out.println("@@@" + sysDate);
 
 		parameters.setDocumentProcessDate(sysDate);
 
@@ -168,9 +221,11 @@ public class StockService {
 
 		int modifyResult = stockMapper.modifyApprovalStatus(parameters);			// 결재상태 변경(결재 처리)
 
+		System.out.println("결재상태 변경 성공 여부 : " + modifyResult);
+		
 		if(modifyResult > 0 ) {
 
-			int hisResult = stockMapper.insertReceivingReqHistory(parameters);	//결재이력 INSERT 
+			int hisResult = stockMapper.insertReceivingReqHistoryParameter(parameters);	//결재이력 INSERT 
 
 			if(hisResult > 0) {
 
@@ -223,5 +278,15 @@ public class StockService {
 		
 		return order;
 	}
+
+	public ReceivingReqDTO selectReleaseInfo(int approvalNo) {
+	
+		ReceivingReqDTO releaseInfo = stockMapper.selectReleaseReqByNo(approvalNo);
+		
+		return releaseInfo;
+	}
+
+	
+	
 
 }

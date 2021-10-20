@@ -60,43 +60,44 @@
                            <table class="table align-items-center table-flush table-hover" id="receivingTable">
                               <thead align="center" class="thead-light">
                                  <tr>
-                                    <th>요청번호</th>
-                                    <th>요청분류</th>
+                                    <th hidden>요청번호</th>
                                     <th>결재문서번호</th>
+                                    <th>요청분류</th>
                                     <th>작성자</th>
                                     <th>처리상태</th>
                                     <th>요청일시</th>
                                     <th></th>
-                                    
                                  </tr>
                               </thead>
                               
                               <tbody align="center">
-                                 <tr th:each="receivingReqList : ${receivingReqList}">
-                                    <td th:text="${receivingReqList.receivingReqHistoryDTO.receivingReqNo}"></td>
-                                    <td th:text="${receivingReqList.ApprovalDocumentDTO.approvalDocumentType}"></td>
-                                    <td th:text="${receivingReqList.ApprovalDocumentDTO.approvalDocumentNo}"></td>
-                                    <td th:text="|${receivingReqList.ApprovalDocumentDTO.empNo} ${receivingReqList.ApprovalDocumentDTO.empName}|"></td>
-                                    <td th:switch="${receivingReqList.ApprovalDocumentDTO.documentStatus}">
+                                 <tr th:each="receivingReq : ${receivingReqList}">
+                                    <td th:text="${receivingReq.receivingReqNo}" hidden></td>
+                                    <td th:text="${receivingReq.ApprovalDocumentDTO.approvalDocumentNo}"></td>
+                                    <td th:text="${receivingReq.ApprovalDocumentDTO.approvalDocumentType}"></td>
+                                    <td th:text="|${receivingReq.ApprovalDocumentDTO.empNo} ${receivingReq.ApprovalDocumentDTO.empName}|"></td>
+                                    <td th:switch="${receivingReq.ApprovalDocumentDTO.documentStatus}">
                                        <span th:case="'승인'" class="badge badge-success"
-                                       		 th:text="${receivingReqList.ApprovalDocumentDTO.documentStatus}"></span>
+                                       		 th:text="${receivingReq.ApprovalDocumentDTO.documentStatus}"></span>
                                        <span th:case="'반려'" class="badge badge-danger"
-                                       		 th:text="${receivingReqList.ApprovalDocumentDTO.documentStatus}"></span>
+                                       		 th:text="${receivingReq.ApprovalDocumentDTO.documentStatus}"></span>
                                        <span th:case="'대기중'" class="badge badge-warning"
-                                       		 th:text="${receivingReqList.ApprovalDocumentDTO.documentStatus}"></span>
+                                       		 th:text="${receivingReq.ApprovalDocumentDTO.documentStatus}"></span>
                                     </td>
-                                    <td th:text="${receivingReqList.ApprovalDocumentDTO.documentWriteDate}"></td>
+                                    <td th:text="${receivingReq.ApprovalDocumentDTO.documentWriteDate}"></td>
                                     <td>
                                        <button class="btn btn-sm btn-dark btn-icon-split"
                                                id="detailInfoBtn" name="detailInfoBtn" 
-                                               data-toggle="modal"
-                                               data-target="#detailInfoBtnModal"
-                                               th:data-receiving-req-no="${receivingReqList.receivingReqHistoryDTO.receivingReqNo}"
-                                               th:data-receiving-req-type="${receivingReqList.ApprovalDocumentDTO.approvalDocumentType}">
+                                               th:data-order-no="${receivingReq.orderNo}"
+                                               th:data-approval-no="${receivingReq.ApprovalDocumentDTO.approvalDocumentNo}"
+                                               th:data-approval-type="${receivingReq.ApprovalDocumentDTO.approvalDocumentType}">
                                            <span class="icon text-white-50">
                                               <i class="fas fa-clipboard-list"></i></span>
                                            <span class="text text-white">상세정보</span>
                                        </button>
+                                    	<input id="buttonOrderNo" name="orderNo" th:value="${receivingReq.orderNo}" hidden>
+                                    	<input id="buttonApprovalNo" th:value="${receivingReq.ApprovalDocumentDTO.approvalDocumentNo}" hidden>
+                                    	<input id="buttonApprovalType" th:value="${receivingReq.ApprovalDocumentDTO.approvalDocumentType}" hidden>
                                     </td>
                                  </tr>
                               </tbody>
@@ -115,7 +116,7 @@
       </div>
    </div>
    
-   <!------------- 요청서결재 Modal --------------->
+   <!------------- 입고요청서결재 Modal --------------->
    <div class="modal fade" id="detailInfoBtnModal" role="dialog">
       <div class="modal-dialog modal-xl centered">
 
@@ -177,12 +178,132 @@
 								</div>
 								<div class="form-group row mb-4" th:align="right">
 									<div class="col-lg-5"></div>	
-										<label for="managerName" class="col-lg-2 col-form-label">담당자</label>
+										<label for="managerName" class="col-lg-2 col-form-label">결재담당자</label>
 										<input type="text" class="form-control col-lg-4"
 											   id="managerName" name="managerName" readonly>
 								</div>
 							</div>
 						</div>		<!-- End receivingReqInfo -->
+
+                        <!-- receivingReqProductList -->
+                        <div class="card mb-4" style="overflow-y: scroll; height: 300px;">
+							<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+								<h6 class="m-0 font-weight-bold text-primary" id="tableTitle">요청상품목록</h6>
+							</div>
+							<div class="table-responsible" style="margin-left: 3%; margin-right: 3%;" >
+								<table class="table align-items-center table-flush" id="receivingReqProductTable">
+									<thead class="thead-light" th:align="center">
+										<tr>
+											<th>No</th>
+											<th>상품번호</th>
+											<th>상품명</th>
+											<th>현재창고재고수량</th>
+											<th>단위</th>
+											<th>추가요청수량</th>
+											<th></th>
+										</tr>
+									</thead>
+									<tbody th:align="center">
+												
+									</tbody>
+								</table>
+							</div>
+						</div>		<!-- End receivingReqProductList -->
+
+					<div id="buttonArea" th:align="center">
+						<button type="button" id="approvalBtn" onclick="modifyApprovalStatus()" class="btn btn-primary mx-2">결재</button>
+						<button type="reset" id="modalCloseBtn" data-dismiss='modal' class="btn btn-outline-danger mx-2">취소</button>
+					</div>
+				</form>
+            </div>
+         </div>
+      </div>
+      <div id="count" value="1"></div>
+   </div>
+   
+    <!------------- 출고요청서결재 Modal --------------->
+   <div class="modal fade" id="releaseDetailInfoModal" role="dialog">
+      <div class="modal-dialog modal-xl centered">
+
+         <!-- Modal content-->
+         <div class="modal-content">
+
+            <div class="modal-body">
+               <form id="approvalReleaseForm" th:action="@{/stock/ApprovalStatus/modify}" method="post">
+                    <!-- OrderInfo -->
+						<div class="col-lg-12">
+							<div class="card mb-4" >
+								<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+									<h6 class="m-0 font-weight-bold text-primary" id="tableTitle">출고요청서 내용</h6>
+								</div>
+								<div class="card-body">
+									<div class="form-group row mb-2" th:align="right">
+										<label for="titleOrder" class="col-form-label col-lg-1">제목</label>
+										<input type="text" id="titleOrder" name="titleOrder" class="form-control col-lg-5" readonly>
+										<label for="approvalManager" class="col-form-label col-lg-2">작성자</label>
+										<input type="text" id="approvalManager" name="approvalManager" class="form-control col-lg-3" readonly>
+										<input type="hidden" class="form-control" id="releaseApprovalNo" name="releaseApprovalNo">
+									</div>
+									<div class="form-group row mb-2" th:align="right">
+										<label for="orderNo" class="col-form-label col-lg-1">주문번호</label>
+										<input type="text" id="orderNo" class="form-control col-lg-4" readonly>
+										<label for="writeDate" class="col-form-label col-lg-2">작성일</label>
+										<input type="text" id="writeDate" name="writeDate" class="form-control col-lg-4" readonly>
+									</div>
+									<div class="form-group row mb-2" th:align="right">
+										<label for="customerCompany" class="col-form-label col-lg-1">고객사</label>
+										<input type="text" id="customerCompany" class="form-control col-lg-4"
+												 readonly>
+										<label for="customerName" class="col-form-label col-lg-2">고객명</label>
+										<input type="text" id="customerName" class="form-control col-lg-4" 
+												 readonly>
+										<input type="hidden" class="form-control" id="customerNo" >
+									</div>
+									<div class="form-group row mb-2" th:align="right">
+										<label for="customerPhone" class="col-form-label col-lg-1">연락처</label>
+										<input type="text" class="form-control col-lg-4" id="customerPhone" name="customerPhone"
+												 readonly>
+										<input type="hidden" class="form-control" id="resEmpNo" >
+										<label for="paymentStatus" class="col-form-label col-lg-2">결제방법</label>
+										<input type="text" class="form-control col-lg-4" id="paymentStatus" name="paymentStatus"
+												 readonly>
+									</div>
+									<div class="form-group row mb-2" th:align="right">
+										<label for="customerAddress" class="col-form-label col-lg-1">주소</label>
+										<input type="text" class="form-control col-lg-4" id="customerAddress" name="customerAddress" readonly>
+										<label for="orderDueDate" class="col-form-label col-lg-2">납기요청일</label>
+										<input type="text" id="orderDueDate" class="form-control col-lg-4"readonly>
+									</div>
+									<div class="form-group row mt-4 col-xl-12">
+									<div class="col-lg-12">
+										<label>요청사유</label>
+										<textarea id="orderReason" class="form-control" name="orderReason" style="height: 40px; resize: none;" readonly></textarea>
+									</div>
+									</div>
+									<hr>
+									<div class="form-group row mb-2" th:align="right">
+									<div class="col-lg-1"></div>
+										<label for="customerAddress" class="col-form-label col-lg-1">결재상태</label>
+										<select class="form-control col-lg-2" id="approvalStatus" name="approvalStatus">
+											<option th:text="대기중"></option>
+											<option th:text="승인"></option>
+											<option th:text="반려"></option>
+										</select>
+										<div class="col-lg-1"></div>
+										<label for="orderDueDate" class="col-form-label col-lg-2">결재일</label>
+										<input type="text" id="orderDueDate" class="form-control col-lg-4"readonly>
+									</div>
+									<div class="form-group row mb-2" th:align="right">
+										<div class="col-lg-5"></div>
+										<label for="orderDueDate" class="col-form-label col-lg-2">결재담당자</label>
+										<input type="text" id="orderDueDate" class="form-control col-lg-4"readonly>
+									</div>
+								</div>
+							</div>
+							<!-- End OrderInfo -->
+							
+							
+						</div>
 
                         <!-- receivingReqProductList -->
                         <div class="card mb-4" style="overflow-y: scroll; height: 300px;">
@@ -238,90 +359,190 @@
       
       $('#dataTable').DataTable();       // ID From dataTable
       
-      $("#detailInfoBtn").click(function() {
-    	  console.log("sdsd")
+      
+      /* 상세보기 버튼 클릭 시 동작 */
+      $(document).on('click', 'button[name=detailInfoBtn]', function() {
+    	  
+    	 const orderNo = $(this).siblings().eq(0).val();
+  	 		console.log(orderNo);
+
+  	     const approvalNo = $(this).siblings().eq(1).val();
+  	 		console.log(approvalNo);
+  	 	
+  		 const approvalType = $(this).siblings().eq(2).val();
+  	  		console.log(approvalType); 
+  	  		
+  	  	 const request = {approvalNo:approvalNo, approvalType:approvalType, orderNo:orderNo}
+ 		
+ 		let queryString = '?' + $.param(request)	
+  	  	 
+     /* 입고요청서인 경우 동작 시작 */ 
+	 if(approvalType == "입고요청") {
+		 
+      $('#detailInfoBtnModal').modal();
+		 
+      console.log("요청타입이 입고요청이므로 입고요청관련 ajax동작시작");
+    	   
+      $.ajax({
+          url: "/stock/request/selectOne",
+    	  type: "POST",
+    	  data: {approvalNo:approvalNo, approvalType:approvalType, orderNo:orderNo},
+    	  success: function(data, status, xhr) {
+    	    	  			
+    	      const receivingReqInfo = JSON.parse(data.receivingReqInfo);
+    	      
+    	      console.table(receivingReqInfo);
+    	      const receivingReqProduct = JSON.parse(data.receivingReqProductList);
+    	      const authority = JSON.parse(data.authority);
+    	    	  			
+    	      console.log(authority);
+    	      console.log(receivingReqInfo.approvalDocumentDTO.approvalDocumentType);
+    	      console.log(receivingReqInfo.approvalDocumentDTO.documentWriteDate);
+    	      console.log(receivingReqInfo.receivingReqNo);
+    	      console.log(receivingReqInfo.approvalDocumentDTO.documentProcessDate);
+    	      console.log(receivingReqInfo.approvalDocumentDTO.managerName);
+    	    	  			
+    	      $('#approvalDocumentName').val(receivingReqInfo.approvalDocumentDTO.approvalDocumentName); 
+    	      $('#receivingReqNo').val(receivingReqInfo.receivingReqNo); 
+    	      $('#approvalDocumentNo').val(receivingReqInfo.approvalDocumentDTO.approvalDocumentNo);
+    	      $('#documentWriteDate').val(receivingReqInfo.approvalDocumentDTO.documentWriteDate);
+    	      $('#approvalStatus').val(receivingReqInfo.approvalDocumentDTO.documentStatus);
+    	      $('#empName').val(receivingReqInfo.approvalDocumentDTO.empName); 
+    	      $('#reqReason').val(receivingReqInfo.approvalDocumentDTO.reqReason); 
+    	      $('#documentProcessDate').val(receivingReqInfo.approvalDocumentDTO.documentProcessDate); 
+    	      $('#managerName').val(receivingReqInfo.approvalDocumentDTO.managerName); 
+    	    	  			
+    	      // 결재상태가 승인 or 반려 상태일경우 selectBox 변경 불가     
+    	      var statusOption = $('#approvalStatus').val();
+    	    	  		     
+    	      if(authority == "담당자") {
+    	    	  			 
+    	          if(statusOption != "대기중") {
+    	    	      $("#approvalStatus").not("option[value*='대기중']").prop('disabled',true);
+    	    	  	  $('#buttonArea').attr('hidden', true);
+    	    	  
+    	          } else {
+    	    	  	  $("#approvalStatus").not("option[value*='대기중']").prop('disabled',false);
+    	    	  	  $('#buttonArea').attr('hidden', false);
+    	          }
+    	      
+    	      } else {
+    	          $("#approvalStatus").not("option[value*='대기중']").prop('disabled',true);
+    	    	  $('#buttonArea').attr('hidden', true);
+    	      }
+    	    	  			
+    		  $('#receivingReqProductTable > tbody').html("");
+    							
+    	      for(let i = 0; i < receivingReqProduct.length; i++) {
+    	    	  				
+    	          for(let j = 0; j < receivingReqProduct[i].receivingReqProductList.length; j++) {
+    	    	  					
+    	    	      console.log(receivingReqProduct[i].receivingReqProductList[j].productName)
+    	    	  				
+    	    	      var no = i + 1;
+    	    	      var productName = receivingReqProduct[i].receivingReqProductList[j].productName;
+    	    	      var productNo = receivingReqProduct[i].receivingReqProductList[j].productNo;
+    	    	  	  var productStock = receivingReqProduct[i].receivingReqProductList[j].productStock;
+    	    	  	  var unit = receivingReqProduct[i].receivingReqProductList[j].unit;
+    	    	  	  var requestOrderStock = receivingReqProduct[i].receivingReqProductList[j].productAmount;
+    	    	  					
+    	    	  	  $('#receivingReqProductTable > tbody:last').append(
+    	    															 '<tr><td id="no" name="no">' + no + '</td>'
+    	    														   + '<td name="productNo">' + productNo + '</td>'
+    	    														   + '<td name="productName">' + productName + '</td>'
+    	    														   + '<td id="productStock" name="productStock">' + productStock + '</td>'
+    	    														   + '<td name="unit">' + unit	+ '</td>'
+    	    														   + '<td name="requestOrderStock">' + requestOrderStock + '</td>'
+    	    														   + '</tr>');
+    	    				}
+    	    	  		}		
+    	    	  	},
+    	    	  	error : function(xhr, status, error) {
+    					console.log(error);
+    				}
+    	      });
+      	 /* 출고요청서인 경우 동작 시작 */ 
+    	 } else if(approvalType == "출고요청") {
+    		
+    		 $('#releaseDetailInfoModal').modal();
+    		 
+    		 $.ajax({
+    	          url: "/stock/request/selectOne",
+    	    	  type: "POST",
+    	    	  data: {approvalNo: approvalNo, approvalType: approvalType, orderNo: orderNo},
+    	    	  success: function(data, status, xhr) {
+    	    	    	  			
+    	    	      const order = JSON.parse(data.order);
+    	    	      const releaseInfo = JSON.parse(data.releaseInfo);
+    	    	      const authority = JSON.parse(data.authority);
+    	    	    	  			
+    	    	      console.log(authority);
+    	    	      console.log(releaseInfo.approvalDocumentDTO.approvalDocumentName);
+    	    	      console.log(releaseInfo.approvalDocumentDTO.approvalDocumentNo);
+    	    	    	  			
+    	    	      $('#releaseApprovalNo').val(releaseInfo.approvalDocumentDTO.approvalDocumentNo); 
+    	    	      $('#titleOrder').val(releaseInfo.approvalDocumentDTO.approvalDocumentName); 
+    	    	      $('#approvalManager').val(releaseInfo.approvalDocumentDTO.empName); 
+    	    	      $('#orderNo').val(order.orderNo); 
+    	    	      $('#writeDate').val(releaseInfo.approvalDocumentDTO.documentWriteDate); 
+    	    	      $('#customerCompany').val(order.customer.company.companyName); 
+    	    	      
+    	    	    	  			
+    	    	      // 결재상태가 승인 or 반려 상태일경우 selectBox 변경 불가     
+    	    	      var statusOption = $('#approvalStatus').val();
+    	    	    	  		     
+    	    	      if(authority == "담당자") {
+    	    	    	  			 
+    	    	          if(statusOption != "대기중") {
+    	    	    	      $("#approvalStatus").not("option[value*='대기중']").prop('disabled',true);
+    	    	    	  	  $('#buttonArea').attr('hidden', true);
+    	    	    	  
+    	    	          } else {
+    	    	    	  	  $("#approvalStatus").not("option[value*='대기중']").prop('disabled',false);
+    	    	    	  	  $('#buttonArea').attr('hidden', false);
+    	    	          }
+    	    	      
+    	    	      } else {
+    	    	          $("#approvalStatus").not("option[value*='대기중']").prop('disabled',true);
+    	    	    	  $('#buttonArea').attr('hidden', true);
+    	    	      }
+    	    	    	  			
+    	    		  $('#receivingReqProductTable > tbody').html("");
+    	    							
+    	    	      for(let i = 0; i < receivingReqProduct.length; i++) {
+    	    	    	  				
+    	    	          for(let j = 0; j < receivingReqProduct[i].receivingReqProductList.length; j++) {
+    	    	    	  					
+    	    	    	      console.log(receivingReqProduct[i].receivingReqProductList[j].productName)
+    	    	    	  				
+    	    	    	      var no = i + 1;
+    	    	    	      var productName = receivingReqProduct[i].receivingReqProductList[j].productName;
+    	    	    	      var productNo = receivingReqProduct[i].receivingReqProductList[j].productNo;
+    	    	    	  	  var productStock = receivingReqProduct[i].receivingReqProductList[j].productStock;
+    	    	    	  	  var unit = receivingReqProduct[i].receivingReqProductList[j].unit;
+    	    	    	  	  var requestOrderStock = receivingReqProduct[i].receivingReqProductList[j].productAmount;
+    	    	    	  					
+    	    	    	  	  $('#receivingReqProductTable > tbody:last').append(
+    	    	    															 '<tr><td id="no" name="no">' + no + '</td>'
+    	    	    														   + '<td name="productNo">' + productNo + '</td>'
+    	    	    														   + '<td name="productName">' + productName + '</td>'
+    	    	    														   + '<td id="productStock" name="productStock">' + productStock + '</td>'
+    	    	    														   + '<td name="unit">' + unit	+ '</td>'
+    	    	    														   + '<td name="requestOrderStock">' + requestOrderStock + '</td>'
+    	    	    														   + '</tr>');
+    	    	    				}
+    	    	    	  		}		
+    	    	    	  	},
+    	    	    	  	error : function(xhr, status, error) {
+    	    					console.log(error);
+    	    				}
+    	    	      });
+    		 
+    	 }
+    	
       })
       
-      $('#detailInfoBtnModal').on('show.bs.modal', function(event) {   	 // 상세정보 버튼 눌렀을시 모달창 열리면서 동작
-    	 console.log()
-    	 const reqNo = $(event.relatedTarget).data('receiving-req-no');
-    	 	console.log(reqNo);
-    	 	
-    	 const reqType = $(event.relatedTarget).data('receiving-req-type');
-    	  	console.log(reqType); 
-    	  	
-    	  	$.ajax({
-    	  		url: "/stock/request/selectOne",
-    	  		type: "GET",
-    	  		data: {reqNo: reqNo},
-    	  		success: function(data, status, xhr) {
-    	  			
-    	  			const receivingReqInfo = JSON.parse(data.receivingReqInfo);
-    	  			const receivingReqProduct = JSON.parse(data.receivingReqProductList);
-    	  			const authority = JSON.parse(data.authority);
-    	  			
-    	  			console.log(authority);
-    	  			
-    	  			$('#approvalDocumentName').val(receivingReqInfo.approvalDocumentDTO.approvalDocumentName); 
-    	  			$('#approvalDocumentNo').val(receivingReqInfo.approvalDocumentDTO.approvalDocumentNo);
-    	  			$('#receivingReqNo').val(receivingReqInfo.receivingReqHistoryDTO.receivingReqNo);
-    	  			$('#documentWriteDate').val(receivingReqInfo.approvalDocumentDTO.documentWriteDate);
-    	  			$('#approvalStatus').val(receivingReqInfo.approvalDocumentDTO.documentStatus);
-    	  			$('#empName').val(receivingReqInfo.approvalDocumentDTO.empName); 
-    	  			$('#reqReason').val(receivingReqInfo.approvalDocumentDTO.reqReason); 
-    	  			$('#documentProcessDate').val(receivingReqInfo.approvalDocumentDTO.documentProcessDate); 
-    	  			$('#managerName').val(receivingReqInfo.approvalDocumentDTO.managerName); 
-    	  			
-    	  			 // 결재상태가 승인 or 반려 상태일경우 selectBox 변경 불가     
-    	  		        var statusOption = $('#approvalStatus').val();
-    	  		     
-						if(authority == "담당자") {
-    	  			 
-    	  		        	if(statusOption != "대기중") {
-    	  		           		$("#approvalStatus").not("option[value*='대기중']").prop('disabled',true);
-    	  		        		$('#buttonArea').attr('hidden', true);
-    	  		      		} else {
-    	  		        		$("#approvalStatus").not("option[value*='대기중']").prop('disabled',false);
-    	  		        		$('#buttonArea').attr('hidden', false);
-							}
-    	  		        } else {
-    	  		        	$("#approvalStatus").not("option[value*='대기중']").prop('disabled',true);
-    	  		        	$('#buttonArea').attr('hidden', true);
-    	  		        }
-    	  			
-						$('#receivingReqProductTable > tbody').html("");
-						
-    	  			for(let i = 0; i < receivingReqProduct.length; i++) {
-    	  				
-    	  				for(let j = 0; j < receivingReqProduct[i].receivingReqProductList.length; j++) {
-    	  					
-    	  				console.log(receivingReqProduct[i].receivingReqProductList[j].productName)
-    	  				
-    	  					var no = i + 1;
-    	  					var productName = receivingReqProduct[i].receivingReqProductList[j].productName;
-    	  					var productNo = receivingReqProduct[i].receivingReqProductList[j].productNo;
-    	  					var productStock = receivingReqProduct[i].receivingReqProductList[j].productStock;
-    	  					var unit = receivingReqProduct[i].receivingReqProductList[j].unit;
-    	  					var requestOrderStock = receivingReqProduct[i].receivingReqProductList[j].productAmount;
-    	  					
-    	  				$('#receivingReqProductTable > tbody:last').append(
-    							'<tr><td id="no" name="no">' + no + '</td>'
-    							+ '<td name="productNo">' + productNo + '</td>'
-    							+ '<td name="productName">' + productName + '</td>'
-    							+ '<td id="productStock" name="productStock">' + productStock + '</td>'
-    							+ '<td name="unit">' + unit	+ '</td>'
-    							+ '<td name="requestOrderStock">' + requestOrderStock + '</td>'
-    							+ '</tr>');
-    				}
-    	  		}		
-    	  			
-    	  			/* $('#buttonArea').attr('button', 'button') */
-    	  	},
-    	  	error : function(xhr, status, error) {
-				console.log(error);
-			}
-      });
-    });
+      
   });  
     
     // 모달창 닫기 X버튼 클릭시 동작 
@@ -360,37 +581,33 @@
 				
 				for(let index in receivingReqList) {
 					
-					let receivingReq = receivingReqList[index];
+					let approvalReq = receivingReqList[index];
 					
 					$tr = $("<tr>");
-					$receivingReqNoTd = $("<td>").text(receivingReq.receivingReqHistoryDTO.receivingReqNo);
-					$approvalDocumentTypeTd = $("<td>").text(receivingReq.approvalDocumentDTO.approvalDocumentType);
-					$approvalDocumentNoTd = $("<td>").text(receivingReq.approvalDocumentDTO.approvalDocumentNo);
-					$writerTd = $("<td>").text(receivingReq.approvalDocumentDTO.empNo + ' ' + receivingReq.approvalDocumentDTO.empName);
-					$badgeSpan = $("<span>").text(receivingReq.approvalDocumentDTO.documentStatus);
-					switch(receivingReq.approvalDocumentDTO.documentStatus) {
+					$approvalDocumentNoTd = $("<td>").text(approvalReq.approvalDocumentNo);
+					$approvalDocumentTypeTd = $("<td>").text(approvalReq.approvalDocumentDTO.approvalDocumentType);
+					$writerTd = $("<td>").text(approvalReq.approvalDocumentDTO.empNo + ' ' + approvalReq.approvalDocumentDTO.empName);
+					$badgeSpan = $("<span>").text(approvalReq.approvalDocumentDTO.documentStatus);
+					switch(approvalReq.approvalDocumentDTO.documentStatus) {
 						case '대기중' : $badgeSpan.addClass("badge badge-success"); break;
 						case '승인' : $badgeSpan.addClass("badge badge-info"); break;
 						case '반려' : $badgeSpan.addClass("badge badge-danger"); break;
 					}
 					$documentStatusTd = $("<td>").append($badgeSpan);
-					$documentWriteDateTd = $("<td>").text(receivingReq.approvalDocumentDTO.documentWriteDate);
+					$documentWriteDateTd = $("<td>").text(approvalReq.approvalDocumentDTO.documentWriteDate);
 					$btnIcon = $("<i>").addClass("fas fa-clipboard-list");
 					$btnIconSpan = $("<span>").addClass("icon text-white-50").append($btnIcon);
 					$btnTextSpan = $("<span>").addClass("text text-white").text("상세정보");
 					$detailBtn = $("<button>").addClass("btn btn-sm btn-dark btn-icon-split")
 											  .attr('id', 'detailInfoBtn')
-											  .attr('data-target', '#detailInfoBtnModal')
-											  .attr('data-toggle', 'modal')
-									          .attr("data-receiving-req-no", receivingReqList[index].receivingReqHistoryDTO.receivingReqNo)
-									          .attr("data-receiving-req-type", receivingReqList[index].approvalDocumentDTO.approvalDocumentType)
-								          	  .attr("name", "receivingReqDetailBtn").append($btnIconSpan).append($btnTextSpan);
+									          .attr("data-approval-no", approvalReq.approvalDocumentNo)
+									          .attr("data-order-no", approvalReq.orderNo)
+									          .attr("data-approval-type", approvalReq.approvalDocumentDTO.approvalDocumentType)
+								          	  .attr("name", "detailInfoBtn").append($btnIconSpan).append($btnTextSpan);
 					$detailTd = $("<td>").append($detailBtn);
-			
 					
-					$tr.append($receivingReqNoTd);
-					$tr.append($approvalDocumentTypeTd);
 					$tr.append($approvalDocumentNoTd);
+					$tr.append($approvalDocumentTypeTd);
 					$tr.append($writerTd);
 					$tr.append($documentStatusTd);
 					$tr.append($documentWriteDateTd);
@@ -405,11 +622,6 @@
 		});
     });
     
-    $(document).on("click", "button[name='receivingReqDetailBtn']", function() {
-		const receivingReqNo = $(this).parent().parent().children().eq(0).text();
-
-		$('#detailInfoBtnModal').modal();
-	});
 
  
 	// 결재 버튼 클릭시 동작

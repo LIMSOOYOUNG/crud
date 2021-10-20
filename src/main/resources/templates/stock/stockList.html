@@ -204,7 +204,7 @@ input {
 									<div class="form-group col-xl-12" >
 										<label for="orderTitle">요청서제목</label>
 										<input type="text" class="form-control" style="text-align: left;" 
-									      	   id="orderTitle" name="orderTitle" readonly>
+									      	   id="orderTitle" name="orderTitle">
 									</div>
 								</div>
 								<div class="form-group row mb-12" th:align="right">
@@ -298,8 +298,8 @@ input {
 							<div class="card mb-4" >
 								<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
 									<h6 class="m-0 font-weight-bold text-primary" id="tableTitle">출고요청서 내용</h6>
-									<button type="button" class="btn btn-info btn-icon-split" id="modifyOrderBtn">
-										
+									<button type="button" class="btn btn-info btn-icon-split" 
+											id="releaseReqBtn" onclick="releaseReq()">
 										<span class="icon text-white"><i class="fas fa-edit"></i></span>
 										<span class="text text-white">출고요청</span>
 									</button>
@@ -347,7 +347,7 @@ input {
 									</div>
 									<div class="form-group col-xl-12">
 										<label>요청사유</label>
-										<textarea id="orderReason" class="form-control" name="orderReason" style="height: 40px; resize: none;" required></textarea>
+										<textarea id="orderReason" class="form-control" name="orderReason" style="height: 40px; resize: none;" ></textarea>
 									</div>
 								</div>
 							</div>
@@ -687,7 +687,7 @@ input {
 			for(let i = 0; i < trLength; i++) {
 				const orderContent = $('#orderContent').val();
 				const orderCount = $('#orderProduct').find('tbody').find('input').eq(i).val();
-				const existProductNo = $('#orderProduct').find('tbody').find('#productNo').eq(i).text();
+				const existProductNo = $('#orderProduct').find('tbody').find('[name=productNo]').eq(i).text();
 				const orderTitle = $('#orderTitle').val();
 				
 				if(orderCount <= 0)
@@ -709,7 +709,7 @@ input {
 				success : function(data, status, xhr) {
 					if(data) {
 						alert("입고요청이 완료되었습니다.")
-						location.reload();
+						location.href="/stock/request/selectAll";
 					} else {
 						alert("오류가 발생하였습니다.")
 						location.reload();
@@ -830,7 +830,7 @@ input {
 					
 						console.table(orderProduct);
 						
-							let no = ++index;
+						let no = ++index;
 					$('#orderProductListTable > tbody:last').append(
 							'<tr><td name="count">' + no + '</td>'
 							+ '<td id="orderProductNo" name="orderProductNo">' + orderProduct.productNo + '</td>'
@@ -842,16 +842,62 @@ input {
 							+ '<td id="subtotal" name="subtotal">' + orderProduct.product.subtotal + '</td>'
 							+ '<td id="tax" name="tax">' + orderProduct.product.tax + '</td>'
 							+ '</tr>');
-					
 					}
 				},
 				error : function(xhr, status, error) {
 					console.log(error);
 				}
-				
 			});
-			
 		});
+		
+		/* 출고요청 버튼 눌렀을경우 동작 */
+		function releaseReq() {
+			const trLength = $('#orderProductListTable > tbody > tr').length;
+			
+			let request = [];
+			
+			for(let i = 0; i < trLength; i++) {
+				const orderNo = $('#orderNo').val();
+				const orderTitle = $('#titleOrder').val();
+				const managerNo = $('#approvalManager').val();
+				const orderReason = $('#orderReason').val();
+				const orderAmount = $('#orderProductListTable').find('tbody').find('[name=productAmount]').eq(i).text();
+				const existProductNo = $('#orderProductListTable').find('tbody').find('[name=orderProductNo]').eq(i).text();
+				
+				const data = {orderProductNo: existProductNo, productAmount: orderAmount, orderReason: orderReason, orderTitle: orderTitle, managerNo: managerNo, orderNo: orderNo};	
+				request.push(data);
+			}
+				if(trLength <= 0) {
+					return alert("출고요청 할 내용이 없습니다.")
+				}	
+			
+			console.log(request)
+			
+			if(confirm("출고요청을 하시겠습니까?")) {
+			
+		 	$.ajax({
+				url : "/stock/releaseProduct/insert",
+				type : "POST",
+				data : JSON.stringify(request),
+				contentType:"application/json;charset=UTF-8",
+				success : function(data, status, xhr) {
+					if(data) {
+						alert("출고요청이 완료되었습니다.")
+						location.href="/stock/request/selectAll";
+					} else {
+						alert("오류가 발생하였습니다.")
+						location.reload();
+					}
+				},
+				error : function(xhr, status, error) {
+					console.log(error);
+					alert("출고요청 실패!")
+				}
+			}); 
+		} else {
+			return false
+		}
+	}
 	</script>
 
 </body>
