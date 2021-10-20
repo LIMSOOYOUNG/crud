@@ -50,7 +50,7 @@ public class StockController {
 		this.adminEmployeeService = adminEmployeeService;
 	}
 
-	/* 창고보유(재고) 상품목록 전체 조회 */
+	/* 창고보유(재고) 상품목록 전체 조회 + 미완료 상태 주문서 전체 조회 */
 	@GetMapping("/selectAll")
 	public ModelAndView selectStockAll(ModelAndView mv, @AuthenticationPrincipal UserImpl userInfo) {
 		
@@ -70,6 +70,8 @@ public class StockController {
 		List<MemberDTO> managerList = adminEmployeeService.selectManagerList(deptCode);
 
 		System.out.println(managerList);
+		
+		System.out.println("@@@ 주문서목록 :  " + orderList);
 		
 		mv.addObject("managerList", managerList);
 		mv.addObject("orderList", orderList);
@@ -232,14 +234,23 @@ public class StockController {
 		/* 출고요청서인 경우 */
 		} else if(approvalType.equals("출고요청")) {
 			
-			ReceivingReqDTO releaseInfo = stockService.selectReleaseInfo(approvalNo);
-			OrderDTO order = orderService.selectOrderDetail(orderNo);
+			int releaseNo = stockService.selectReleaseNoByApprovalNo(approvalNo);		//출고요청번호 찾아옴
+			
+			System.out.println("출고요청서 번호 : " + releaseNo);
+			
+			ReceivingReqDTO releaseInfo = stockService.selectReleaseInfo(approvalNo);	//출고요청서 기본정보(결재문서관련)
+			releaseInfo.setReleaseReqNo(releaseNo);
+			
+			System.out.println("출고요청서 기본정보 : " + releaseInfo);
+			
+			OrderDTO order = orderService.selectOrderDetail(orderNo);					//출고요청서 상세정보(주문서정보 + 요청상품정보)
+			
 			mv.addObject("releaseInfo", objectMapper.writeValueAsString(releaseInfo));
 			mv.addObject("order", objectMapper.writeValueAsString(order));
 		}
 		
 		String authority = userInfo.getAuthority();
-		System.out.println(authority);
+		System.out.println("@@@ 권한 : " + authority);
 		System.out.println(receivingReqInfo);
 		System.out.println(receivingReqProductList);
 		
@@ -250,11 +261,13 @@ public class StockController {
 	}
 	
 	/* 선택한 입고 요청서 결재 처리*/
-	@PostMapping("ApprovalStatus/modify")
+	@PostMapping("approvalStatus/modify")
 	public ModelAndView modifyApprovalStatus(ModelAndView mv, RedirectAttributes rttr
 											, @ModelAttribute ApprovalModifyDTO parameters) {
 		
-		System.out.println("결재처리 컨트롤러로 이동");
+		System.out.println("입고요청서 결재처리 컨트롤러로 이동");
+		
+		System.out.println(parameters);
 		
 		boolean result = stockService.modifyApprovalStatus(parameters);
 	
@@ -269,6 +282,29 @@ public class StockController {
 		rttr.addFlashAttribute("message", message);
 		
 		mv.setViewName("redirect:/stock/request/selectAll");
+		return mv;
+	}
+	
+	/* 선택한 출고 요청서 결재 처리*/
+	@PostMapping("releaseStatus/modify")
+	public ModelAndView modifyReleaseStatus(ModelAndView mv, HttpServletResponse response,
+										@RequestBody ReceivingReqDTO parameters) {
+		
+		response.setContentType("application/json; charset=UTF-8");
+		
+		System.out.println("@@@출고요청서 결재처리 컨트롤러로 이동");
+		for(int i = 0; i < parameters.getReceivingReqProductList().size(); i++) {
+			System.out.println("상품번호 : " +parameters.getReceivingReqProductList().get(i).getProductNo());
+			System.out.println("상품재고 수량" + parameters.getReceivingReqProductList().get(i).getProductStock());
+			System.out.println("출고요청 수량" + parameters.getReceivingReqProductList().get(i).getProductAmount());
+			
+		}			
+		
+		boolean result = stockService.modifyReleaseStatus(parameters);
+	
+		mv.addObject("result", result);
+		mv.setViewName("jsonView");
+		
 		return mv;
 	}
 	

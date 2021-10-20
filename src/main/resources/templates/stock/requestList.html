@@ -77,7 +77,7 @@
                                     <td th:text="${receivingReq.ApprovalDocumentDTO.approvalDocumentType}"></td>
                                     <td th:text="|${receivingReq.ApprovalDocumentDTO.empNo} ${receivingReq.ApprovalDocumentDTO.empName}|"></td>
                                     <td th:switch="${receivingReq.ApprovalDocumentDTO.documentStatus}">
-                                       <span th:case="'승인'" class="badge badge-success"
+                                       <span th:case="'승인'" class="badge badge-info"
                                        		 th:text="${receivingReq.ApprovalDocumentDTO.documentStatus}"></span>
                                        <span th:case="'반려'" class="badge badge-danger"
                                        		 th:text="${receivingReq.ApprovalDocumentDTO.documentStatus}"></span>
@@ -124,7 +124,7 @@
          <div class="modal-content">
 
             <div class="modal-body">
-               <form id="approvalForm" th:action="@{/stock/ApprovalStatus/modify}" method="post">
+               <form id="approvalForm" th:action="@{/stock/approvalStatus/modify}" method="post">
                     <!-- receivingReqInfo -->
                     <div class="card mb-4">
 						<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
@@ -166,7 +166,7 @@
 								<div class="form-group row mb-2" th:align="left">
 									<div class="col-lg-2"></div>	
 										<label for="approvalStatus" class="col-lg-1 col-form-label">결재상태</label>
-										<select class="form-control col-lg-2" id="approvalStatus" name="approvalStatus">
+										<select class="form-control col-lg-2" id="approvalStatus" name="documentStatus">
 											<option th:text="대기중"></option>
 											<option th:text="승인"></option>
 											<option th:text="반려"></option>
@@ -211,7 +211,7 @@
 						</div>		<!-- End receivingReqProductList -->
 
 					<div id="buttonArea" th:align="center">
-						<button type="button" id="approvalBtn" onclick="modifyApprovalStatus()" class="btn btn-primary mx-2">결재</button>
+						<button type="button" id="approvalBtn" name="approvalBtn" class="btn btn-primary mx-2">결재</button>
 						<button type="reset" id="modalCloseBtn" data-dismiss='modal' class="btn btn-outline-danger mx-2">취소</button>
 					</div>
 				</form>
@@ -229,7 +229,6 @@
          <div class="modal-content">
 
             <div class="modal-body">
-               <form id="approvalReleaseForm" th:action="@{/stock/ApprovalStatus/modify}" method="post">
                     <!-- OrderInfo -->
 						<div class="col-lg-12">
 							<div class="card mb-4" >
@@ -239,16 +238,17 @@
 								<div class="card-body">
 									<div class="form-group row mb-2" th:align="right">
 										<label for="titleOrder" class="col-form-label col-lg-1">제목</label>
-										<input type="text" id="titleOrder" name="titleOrder" class="form-control col-lg-5" readonly>
-										<label for="approvalManager" class="col-form-label col-lg-2">작성자</label>
-										<input type="text" id="approvalManager" name="approvalManager" class="form-control col-lg-3" readonly>
-										<input type="hidden" class="form-control" id="releaseApprovalNo" name="releaseApprovalNo">
+										<input type="text" id="titleOrder" name="approvalDocumentName" class="form-control col-lg-5" readonly>
+										<label for="releaseEmpName" class="col-form-label col-lg-2">작성자</label>
+										<input type="text" id="releaseEmpName" name="empName" class="form-control col-lg-3" readonly>
+										<input type="hidden" class="form-control" id="releaseApprovalNo" name="approvalDocumentNo">
 									</div>
 									<div class="form-group row mb-2" th:align="right">
 										<label for="orderNo" class="col-form-label col-lg-1">주문번호</label>
-										<input type="text" id="orderNo" class="form-control col-lg-4" readonly>
+										<input type="text" id="orderNo" name="orderNo" class="form-control col-lg-4" readonly>
+										<input type="hidden" id="releaseReqNo" name="releaseReqNo" class="form-control col-lg-4">
 										<label for="writeDate" class="col-form-label col-lg-2">작성일</label>
-										<input type="text" id="writeDate" name="writeDate" class="form-control col-lg-4" readonly>
+										<input type="text" id="writeDate" name="documentWriteDate" class="form-control col-lg-4" readonly>
 									</div>
 									<div class="form-group row mb-2" th:align="right">
 										<label for="customerCompany" class="col-form-label col-lg-1">고객사</label>
@@ -277,26 +277,27 @@
 									<div class="form-group row mt-4 col-xl-12">
 									<div class="col-lg-12">
 										<label>요청사유</label>
-										<textarea id="orderReason" class="form-control" name="orderReason" style="height: 40px; resize: none;" readonly></textarea>
+										<textarea id="orderReason" class="form-control" name="reqReason" style="height: 40px; resize: none;" readonly></textarea>
 									</div>
 									</div>
 									<hr>
 									<div class="form-group row mb-2" th:align="right">
 									<div class="col-lg-1"></div>
-										<label for="customerAddress" class="col-form-label col-lg-1">결재상태</label>
-										<select class="form-control col-lg-2" id="approvalStatus" name="approvalStatus">
-											<option th:text="대기중"></option>
-											<option th:text="승인"></option>
-											<option th:text="반려"></option>
+										<label for="releaseStatus" class="col-form-label col-lg-1">결재상태</label>
+										<select class="form-control col-lg-2" id="releaseStatus" name="documentStatus">
+											<option th:text="대기중" th:value="대기중"></option>
+											<option th:text="승인" th:value="승인"></option>
+											<option th:text="반려" th:value="반려"></option>
 										</select>
 										<div class="col-lg-1"></div>
-										<label for="orderDueDate" class="col-form-label col-lg-2">결재일</label>
-										<input type="text" id="orderDueDate" class="form-control col-lg-4"readonly>
+										<label for="processDate" class="col-form-label col-lg-2">결재일</label>
+										<input type="text" id="processDate" name="documentProcessDate" class="form-control col-lg-4"readonly>
 									</div>
 									<div class="form-group row mb-2" th:align="right">
 										<div class="col-lg-5"></div>
-										<label for="orderDueDate" class="col-form-label col-lg-2">결재담당자</label>
-										<input type="text" id="orderDueDate" class="form-control col-lg-4"readonly>
+										<label for="releaseApprovalManagerName" class="col-form-label col-lg-2">결재담당자</label>
+										<input type="text" id="releaseApprovalManagerName" name="managerName" class="form-control col-lg-4"readonly>
+										<input type="hidden" id="releaseApprovalManagerNo" name="managerNo" class="form-control col-lg-4"readonly>
 									</div>
 								</div>
 							</div>
@@ -311,7 +312,7 @@
 								<h6 class="m-0 font-weight-bold text-primary" id="tableTitle">요청상품목록</h6>
 							</div>
 							<div class="table-responsible" style="margin-left: 3%; margin-right: 3%;" >
-								<table class="table align-items-center table-flush" id="receivingReqProductTable">
+								<table class="table align-items-center table-flush" id="releaseReqProductTable">
 									<thead class="thead-light" th:align="center">
 										<tr>
 											<th>No</th>
@@ -330,11 +331,10 @@
 							</div>
 						</div>		<!-- End receivingReqProductList -->
 
-					<div id="buttonArea" th:align="center">
-						<button type="button" id="approvalBtn" onclick="modifyApprovalStatus()" class="btn btn-primary mx-2">결재</button>
-						<button type="reset" id="modalCloseBtn" data-dismiss='modal' class="btn btn-outline-danger mx-2">취소</button>
+					<div id="releasebuttonArea" th:align="center">
+						<button type="button" id="releaseBtn" name="releaseBtn" class="btn btn-primary mx-2">결재</button>
+						<button type="reset" id="releaselBtnModalCloseBtn" data-dismiss='modal' class="btn btn-outline-danger mx-2">취소</button>
 					</div>
-				</form>
             </div>
          </div>
       </div>
@@ -371,10 +371,6 @@
   	 	
   		 const approvalType = $(this).siblings().eq(2).val();
   	  		console.log(approvalType); 
-  	  		
-  	  	 const request = {approvalNo:approvalNo, approvalType:approvalType, orderNo:orderNo}
- 		
- 		let queryString = '?' + $.param(request)	
   	  	 
      /* 입고요청서인 경우 동작 시작 */ 
 	 if(approvalType == "입고요청") {
@@ -390,17 +386,8 @@
     	  success: function(data, status, xhr) {
     	    	  			
     	      const receivingReqInfo = JSON.parse(data.receivingReqInfo);
-    	      
-    	      console.table(receivingReqInfo);
     	      const receivingReqProduct = JSON.parse(data.receivingReqProductList);
     	      const authority = JSON.parse(data.authority);
-    	    	  			
-    	      console.log(authority);
-    	      console.log(receivingReqInfo.approvalDocumentDTO.approvalDocumentType);
-    	      console.log(receivingReqInfo.approvalDocumentDTO.documentWriteDate);
-    	      console.log(receivingReqInfo.receivingReqNo);
-    	      console.log(receivingReqInfo.approvalDocumentDTO.documentProcessDate);
-    	      console.log(receivingReqInfo.approvalDocumentDTO.managerName);
     	    	  			
     	      $('#approvalDocumentName').val(receivingReqInfo.approvalDocumentDTO.approvalDocumentName); 
     	      $('#receivingReqNo').val(receivingReqInfo.receivingReqNo); 
@@ -464,6 +451,7 @@
       	 /* 출고요청서인 경우 동작 시작 */ 
     	 } else if(approvalType == "출고요청") {
     		
+    		 
     		 $('#releaseDetailInfoModal').modal();
     		 
     		 $.ajax({
@@ -472,65 +460,77 @@
     	    	  data: {approvalNo: approvalNo, approvalType: approvalType, orderNo: orderNo},
     	    	  success: function(data, status, xhr) {
     	    	    	  			
+    	    		  console.log("ajax 다녀옴")
+    	    		  
     	    	      const order = JSON.parse(data.order);
     	    	      const releaseInfo = JSON.parse(data.releaseInfo);
     	    	      const authority = JSON.parse(data.authority);
     	    	    	  			
     	    	      console.log(authority);
-    	    	      console.log(releaseInfo.approvalDocumentDTO.approvalDocumentName);
-    	    	      console.log(releaseInfo.approvalDocumentDTO.approvalDocumentNo);
+    	    	      console.log("결재문서 번호 :" + releaseInfo.approvalDocumentNo);
+    	    	      console.log("출고요청서 번호 :" + releaseInfo.releaseReqNo);
+    	    	      console.log("결재 담당자 이름 :" + releaseInfo.approvalDocumentDTO.managerName);
+    	    	      console.log("결재 상태 :" + releaseInfo.approvalDocumentDTO.documentStatus);
     	    	    	  			
-    	    	      $('#releaseApprovalNo').val(releaseInfo.approvalDocumentDTO.approvalDocumentNo); 
+    	    	      $('#releaseApprovalNo').val(releaseInfo.approvalDocumentNo);
+    	    	      $('#releaseReqNo').val(releaseInfo.releaseReqNo); 
     	    	      $('#titleOrder').val(releaseInfo.approvalDocumentDTO.approvalDocumentName); 
-    	    	      $('#approvalManager').val(releaseInfo.approvalDocumentDTO.empName); 
+    	    	      $('#releaseEmpName').val(releaseInfo.approvalDocumentDTO.empName); 
     	    	      $('#orderNo').val(order.orderNo); 
     	    	      $('#writeDate').val(releaseInfo.approvalDocumentDTO.documentWriteDate); 
     	    	      $('#customerCompany').val(order.customer.company.companyName); 
+    	    	      $('#customerName').val(order.customer.customerName); 
+    	    	      $('#customerPhone').val(order.customer.customerPhone); 
+    	    	      $('#paymentStatus').val(order.paymentStatus); 
+    	    	      $('#customerAddress').val(order.customer.customerAddress); 
+    	    	      $('#orderDueDate').val(order.dueDate); 
+    	    	      $('#processDate').val(releaseInfo.approvalDocumentDTO.documentProcessDate); 
+    	    	      $('#orderReason').val(releaseInfo.approvalDocumentDTO.reqReason); 
+    	    	      $('#releaseStatus').val(releaseInfo.approvalDocumentDTO.documentStatus); 
+    	    	      $('#releaseApprovalManagerName').val(releaseInfo.approvalDocumentDTO.managerName); 
     	    	      
     	    	    	  			
     	    	      // 결재상태가 승인 or 반려 상태일경우 selectBox 변경 불가     
-    	    	      var statusOption = $('#approvalStatus').val();
+    	    	      var statusOption = $('#releaseStatus').val();
     	    	    	  		     
     	    	      if(authority == "담당자") {
     	    	    	  			 
     	    	          if(statusOption != "대기중") {
-    	    	    	      $("#approvalStatus").not("option[value*='대기중']").prop('disabled',true);
-    	    	    	  	  $('#buttonArea').attr('hidden', true);
+    	    	    	      $("#releaseStatus").not("option[value*='대기중']").prop('disabled',true);
+    	    	    	  	  $('#releaseBtn').attr('hidden', true);
     	    	    	  
     	    	          } else {
-    	    	    	  	  $("#approvalStatus").not("option[value*='대기중']").prop('disabled',false);
-    	    	    	  	  $('#buttonArea').attr('hidden', false);
+    	    	    	  	  $("#releaseStatus").not("option[value*='대기중']").prop('disabled',false);
+    	    	    	  	  $('#releaselBtn').attr('hidden', false);
     	    	          }
     	    	      
     	    	      } else {
-    	    	          $("#approvalStatus").not("option[value*='대기중']").prop('disabled',true);
-    	    	    	  $('#buttonArea').attr('hidden', true);
+    	    	          $("#releaseStatus").not("option[value*='대기중']").prop('disabled',true);
+    	    	    	  $('#releaseBtn').attr('hidden', true);
     	    	      }
     	    	    	  			
-    	    		  $('#receivingReqProductTable > tbody').html("");
-    	    							
-    	    	      for(let i = 0; i < receivingReqProduct.length; i++) {
+    	    		  $('#releaseReqProductTable > tbody').html("");
+    	    		  
+    	    	      for(let i = 0; i < order.orderProductList.length; i++) {
     	    	    	  				
-    	    	          for(let j = 0; j < receivingReqProduct[i].receivingReqProductList.length; j++) {
     	    	    	  					
-    	    	    	      console.log(receivingReqProduct[i].receivingReqProductList[j].productName)
+    	    	    	      console.log(order.orderProductList[i].product.productName)
     	    	    	  				
     	    	    	      var no = i + 1;
-    	    	    	      var productName = receivingReqProduct[i].receivingReqProductList[j].productName;
-    	    	    	      var productNo = receivingReqProduct[i].receivingReqProductList[j].productNo;
-    	    	    	  	  var productStock = receivingReqProduct[i].receivingReqProductList[j].productStock;
-    	    	    	  	  var unit = receivingReqProduct[i].receivingReqProductList[j].unit;
-    	    	    	  	  var requestOrderStock = receivingReqProduct[i].receivingReqProductList[j].productAmount;
+    	    	    	      var productName = order.orderProductList[i].product.productName;
+    	    	    	      var productNo = order.orderProductList[i].product.productNo;
+    	    	    	  	  var productStock = order.orderProductList[i].productStock;
+    	    	    	  	  var unit = order.orderProductList[i].product.unit;
+    	    	    	  	  var requestOrderStock = order.orderProductList[i].productAmount;
     	    	    	  					
-    	    	    	  	  $('#receivingReqProductTable > tbody:last').append(
-    	    	    															 '<tr><td id="no" name="no">' + no + '</td>'
-    	    	    														   + '<td name="productNo">' + productNo + '</td>'
-    	    	    														   + '<td name="productName">' + productName + '</td>'
-    	    	    														   + '<td id="productStock" name="productStock">' + productStock + '</td>'
-    	    	    														   + '<td name="unit">' + unit	+ '</td>'
-    	    	    														   + '<td name="requestOrderStock">' + requestOrderStock + '</td>'
+    	    	    	  	  $('#releaseReqProductTable > tbody:last').append(
+    	    	    															 '<tr><td id="no" name="number">' + no + '</td>'
+    	    	    														   + '<td id="releaseProductNo" name="releaseProductNo">' + productNo + '</td>'
+    	    	    														   + '<td id="releaseProductName">' + productName + '</td>'
+    	    	    														   + '<td id="releaseProductStock" name="releaseProductStock">' + productStock + '</td>'
+    	    	    														   + '<td id="productUnit">' + unit	+ '</td>'
+    	    	    														   + '<td id="releaseProductAmount" name="releaseProductAmount">' + requestOrderStock + '</td>'
     	    	    														   + '</tr>');
-    	    	    				}
     	    	    	  		}		
     	    	    	  	},
     	    	    	  	error : function(xhr, status, error) {
@@ -589,7 +589,7 @@
 					$writerTd = $("<td>").text(approvalReq.approvalDocumentDTO.empNo + ' ' + approvalReq.approvalDocumentDTO.empName);
 					$badgeSpan = $("<span>").text(approvalReq.approvalDocumentDTO.documentStatus);
 					switch(approvalReq.approvalDocumentDTO.documentStatus) {
-						case '대기중' : $badgeSpan.addClass("badge badge-success"); break;
+						case '대기중' : $badgeSpan.addClass("badge badge-warning"); break;
 						case '승인' : $badgeSpan.addClass("badge badge-info"); break;
 						case '반려' : $badgeSpan.addClass("badge badge-danger"); break;
 					}
@@ -606,6 +606,14 @@
 								          	  .attr("name", "detailInfoBtn").append($btnIconSpan).append($btnTextSpan);
 					$detailTd = $("<td>").append($detailBtn);
 					
+					$input1 = $('<input>').val(approvalReq.orderNo).attr("hidden", true).attr("id", "buttonOrderNo")
+					$input2 = $('<input>').val(approvalReq.approvalDocumentNo).attr("hidden", true).attr("id", "buttonApprovalNo")
+					$input3 = $('<input>').val(approvalReq.approvalDocumentDTO.approvalDocumentType).attr("hidden", true).attr("id", "buttonApprovalType")
+					
+					$detailTd.append($input1);
+					$detailTd.append($input2);
+					$detailTd.append($input3);
+					
 					$tr.append($approvalDocumentNoTd);
 					$tr.append($approvalDocumentTypeTd);
 					$tr.append($writerTd);
@@ -621,11 +629,9 @@
 			}
 		});
     });
-    
-
  
-	// 결재 버튼 클릭시 동작
- 	function modifyApprovalStatus() {
+	// 입고요청 결재 버튼 클릭시 동작
+ 	 $(document).on('click', '[name=approvalBtn]', function() {
  		
  		let valueStatus = true;
  		const approvalStatus = $('#approvalStatus').val();
@@ -652,8 +658,77 @@
  			
  		alert("결재처리 실패");
  		}
+ 	});
+	
+ 	// 출고요청 결재 버튼 클릭시 동작
+ 	 $(document).on('click', "[name=releaseBtn]", function() {
  		
- 	}
+ 		
+ 		const approvalDocumentNo = $('#releaseApprovalNo').val();
+ 		const releaseReqNo = $('#releaseReqNo').val();
+ 		const orderNo = $('#orderNo').val();
+ 		const documentStatus = $('#releaseStatus').val();
+ 		
+ 		const productList = [];
+ 		
+ 		const productCount = $('#releaseReqProductTable > tbody > tr').length;
+ 		
+ 		for(let i = 0; i < productCount; i++) {
+ 			
+ 		const productNo = $('[name=releaseProductNo]').eq(i).text();
+ 		const productStock = $('[name=releaseProductStock]').eq(i).text();
+ 		const productAmount = $('[name=releaseProductAmount]').eq(i).text();
+ 		console.log(productNo)
+ 		productList.push({productNo, productStock, productAmount})
+ 		}
+ 		
+ 		const request = { approvalDocumentNo: approvalDocumentNo, releaseReqNo: releaseReqNo,
+ 						orderNo: orderNo, approvalDocumentDTO: {documentStatus: documentStatus},
+ 						receivingReqProductList: productList
+ 						}
+ 		
+ 		console.log(request);
+ 		
+ 		let valueStatus = true;
+ 		
+ 		if(documentStatus == "대기중") {
+ 			alert("결재상태를 변경해 주세요")
+ 			valueStatus = false;
+ 			return;
+ 		} else if(!confirm("결재상태를 \n" + "[" + releaseStatus + "]" + " 상태로 변경하시겠습니까? \n"
+ 							+ "(※ 결재처리 시 상태 재변경이 불가능합니다.)")){
+ 			valueStatus = false;
+ 			return;
+ 		}
+ 		
+ 		if(valueStatus) {
+ 		console.log("출고요청서 결재상태변경 Ajax 실행" + valueStatus);
+ 		
+ 		$.ajax({
+ 	         url: "/stock/releaseStatus/modify",
+ 	    	 type: "POST",
+ 	    	 contentType: 'application/json',
+ 	    	 data: JSON.stringify(request),
+ 	    	 success: function(data, status, xhr) {	
+ 	    		if(data) {
+					alert("출고요청서 결재를 완료했습니다.")
+					location.reload();
+				} else {
+					alert("출고요청서 결재 실패!!")
+					location.reload();
+				}
+ 	    	 },
+ 			 error : function(xhr, status, error) {
+					console.log(error);
+			 }
+ 		}) 
+ 		
+ 		} else {
+ 			
+ 		alert("결재처리 실패");
+ 		}
+ 	});
+ 
  
   </script>
 </body>

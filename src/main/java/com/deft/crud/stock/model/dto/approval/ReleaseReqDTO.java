@@ -14,6 +14,7 @@ import lombok.ToString;
 public class ReleaseReqDTO {
 
 	private int approvalNo;
+	private int releaseReqNo;
 	private String approvalType;
 	private String orderNo;
 }

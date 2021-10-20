@@ -20,6 +20,7 @@ public class OrderProductDTO implements Serializable {
 	private String orderNo;
 	private int productNo;
 	private int productAmount;
+	private int productStock;
 	
 	private ProductDTO product;
 }

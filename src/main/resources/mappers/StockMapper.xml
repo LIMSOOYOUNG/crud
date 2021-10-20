@@ -70,17 +70,17 @@
   <!-- 입고요청서 DTO  -->
     <resultMap type="com.deft.crud.stock.model.dto.approval.ReceivingReqDTO" id="receivingReqResultMap">
         <id property="receivingReqNo" column="RECEIVING_REQ_NO"/>
-        <result property="approvalDocumentNo" column="APPROVAL_DOCUMENT_NO"/>
+        <id property="releaseReqNo" column="RELEASE_REQ_NO"/>
+        <id property="approvalDocumentNo" column="APPROVAL_DOCUMENT_NO"/>
         <result property="orderNo" column="ORDER_NO" />
 
-
-        <association property="approvalDocumentDTO" resultMap="aoorovalDocumentResultMap"/>
+        <association property="approvalDocumentDTO" resultMap="approvalDocumentResultMap"/>
         <association property="receivingReqHistoryDTO" resultMap="receivingReqHistoryResultMap"/>   
         <collection property="receivingReqProductList" resultMap="receivingReqProductListResultMap"/>   
     </resultMap>
    
    <!-- 결재문서 DTO -->
-    <resultMap type="com.deft.crud.stock.model.dto.approval.ApprovalDocumentDTO" id="aoorovalDocumentResultMap">
+    <resultMap type="com.deft.crud.stock.model.dto.approval.ApprovalDocumentDTO" id="approvalDocumentResultMap">
         <id property="approvalDocumentNo" column="APPROVAL_DOCUMENT_NO"/>
         <result property="approvalDocumentType" column="APPROVAL_DOCUMENT_TYPE" />
         <result property="approvalDocumentName" column="APPROVAL_DOCUMENT_NAME" />
@@ -98,7 +98,7 @@
     <resultMap type="com.deft.crud.stock.model.dto.approval.ReceivingReqHistoryDTO" id="receivingReqHistoryResultMap">
         <id property="receivingReqHisNo" column="RECEIVING_REQ_HIS_NO"/>
         <result property="documentProcessDate" column="DOCUMENT_PROCESS_DATE" />
-        <result property="approvalStatus" column="APPROVAL_STATUS" />
+        <result property="documentStatus" column="DOCUMENT_STATUS" />
         <result property="receivingReqNo" column="RECEIVING_REQ_NO" />
     </resultMap>
      
@@ -111,27 +111,6 @@
         <result property="unit" column="UNIT" />
         <result property="productName" column="PRODUCT_NAME" />
     </resultMap> 
-     
-	<!-- 출고요청서 DTO -->
-	
-	<resultMap type="com.deft.crud.stock.model.dto.RequestReleaseDTO" id="requestReleaseResultMap">
-	<id property="orderNo" column="ORDER_NO"/>
-	<result property="orderProductNo" column="PRODUCT_NO" />
-	<result property="empNo" column="EMP_NO" />
-	<result property="productAmount" column="PRODUCT_AMOUNT" />
-	<result property="orderReason" column="REQ_REASON" />
-	<result property="orderTitle" column="APPROVAL_DOCUMENT_NAME" />
-	<result property="managerNo" column="MANAGER_NO" />
-	</resultMap>
-	
-	<!-- ReleaseReqDTO -->
-	<resultMap type="com.deft.crud.stock.model.dto.approval.ReleaseReqDTO" id="ReleaseReqDTOResultMap">
-	<id property="releaseNo" column="RELEASE_REQ_NO" />
-	<result property="orderNo" column="ORDER_NO" />
-	</resultMap>
-	<!-- 출고요청 상품 DTO -->
-
-
    
    <!-- 창고에 보관중인 상품리스트 조회 -->
    <select id="selectStorageAll" resultMap="storageResultMap">
@@ -318,7 +297,7 @@
         (
           RECEIVING_REQ_HIS_NO
         , DOCUMENT_PROCESS_DATE
-        , APPROVAL_STATUS
+        , DOCUMET_STATUS
         , RECEIVING_REQ_NO  
         )
         VALUES
@@ -452,12 +431,14 @@
            , A.EMP_NO
            , E.EMP_NAME
            , A.MANAGER_NO
+           , M.EMP_NAME MANAGER_NAME
            , A.DOCUMENT_WRITE_DATE
            , A.DOCUMENT_STATUS
            , Q.ORDER_NO
            , Q.RELEASE_REQ_NO
         FROM TBL_APPROVAL_DOCUMENT A
         LEFT JOIN TBL_EMP_INFO E ON (A.EMP_NO = E.EMP_NO)
+        LEFT JOIN TBL_EMP_INFO M ON (A.MANAGER_NO = M.EMP_NO)
         LEFT JOIN TBL_RELEASE_REQ Q ON(A.APPROVAL_DOCUMENT_NO = Q.APPROVAL_DOCUMENT_NO)
        WHERE A.APPROVAL_DOCUMENT_NO = #{ approvalNo }  
    </select>
@@ -480,29 +461,69 @@
    <update id="modifyApprovalStatus" parameterType="com.deft.crud.stock.model.dto.approval.ApprovalModifyDTO">
        UPDATE /* com.deft.crud.stock.model.dao.StockMapper#modifyApprovalStatus() */
               TBL_APPROVAL_DOCUMENT A
-          SET A.DOCUMENT_STATUS = #{ approvalStatus }
+          SET A.DOCUMENT_STATUS = #{ documentStatus }
            , A.DOCUMENT_PROCESS_DATE = TO_DATE(#{ documentProcessDate }, 'YYYY-MM-DD HH24:MI:SS')
        WHERE A.APPROVAL_DOCUMENT_NO = #{ approvalDocumentNo }   
    </update>
    
-   <!-- 결재처리 후 결재이력 생성 -->
+   <!-- 입고요청서 결재처리 후 결재이력 생성 -->
    <insert id="insertReceivingReqHistoryParameter" parameterType="com.deft.crud.stock.model.dto.approval.ApprovalModifyDTO">
       INSERT /* com.deft.crud.stock.model.dao.StockMapper#insertReceivingReqHistory() */
         INTO TBL_RECEIVING_REQ_HIS A
         (
           A.RECEIVING_REQ_HIS_NO
         , A.DOCUMENT_PROCESS_DATE 
-        , A.APPROVAL_STATUS 
+        , A.DOCUMENT_STATUS 
         , A.RECEIVING_REQ_NO 
         )
         VALUES
         (
           SEQ_RECEIVING_REQ_HIS_NO.NEXTVAL
         , TO_DATE(#{ documentProcessDate }, 'YYYY-MM-DD HH24:MI:SS')
-        , #{ approvalStatus } 
+        , #{ documentStatus } 
         , #{ receivingReqNo }  
         )
    </insert>
+   
+   <!-- 출고 요청서 결재 상태 변경(결재처리) -->
+   <update id="modifyReleaseStatus" parameterType="com.deft.crud.stock.model.dto.approval.ReceivingReqDTO">
+       UPDATE /* com.deft.crud.stock.model.dao.StockMapper#modifyReleaseStatus() */
+              TBL_APPROVAL_DOCUMENT A
+          SET A.DOCUMENT_STATUS = #{ approvalDocumentDTO.documentStatus }
+            , A.DOCUMENT_PROCESS_DATE = TO_DATE(#{ approvalDocumentDTO.documentProcessDate }, 'YYYY-MM-DD HH24:MI:SS')
+        WHERE A.APPROVAL_DOCUMENT_NO = #{ approvalDocumentNo }   
+   </update>
+   
+   <!-- 출고 요청서 결재 상태 변경 후 요청 상품수량 만큼 상품별로 재고수량 차감 -->
+   
+   
+   
+   <!-- 출고 요청서 결재처리 후 결재이력 생성 -->
+   <insert id="insertReleaseReqHistoryParameter" parameterType="com.deft.crud.stock.model.dto.approval.ReceivingReqDTO">
+      INSERT /* com.deft.crud.stock.model.dao.StockMapper#insertReleaseReqHistoryParameter() */
+        INTO TBL_RELEASE_REQ_HIS A
+        (
+          A.RELEASE_REQ_HIS_NO
+        , A.DOCUMENT_PROCESS_DATE 
+        , A.DOCUMENT_STATUS 
+        , A.RELEASE_REQ_NO 
+        )
+        VALUES
+        (
+          SEQ_RELEASE_REQ_HIS_NO.NEXTVAL
+        , TO_DATE(#{ approvalDocumentDTO.documentProcessDate }, 'YYYY-MM-DD HH24:MI:SS')
+        , #{ approvalDocumentDTO.documentStatus } 
+        , #{ releaseReqNo }  
+        )
+   </insert>
+   
+   <!-- 출고 요청한 수량 만큼 재고보유수량 차감 -->
+   <update id="updateStorage" parameterType="com.deft.crud.stock.model.dto.RequestStockDTO">
+		UPDATE 
+               TBL_STORAGE A
+           SET A.PRODUCT_STOCK = A.PRODUCT_STOCK - #{ orderStockAmount }
+         WHERE A.PRODUCT_NO = #{ stockProductNo }
+	</update>
    
    <!-- 입고요청서 번호 찾기 -->
 	<select id="selectReceivingNoByApprovalNo" resultType="_int" parameterType="_int">
@@ -513,13 +534,15 @@
 	</select>
 
    <!-- 출고요청서 번호 찾기 -->
-   <select id="selectorderNoByApprovalNo" resultMap="ReleaseReqDTOResultMap" parameterType="_int">
+   <select id="selectReleaseNoByApprovalNo" resultType="_int" parameterType="_int">
 	       SELECT
 	              RELEASE_REQ_NO
 	            , ORDER_NO
 	         FROM TBL_RELEASE_REQ
 	        WHERE APPROVAL_DOCUMENT_NO = #{ approvalNo }     
 	</select>
+	
+	
 </mapper>
 
 

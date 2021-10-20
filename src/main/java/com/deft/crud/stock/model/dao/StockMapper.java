@@ -65,6 +65,15 @@ public interface StockMapper {
 
 	ReceivingReqDTO selectReleaseReqByNo(int approvalNo);
 
+	int modifyReleaseStatus(ReceivingReqDTO parameters);
+
+	int insertReleaseReqHistoryParameter(ReceivingReqDTO parameters);
+
+	int selectReleaseNoByApprovalNo(int approvalNo);
+
+	void updateStorage(RequestStockDTO requestStock);
+
+
 
 
 
