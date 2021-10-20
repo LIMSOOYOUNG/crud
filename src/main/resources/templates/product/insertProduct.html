@@ -25,8 +25,8 @@
 							<li class="breadcrumb-item active" aria-current="page">상품등록</li>
 						</ol>
 					</div>
-					<div class="row" >
-						<form class="col-lg-3" action="/product/thumbnail/insert" method="post" encType="multipart/form-data" onsubmit="return checkImg()">
+					<form class="row" id="insertProductForm" action="/product/insert" method="post" encType="multipart/form-data" onsubmit="return checkProduct()">
+						<div class="col-lg-3">
 							<div class="card mb-4">
 								<div
 									class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
@@ -34,18 +34,15 @@
 								</div>
 								<div class="card-body">
 									<div class="form-group" id="productImgArea">
-										<img id="productImg" width="250" height="250" class="mx-3">
+										<img id="productImg" width="250" height="300" class="mx-3">
 										<div class="thumbnail-file-area">
-											<input type="file" class="mx-3" id="productThumbNail" name="productThumbNail" onchange="loadImg(this,1)">
+											<input type="file" class="mx-3" id="productThumbNail" name="productThumbNail" onchange="loadImg(this,1)" required>
 										</div>
 									</div>
-									<div class="row">
-										<button type="submit" class="btn btn-primary mb-3 mx-3" id="insertProductBtn">상품등록</button>
-									</div>	
 								</div>
 							</div>
-						</form>
-						<form class="col-lg-9" action="/product/insert" method="post" onsubmit="return checkProduct()"> 
+						</div>
+						<div class="col-lg-9"> 
 							<div class="card mb-4"> 
 								<br> 
 								<h3 th:align="center">상품등록</h3>
@@ -60,9 +57,8 @@
 									</div>
 									<div class="form-group col-lg-6 row">
 										<label for="categoryName" class="col-sm-3 col-form-label" th:align="center">카테고리 (소)</label>
-										<select class="form-control col-sm-9" id="categoryCode" name="categoryCode" th:value="categoryCode" disabled>
-											<option>
-											</option>
+										<select class="form-control col-sm-9" id="categoryCode" name="categoryCode" th:value="categoryCode" required>
+											<option value="">카테고리(소)</option>
 										</select>
 									</div>
 								</div>
@@ -90,24 +86,23 @@
 									<div class="form-group col-lg-6 row">
 										<label for="productName" class="col-sm-3 col-form-label" th:align="center">상품명</label>
 										<input type="text" class="form-control col-sm-9" 
-												id="productName" name="productName">
+												id="productName" name="productName" required>
 									</div>
 									<div class="form-group col-lg-6 row">
 										<label for="unit" class="col-sm-3 col-form-label" th:align="center">단위</label>
-										<input type="text" class="form-control col-sm-9" id="unit" name="unit">
+										<input type="text" class="form-control col-sm-9" id="unit" name="unit" required>
 									</div>
-									
 								</div>
 								<div class="row">
 									<div class="form-group col-lg-6 row">
 										<label for="purchasePrice" class="col-sm-3 col-form-label" th:align="center">원가</label>
 										<input type="number" class="form-control col-sm-9" 
-												id="purchasePrice" name="purchasePrice" min=1>
+												id="purchasePrice" name="purchasePrice" min=1 required>
 									</div>	
 									<div class="form-group col-lg-6 row">
 										<label for="sellingPrice" class="col-sm-3 col-form-label" th:align="center">판매가</label>
 										<input type="number" class="form-control col-sm-9" 
-												id="sellingPrice" name="sellingPrice" min=1>
+												id="sellingPrice" name="sellingPrice" min=1 required>
 									</div>	
 								</div>
 								
@@ -128,8 +123,8 @@
                   					</div>
 								</div>
 							</div>
-						</form>
-					</div>
+						</div>
+					</form>
 				</div>				
 			</div>
 		</div>
@@ -139,12 +134,6 @@
 	<script>
 		
 		/* 이미지 선택 */
-		const $productImgArea = document.getElementById("productImgArea");
-		
-		$productImgArea.onclick = function() { 
-			document.getElementById("productThumbNail").click(); 
-		}
-		
 		function loadImg(value) {
 			if(value.files && value.files[0]) {
 				const reader = new FileReader();
@@ -171,7 +160,6 @@
 					$("#refCategoryDefault").attr('hidden', 'hidden');
 						
 					for(let index in data) {
-						$('select').removeAttr('disabled');		
 
 						$select.append("<option value='" + data[index].categoryCode + "'>" + data[index].categoryName + "</option>");
 								
@@ -187,18 +175,11 @@
 		
 		/* 유효성 검사 */
 		function checkProduct() {
+			
 			if(!confirm("상품을 등록하시겠습니까?")) {
 				return false;
-			}
+			} 
 		}
-
-		function checkImg() {
-			if(!confirm("이미지를 등록하시겠습니까?")) {
-				return false;
-			}
-		}
-		
-
 
 	</script>
 </body>	

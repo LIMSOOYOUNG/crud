@@ -28,6 +28,7 @@ import com.deft.crud.product.model.dto.InsertProductDTO;
 import com.deft.crud.product.model.dto.ManufacturerDTO;
 import com.deft.crud.product.model.dto.ProductCategoryDTO;
 import com.deft.crud.product.model.dto.ProductDTO;
+import com.deft.crud.product.model.dto.ProductImageDTO;
 import com.deft.crud.product.model.service.ProductService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -69,6 +70,11 @@ public class ProductController {
 		/* 해당 상품 번호를 인자값으로 넘겨 하나의 상품 정보 조회 */
 		ProductDTO productDetail = productService.productDetail(productNo);
 		
+		/* 상품 이미지 조회 */
+		ProductImageDTO productImage = productService.selectProductImage(productNo);
+		
+		System.out.println("productImage : " + productImage);
+		
 		/* 카테고리(중) 리스트 조회 */
 		List<ProductCategoryDTO> refCategoryList = productService.refCategoryList();
 		
@@ -82,10 +88,12 @@ public class ProductController {
 		List<AccountDTO> accountList = productService.accountList();
 		
 		mv.addObject("productDetail", productDetail);
+		mv.addObject("productImage", productImage);
 		mv.addObject("refCategoryList", refCategoryList);
 		mv.addObject("categoryList", categoryList);
 		mv.addObject("manufacturerList", manufacturerList);
 		mv.addObject("accountList", accountList);
+		
 
 		mv.setViewName("product/productDetail");
 		
@@ -154,30 +162,10 @@ public class ProductController {
 	
 	/* 상품 등록 */
 	@PostMapping("/insert")
-	public ModelAndView insertProduct(ModelAndView mv, InsertProductDTO parameters
-			, RedirectAttributes rttr) {
+	public ModelAndView insertProduct(ModelAndView mv, @ModelAttribute InsertProductDTO parameters,
+			@RequestParam MultipartFile productThumbNail, HttpServletRequest request, RedirectAttributes rttr) {
 		
 		System.out.println("parameters : " + parameters );
-		
-		int result = productService.insertProduct(parameters);
-		
-		String message = "";
-		
-		if(result > 0) {
-			message = "상품 등록에 성공하셨습니다.";
-		} else {
-			message = "상품 등록에 실패하셨습니다.";
-		}
-		
-		rttr.addFlashAttribute("message", message);
-		mv.setViewName("redirect:/product/selectAll");
-		return mv;
-	}
-	
-	@PostMapping("/thumbnail/insert")
-	public ModelAndView insertProductThumbNail(ModelAndView mv, @RequestParam MultipartFile productThumbNail,
-			HttpServletRequest request, RedirectAttributes rttr) {
-		
 		
 		System.out.println("$%$%$%$%$%$%$%");
 		System.out.println("$%$%$%$%$%$%$%");
@@ -208,30 +196,46 @@ public class ProductController {
 		Map<String, String> fileMap = new HashMap<>();
 		fileMap.put("originFileName", originFileName);
 		fileMap.put("savedName", savedName);
-		fileMap.put("savePath", fileUploadDirectory);
+		fileMap.put("savedPath", fileUploadDirectory);
 		
 		int width = 250;
 		int height = 250;
 		
+		int result = 0;
+		
 		try {
 			productThumbNail.transferTo(new File(fileUploadDirectory + "\\" + savedName));
 			
-			Thumbnails.of(fileUploadDirectory + savedName)
+			Thumbnails.of(fileUploadDirectory + "\\" + savedName)
 					.size(width, height)
-					.toFile(thumbnailDirectory + "thumbnail_" + savedName);
+					.toFile(thumbnailDirectory + "\\thumbnail_" + savedName);
 					
-			fileMap.put("thumbnailPath", "\\webapp\\upload\\thumbnail\\thumbnail_" + savedName);
+			fileMap.put("thumbnailPath", "/thumbnail_" + savedName);
+			
+			result = productService.insertProduct(parameters, fileMap);
 	
 		} catch (IllegalStateException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
-
+			
 			new File(fileUploadDirectory + "\\" + savedName).delete();
 		}
 		
-		return null;
+		String message = "";
+		
+		if(result > 0) {
+			message = "상품 등록에 성공하셨습니다.";
+		} else {
+			message = "상품 등록에 실패하셨습니다.";
+		}
+		
+		rttr.addFlashAttribute("message", message);
+		mv.setViewName("redirect:/product/selectAll");
+		return mv;
 	}
+	
+	
 	
 	
 	

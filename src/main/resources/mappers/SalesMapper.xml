@@ -152,7 +152,7 @@
 	    	 , T.PERFORM_MONTH
 		  FROM TBL_EMP_TARGET_PERFOM T
 		 WHERE T.EMP_NO = #{ empNo }
-		   AND T.PERFORM_YEAR = #{ collectBillYear }
+		   AND T.PERFORM_YEAR = #{ performYear }
 		 ORDER BY T.PERFORM_MONTH ASC 
 	</select>
 	

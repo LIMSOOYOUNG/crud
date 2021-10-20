@@ -1,9 +1,12 @@
 package com.deft.crud.product.model.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.deft.crud.product.model.dao.ProductMapper;
@@ -12,6 +15,7 @@ import com.deft.crud.product.model.dto.InsertProductDTO;
 import com.deft.crud.product.model.dto.ManufacturerDTO;
 import com.deft.crud.product.model.dto.ProductCategoryDTO;
 import com.deft.crud.product.model.dto.ProductDTO;
+import com.deft.crud.product.model.dto.ProductImageDTO;
 
 @Service
 public class ProductService {
@@ -54,6 +58,11 @@ public class ProductService {
 		return productMapper.productDetail(productNo);
 	}
 
+	/* 상품이미지 조회 */
+	public ProductImageDTO selectProductImage(int productNo) {
+
+		return productMapper.selectProductImage(productNo);
+	}
 
 	public List<ProductCategoryDTO> selectSmallCategoryList(int refCategoryCode) {
 		
@@ -91,10 +100,34 @@ public class ProductService {
 	}
 	
 	/* 상품 등록 메소드*/
-	@Transactional
-	public int insertProduct(InsertProductDTO parameters) {
+	@Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE,
+			rollbackFor = {Exception.class})
+	public int insertProduct(InsertProductDTO parameters, Map<String, String> fileMap) {
 		
-		return productMapper.insertProduct(parameters);
+		int result = 0;
+		
+		int productTextResult = productMapper.insertProduct(parameters);
+		
+		/* 상품 등록하면서 시퀀스번호 조회*/
+		int productNo = productMapper.selectProductSeq();
+		
+		
+		ProductImageDTO productImage = new ProductImageDTO();
+		productImage.setOriginalName(fileMap.get("originFileName"));
+		productImage.setSavedName(fileMap.get("savedName"));
+		productImage.setSavedPath(fileMap.get("savedPath"));
+		productImage.setThumbnailPath(fileMap.get("thumbnailPath"));
+		productImage.setProductNo(productNo);
+		
+		System.out.println("productImage : " + productImage);
+		
+		int productImageResult = productMapper.insertProductImage(productImage);
+		
+		if(productTextResult > 0 && productImageResult > 0) {
+			result = 1;
+		}
+		
+		return result; 
 	}
 
 	public ProductCategoryDTO selectOneCategory(int selectedCategory) {
@@ -107,6 +140,7 @@ public class ProductService {
 		
 		return productMapper.updateCategory(parameters);
 	}
+
 
 
 }
