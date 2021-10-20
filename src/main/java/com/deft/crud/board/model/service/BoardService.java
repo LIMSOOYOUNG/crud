@@ -1,6 +1,7 @@
 package com.deft.crud.board.model.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.deft.crud.board.model.dao.BoardMapper;
 import com.deft.crud.board.model.dto.BoardDTO;
+import com.deft.crud.board.model.dto.BoardFileDTO;
 
 @Service
 public class BoardService {
@@ -41,7 +43,32 @@ public class BoardService {
 	@Transactional
 	public int insertFreeboard(BoardDTO board) {
 		
-		int result = boardMapper.insertFreeboard(board);
+		System.out.println("sdasdasdasda" + board);
+		
+		int result = 0;
+		
+//		int boardResult = boardMapper.insertFreeboard(board);
+		
+//		if(!board.getBoardFileList().isEmpty()) {
+//			
+//			int boardFile = 0;
+//			
+//			for(BoardFileDTO file : board.getBoardFileList()) {
+//				
+//				boardFile += boardMapper.insertFile(file);
+//				
+//			}
+//			
+//			if(boardResult > 0 && boardFile > board.getBoardFileList().size()) {
+//				
+//				result = 1;
+//				
+//			}
+//		}else {
+//			if(boardResult > 0) {
+//				result = 1;
+//			}
+//		}
 		
 		return result;
 	}

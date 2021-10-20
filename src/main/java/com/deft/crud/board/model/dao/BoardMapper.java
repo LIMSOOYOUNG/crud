@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.deft.crud.board.model.dto.BoardDTO;
+import com.deft.crud.board.model.dto.BoardFileDTO;
 
 
 @Mapper
@@ -43,6 +44,9 @@ public interface BoardMapper {
 
 	/* 자유게시글 삭제 */
 	int deleteFreeboard(int writeNo);
+
+	/* 파일 업로드 */
+	int insertFile(BoardFileDTO file);
 
 
 

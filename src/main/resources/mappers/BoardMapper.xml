@@ -38,25 +38,25 @@
 	<insert id="insertFreeboard" parameterType="com.deft.crud.board.model.dto.BoardDTO">
 		INSERT /*com.deft.crud.board.model.dto.BoardDTO*/
 		  INTO TBL_BOARD B
-		     (
-		       B.WRITE_NO
-		     , B.BOARD_NO 
-		     , B.BOARD_NAME
-		     , B.EMP_NO
-		     , B.WRITE_DATE
-		     , B.CONTENTS
-		     , B.TYPE
-		     )
+		(
+		  B.WRITE_NO
+		, B.BOARD_NO 
+		, B.BOARD_NAME
+		, B.EMP_NO
+		, B.WRITE_DATE
+		, B.CONTENTS
+		, B.TYPE
+		)
 		VALUES
-		     (
-		       SEQ_WRITE_NO.NEXTVAL
-		     , 2  
-		     , #{ boardName }  
-		     , #{ empNo }
-		     , SYSDATE
-		     , #{ contents }	
-		     , '자유게시판'
-		     )
+		(
+		  SEQ_WRITE_NO.NEXTVAL
+		, 2  
+		, #{ boardName }  
+		, #{ empNo }
+		, SYSDATE
+		, #{ contents }	
+		, '자유게시판'
+		)
 	</insert>
 	
 	<delete id="deleteFreeboard" parameterType="_int">
@@ -131,4 +131,26 @@
 	         , B.CONTENTS = #{ contents,jdbcType=VARCHAR }
 	     WHERE B.WRITE_NO = #{ writeNo }    
 	</update>
+	
+	<insert id="insertFile" parameterType="com.deft.crud.board.model.dto.BoardFileDTO">
+		INSERT /*com.deft.crud.board.model.dto.BoardFileDTO*/
+		  INTO TBL_BOARD_ATTATCH
+		(
+		  BOARD_ATTATCH_NO
+		, WRITE_NO   
+        , ORIGINAL_NAME
+        , SAVED_NAME
+        , SAVED_PATH
+        , BOARD_NO
+        )
+	    VALUES
+	    (
+	      SEQ_BOARD_ATTATCH.NEXTVAL
+	    , #{ writeNo }  
+	    , #{ originalName }     
+	    , #{ savedName }     
+	    , #{ savedPath }
+	    , 2     
+	    )
+	</insert>
 </mapper>

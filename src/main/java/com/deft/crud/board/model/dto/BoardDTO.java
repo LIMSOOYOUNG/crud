@@ -1,6 +1,7 @@
 package com.deft.crud.board.model.dto;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -25,6 +26,6 @@ public class BoardDTO implements java.io.Serializable{
 	private String type;
 	private int empNo;
 	private String empId;
-	private BoardFileDTO boardFileDTO;
+	private List<BoardFileDTO> boardFileList;
 	
 }

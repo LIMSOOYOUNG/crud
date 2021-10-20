@@ -9,6 +9,7 @@ import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -23,6 +24,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.deft.crud.board.model.dto.BoardDTO;
+import com.deft.crud.board.model.dto.BoardFileDTO;
 import com.deft.crud.board.model.service.BoardService;
 import com.deft.crud.member.model.service.UserImpl;
 
@@ -85,75 +87,83 @@ public class BoardController {
 	@PostMapping("/freeboardinsert")
 	public ModelAndView insertfreeboardForm(ModelAndView mv, @ModelAttribute BoardDTO parameters,
 			@AuthenticationPrincipal UserImpl loginInfo,  @RequestParam int writeNo
-			, @RequestParam List<MultipartFile> freeboardUpload
-			,HttpServletRequest request, RedirectAttributes rttr) 
+			, @RequestParam(required = false) List<MultipartFile> freeboardUpload
+			,HttpServletRequest request) 
 					throws Exception {
+		
 		System.out.println("sasaaaaaaaaaaaaaaaaaa" + freeboardUpload);
 		
 	    int loginEmpNo = loginInfo.getEmpNo();
 	    parameters.setEmpNo(loginEmpNo);
 	    
-	    String root = request.getSession().getServletContext().getRealPath("\\");
-	    System.out.println("rrrrrrrrrrerrrrrrrrr" + root);
-	    
-	    String filePath  = root + "\\upload\\freeboard";
-	    
-	    File directory = new File(filePath);
-	    
-	    File mkdir = new File(filePath);
-		if(!mkdir.exists()) {
-			mkdir.mkdirs();
-		}
-
-	    
-	    if(!directory.exists()) {
-	    	
+	    System.out.println("dasdasdasdas" + CollectionUtils.isEmpty(freeboardUpload));
+	    for(MultipartFile file : freeboardUpload) {
+	    	System.out.println("1234567890" + file);
 	    }
-	    
-	    List<Map<String, String>> files = new ArrayList<>();
-	    for(int i = 0; i < freeboardUpload.size(); i++) {
-	    	
-	    	String originFileName = freeboardUpload.get(i).getOriginalFilename();
-	    	String ext = originFileName.substring(originFileName.lastIndexOf("."));
-			String savedName = UUID.randomUUID().toString().replace("-", "") + ext;
+//	    if(!freeboardUpload.isEmpty()) {
+//	    
+//		    String root = request.getSession().getServletContext().getRealPath("\\");
+//		    System.out.println("rrrrrrrrrrerrrrrrrrr" + root);
+//		    
+//		    String filePath  = root + "\\upload\\freeboard";
+//		    
+//		    
+//		    File mkdir = new File(filePath);
+//			if(!mkdir.exists()) {
+//				mkdir.mkdirs();
+//			}
+//	
+//		    List<BoardFileDTO> files = new ArrayList<>();
+//		    
+//		    for(int i = 0; i < freeboardUpload.size(); i++) {
+//		    	
+//		    	String originFileName = freeboardUpload.get(i).getOriginalFilename();
+//		    	String ext = originFileName.substring(originFileName.lastIndexOf("."));
+//				String savedName = UUID.randomUUID().toString().replace("-", "") + ext;
+//	
+//				BoardFileDTO file = new BoardFileDTO();
+//				file.setOriginalName(originFileName);
+//				file.setSavedName(savedName);
+//				file.setSavedPath(filePath);
+//				file.setWriteNo(writeNo);
+//				
+//				files.add(file);	
+//	
+//		    }
+//		    
+//		    parameters.setBoardFileList(files);
+//		    
+//		    try {
+//		    	for(int i = 0; i < freeboardUpload.size(); i++) {
+//		    		
+//		    		BoardFileDTO file = files.get(i);
+//		    		
+//		    		freeboardUpload.get(i).transferTo(new File(filePath + "\\" + file.getSavedName()));
+//		    	}
+//		    }catch (Exception e) {
+//		    	e.printStackTrace();
+//		    	
+//		    	for(int i = 0; i < freeboardUpload.size(); i++) {
+//		    		BoardFileDTO file = files.get(i);
+//					
+//					new File(filePath + "\\" + file.getSavedName()).delete();
+//	
+//		    	}
+//		    }
+//	    
+//	    }
+//	    
+//	    /* parameters(BoardDTO)를 서비스에 전달한다. */
+//		int result = boardService.insertFreeboard(parameters);
+//		String message = "";
+//		/* result값이 0 보다 클때 페이지 이동값을 /board/selectfreeboard 지정한다.*/
+//		if(result > 0) {
+//			
+//			message = "자유게시글등록에 성공하셨습니다";
+//		}
+		mv.setViewName("redirect:/board/selectfreeboard");
 
-			Map<String, String> file = new HashMap<>();
-			file.put("originFileName", originFileName);
-			file.put("savedName", savedName);
-			file.put("filePath", filePath);
-			
-			files.add(file);	
-
-	    }
-	    
-	    try {
-	    	for(int i = 0; i < freeboardUpload.size(); i++) {
-	    		
-	    		Map<String, String> file = files.get(i);
-	    		
-	    		freeboardUpload.get(i).transferTo(new File(filePath + "\\" + file.get("savedName")));
-	    	}
-	    }catch (Exception e) {
-	    	e.printStackTrace();
-	    	
-	    	for(int i = 0; i < freeboardUpload.size(); i++) {
-				Map<String, String> file = files.get(i);
-				
-				new File(filePath + "\\" + file.get("savedName")).delete();
-
-	    	}
-	    }
-	    
-	    /* parameters(BoardDTO)를 서비스에 전달한다. */
-		int result = boardService.insertFreeboard(parameters);
-		
-		/* result값이 0 보다 클때 페이지 이동값을 /board/selectfreeboard 지정한다.*/
-		if(result>0) {
-			
-			mv.setViewName("redirect:/board/selectfreeboard");
-		}
-
-		return null;
+		return mv;
 	}
 	
 
