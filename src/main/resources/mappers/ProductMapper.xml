@@ -46,6 +46,17 @@
 		
 	</resultMap>
 	
+	<resultMap type="com.deft.crud.product.model.dto.ProductImageDTO" id="productImageMap">
+		<id property="productImageNo" column="PRODUCT_IMAGE_NO"/>
+		<result property="originalName" column="ORIGINAL_NAME"/>
+		<result property="savedName" column="SAVED_NAME"/>
+		<result property="savedPath" column="SAVED_PATH"/>
+		<result property="productNo" column="PRODUCT_NO"/>
+		<result property="thumbnailPath" column="THUMBNAIL_PATH"/>
+	
+	
+	</resultMap>
+	
 	<select id="allProductList" resultMap="productResultMap">
 	    SELECT /*com.deft.crud.product.model.dao.ProductMapper#allProductList()*/
 	           P.PRODUCT_NO
@@ -119,6 +130,18 @@
 	      WHERE P.PRODUCT_NO = #{ productNo }
 	</select>
 	
+	<select id="selectProductImage" resultMap="productImageMap">
+		SELECT /*com.deft.crud.product.model.dao.ProductMapper#selectProductImage()*/
+			   P.PRODUCT_IMAGE_NO
+			 , P.ORIGINAL_NAME
+			 , P.SAVED_NAME
+			 , P.SAVED_PATH
+			 , P.PRODUCT_NO
+			 , P.THUMBNAIL_PATH
+	      FROM TBL_PRODUCT_IMAGE P
+	     WHERE P.PRODUCT_NO = #{ productNo }
+	</select>
+	
 	<select id="selectSmallCategoryList" resultMap="productCategoryResultMap">
 		SELECT /*com.deft.crud.product.model.dao.ProductMapper#selectSmallCategoryList()*/
 			   PC.CATEGORY_CODE
@@ -186,15 +209,38 @@
 	<insert id="insertProduct" parameterType="com.deft.crud.product.model.dto.InsertProductDTO">
 		INSERT /*com.deft.crud.product.model.dao.ProductMapper#insertProduct()*/
 		  INTO TBL_PRODUCT P
-		 (
-	     	P.PRODUCT_NO, P.SELL_STATUS, P.PRODUCT_NAME, P.PURCHASE_PRICE
-	     ,  P.SELLING_PRICE, P.UNIT, P.CATEGORY_CODE, P.ACCOUNT_NO, P.MANUFACTURER_NO
-		 )
-		 VALUES
-		 (
-		   SEQ_PRODUCT_NO.NEXTVAL, #{ sellStatus }, #{ productName }, #{ purchasePrice }, 
-		   #{ sellingPrice }, #{ unit }, #{ categoryCode }, #{ accountNo }, #{ manufacturerNo }
-		 )
+	    (
+	      P.PRODUCT_NO, P.SELL_STATUS, P.PRODUCT_NAME, P.PURCHASE_PRICE
+	    , P.SELLING_PRICE, P.UNIT, P.CATEGORY_CODE, P.ACCOUNT_NO, P.MANUFACTURER_NO
+		)
+		VALUES
+		(
+		 SEQ_PRODUCT_NO.NEXTVAL, #{ sellStatus }, #{ productName }, #{ purchasePrice }, 
+		 #{ sellingPrice }, #{ unit }, #{ categoryCode }, #{ accountNo }, #{ manufacturerNo }
+		)
+	</insert>
+	
+	<select id="selectProductSeq" resultType="INT">
+		SELECT /*com.deft.crud.product.model.dao.ProductMapper#selectProductSeq()*/
+			   LAST_NUMBER "PRODUCT_NO"
+		  FROM USER_SEQUENCES
+		 WHERE SEQUENCE_NAME = 'SEQ_PRODUCT_NO'
+	
+	</select>
+	
+	<insert id="insertProductImage" parameterType="com.deft.crud.product.model.dto.ProductImageDTO">
+		INSERT /*com.deft.crud.product.model.dao.ProductMapper#insertProductImage()*/
+		  INTO TBL_PRODUCT_IMAGE P
+	    (
+		  P.PRODUCT_IMAGE_NO, P.ORIGINAL_NAME, P.SAVED_NAME 
+	    , P.SAVED_PATH, P.PRODUCT_NO, P.THUMBNAIL_PATH
+		)
+		VALUES
+		(
+		  SEQ_PRODUCT_IMG_NO.NEXTVAL, #{ originalName }, #{ savedName },
+		  #{ savedPath }, #{ productNo }, #{ thumbnailPath } 
+		)
+		 
 	</insert>
 	
 	<select id="selectOneCategory" resultMap="productCategoryResultMap">

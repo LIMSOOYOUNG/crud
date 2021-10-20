@@ -18,6 +18,6 @@ public class ProductImageDTO {
 	private String savedName;
 	private String savedPath;
 	private int productNo;
-	private String thumbNailPath;
+	private String thumbnailPath;
 	
 }
