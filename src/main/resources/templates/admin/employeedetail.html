@@ -22,7 +22,7 @@
 				<!-- Header -->
 				<th:block th:replace="@{/common/header} :: header"></th:block>
 
-					<!-- Row -->
+	<!-- Row -->
 	<!-- Register Content -->
 	<div class="container-login">
 	
@@ -41,12 +41,11 @@
 											<div class="col-lg-2" style="margin-top: 60px;">
 												<div align="center">
 													<label>프로필 사진</label>
-													<div style="height: 300px; width: 200px; border: 1px solid black; ">
+													<div style="height: 253px; width: 200px; border: 1px solid black; ">
+														<img th:if="${employeeDTO.empImage != null}" th:src="|@{/upload/profileImage/thumbnail}${employeeDTO.empImage.thumbnailPath}|">
 													</div>
 													<br>
-													<div>
-														<input type="file">
-													</div>
+														
 												</div>
 											</div>
 											<div class="col-lg-5">

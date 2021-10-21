@@ -382,12 +382,6 @@
         const empNo = $(this).data('emp-no');
         const empName = $(this).data('emp-name');
         
-        console.log(this);
-        
-        console.log(cusmtomerNo);
-        console.log(cusmtomerName);
-        console.log(empNo);
-        console.log(empName);
         $('#insertCustomerNo').val(cusmtomerNo);
         $('#insertCustomerName').val(cusmtomerName);
         $('#insertEmpNo').val(empNo);
@@ -407,7 +401,6 @@
     	
        const activityNo = $(this).parent().siblings().eq(0).text();
        
-       console.log('test :' + activityNo);
        $('#activityDetailInfoModal').modal();
        
        $.ajax({

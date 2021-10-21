@@ -8,11 +8,8 @@
 .form-control {
 	text-align: center;
 }
-
 </style>
-
 </head>
-
 <body id="page-top">
 	<div id="wrapper">
 
@@ -109,9 +106,6 @@
 											</tr>
 										</tbody>
 										
-										<tfoot th:align="center">
-										</tfoot>
-										
 									</table>
 								</div>
 							</div>
@@ -162,8 +156,6 @@
 										<tbody th:align="center">
 
 										</tbody>
-										<tfoot align="center">
-										</tfoot>
 									</table>
 								</div>
 							</div>
@@ -287,7 +279,6 @@ $(document).ready(function () {
 		order:[]
 	});
 	
-	
 });
 	/* 메세지 출력 */
 	const message = '[[${ message }]]';
@@ -295,8 +286,6 @@ $(document).ready(function () {
 	if(message) {
 		alert(message);
 	}
-	
- 
     
  	// 테이블 (진행상태)별 검색 결과 
     $(document).on('click', "a[name=status]",  function() {
@@ -413,7 +402,6 @@ $(document).ready(function () {
 		if(!confirm("입력하신 내용으로 영업기회를 등록하시겠습니까?")){
     		return false;
     	}
-
     	
 		$('#insertBusinessChanceForm').submit();
 	
@@ -460,7 +448,6 @@ $(document).ready(function () {
 		});
     });
     
-    
     /* 추가버튼 눌렀을시 동작 */
 	$(document).on("click", "button[name='addBtn']", function() {
 		
@@ -483,7 +470,6 @@ $(document).ready(function () {
 			}
 		});
 	});
-
     
   </script>
 </body>

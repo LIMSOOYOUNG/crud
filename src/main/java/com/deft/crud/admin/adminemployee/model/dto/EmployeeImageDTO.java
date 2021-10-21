@@ -18,4 +18,6 @@ public class EmployeeImageDTO {
 	private String originalName;
 	private String savedName;
 	private String savedPath;
+	private String thumbnailPath; 
+	
 }

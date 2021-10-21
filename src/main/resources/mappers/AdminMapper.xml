@@ -24,6 +24,11 @@
 		<result property="entYn" column="ENT_YN" />
 		<result property="jobName" column="JOB_NAME" />
 		<result property="deptName" column="DEPT_NAME" />
+		<result property="empImgNo" column="EMP_IMG_NO"/>
+		<result property="originalName" column="ORIGINAL_NAME" />
+		<result property="savedName" column="SAVED_NAME" />
+		<result property="savedPath" column="SAVED_PATH" />
+		<result property="thumbnailPath" column="THUMBNAIL_PATH" />
 	</resultMap>
 
 	<select id="checkUserId" parameterType="String" resultType="_int">
@@ -69,6 +74,29 @@
 		 , #{empNo}  
 		 , #{empTel}  
 		 )
+	</insert>
+	
+	<insert id="insetProfileImg" parameterType="com.deft.crud.member.model.dto.MemberDTO">
+        INSERT
+		  INTO TBL_EMP_IMAGE A
+		 (
+		   A.EMP_IMG_NO
+		 , A.EMP_NO
+		 , A.ORIGINAL_NAME
+		 , A.SAVED_NAME
+		 , A.SAVED_PATH
+		 , A.THUMBNAIL_PATH
+		 ) 
+		  VALUES
+		 (
+		   SEQ_EMP_IMG_NO.NEXTVAL
+		 , SEQ_EMP_NO.CURRVAL
+		 , #{originalName}  
+		 , #{savedName}  
+		 , #{savedPath}  
+		 , #{thumbnailPath}  
+		 )	       
+	
 	</insert>
 	
 	<select id="selectJobList" resultMap="memberesultMap">

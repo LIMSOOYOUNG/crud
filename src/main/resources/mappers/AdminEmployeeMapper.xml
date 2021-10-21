@@ -23,8 +23,17 @@
 		<result property="deptCode" column="DEPT_CODE"/>
 		<result property="jobCode" column="JOB_CODE"/>
 		
+		<association property="empImage" resultMap="empImageReusltMap"></association>
 		<association property="dept" resultMap="departmentResultMap"/>
 		<association property="job" resultMap="jobResultMap"/> 
+	</resultMap>
+	
+	<resultMap type="com.deft.crud.admin.adminemployee.model.dto.EmployeeImageDTO" id="empImageReusltMap">
+		<result property="empImgNo" column="EMP_IMG_NO"/>
+		<result property="originalName" column="ORIGINAL_NAME" />
+		<result property="savedName" column="SAVED_NAME" />
+		<result property="savedPath" column="SAVED_PATH" />
+		<result property="thumbnailPath" column="THUMBNAIL_PATH" />
 	</resultMap>
 	
 	<resultMap type="com.deft.crud.admin.adminemployee.model.dto.DepartmentDTO" id="departmentResultMap">
@@ -42,7 +51,7 @@
 		<result property="jobStatus" column="JOB_STATUS"/>
 	</resultMap>
 	
-	<select id="empDetail" parameterType="_int" resultType="com.deft.crud.admin.adminemployee.model.dto.AdminEmployeeDTO" resultMap="adminEmployeeResultMap">
+	<select id="empDetail" parameterType="_int" resultMap="adminEmployeeResultMap">
 		SELECT	/* com.deft.crud.admin.adminemployee.controller.AdminEmployeeController */
 		       A.EMP_NO
 		     , A.EMP_NAME
@@ -60,11 +69,13 @@
 		     , J.JOB_NAME 
 		     , D.DEPT_NAME
 		     , B.EMP_NAME "MANAGER_NAME"
+		     , EI.THUMBNAIL_PATH
 		  FROM TBL_EMP_INFO A
-          JOIN TBL_EMP_INFO B ON ( A.MANAGER_NO = B.EMP_NO )
-          JOIN TBL_JOB J ON (A.JOB_CODE = J.JOB_CODE)
-          JOIN TBL_DEPARTMENT D ON (A.DEPT_CODE = D.DEPT_CODE)
-          JOIN TBL_EMP_INFO B ON ( A.MANAGER_NO = B.EMP_NO )	
+          LEFT JOIN TBL_EMP_INFO B ON ( A.MANAGER_NO = B.EMP_NO )
+          LEFT JOIN TBL_EMP_IMAGE EI ON ( A.EMP_NO = EI.EMP_NO )
+          LEFT JOIN TBL_JOB J ON (A.JOB_CODE = J.JOB_CODE)
+          LEFT JOIN TBL_DEPARTMENT D ON (A.DEPT_CODE = D.DEPT_CODE)
+          LEFT JOIN TBL_EMP_INFO B ON ( A.MANAGER_NO = B.EMP_NO )	
          WHERE A.EMP_NO = #{ employeeNo }
 	</select>
 	

@@ -335,9 +335,9 @@
 						<button type="button" id="releaseBtn" name="releaseBtn" class="btn btn-primary mx-2">결재</button>
 						<button type="reset" id="releaselBtnModalCloseBtn" data-dismiss='modal' class="btn btn-outline-danger mx-2">취소</button>
 					</div>
-            </div>
-         </div>
-      </div>
+            	</div>
+        	 </div>
+      	</div>
       <div id="count" value="1"></div>
    </div>
 
@@ -364,20 +364,13 @@
       $(document).on('click', 'button[name=detailInfoBtn]', function() {
     	  
     	 const orderNo = $(this).siblings().eq(0).val();
-  	 		console.log(orderNo);
-
   	     const approvalNo = $(this).siblings().eq(1).val();
-  	 		console.log(approvalNo);
-  	 	
   		 const approvalType = $(this).siblings().eq(2).val();
-  	  		console.log(approvalType); 
   	  	 
      /* 입고요청서인 경우 동작 시작 */ 
 	 if(approvalType == "입고요청") {
 		 
       $('#detailInfoBtnModal').modal();
-		 
-      console.log("요청타입이 입고요청이므로 입고요청관련 ajax동작시작");
     	   
       $.ajax({
           url: "/stock/request/selectOne",
@@ -423,8 +416,6 @@
     	      for(let i = 0; i < receivingReqProduct.length; i++) {
     	    	  				
     	          for(let j = 0; j < receivingReqProduct[i].receivingReqProductList.length; j++) {
-    	    	  					
-    	    	      console.log(receivingReqProduct[i].receivingReqProductList[j].productName)
     	    	  				
     	    	      var no = i + 1;
     	    	      var productName = receivingReqProduct[i].receivingReqProductList[j].productName;
@@ -450,7 +441,6 @@
     	      });
       	 /* 출고요청서인 경우 동작 시작 */ 
     	 } else if(approvalType == "출고요청") {
-    		
     		 
     		 $('#releaseDetailInfoModal').modal();
     		 
@@ -459,18 +449,10 @@
     	    	  type: "POST",
     	    	  data: {approvalNo: approvalNo, approvalType: approvalType, orderNo: orderNo},
     	    	  success: function(data, status, xhr) {
-    	    	    	  			
-    	    		  console.log("ajax 다녀옴")
     	    		  
     	    	      const order = JSON.parse(data.order);
     	    	      const releaseInfo = JSON.parse(data.releaseInfo);
     	    	      const authority = JSON.parse(data.authority);
-    	    	    	  			
-    	    	      console.log(authority);
-    	    	      console.log("결재문서 번호 :" + releaseInfo.approvalDocumentNo);
-    	    	      console.log("출고요청서 번호 :" + releaseInfo.releaseReqNo);
-    	    	      console.log("결재 담당자 이름 :" + releaseInfo.approvalDocumentDTO.managerName);
-    	    	      console.log("결재 상태 :" + releaseInfo.approvalDocumentDTO.documentStatus);
     	    	    	  			
     	    	      $('#releaseApprovalNo').val(releaseInfo.approvalDocumentNo);
     	    	      $('#releaseReqNo').val(releaseInfo.releaseReqNo); 
@@ -513,9 +495,6 @@
     	    		  
     	    	      for(let i = 0; i < order.orderProductList.length; i++) {
     	    	    	  				
-    	    	    	  					
-    	    	    	      console.log(order.orderProductList[i].product.productName)
-    	    	    	  				
     	    	    	      var no = i + 1;
     	    	    	      var productName = order.orderProductList[i].product.productName;
     	    	    	      var productNo = order.orderProductList[i].product.productNo;
@@ -552,14 +531,11 @@
 		$('#orderContent').val().empty();
 	});
     
-    
     // 테이블 (결재상태)별 검색 결과 
     $(document).on('click', "a[name=status]", function() {
     	
     	let documentStatus = $(this).attr('value');
     	
-    	console.log(documentStatus);
-				
     	if(documentStatus == 'all') {
 			$("#tableTitle").html("요청서 목록 (전체)");
 		} else {
@@ -572,8 +548,6 @@
 			success: function(data, status, xhr) {
 				
 				const receivingReqList = JSON.parse(data.receivingReqList);
-				
-				console.table(receivingReqList);
 				
 				const $table = $("#receivingTable tbody");
 				
@@ -636,8 +610,6 @@
  		let valueStatus = true;
  		const approvalStatus = $('#approvalStatus').val();
  		
- 		console.log(approvalStatus);
- 		
  		if(approvalStatus == "대기중") {
  			alert("결재상태를 변경해 주세요")
  			valueStatus = false;
@@ -647,8 +619,6 @@
  			valueStatus = false;
  			return;
  		}
- 		
- 		console.log("Ajax 실행" + valueStatus);
  		
  		if(valueStatus) {
  			
@@ -662,7 +632,6 @@
 	
  	// 출고요청 결재 버튼 클릭시 동작
  	 $(document).on('click', "[name=releaseBtn]", function() {
- 		
  		
  		const approvalDocumentNo = $('#releaseApprovalNo').val();
  		const releaseReqNo = $('#releaseReqNo').val();
@@ -678,7 +647,7 @@
  		const productNo = $('[name=releaseProductNo]').eq(i).text();
  		const productStock = $('[name=releaseProductStock]').eq(i).text();
  		const productAmount = $('[name=releaseProductAmount]').eq(i).text();
- 		console.log(productNo)
+ 		
  		productList.push({productNo, productStock, productAmount})
  		}
  		
@@ -686,8 +655,6 @@
  						orderNo: orderNo, approvalDocumentDTO: {documentStatus: documentStatus},
  						receivingReqProductList: productList
  						}
- 		
- 		console.log(request);
  		
  		let valueStatus = true;
  		
@@ -702,7 +669,6 @@
  		}
  		
  		if(valueStatus) {
- 		console.log("출고요청서 결재상태변경 Ajax 실행" + valueStatus);
  		
  		$.ajax({
  	         url: "/stock/releaseStatus/modify",

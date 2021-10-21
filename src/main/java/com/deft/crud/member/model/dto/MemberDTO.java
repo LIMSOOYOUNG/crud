@@ -1,5 +1,6 @@
 package com.deft.crud.member.model.dto;
 
+import com.deft.crud.admin.adminemployee.model.dto.EmployeeImageDTO;
 import com.deft.crud.organization.model.dto.DepartmentDTO;
 import com.deft.crud.organization.model.dto.JobDTO;
 
@@ -35,6 +36,11 @@ public class MemberDTO {
 	private String deptCode;
 	private String deptName;
 	private int managerNo;
+	private int empImgNo;
+	private String originalName;
+	private String savedName;
+	private String savedPath;
+	private String thumbnailPath;
 	
 	private JobDTO job;
 	private DepartmentDTO dept;

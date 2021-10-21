@@ -1,16 +1,24 @@
 package com.deft.crud.admin.adminemployee.model.service;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
+import java.util.UUID;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.deft.crud.admin.adminemployee.model.dao.AdminEmployeeMapper;
 import com.deft.crud.admin.adminemployee.model.dto.AdminEmployeeDTO;
 import com.deft.crud.admin.adminemployee.model.dto.DepartmentDTO;
 import com.deft.crud.admin.adminemployee.model.dto.JobDTO;
 import com.deft.crud.member.model.dto.MemberDTO;
+
+import net.coobird.thumbnailator.Thumbnails;
 
 @Service
 public class AdminEmployeeService {
@@ -31,14 +39,90 @@ public class AdminEmployeeService {
 	}
 	
 	/* 사원 등록 */
-	public int insertMember(MemberDTO member) {
+	public int insertMember(HttpServletRequest request, MemberDTO member, MultipartFile profileThumbNail) {
 		
-		String encodedPassword = passwordEncoder.encode(member.getEmpPwd());
-	      
-	      member.setEmpPwd(encodedPassword);
-	      
-	      int result = adminEmployeeMapper.insertMember(member);
+		/* 입력한 비밀번호 암호화 */
+		String encodedPassword = passwordEncoder.encode(member.getEmpPwd());	
+	    
+		/* 암호화한 비밀번호 등록할 사원정보DTO에 넣어줌 */
+	    member.setEmpPwd(encodedPassword);
+	    
+	    /* 절대경로를 변수에 초기화한다. */
+		String root = request.getSession().getServletContext().getRealPath("\\");
 		
+		System.out.println("root : " + root);
+		
+		/* 이미지 원본파일과 썸네일을 저장할 경로를 설정해준다.*/
+		String fileUploadDirectory = root + "\\upload\\profileImage\\original";
+		String thumbnailDirectory = root + "\\upload\\profileImage\\thumbnail";
+		
+		/* 파일 객체 생성 */
+		File directory = new File(fileUploadDirectory);
+		File directory2 = new File(thumbnailDirectory);
+		
+		/* 이미지를 저장할 폴더가 없을시에 폴더를 생성해준다. */
+		if(!directory.exists() || !directory2.exists()) {
+			System.out.println("폴더생성 : " + directory.mkdirs());
+			System.out.println("폴더생성 : " + directory2.mkdirs());
+		}
+		
+		/* 이미지 원본파일 */
+		String originFileName = profileThumbNail.getOriginalFilename();
+		
+		System.out.println(originFileName);
+		
+		/* 이미지 확장자 */
+		String ext = originFileName.substring(originFileName.lastIndexOf("."));
+		
+		/* 이미지파일명이 중복되지 않도록 설정해준다. */
+		String savedName = UUID.randomUUID().toString().replace("-", "") + ext;
+
+		System.out.println("저장할 파일이름 : " + savedName);
+		
+		member.setOriginalName(originFileName);
+		member.setSavedName(savedName);
+		member.setSavedPath(fileUploadDirectory);
+		
+		System.out.println(member.getEmpId());
+		
+		/* 썸네일 너비 높이 설정 */
+		int width = 200;
+		int height = 250;
+	    
+		/* 사원정보와 프로필사진저장 경로를 가지고 매퍼로 이동 */
+	    int result = adminEmployeeMapper.insertMember(member);		
+	    
+	    int profileImgResult = 0;
+	    
+	    if(result > 0) {
+	    	
+	    	try {
+				
+				/* 원본 이미지 저장 */
+	    		profileThumbNail.transferTo(new File(fileUploadDirectory + "\\" + savedName));
+				
+				/* 썸네일 저장 */
+				Thumbnails.of(fileUploadDirectory + "\\" + savedName)
+				.size(width, height)
+				.toFile(thumbnailDirectory + "\\thumbnail_" + savedName);
+				
+				/* 썸네일 경로 멥에 담아준다. */
+				String thumbnailPath = "/thumbnail_" + savedName;
+				member.setThumbnailPath(thumbnailPath);
+				
+				/* 프로필이미지 등록 결과 값이 1이 되면 등록 성공 아니면 실패 */
+				profileImgResult = adminEmployeeMapper.insetProfileImg(member);
+				
+			} catch (IllegalStateException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+				
+				/* 어떠한 예외처리가 발생한다면 파일 삭제 */
+				new File(fileUploadDirectory + "\\" + savedName).delete();
+			}
+	    	
+	    }
 		
 		return result;
 	}

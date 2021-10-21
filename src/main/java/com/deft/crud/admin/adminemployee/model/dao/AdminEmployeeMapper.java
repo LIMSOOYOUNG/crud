@@ -1,6 +1,7 @@
 package com.deft.crud.admin.adminemployee.model.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
@@ -43,5 +44,7 @@ public interface AdminEmployeeMapper {
 	List<MemberDTO> selectAuthorityList();
 
 	List<MemberDTO> selectManagerList(String deptCode);
+
+	int insetProfileImg(MemberDTO member);
 	
 }

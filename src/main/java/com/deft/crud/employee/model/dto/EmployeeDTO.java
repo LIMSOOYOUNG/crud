@@ -1,7 +1,5 @@
 package com.deft.crud.employee.model.dto;
 
-import java.util.Date;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -575,8 +575,6 @@ input {
 
 						const productInfo = JSON.parse(data.productStockInfo);
 						
-						console.table(productInfo);
-						
 						let minOrderStockAmount = (-1 * productInfo.productStock);
 						
 						$('#stockRefCategoryName').val(productInfo.stockRefCategoryName);
@@ -697,8 +695,6 @@ input {
 				request.push(data);
 			}
 			
-			console.log(request)
-			
 			if(confirm("입고요청을 하시겠습니까?")) {
 			
 		 	$.ajax({
@@ -725,6 +721,7 @@ input {
 		}
 	}
 		
+		/* 이미 입고요청상품목록에 추가중인 상품은 또 담지 못하도록 체크 */
 		function productNoCheck(productNo) {
 			const trLength = $('#orderProduct > tbody > tr').length;
 			
@@ -800,8 +797,6 @@ input {
 
 			const orderNo = $td.siblings().eq(0).text();
 			
-			console.log(orderNo);
-			
 			const $tbody = $("#orderProductListTable tbody");
 			$tbody.html("");
 			
@@ -811,8 +806,6 @@ input {
 				data: {orderNo : orderNo},
 				success : function(data, status, xhr) {
 					const orderInfo = JSON.parse(data.orderInfo);
-					
-					console.table(orderInfo);
 					
 					$("#titleOrder").val(orderInfo.orderTitle);
 					$("#orderNo").val(orderInfo.orderNo);
@@ -827,8 +820,6 @@ input {
 					for(let index in orderInfo.orderProductList) {
 						
 						let orderProduct = orderInfo.orderProductList[index];
-					
-						console.table(orderProduct);
 						
 						let no = ++index;
 					$('#orderProductListTable > tbody:last').append(
@@ -870,8 +861,6 @@ input {
 				if(trLength <= 0) {
 					return alert("출고요청 할 내용이 없습니다.")
 				}	
-			
-			console.log(request)
 			
 			if(confirm("출고요청을 하시겠습니까?")) {
 			

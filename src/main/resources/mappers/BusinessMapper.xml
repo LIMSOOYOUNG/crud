@@ -228,7 +228,7 @@
 		SELECT /* com.deft.crud.business.model.dao.BusinessMapper#selectChanceHistoryByNo() */
 		       B.BUSINESS_CHANCE_CHANGE_DATE
 		     , A.BUSINESS_CHANCE_NO
-		     , A.BUSINESS_TITLE
+		     , B.BUSINESS_TITLE
 		     , B.BUSINESS_CHANCE_HIS_NO
 		     , C.EMP_NAME
 		     , B.PROGRESS_STATUS

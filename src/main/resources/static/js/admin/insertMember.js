@@ -97,7 +97,8 @@ const insertMember = {
 			return document.getElementById('checkPwd2').style.color = 'green'
 		}
 	},
-	
+
+	// 소속부서의 담당자 목록 불러와 selectBox 만들기	
 	selectManagerName: function() {
 		
 		const deptCode = document.getElementById('deptNmae').value

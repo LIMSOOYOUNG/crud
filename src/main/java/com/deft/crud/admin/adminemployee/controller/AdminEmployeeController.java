@@ -1,7 +1,9 @@
 package com.deft.crud.admin.adminemployee.controller;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
@@ -23,19 +25,16 @@ import com.deft.crud.admin.adminemployee.model.dto.DepartmentDTO;
 import com.deft.crud.admin.adminemployee.model.dto.JobDTO;
 import com.deft.crud.admin.adminemployee.model.service.AdminEmployeeService;
 import com.deft.crud.member.model.dto.MemberDTO;
-import com.deft.crud.organization.model.service.OrganizationService;
 
 @Controller
 @RequestMapping("/admin")
 public class AdminEmployeeController {
 
 	private final AdminEmployeeService adminEmployeeService;
-	private final OrganizationService organizationService;
 	
 	@Autowired
-	public AdminEmployeeController(AdminEmployeeService adminEmployeeService, OrganizationService organizationService) {
+	public AdminEmployeeController(AdminEmployeeService adminEmployeeService) {
 		this.adminEmployeeService = adminEmployeeService;
-		this.organizationService = organizationService;
 	}
 	
 	/* 사원등록 페이지로 이동 */
@@ -74,11 +73,14 @@ public class AdminEmployeeController {
 	/* 사원 등록 페이지에서 데이터 가져옴 */
 	@PostMapping(value = "/emp/insert")
 	
-	public ModelAndView redirectInsertMember(ModelAndView mv, RedirectAttributes rttr, MemberDTO member) {
+	public ModelAndView redirectInsertMember(ModelAndView mv, RedirectAttributes rttr,
+											@ModelAttribute MemberDTO member,
+											HttpServletRequest request,
+											@RequestParam MultipartFile profileThumbNail) {
 		
 		System.out.println(member);
 		
-		int result = adminEmployeeService.insertMember(member);
+		int result = adminEmployeeService.insertMember(request, member, profileThumbNail);
 		
 		 String message = "";
 		  
@@ -113,9 +115,12 @@ public class AdminEmployeeController {
 	/* 사원상세 정보 */
 	@GetMapping("employeedetail")
 	public ModelAndView employeeDetailSelect(ModelAndView mv, @RequestParam int employeeNo)  {
+
+		System.out.println("@@@ 사원번호 : " + employeeNo);
 		
 		/* employeeDTO를 employeeNo를 담아서 서비스에 전달한다.  */
 		AdminEmployeeDTO employeeDTO = adminEmployeeService.empDetail(employeeNo);
+		
 		
 		/* 페이지 이동값을 admin/employeedetail 지정한다.*/
 		mv.setViewName("admin/employeedetail");
