@@ -45,7 +45,12 @@ public class SalesService {
 
 		return salesMapper.selectDeptAvgPeform(deptCode, collectBillDate);
 	}
-
+	
+	/* 전 달 사원 실적 조회*/
+	public PerformanceDTO selectEmpPeformLastMonth(int empNo, CollectBillDTO collectBillDate) {
+		
+		return salesMapper.selectEmpPeformLastMonth(empNo, collectBillDate);
+	}
 	
 	/* 목표실적 등록하는 메소드*/
 	@Transactional
@@ -111,10 +116,6 @@ public class SalesService {
 	}
 	
 	
-	public PerformanceDTO selectEmpPeformLastMonth(int empNo, CollectBillDTO collectBillDate) {
-
-		return salesMapper.selectEmpPeformLastMonth(empNo, collectBillDate);
-	}
 	
 	/* 상품 실적 조회 */
 	public List<PerformanceDTO> selectProductPerformList(CollectBillDTO collectBillDate) {

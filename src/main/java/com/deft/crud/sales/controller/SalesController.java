@@ -161,7 +161,7 @@ public class SalesController {
 		/* 사원이 속한 부서 전 달 평균 실적 조회*/
 		PerformanceDTO selectDeptAvgPeform = salesService.selectDeptAvgPeform(deptCode, collectBillDate);
 		
-		/* 사원의 전 실적 */
+		/* 사원의 전 달 실적 */
 		PerformanceDTO selectEmpPeformLastMonth = salesService.selectEmpPeformLastMonth(empNo, collectBillDate);
 		
 		System.out.println("selectDeptAvgPeform : " + selectDeptAvgPeform);

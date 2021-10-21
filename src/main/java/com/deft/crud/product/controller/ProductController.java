@@ -2,7 +2,6 @@ package com.deft.crud.product.controller;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -48,19 +47,43 @@ public class ProductController {
 		this.objectMapper = objectMapper;
 	}
 	
-	
 	/* 상품 전체 조회 */
 	@GetMapping("/selectAll")
 	public ModelAndView productList(ModelAndView mv) {
 		
+		/* 리스트로 상품 목록을 전체 조회한다. */
 		List<ProductDTO> allProductList = productService.allProductList();
-		
 		
 		mv.addObject("allProductList", allProductList);
 		mv.setViewName("product/productList");
 		return mv;
 	}
 	
+	/* 상품 등록을 위해 필요한 데이터를 가지고 와 조회를 한다. */
+	@GetMapping("/insert")
+	public ModelAndView insertProductPage(ModelAndView mv) {
+		
+		/* 카테고리(중) 리스트 조회*/
+		List<ProductCategoryDTO> refCategoryList = productService.refCategoryList();
+		
+		
+		/* 카테고리(소) 리스트 조회 */
+		List<ProductCategoryDTO> categoryList = productService.categoryList();
+		
+		/* 제조사 정보 조회 */
+		List<ManufacturerDTO> manufacturerList = productService.manufacturerList();
+		
+		/* 거래처 정보 조회*/
+		List<AccountDTO> accountList = productService.accountList();
+		
+		mv.addObject("categoryList", categoryList);
+		mv.addObject("refCategoryList", refCategoryList);
+		mv.addObject("manufacturerList", manufacturerList);
+		mv.addObject("accountList", accountList);
+		mv.setViewName("product/insertProduct");
+		
+		return mv;
+	}
 	
 	/* 상품 상세 조회 */
 	@GetMapping("/select")
@@ -93,7 +116,6 @@ public class ProductController {
 		mv.addObject("categoryList", categoryList);
 		mv.addObject("manufacturerList", manufacturerList);
 		mv.addObject("accountList", accountList);
-		
 
 		mv.setViewName("product/productDetail");
 		
@@ -109,119 +131,87 @@ public class ProductController {
 		
 	}
 	
-	
-	/* 상품 업데이트 */
-	@PostMapping("/modify") 
-	public ModelAndView modifyProduct(ModelAndView mv, @ModelAttribute ProductDTO parameters, 
-			RedirectAttributes rttr) {
-		
-		System.out.println("parameters : " + parameters);
-		
-		
-		int result = productService.modifyProduct(parameters);
-		
-		String message = "";
-		
-		if(result > 0) {
-			message = "상품수정에 성공하셨습니다!";
-		} else {
-			message = "상품수정에 실패하셨습니다!";
-		}
-		
-		rttr.addFlashAttribute("message", message);
-		mv.setViewName("redirect:/product/selectAll");
-		return mv;
-	}
-	
-	
-	/* 상품 등록을 위해 필요한 데이터를 가지고 와 조회를 한다. */
-	@GetMapping("/insert")
-	public ModelAndView insertProductPage(ModelAndView mv) {
-		
-		/* 카테고리(중) 리스트 조회*/
-		List<ProductCategoryDTO> refCategoryList = productService.refCategoryList();
-		
-
-		/* 카테고리(소) 리스트 조회 */
-		List<ProductCategoryDTO> categoryList = productService.categoryList();
-		
-		/* 제조사 정보 조회 */
-		List<ManufacturerDTO> manufacturerList = productService.manufacturerList();
-		
-		/* 거래처 정보 조회*/
-		List<AccountDTO> accountList = productService.accountList();
-		
-		mv.addObject("categoryList", categoryList);
-		mv.addObject("refCategoryList", refCategoryList);
-		mv.addObject("manufacturerList", manufacturerList);
-		mv.addObject("accountList", accountList);
-		mv.setViewName("product/insertProduct");
-		
-		return mv;
-	}
-	
 	/* 상품 등록 */
 	@PostMapping("/insert")
 	public ModelAndView insertProduct(ModelAndView mv, @ModelAttribute InsertProductDTO parameters,
 			@RequestParam MultipartFile productThumbNail, HttpServletRequest request, RedirectAttributes rttr) {
 		
-		System.out.println("parameters : " + parameters );
+		System.out.println("parameters : " + parameters);
 		
 		System.out.println("$%$%$%$%$%$%$%");
 		System.out.println("$%$%$%$%$%$%$%");
 		System.out.println("$%$%$%$%$%$%$%");
 		System.out.println("productThumbNail : " + productThumbNail);
 		
+		/* 절대경로를 변수에 초기화한다. */
 		String root = request.getSession().getServletContext().getRealPath("\\");
 		
 		System.out.println("root : " + root);
 		
+		/* 이미지 원본파일과 썸네일을 저장할 경로를 설정해준다.*/
 		String fileUploadDirectory = root + "\\upload\\original";
 		String thumbnailDirectory = root + "\\upload\\thumbnail";
 		
-		
+		/* 파일 객체 생성 */
 		File directory = new File(fileUploadDirectory);
 		File directory2 = new File(thumbnailDirectory);
 		
+		/* 이미지를 저장할 폴더가 없을시에 폴더를 생성해준다. */
 		if(!directory.exists() || !directory2.exists()) {
 			System.out.println("폴더생성 : " + directory.mkdirs());
 			System.out.println("폴더생성 : " + directory2.mkdirs());
 		}
 		
 		
-		
+		/* 이미지 원본파일 */
 		String originFileName = productThumbNail.getOriginalFilename();
+		
+		/* 이미지 확장자 */
 		String ext = originFileName.substring(originFileName.lastIndexOf("."));
+		
+		/* 이미지파일명이 중복되지 않도록 설정해준다. */
 		String savedName = UUID.randomUUID().toString().replace("-", "") + ext;
+		
+		/* 맵에다 원본파일명과 저장경로와 저장된 파일명
+		 * 썸네일 사이즈를 설정한 뒤 썸네일 경로까지 담아준다.*/
 		Map<String, String> fileMap = new HashMap<>();
 		fileMap.put("originFileName", originFileName);
 		fileMap.put("savedName", savedName);
 		fileMap.put("savedPath", fileUploadDirectory);
 		
+		/* 썸네일 너비 높이 설정 */
 		int width = 250;
 		int height = 250;
 		
+		/* 등록 결과 초기화 */
 		int result = 0;
 		
 		try {
+			
+			/* 원본 이미지 저장 */
 			productThumbNail.transferTo(new File(fileUploadDirectory + "\\" + savedName));
 			
+			/* 썸네일 저장 */
 			Thumbnails.of(fileUploadDirectory + "\\" + savedName)
-					.size(width, height)
-					.toFile(thumbnailDirectory + "\\thumbnail_" + savedName);
-					
+			.size(width, height)
+			.toFile(thumbnailDirectory + "\\thumbnail_" + savedName);
+			
+			/* 썸네일 경로 멥에 담아준다. */
 			fileMap.put("thumbnailPath", "/thumbnail_" + savedName);
 			
+			/* 상품 등록 결과 값이 1이 되면 등록 성공 아니면 실패 */
 			result = productService.insertProduct(parameters, fileMap);
-	
+			
 		} catch (IllegalStateException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 			
+			/* 어떠한 예외처리가 발생한다면 파일 삭제 */
 			new File(fileUploadDirectory + "\\" + savedName).delete();
 		}
 		
+		/* 성공 실패시 화면에 띄워줄 메세지를 설정해준다.*/
 		String message = "";
 		
 		if(result > 0) {
@@ -236,8 +226,102 @@ public class ProductController {
 	}
 	
 	
-	
-	
+	/* 상품 업데이트 */
+	@PostMapping("/modify") 
+	public ModelAndView modifyProduct(ModelAndView mv, @ModelAttribute ProductDTO parameters, 
+			HttpServletRequest request, RedirectAttributes rttr, @RequestParam MultipartFile productThumbNail,
+			String productImg) {
+		
+		System.out.println("productImg : " + productImg);
+		
+		System.out.println("parameters : " + parameters);
+		
+		System.out.println("productThumbNail : " + productThumbNail);
+		
+		/* 등록 결과 초기화 */
+		int result = 0;
+		
+		/* 기본 파일 이름, 이미지 파일명, 원본파일 저장경로 ,상품번호, 썸네일로 저장한 파일명을 담아주는 DTO*/
+		ProductImageDTO updateFile = new ProductImageDTO();
+		
+		
+		/* 입력한 파일이 비어있지 않는다면 이미지 수정*/
+		if(!productThumbNail.isEmpty()) {
+		
+		
+			/* 절대경로를 변수에 초기화한다. */
+			String root = request.getSession().getServletContext().getRealPath("\\");
+			
+			System.out.println("root : " + root);
+			
+			/* 이미지 원본파일과 썸네일을 저장할 경로를 설정해준다.*/
+			String fileUploadDirectory = root + "\\upload\\original";
+			String thumbnailDirectory = root + "\\upload\\thumbnail";
+			
+			
+			/* 이미지 원본파일 */
+			String originFileName = productThumbNail.getOriginalFilename();
+			
+			/* 이미지 확장자 */
+			String ext = originFileName.substring(originFileName.lastIndexOf("."));
+			
+			/* 이미지파일명이 중복되지 않도록 설정해준다. */
+			String savedName = UUID.randomUUID().toString().replace("-", "") + ext;
+			
+			/* 기본 파일 이름, 이미지 파일명, 원본파일 저장경로, 상품번호를 담아준다*/
+			updateFile.setOriginalName(originFileName);
+			updateFile.setSavedName(savedName);
+			updateFile.setSavedPath(fileUploadDirectory);
+			updateFile.setProductNo(parameters.getProductNo());
+			
+			
+			/* 썸네일 너비 높이 설정 */
+			int width = 250;
+			int height = 250;
+			
+			
+			try {
+					
+				/* 원본 이미지 저장 */
+				productThumbNail.transferTo(new File(fileUploadDirectory + "\\" + savedName));
+				
+				/* 썸네일 경로 저장 */
+				Thumbnails.of(fileUploadDirectory + "\\" + savedName)
+				.size(width, height)
+				.toFile(thumbnailDirectory + "\\thumbnail_" + savedName);
+				
+				/* html에서 이미지를 조회할 수 있도록 썸네일 경로를 dto에 담아준다.*/
+				updateFile.setThumbnailPath("/thumbnail_" + savedName);
+				
+			} catch (IllegalStateException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				
+				/* 어떠한 예외처리가 발생한다면 파일 삭제 */
+				new File(fileUploadDirectory + "\\" + savedName).delete();
+				e.printStackTrace();
+			}
+			
+			result = productService.modifyProductWithImg(parameters, updateFile);
+			
+		} else {
+			
+			result = productService.modifyProductForText(parameters);
+			
+		}
+		
+		String message = "";
+		
+		if(result > 0) {
+			message = "상품수정에 성공하셨습니다!";
+		} else {
+			message = "상품수정에 실패하셨습니다!";
+		}
+		
+		rttr.addFlashAttribute("message", message);
+		mv.setViewName("redirect:/product/selectAll");
+		return mv;
+	}
 	
 	/* 카테고리 조회 */
 	@GetMapping("/category/selectAll")

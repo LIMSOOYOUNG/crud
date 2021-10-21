@@ -160,18 +160,7 @@
 	
 	</select>
 	
-	<update id="modifyProduct" parameterType="com.deft.crud.product.model.dto.ProductDTO">
-		UPDATE /*com.deft.crud.product.model.dao.ProductMapper#modifyProduct()*/
-			   TBL_PRODUCT A
-		   SET A.SELL_STATUS = #{ sellStatus }
-		     , A.PRODUCT_NAME = #{ productName }
-		     , A.PURCHASE_PRICE = #{ purchasePrice }
-		     , A.SELLING_PRICE = #{ sellingPrice }
-		     , A.CATEGORY_CODE = #{ categoryCode }
-		     , A.ACCOUNT_NO = #{ accountNo } 
-		     , A.MANUFACTURER_NO = #{ manufacturerNo }
-		 WHERE A.PRODUCT_NO = #{ productNo } 
-	</update>
+	
 	
 	<insert id="insertRefCategory" parameterType="com.deft.crud.product.model.dto.ProductCategoryDTO">
 		INSERT /*com.deft.crud.product.model.dao.ProductMapper#insertRefCategory()*/
@@ -220,14 +209,15 @@
 		)
 	</insert>
 	
-	<select id="selectProductSeq" resultType="INT">
+	<!-- 상품 이미지 등록을 위해 마지막 시퀀스 번호 조회 -->
+	<select id="selectProductSeq" resultType="_int">
 		SELECT /*com.deft.crud.product.model.dao.ProductMapper#selectProductSeq()*/
 			   LAST_NUMBER "PRODUCT_NO"
 		  FROM USER_SEQUENCES
 		 WHERE SEQUENCE_NAME = 'SEQ_PRODUCT_NO'
-	
 	</select>
 	
+	<!-- 상품 이미지 등록 -->
 	<insert id="insertProductImage" parameterType="com.deft.crud.product.model.dto.ProductImageDTO">
 		INSERT /*com.deft.crud.product.model.dao.ProductMapper#insertProductImage()*/
 		  INTO TBL_PRODUCT_IMAGE P
@@ -240,8 +230,31 @@
 		  SEQ_PRODUCT_IMG_NO.NEXTVAL, #{ originalName }, #{ savedName },
 		  #{ savedPath }, #{ productNo }, #{ thumbnailPath } 
 		)
-		 
 	</insert>
+	
+	<!-- 상품 텍스트 수정 -->
+	<update id="modifyProductForText" parameterType="com.deft.crud.product.model.dto.ProductDTO">
+		UPDATE /*com.deft.crud.product.model.dao.ProductMapper#modifyProductForText()*/
+			   TBL_PRODUCT A
+		   SET A.SELL_STATUS = #{ sellStatus }
+		     , A.PRODUCT_NAME = #{ productName }
+		     , A.PURCHASE_PRICE = #{ purchasePrice }
+		     , A.SELLING_PRICE = #{ sellingPrice }
+		     , A.CATEGORY_CODE = #{ categoryCode }
+		     , A.ACCOUNT_NO = #{ accountNo } 
+		     , A.MANUFACTURER_NO = #{ manufacturerNo }
+		 WHERE A.PRODUCT_NO = #{ productNo } 
+	</update>
+	
+	<update id="modifyProductImage" parameterType="com.deft.crud.product.model.dto.ProductImageDTO">
+		UPDATE /*com.deft.crud.product.model.dao.ProductMapper#modifyProductForText()*/
+			   TBL_PRODUCT_IMAGE P
+		   SET P.ORIGINAL_NAME = #{ originalName }
+		     , P.SAVED_NAME = #{ savedName }
+			 , P.SAVED_PATH = #{ savedPath }
+			 , P.THUMBNAIL_PATH = #{ thumbnailPath }
+		 WHERE P.PRODUCT_NO = #{ productNo }
+	</update>
 	
 	<select id="selectOneCategory" resultMap="productCategoryResultMap">
 		SELECT /*com.deft.crud.product.model.dao.ProductMapper#selectOneCategory()*/
