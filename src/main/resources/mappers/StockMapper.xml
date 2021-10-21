@@ -297,7 +297,7 @@
         (
           RECEIVING_REQ_HIS_NO
         , DOCUMENT_PROCESS_DATE
-        , DOCUMET_STATUS
+        , DOCUMENT_STATUS
         , RECEIVING_REQ_NO  
         )
         VALUES
