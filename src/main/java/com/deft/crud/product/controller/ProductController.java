@@ -149,8 +149,8 @@ public class ProductController {
 		System.out.println("root : " + root);
 		
 		/* 이미지 원본파일과 썸네일을 저장할 경로를 설정해준다.*/
-		String fileUploadDirectory = root + "\\upload\\original";
-		String thumbnailDirectory = root + "\\upload\\thumbnail";
+		String fileUploadDirectory = root + "\\upload\\productImage\\original";
+		String thumbnailDirectory = root + "\\upload\\productImage\\thumbnail";
 		
 		/* 파일 객체 생성 */
 		File directory = new File(fileUploadDirectory);
@@ -255,9 +255,18 @@ public class ProductController {
 			System.out.println("root : " + root);
 			
 			/* 이미지 원본파일과 썸네일을 저장할 경로를 설정해준다.*/
-			String fileUploadDirectory = root + "\\upload\\original";
-			String thumbnailDirectory = root + "\\upload\\thumbnail";
+			String fileUploadDirectory = root + "\\upload\\productImage\\original";
+			String thumbnailDirectory = root + "\\upload\\productImage\\thumbnail";
 			
+			/* 파일 객체 생성 */
+			File directory = new File(fileUploadDirectory);
+			File directory2 = new File(thumbnailDirectory);
+			
+			/* 이미지를 저장할 폴더가 없을시에 폴더를 생성해준다. */
+			if(!directory.exists() || !directory2.exists()) {
+				System.out.println("폴더생성 : " + directory.mkdirs());
+				System.out.println("폴더생성 : " + directory2.mkdirs());
+			}
 			
 			/* 이미지 원본파일 */
 			String originFileName = productThumbNail.getOriginalFilename();

@@ -25,8 +25,10 @@
 							<canvas id="deptPerformanceChart"></canvas>
 						</div>
 					</div> 
-					<div>
-					<!-- 여기서부터 대시보드 -->
+					<div class="row">
+						<div class="row col-lg-6">
+							<canvas id="failedBusinessChanceChart"></canvas>
+						</div>	
 					</div>
 				</div>
 			</div> 
@@ -50,20 +52,12 @@
 				type: 'GET',
 				success: function(data, status, xhr) {
 					
-					const userPerformChart = JSON.parse(data.userPerformChart);
-					const userTargetPerformChart = JSON.parse(data.userTargetPerformChart);
-					console.table(userTargetPerformChart);
+					const userSales = JSON.parse(data.userSalesChart);
+					const userTargetSales = JSON.parse(data.userTargetSalesChart);
 					
-					let collectBillAmount = new Array();
-					let targetSales = new Array();
+					console.log(userSales);
+					console.log(userTargetSales);
 					
-					for(var i = 0; i < userPerformChart.length; i++) {
-						collectBillAmount[i] = userPerformChart[i].collect.collectBillAmount;
-					}
-					
-					for(var j = 0; j < userTargetPerformChart.length; j++) {
-						targetSales[j] = userTargetPerformChart[j].targetSales;
-					}
 					
 					
 					var config = {
@@ -73,18 +67,18 @@
 								labels: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'],
 								datasets: [{
 									label: '내 실적',
-									data: [collectBillAmount[0], 
-											collectBillAmount[1], 
-											collectBillAmount[2], 
-											collectBillAmount[3], 
-											collectBillAmount[4], 
-											collectBillAmount[5], 
-											collectBillAmount[6], 
-											collectBillAmount[7],
-											collectBillAmount[8],
-											collectBillAmount[9],
-											collectBillAmount[10],
-											collectBillAmount[11],
+									data: [userSales[0], 
+											userSales[1], 
+											userSales[2], 
+											userSales[3], 
+											userSales[4], 
+											userSales[5], 
+											userSales[6], 
+											userSales[7],
+											userSales[8],
+											userSales[9],
+											userSales[10],
+											userSales[11],
 										   ],
 									backgroundColor: ['rgba(54, 162, 235, 0.2)'],
 									borderColor: ['rgba(54, 162, 235, 1)'],
@@ -92,18 +86,18 @@
 								
 							}, {									   
 									label: '내 목표 실적',
-									data: [targetSales[0], 
-											targetSales[1], 
-											targetSales[2], 
-											targetSales[3], 
-											targetSales[4], 
-											targetSales[5], 
-											targetSales[6], 
-											targetSales[7],
-											targetSales[8],
-											targetSales[9],
-											targetSales[10],
-											targetSales[11],
+									data: [userTargetSales[0], 
+											userTargetSales[1], 
+											userTargetSales[2], 
+											userTargetSales[3], 
+											userTargetSales[4], 
+											userTargetSales[5], 
+											userTargetSales[6], 
+											userTargetSales[7],
+											userTargetSales[8],
+											userTargetSales[9],
+											userTargetSales[10],
+											userTargetSales[11],
 										   ],
 									backgroundColor: ['rgba(255, 99, 132, 0.2)'],
 									borderColor: ['rgba(255, 99, 132, 1)'],
@@ -140,15 +134,9 @@
 				type: 'GET',
 				success: function(data, status, xhr) {
 					
-					console.log(data);
+					const deptSales = JSON.parse(data.deptSalesChart);
 					
-					const deptPerformChart = JSON.parse(data.deptPerformChart);
-					
-					let collectBillAmount = new Array();
-					
-					for(var i = 0; i < deptPerformChart.length; i++) {
-						collectBillAmount[i] = deptPerformChart[i].collect.collectBillAmount;
-					}
+					console.log(deptSales);
 					
 					var config = {
 							
@@ -157,18 +145,18 @@
 							labels: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'],
 							datasets: [{
 								label: '부서 실적',
-								data: [collectBillAmount[0], 
-										collectBillAmount[1], 
-										collectBillAmount[2], 
-										collectBillAmount[3], 
-										collectBillAmount[4], 
-										collectBillAmount[5], 
-										collectBillAmount[6], 
-										collectBillAmount[7],
-										collectBillAmount[8],
-										collectBillAmount[9],
-										collectBillAmount[10],
-										collectBillAmount[11]
+								data: [deptSales[0], 
+										deptSales[1], 
+										deptSales[2], 
+										deptSales[3], 
+										deptSales[4], 
+										deptSales[5], 
+										deptSales[6], 
+										deptSales[7],
+										deptSales[8],
+										deptSales[9],
+										deptSales[10],
+										deptSales[11]
 									   ], 
 								backgroundColor: ['rgba(255, 99, 132, 0.2)'],
 								borderColor: ['rgba(255, 99, 132, 1)'],
@@ -185,6 +173,69 @@
 					};
 						
 					var deptPerformanceChart = new Chart(ctx, config);
+
+				},
+
+				error: function(xhr, status, error) {
+					console.log(error);
+				}
+			
+			});
+		}); 
+		
+		/* 영업기회 실패 조회 */
+		$(document).ready(function () {
+		
+			var ctx = document.getElementById('failedBusinessChanceChart');
+			
+			$.ajax({
+				url:"/dashboard/business/failedChance",
+				type: 'GET',
+				success: function(data, status, xhr) {
+					
+					const businessChanceFailed = JSON.parse(data.businessChanceFailed);
+					
+					let failedBusinessChanceCount = new Array();
+					
+					for(var i = 0; i < businessChanceFailed.length; i++) {
+						failedBusinessChanceCount[i] = businessChanceFailed[i].failedBusinessChanceCount;
+					}
+					
+					var config = {
+							
+						type: 'bar',
+						data: {
+							labels: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'],
+							datasets: [{
+								label: '실패한 영업기회',
+								data: [failedBusinessChanceCount[0], 
+										failedBusinessChanceCount[1], 
+										failedBusinessChanceCount[2], 
+										failedBusinessChanceCount[3], 
+										failedBusinessChanceCount[4], 
+										failedBusinessChanceCount[5], 
+										failedBusinessChanceCount[6], 
+										failedBusinessChanceCount[7], 
+										failedBusinessChanceCount[8], 
+										failedBusinessChanceCount[9], 
+										failedBusinessChanceCount[10], 
+										failedBusinessChanceCount[11]
+									   ], 
+								backgroundColor: ['rgba(255, 99, 132, 0.2)'],
+								borderColor: ['rgba(255, 99, 132, 1)'],
+								borderWidth: 1
+							}]
+						},
+						options: {
+							scales: {
+								y: {
+									beginAtZero: true
+								}
+							}
+						}
+					};
+						
+					var failedBusinessChanceChart = new Chart(ctx, config);
 
 				},
 

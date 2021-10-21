@@ -35,7 +35,7 @@
 								</div>
 								<div class="card-body">
 									<div class="form-group" id="productImgArea">
-										<img th:if="${productImage != null}" th:src="|@{/upload/thumbnail}${productImage.thumbnailPath}|" width="250" height="300" id="productImg" name="productImg" class="mx-3">
+										<img th:if="${productImage != null}" th:src="|@{/upload/productImage/thumbnail}${productImage.thumbnailPath}|" width="250" height="300" id="productImg" name="productImg" class="mx-3">
 										<div class="thumbnail-file-area">
 											<input type="file" class="mx-3" id="productThumbNail" name="productThumbNail" onchange="loadImg(this,1)">
 										</div>
