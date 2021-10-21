@@ -41,7 +41,7 @@
 							<div class="card mb-4">
 								<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
 									<h6 class="m-0 font-weight-bold text-primary">사원실적조회</h6>
-									<input type="button" id="insertTarget" class="btn btn-primary" data-toggle="modal" data-target="#insertSalesTarget" value="목표실적등록">
+									<input type="button" id="insertSalesTargetBtn" class="btn btn-primary" data-toggle="modal" data-target="#insertSalesTarget" value="목표실적등록">
 								</div>
 								<div class="row ml-3">
 									<div class="form-group col-lg-2">
@@ -97,7 +97,7 @@
 	</div>
 
 
-	<div class="modal fade" id="insertSalesTarget" tabindex="-1" role="dialog"
+	<div class="modal fade" id="insertSalesTargetModal" tabindex="-1" role="dialog"
 		aria-labelledby="insertSalesTargetCenterTitle" aria-hidden="true">
 		<div class="modal-dialog modal-dialog-centered modal-" role="document"> 
 			<div class="modal-content">
@@ -127,15 +127,15 @@
 						<div class="form-group row col-lg-12">
 							<label for="inputTargetSales" class="col-sm-5 col-form-label">목표매출(원)</label>
 							<div class="col-sm-7">
-								<input type="number" class="form-control" id="inputTargetSales" name="targetSales" min=0>
+								<input type="number" class="form-control" id="inputTargetSales" name="targetSales" min=0 required>
 							</div>
 						</div> 
 					</div>
 					<div class="row">
 						<div class="form-group row col-lg-12">
-							<label for="inputTargetSales" class="col-sm-5 col-form-label">목표계약수(건)</label>
+							<label for="inputTargetContract" class="col-sm-5 col-form-label">목표계약수(건)</label>
 							<div class="col-sm-7">
-								<input type="number" class="form-control" id="inputTargetContract" name="targetContract" min=0>
+								<input type="number" class="form-control" id="inputTargetContract" name="targetContract" min=0 required>
 							</div>
 						</div>
 					</div>
@@ -143,9 +143,9 @@
 					<h5 class="modal-title" id="insertSalesTargetCenterTitle" style="color: #6777EF;">전월 실적</h5>
 					<div class="row mt-3">
 						<div class="form-group row col-lg-12">
-							<label for="departmentSales" class="col-sm-5 col-form-label">전월 부서 평균 실적</label>
+							<label for="myLastMonthContractCount" class="col-sm-5 col-form-label">전월 계약수</label>
 							<div class="col-sm-7">
-								<label class="form-control" id="departmentSales"></label>
+								<input type="text" class="form-control" id="myLastMonthContractCount" name="myLastMonthContractCount">
 							</div>
 						</div>
 					</div>
@@ -153,7 +153,7 @@
 						<div class="form-group row col-lg-12">
 							<label for="mySales" class="col-sm-5 col-form-label">전월 나의 실적</label>
 							<div class="col-sm-7">
-								<label class="form-control" id="mySales"></label>
+								<input type="text" class="form-control" id="myLastMonthSales" name="myLastMonthSales">
 							</div>
 						</div>
 					</div>
@@ -166,7 +166,6 @@
 			</div>
 		</div>	
 	</div>
-</body>	
 
     <!-- Script -->
     <th:block th:replace="@{/common/script} :: script"></th:block>
@@ -309,30 +308,29 @@
 			}); 
 			
 			/* 전월 부서 평균 실적과 내 실적 조회*/
-			$(document).on('click', "#insertTarget", function() {
+			$(document).on('click', "#insertSalesTargetBtn", function() {
 				
-				$("#insertSalesTarget").modal();
+				$("#insertSalesTargetModal").modal();
 				
 				$.ajax({
 					url: "/sales/last/month/perform/select",
 					success: function(data, status, xhr) {
 						
-						deptAvgPeform = JSON.parse(data.selectDeptAvgPeform);
-						empPeformLastMonth = JSON.parse(data.selectEmpPeformLastMonth);
+						const empPeformLastMonth = JSON.parse(data.selectEmpPeformLastMonth);
 
-						console.table(deptAvgPeform);
 						console.table(empPeformLastMonth);
+						
+						let myLastMonthSales = empPeformLastMonth.collect.collectBillAmount;
+						
+						myLastMonthSales = myLastMonthSales.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
-						$departmentSales = $("#departmentSales");
-						$mySales = $("#mySales");
-
-						$departmentSales.html("");
-						$mySales.html("");
+						$('#myLastMonthContractCount').val(empPeformLastMonth.performanceCount + "건").attr('disabled', 'disabled'); 
+						$('#myLastMonthSales').val(myLastMonthSales + "원").attr('disabled', 'disabled'); 
 
 					}
 
 				});
-			})
+			});
 
 			/* 상세보기 페이지 */
 			$(document).on('click', "button[name='detailButton']", function () {   
@@ -365,10 +363,8 @@
 		$('#insertTarget').submit();
 	}	
 
-	
-
     </script>
- 
+</body> 
 </html>
 
 

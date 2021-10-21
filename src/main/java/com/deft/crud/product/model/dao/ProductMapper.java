@@ -34,7 +34,6 @@ public interface ProductMapper {
 	
 	
 
-	int modifyProduct(ProductDTO parameters);
 
 	int insertRefCategory(ProductCategoryDTO parameter);
 
@@ -52,10 +51,20 @@ public interface ProductMapper {
 	/* 상품 이미지 등록 */
 	int insertProductImage(ProductImageDTO productImage);
 	
+	/* 상품정보 텍스트로 입력한 정보 수정 */
+	int modifyProductForText(ProductDTO parameters);
+	
+	/* 상품 이미지 정보 수정 결과 */
+	int modifyProductImage(ProductImageDTO updateFile);
+	
+	
 	ProductCategoryDTO selectOneCategory(int selectedCategory);
 	
 	/* 카테고리(소) 수정*/
 	int updateCategory(ProductCategoryDTO parameters);
+
+	
+	
 
 	
 
