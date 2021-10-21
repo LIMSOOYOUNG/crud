@@ -7,6 +7,8 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.deft.crud.member.model.service.UserImpl;
@@ -205,7 +207,7 @@ public class StockService {
 		return receivingReqProductList;
 	}
 
-	/* 결재문서 결재상태 변경 후 결재 처리 and 결재 이력 생성 */
+	/* 입고요청서 결재상태 변경 후 결재 처리 and 결재 이력 생성 */
 	@Transactional
 	public boolean modifyApprovalStatus(ApprovalModifyDTO parameters) {
 
@@ -235,6 +237,51 @@ public class StockService {
 
 		return result > 0? true: false;
 	}
+	
+	/* 출고요청서 결재상태 변경 후 결재 처리 and 결재 이력 생성 */
+	@Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE,
+			rollbackFor = {Exception.class})
+	public boolean modifyReleaseStatus(ReceivingReqDTO parameters) {
+
+		LocalDateTime sysDateLocalDateTime = LocalDateTime.now();
+
+		String sysDate= sysDateLocalDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss"));
+		
+		System.out.println("@@@" + sysDate);
+
+		parameters.getApprovalDocumentDTO().setDocumentProcessDate(sysDate);
+
+		int result = 0;
+
+		int modifyResult = stockMapper.modifyReleaseStatus(parameters);			// 결재상태 변경(결재 처리)
+
+		System.out.println("결재상태 변경 성공 여부 : " + modifyResult);
+		
+		String approvalStatus = parameters.getApprovalDocumentDTO().getDocumentStatus();
+		
+		RequestStockDTO requestStock = new RequestStockDTO();
+		if(modifyResult > 0 && approvalStatus.equals("승인")) {
+
+			for(int i = 0; i < parameters.getReceivingReqProductList().size(); i++) {
+				requestStock.setStockProductNo(parameters.getReceivingReqProductList().get(i).getProductNo());
+				requestStock.setProductStock(parameters.getReceivingReqProductList().get(i).getProductStock());
+				requestStock.setOrderStockAmount(parameters.getReceivingReqProductList().get(i).getProductAmount());
+				
+				stockMapper.updateStorage(requestStock);		// 출고 요청수량 만큼 창고재고수량 감소
+			}			
+			
+			
+			int hisResult = stockMapper.insertReleaseReqHistoryParameter(parameters);	//결재이력 INSERT 
+
+			if(hisResult > 0) {
+
+				result = 1;
+			}
+		}
+
+		return result > 0? true: false;
+	}
+
 
 	/* 미완료 상태 주문서 목록 조회 */
 	public List<OrderDTO> selectPurchaseOrderAll(int empNo) {
@@ -279,6 +326,7 @@ public class StockService {
 		return order;
 	}
 
+	/* 출고요청서 기본 정보조회 */
 	public ReceivingReqDTO selectReleaseInfo(int approvalNo) {
 	
 		ReceivingReqDTO releaseInfo = stockMapper.selectReleaseReqByNo(approvalNo);
@@ -286,6 +334,15 @@ public class StockService {
 		return releaseInfo;
 	}
 
+	/* 결재문서번호로 출고요청서 번호 조회 */
+	public int selectReleaseNoByApprovalNo(int approvalNo) {
+
+		int releaseNo = stockMapper.selectReleaseNoByApprovalNo(approvalNo);
+		
+		return releaseNo;
+	}
+
+	
 	
 	
 

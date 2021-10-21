@@ -52,18 +52,27 @@ public interface StockMapper {
 
 	int modifyApprovalStatus(ApprovalModifyDTO parameters);					// 결재문서 결재상태 변경 후 결재 처리
 
-	int insertReceivingReqHistoryParameter(ApprovalModifyDTO parameters);			// 결재이력 생성 
+	int insertReceivingReqHistoryParameter(ApprovalModifyDTO parameters);	// 결재이력 생성 
 
 	List<ReceivingReqDTO> selectReceivingReqByStatus(String documentStatus  // 요청목록 결재상태 별 조회(담당자 or 사원)
 													, UserImpl userInfo);
 
 	List<OrderDTO> selectPurchaseOrderAll(int empNo);  						// 미완료 상태 주문서 목록조회
 
-	ReleaseReqDTO selectorderNoByApprovalNo(int approvalNo);						// 결재문서 번호로 주문서 번호 찾기
+	ReleaseReqDTO selectorderNoByApprovalNo(int approvalNo);				// 결재문서 번호로 주문서 번호 찾기
 
 	int selectReceivingNoByApprovalNo(int approvalNo);						// 결재문서 번호로 입고요청번호 찾기
 
-	ReceivingReqDTO selectReleaseReqByNo(int approvalNo);
+	ReceivingReqDTO selectReleaseReqByNo(int approvalNo);					// 선택한 출고요청서 상세정보 조회
+
+	int modifyReleaseStatus(ReceivingReqDTO parameters);					// 출고요청서 결재 상태 변경
+
+	int insertReleaseReqHistoryParameter(ReceivingReqDTO parameters);		// 출고요청서 결재 이력 생성
+
+	int selectReleaseNoByApprovalNo(int approvalNo);						// 결재문서번호로 출고요청서 번호 조회
+
+	void updateStorage(RequestStockDTO requestStock);
+
 
 
 

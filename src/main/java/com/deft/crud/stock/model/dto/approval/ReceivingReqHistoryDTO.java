@@ -15,6 +15,6 @@ public class ReceivingReqHistoryDTO {
 
 	private int receivingReqHisNo;
 	private String documentProcessDate;
-	private String approvalStatus;
+	private String documentStatus;
 	private int receivingReqNo;
 }

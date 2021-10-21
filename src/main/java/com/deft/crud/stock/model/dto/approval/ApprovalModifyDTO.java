@@ -14,8 +14,9 @@ import lombok.ToString;
 public class ApprovalModifyDTO {
 
 	private int receivingReqNo;
+	private int releaseReqNo;
 	private int approvalDocumentNo;
 	private String approvalDocumentType;
-	private String approvalStatus;
+	private String documentStatus;
 	private String documentProcessDate;
 }

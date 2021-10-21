@@ -14,6 +14,7 @@
 		<result property="deliveryPlace" column="DELIVERY_PLACE"/>
 		<result property="providerRegistNo" column="PROVIDER_REGIST_NO"/>
 		
+		
 		<association property="customer" resultMap="customerResultMap"/>
 		<association property="provider" resultMap="providerResultMap"/>
 		<collection property="orderProductList" resultMap="orderProductResultMap"/>
@@ -23,6 +24,7 @@
 		<id property="customerNo" column="CUSTOMER_NO"/>
         <result property="customerName" column="CUSTOMER_NAME"/>
         <result property="customerPhone" column="CUSTOMER_PHONE"/>
+        <result property="customerAddress" column="CUSTOMER_ADDRESS"/>
         <result property="empNo" column="EMP_NO"/>
 		
 		<association property="company" resultMap="companyResultMap"/>
@@ -58,6 +60,8 @@
 	<resultMap type="com.deft.crud.order.model.dto.OrderProductDTO" id="orderProductResultMap">
 		<id property="orderNo" column="ORDER_NO"/>
 		<id property="productNo" column="PRODUCT_NO"/>
+		<result property="productStock" column="PRODUCT_STOCK" />
+
 		<result property="productAmount" column="PRODUCT_AMOUNT"/>
 		
 		<association property="product" resultMap="productResultMap"/>
@@ -95,6 +99,7 @@
              , O.ORDER_TITLE
              , O.CUSTOMER_NO
              , C.CUSTOMER_NAME
+             , C.CUSTOMER_ADDRESS
              , C.CUSTOMER_PHONE
              , CC.COMPANY_NAME
              , EI.EMP_NAME
@@ -111,6 +116,7 @@
              , P.SELLING_PRICE
              , P.UNIT
              , OP.PRODUCT_AMOUNT
+             , S.PRODUCT_STOCK
           FROM TBL_PURCHASE_ORDER O
           LEFT JOIN TBL_CUSTOMER C ON (O.CUSTOMER_NO = C.CUSTOMER_NO)
           LEFT JOIN TBL_CUSTOMER_COMPANY CC ON (C.CUSTOMER_COMPANY_NO = CC.CUSTOMER_COMPANY_NO)
@@ -118,6 +124,7 @@
           LEFT JOIN TBL_JOB J ON (EI.JOB_CODE = J.JOB_CODE)
           LEFT JOIN TBL_PURCHASE_ORDER_PRODUCT OP ON (O.ORDER_NO = OP.ORDER_NO)
           LEFT JOIN TBL_PRODUCT P ON (OP.PRODUCT_NO = P.PRODUCT_NO)
+          LEFT JOIN TBL_STORAGE S ON (P.PRODUCT_NO = S.PRODUCT_NO)
          WHERE O.ORDER_NO = #{ orderNo }
 	</select>
 	
