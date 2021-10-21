@@ -6,26 +6,26 @@ import org.apache.ibatis.annotations.Mapper;
 
 import com.deft.crud.dashboard.model.dto.BusinessChanceDTO;
 import com.deft.crud.dashboard.model.dto.EmpInfoDTO;
-import com.deft.crud.dashboard.model.dto.PerformanceDTO;
-import com.deft.crud.sales.model.dto.TargetPerfomDTO;
+import com.deft.crud.member.model.service.UserImpl;
 
 @Mapper
 public interface DashboardMapper {
 	
 	/* 사원 실적 그래프 */
-	List<PerformanceDTO> userPerformChart(int empNo, int collectBillYear);
+	Integer userSalesChart(int empNo, int collectBillYear, int collectBillMonth);
 	
 	/* 사원 목표실적 그래프*/
-	List<TargetPerfomDTO> userTargetPerformChart(int empNo, int collectBillYear);
+	Integer userTargetSalesChart(int empNo, int collectBillYear, int collectBillMonth);
 
 	/* 부서 실적 그래프 */
-	List<PerformanceDTO> deptPerformChart(EmpInfoDTO empInfo, int collectBillYear);
+	Integer deptSalesChart(UserImpl empInfo, int collectBillYear, int collectBillMonth);
 
 	/* 유도 경로별 그래프 */
 	List<BusinessChanceDTO> businessChanceChart(EmpInfoDTO empInfo);
 
 	/* 실패한 영업기회 수 */
-	List<BusinessChanceDTO> failedChart(int empNo, int collectBillYear);
+	List<BusinessChanceDTO> failedChart(int empNo, int businessChanceFailedYear);
+
 
 	
 }

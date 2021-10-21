@@ -1,5 +1,7 @@
 package com.deft.crud.dashboard.model.service;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +11,7 @@ import com.deft.crud.dashboard.model.dao.DashboardMapper;
 import com.deft.crud.dashboard.model.dto.BusinessChanceDTO;
 import com.deft.crud.dashboard.model.dto.EmpInfoDTO;
 import com.deft.crud.dashboard.model.dto.PerformanceDTO;
+import com.deft.crud.member.model.service.UserImpl;
 import com.deft.crud.sales.model.dto.TargetPerfomDTO;
 
 @Service
@@ -22,26 +25,87 @@ public class DashBoardService {
 	}
 	
 	/* 사원 실적 그래프 */
-	public List<PerformanceDTO> userPerformChart(int empNo, int collectBillYear) {
+	public List<Integer> userSalesChart(UserImpl loginInfo, int collectBillYear) {
 		
-		return dashBoardMapper.userPerformChart(empNo, collectBillYear);
+		List<Integer> salesList = new ArrayList<>();
+
+		int empNo = loginInfo.getEmpNo();
+		
+		for(int collectBillMonth = 1; collectBillMonth <= 12; collectBillMonth++) {
+			
+			Integer userSales = dashBoardMapper.userSalesChart(empNo, collectBillYear, collectBillMonth);
+			
+			System.out.println("userSales : " + userSales);
+			
+			if(userSales == null) {
+				salesList.add(0);
+			} else {
+				salesList.add(userSales);
+			}
+			
+		}
+		
+		return salesList;
 	}
 	
 	/* 사원 목표 실적 그래프*/
-	public List<TargetPerfomDTO> userTargetPerformChart(int empNo, int collectBillYear) {
+	public List<Integer> userTargetSalesChart(UserImpl loginInfo, int collectBillYear) {
 		
-		return dashBoardMapper.userTargetPerformChart(empNo, collectBillYear);
+		/* null값도 담아주기 위해서 arrayList 생성 */
+		List<Integer> targetSalesList = new ArrayList<>();
+		
+		int empNo = loginInfo.getEmpNo();
+		
+		/* 반복문을 돌려서 1월 부터 12월까지 조회한다. */
+		for(int collectBillMonth = 1; collectBillMonth <= 12; collectBillMonth++) {
+			
+			Integer targetSales = dashBoardMapper.userTargetSalesChart(empNo, collectBillYear, collectBillMonth);
+			
+			if(targetSales == null) {
+				targetSalesList.add(0);
+			} else {
+				targetSalesList.add(targetSales);
+			}
+			
+		}
+		
+		System.out.println("targetSalesList : " + targetSalesList);
+		
+		return targetSalesList;
 	}
 
 	/* 부서 실적 그래프 */
-	public List<PerformanceDTO> deptPerformChart(EmpInfoDTO empInfo, int collectBillYear) {
+	public List<Integer> deptSalesChart(UserImpl empInfo) {
 		
-		return dashBoardMapper.deptPerformChart(empInfo, collectBillYear);
+		/* 현재 연도 정보를 LocalDate에서 가지고 온다.*/
+		LocalDate collectBillDate = LocalDate.now();
+		int collectBillYear = collectBillDate.getYear();
+		
+		
+		/* null값도 담아주기 위해서 arrayList 생성 */
+		List<Integer> deptSalesList = new ArrayList<>();
+		
+		/* 1월부터 12월까지 실적 조회를 가지고 오기 위해 반복문을 돌리고 null값이 나오면 0 기본값 데이터가 있으면 그 값을 넣어준다. */
+		for(int collectBillMonth = 1; collectBillMonth <= 12; collectBillMonth++) {
+			
+			Integer deptSales = dashBoardMapper.deptSalesChart(empInfo, collectBillYear, collectBillMonth); 
+			
+			System.out.println("deptSales : " + deptSales);
+			
+			if(deptSales == null) {
+				deptSalesList.add(0);
+			} else {
+				deptSalesList.add(deptSales);
+			}
+			
+		}
+		
+		return deptSalesList;
 	}
 
-	public List<BusinessChanceDTO> failedChart(int empNo, int collectBillYear) {
+	public List<BusinessChanceDTO> failedChart(int empNo, int businessChanceFailedYear) {
 		
-		return dashBoardMapper.failedChart(empNo, collectBillYear);
+		return dashBoardMapper.failedChart(empNo, businessChanceFailedYear);
 	}
 
 

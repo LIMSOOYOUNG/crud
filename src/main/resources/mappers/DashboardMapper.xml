@@ -54,65 +54,60 @@
 		<result property="customerNo" column="CUSTOMER_NO"/>
 		<result property="writeDate" column="WRITE_DATE"/>
 		<result property="businessChanceMonth" column="BUSINESS_CHANCE_MONTH"/>
+		<result property="failedBusinessChanceCount" column="FAILED_BUSINESS_CHANCE_COUNT"/>
 	</resultMap>
 	
 	<!-- 사원 실적 그래프 -->
-	<select id="userPerformChart" resultMap="performanceResultMap">
+	<select id="userSalesChart" resultType="_int">
 		SELECT /*com.deft.crud.dashboard.model.dao.DashBoardMapper#userPerformChart()*/
-               EXTRACT(MONTH FROM B.COLLECT_BILL_DATE) "COLLECT_BILL_MONTH"
-      	     , SUM(B.COLLECT_BILL_AMOUNT) "COLLECT_BILL_AMOUNT"
+      	       SUM(B.COLLECT_BILL_AMOUNT)
 		  FROM TBL_PERFORMANCE P
 		  JOIN TBL_COLLECT_BILL B ON (P.COLLECT_BILL_NO = B.COLLECT_BILL_NO)
 		  JOIN TBL_EMP_INFO E ON (P.EMP_NO = E.EMP_NO)
 		 WHERE B.COLLECT_BILL_STATUS = '수금'
 	       AND P.EMP_NO = #{ empNo }
 		   AND EXTRACT(YEAR FROM B.COLLECT_BILL_DATE) = #{ collectBillYear }
-		 GROUP BY EXTRACT(MONTH FROM B.COLLECT_BILL_DATE)
-		 ORDER BY EXTRACT(MONTH FROM B.COLLECT_BILL_DATE) ASC
+		   AND EXTRACT(MONTH FROM B.COLLECT_BILL_DATE) = #{ collectBillMonth }
 	
 	</select>
 	
 	<!-- 사원 목표실적 그래프 -->
-	<select id="userTargetPerformChart" resultMap="targetPerformResultMap">
+	<select id="userTargetSalesChart" resultType="_int">
 		SELECT /*com.deft.crud.dashboard.model.dao.DashBoardMapper#userPerformChart()*/
-	    	   T.TARGET_NO
-	    	 , T.EMP_NO
-	    	 , T.TARGET_SALES
-	    	 , T.TARGET_CONTRACT
-	    	 , T.PERFORM_MONTH
+	    	   T.TARGET_SALES
 		  FROM TBL_EMP_TARGET_PERFOM T
 		 WHERE T.EMP_NO = #{ empNo }
 		   AND T.PERFORM_YEAR = #{ collectBillYear }
+		   AND T.PERFORM_MONTH = #{ collectBillMonth }
 		 ORDER BY T.PERFORM_MONTH ASC
-		
 	</select>
 	
 	<!-- 부서 실적 그래프 -->
-	<select id="deptPerformChart" resultMap="performanceResultMap" parameterType="com.deft.crud.dashboard.model.dto.EmpInfoDTO">
+	<select id="deptSalesChart" resultType="_int" parameterType="com.deft.crud.member.model.service.UserImpl">
 		SELECT /*com.deft.crud.product.model.dao.SalesMapper#selectDeptPerformList()*/
-		       EXTRACT(MONTH FROM CO.COLLECT_BILL_DATE) "COLLECT_BILL_MONTH"
-		     , SUM(CO.COLLECT_BILL_AMOUNT) "COLLECT_BILL_AMOUNT"
+		       SUM(CO.COLLECT_BILL_AMOUNT) 
 		  FROM TBL_PERFORMANCE P
 		  JOIN TBL_EMP_INFO E ON ( E.EMP_NO = P.EMP_NO)
 		  JOIN TBL_DEPARTMENT D ON ( D.DEPT_CODE = E.DEPT_CODE)
 		  JOIN TBL_COLLECT_BILL CO ON ( CO.COLLECT_BILL_NO = P.COLLECT_BILL_NO)
 		 WHERE CO.COLLECT_BILL_STATUS = '수금'
 		   AND EXTRACT(YEAR FROM CO.COLLECT_BILL_DATE) = #{ collectBillYear }
+		   AND EXTRACT(MONTH FROM CO.COLLECT_BILL_DATE) = #{ collectBillMonth }
 		   AND D.DEPT_CODE = #{ empInfo.deptCode }
-		 GROUP BY EXTRACT(MONTH FROM CO.COLLECT_BILL_DATE)
 		 ORDER BY EXTRACT(MONTH FROM CO.COLLECT_BILL_DATE) ASC
 	
 	</select>
-
+	
+	<!-- 실패한 영업기회 그래프 -->
 	<select id="failedChart" resultMap="businessChanceResultMap" parameterType="com.deft.crud.dashboard.model.dto.BusinessChanceDTO">
 		SELECT
        		   EXTRACT(MONTH FROM B.DUE_DATE) "BUSINESS_CHANCE_MONTH"
-             , COUNT(B.DUE_DATE)
+             , COUNT(B.DUE_DATE) "FAILED_BUSINESS_CHANCE_COUNT"
           FROM TBL_BUSINESS_CHANCE B
          WHERE B.EMP_NO = #{ empNo }
-           AND EXTRACT(YEAR FROM B.DUE_DATE) = 2021
+           AND EXTRACT(YEAR FROM B.DUE_DATE) = #{ businessChanceFailedYear }
            AND B.PROGRESS_STATUS = '실패'
          GROUP BY EXTRACT(MONTH FROM B.DUE_DATE)
-         ORDER BY EXTRACT(MONTH FROM B.DUE_DATE) ASC;
+         ORDER BY EXTRACT(MONTH FROM B.DUE_DATE) ASC
 	</select>
 </mapper>

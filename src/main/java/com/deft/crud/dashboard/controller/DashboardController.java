@@ -42,7 +42,7 @@ public class DashboardController {
 	
 	/* 사원 실적 그래프 */
 	@GetMapping("/emp/sales/selectAll")
-	public ModelAndView userPerformChart(ModelAndView mv, HttpServletResponse response, @AuthenticationPrincipal UserImpl loginInfo) throws JsonProcessingException {
+	public ModelAndView userSalesChart(ModelAndView mv, HttpServletResponse response, @AuthenticationPrincipal UserImpl loginInfo) throws JsonProcessingException {
 		
 		response.setCharacterEncoding("UTF-8");
 		
@@ -50,75 +50,59 @@ public class DashboardController {
 		LocalDate collectBillDate = LocalDate.now();
 		int collectBillYear = collectBillDate.getYear();
 		
-		/* 로그인된 사원 정보를 세션에서 가지고 온다. */
-		int empNo = loginInfo.getEmpNo();
 		
 		/* 사원 정보와 부서정보를 조건을 주기 위해 인자값으로 넘겨주고 조회를 한다. */
-		List<PerformanceDTO> userPerformChart = dashBoardService.userPerformChart(empNo, collectBillYear);
+		List<Integer> userSalesChart = dashBoardService.userSalesChart(loginInfo ,collectBillYear);
+		System.out.println("userSalesChart : " + userSalesChart);
 		
 		/* 사원 목표 실적 조회 */
-		List<TargetPerfomDTO> userTargetPerformChart = dashBoardService.userTargetPerformChart(empNo, collectBillYear);
+		List<Integer> userTargetSalesChart = dashBoardService.userTargetSalesChart(loginInfo , collectBillYear);
 		
-		System.out.println("userPerformChart : " + userPerformChart);
+		System.out.println("userTargetPerformChart : " + userTargetSalesChart);
 		
 		
-		mv.addObject("userPerformChart", objectMapper.writeValueAsString(userPerformChart));
-		mv.addObject("userTargetPerformChart", objectMapper.writeValueAsString(userTargetPerformChart));
+		mv.addObject("userSalesChart", objectMapper.writeValueAsString(userSalesChart));
+		mv.addObject("userTargetSalesChart", objectMapper.writeValueAsString(userTargetSalesChart));
 		mv.setViewName("jsonView");
 		return mv;
 	}
 
 	/* 로그인된 사원이 속한 부서 실적 그래프 */
 	@GetMapping("/dept/sales/selectAll")
-	public ModelAndView deptPerformChart(ModelAndView mv, HttpServletResponse response, @AuthenticationPrincipal UserImpl loginInfo) throws JsonProcessingException {
+	public ModelAndView deptSalesChart(ModelAndView mv, HttpServletResponse response, @AuthenticationPrincipal UserImpl loginInfo) throws JsonProcessingException {
 		
 		response.setCharacterEncoding("UTF-8");
 		
-		/* 현재 연도 정보를 LocalDate에서 가지고 온다.*/
-		LocalDate collectBillDate = LocalDate.now();
-		int collectBillYear = collectBillDate.getYear();
-
-		/* 로그인된 사원 정보와 부서 정보를 세션에서 가지고 온다. */
-		int empNo = loginInfo.getEmpNo();
-		String deptCode = loginInfo.getDeptCode();
-		
-		EmpInfoDTO empInfo = new EmpInfoDTO();
-		empInfo.setEmpNo(empNo);
-		empInfo.setDeptCode(deptCode);
-		
 		/* 사원 정보와 부서정보를 조건을 주기 위해 인자값으로 넘겨주고 조회를 한다. */
-		List<PerformanceDTO> deptPerformChart = dashBoardService.deptPerformChart(empInfo, collectBillYear);
+		List<Integer> deptSalesChart = dashBoardService.deptSalesChart(loginInfo);
 		
-		System.out.println("deptPerformChart : " + deptPerformChart);
+		System.out.println("deptPerformChart : " + deptSalesChart);
 		
-		System.out.println("890890890890802982390890");
-		System.out.println("empNo : " + empNo);
-		System.out.println(deptCode);
 		
-		mv.addObject("deptPerformChart", objectMapper.writeValueAsString(deptPerformChart));
+		mv.addObject("deptSalesChart", objectMapper.writeValueAsString(deptSalesChart));
 		mv.setViewName("jsonView");
 		return mv;
 	}
 	
 	/* 영업기회 실패 통계 */
-	@GetMapping("/bus/failedChance")
+	@GetMapping("/business/failedChance")
 	public ModelAndView failedChace(ModelAndView mv,  HttpServletResponse response, @AuthenticationPrincipal UserImpl loginInfo) throws JsonProcessingException {
 		
 		response.setCharacterEncoding("UTF-8");
 		
-		LocalDate collectBillDate = LocalDate.now();
-		int collectBillYear = collectBillDate.getYear();
+		LocalDate businessChanceDate = LocalDate.now();
+		int businessChanceFailedYear = businessChanceDate.getYear();
 		
 		int empNo = loginInfo.getEmpNo();
 		
-		List<BusinessChanceDTO> businessChanceFailed = dashBoardService.failedChart(empNo, collectBillYear);
+		List<BusinessChanceDTO> businessChanceFailed = dashBoardService.failedChart(empNo, businessChanceFailedYear);
 		
 		System.out.println("dasdasdasdassdasdasdasd"+ businessChanceFailed);
 		
 		mv.addObject("businessChanceFailed", objectMapper.writeValueAsString(businessChanceFailed));
 		mv.setViewName("jsonView");
 		
-		return null;
+		return mv;
 	}
 	
 	/* 사원별 영업기회 수 통계 */
