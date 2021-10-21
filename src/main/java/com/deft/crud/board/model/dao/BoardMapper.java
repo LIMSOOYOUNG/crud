@@ -48,6 +48,11 @@ public interface BoardMapper {
 	/* 파일 업로드 */
 	int insertFile(BoardFileDTO file);
 
+	/* 게시글 삭제시 파일 삭제 */
+	int deleteFile(int writeNo);
+
+
+
 
 
 

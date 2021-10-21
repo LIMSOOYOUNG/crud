@@ -100,67 +100,67 @@ public class BoardController {
 	    for(MultipartFile file : freeboardUpload) {
 	    	System.out.println("1234567890" + file);
 	    }
-//	    if(!freeboardUpload.isEmpty()) {
-//	    
-//		    String root = request.getSession().getServletContext().getRealPath("\\");
-//		    System.out.println("rrrrrrrrrrerrrrrrrrr" + root);
-//		    
-//		    String filePath  = root + "\\upload\\freeboard";
-//		    
-//		    
-//		    File mkdir = new File(filePath);
-//			if(!mkdir.exists()) {
-//				mkdir.mkdirs();
-//			}
-//	
-//		    List<BoardFileDTO> files = new ArrayList<>();
-//		    
-//		    for(int i = 0; i < freeboardUpload.size(); i++) {
-//		    	
-//		    	String originFileName = freeboardUpload.get(i).getOriginalFilename();
-//		    	String ext = originFileName.substring(originFileName.lastIndexOf("."));
-//				String savedName = UUID.randomUUID().toString().replace("-", "") + ext;
-//	
-//				BoardFileDTO file = new BoardFileDTO();
-//				file.setOriginalName(originFileName);
-//				file.setSavedName(savedName);
-//				file.setSavedPath(filePath);
-//				file.setWriteNo(writeNo);
-//				
-//				files.add(file);	
-//	
-//		    }
-//		    
-//		    parameters.setBoardFileList(files);
-//		    
-//		    try {
-//		    	for(int i = 0; i < freeboardUpload.size(); i++) {
-//		    		
-//		    		BoardFileDTO file = files.get(i);
-//		    		
-//		    		freeboardUpload.get(i).transferTo(new File(filePath + "\\" + file.getSavedName()));
-//		    	}
-//		    }catch (Exception e) {
-//		    	e.printStackTrace();
-//		    	
-//		    	for(int i = 0; i < freeboardUpload.size(); i++) {
-//		    		BoardFileDTO file = files.get(i);
-//					
-//					new File(filePath + "\\" + file.getSavedName()).delete();
-//	
-//		    	}
-//		    }
-//	    
-//	    }
-//	    
-//	    /* parameters(BoardDTO)를 서비스에 전달한다. */
-//		int result = boardService.insertFreeboard(parameters);
-//		String message = "";
-//		/* result값이 0 보다 클때 페이지 이동값을 /board/selectfreeboard 지정한다.*/
-//		if(result > 0) {
-//			
-//			message = "자유게시글등록에 성공하셨습니다";
-//		}
+	    if(!freeboardUpload.isEmpty()) {
+	    
+		    String root = request.getSession().getServletContext().getRealPath("\\");
+		    System.out.println("rrrrrrrrrrerrrrrrrrr" + root);
+		    
+		    String filePath  = root + "\\upload\\freeboard";
+		    
+		    
+		    File mkdir = new File(filePath);
+			if(!mkdir.exists()) {
+				mkdir.mkdirs();
+			}
+	
+		    List<BoardFileDTO> files = new ArrayList<>();
+		    
+		    for(int i = 0; i < freeboardUpload.size(); i++) {
+		    	
+		    	String originFileName = freeboardUpload.get(i).getOriginalFilename();
+		    	String ext = originFileName.substring(originFileName.lastIndexOf("."));
+				String savedName = UUID.randomUUID().toString().replace("-", "") + ext;
+	
+				BoardFileDTO file = new BoardFileDTO();
+				file.setOriginalName(originFileName);
+				file.setSavedName(savedName);
+				file.setSavedPath(filePath);
+				file.setWriteNo(writeNo);
+				
+				files.add(file);	
+	
+		    }
+		    
+		    parameters.setBoardFileList(files);
+		    
+		    try {
+		    	for(int i = 0; i < freeboardUpload.size(); i++) {
+		    		
+		    		BoardFileDTO file = files.get(i);
+		    		
+		    		freeboardUpload.get(i).transferTo(new File(filePath + "\\" + file.getSavedName()));
+		    	}
+		    }catch (Exception e) {
+		    	e.printStackTrace();
+		    	
+		    	for(int i = 0; i < freeboardUpload.size(); i++) {
+		    		BoardFileDTO file = files.get(i);
+					
+					new File(filePath + "\\" + file.getSavedName()).delete();
+	
+		    	}
+		    }
+	    
+	    }
+	    
+	    /* parameters(BoardDTO)를 서비스에 전달한다. */
+		int result = boardService.insertFreeboard(parameters);
+		
+		String message = "";
+		
+		if(result > 0) {
+			message = "자유게시글등록에 성공하셨습니다";
+		}
 		mv.setViewName("redirect:/board/selectfreeboard");
 
 		return mv;
@@ -173,7 +173,6 @@ public class BoardController {
 		
 		/* writeNo의 값을 서비스에 전달한다. */
 		BoardDTO boardDTO = boardService.freeboardDetail(writeNo); 
-		
 		/* 조회수 카운터 */
 		boardService.freeboardviewCount(writeNo);
 		
@@ -241,13 +240,11 @@ public class BoardController {
 	}
 	
 	/* 자유게시글 삭제 */
-	@GetMapping("deletefreeboard")
-	public void deletefreeboard() {}
-	
 	@PostMapping("deletefreeboard")
 	public ModelAndView deletefreeboard(ModelAndView mv, @ModelAttribute BoardDTO parameters)throws Exception {
 		
 		/* parameters(BoardDTO)에 있는 writeNo를 받아온다. */
+		int writeNoAttatch = boardService.deleteFile(parameters.getWriteNo());
 		int writeNo = boardService.deleteFreeboard(parameters.getWriteNo());
 		
 		/* 페이지 이동값을 /board/selectfreeboard 지정한다. */

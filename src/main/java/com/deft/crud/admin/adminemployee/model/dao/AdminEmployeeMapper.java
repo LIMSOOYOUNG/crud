@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 import com.deft.crud.admin.adminemployee.model.dto.AdminEmployeeDTO;
 import com.deft.crud.admin.adminemployee.model.dto.DepartmentDTO;
+import com.deft.crud.admin.adminemployee.model.dto.EmployeeImageDTO;
 import com.deft.crud.admin.adminemployee.model.dto.JobDTO;
 import com.deft.crud.member.model.dto.MemberDTO;
 
@@ -46,5 +47,10 @@ public interface AdminEmployeeMapper {
 	List<MemberDTO> selectManagerList(String deptCode);
 
 	int insetProfileImg(MemberDTO member);
+
+	/* 사원정보 텍스트 수정 */
+	int modifyEmployeeText(AdminEmployeeDTO parameters);
+	/* 사원 이미지 정보 수정 */
+	int modifyEmployeeImage(EmployeeImageDTO employeeImageDTO);
 	
 }

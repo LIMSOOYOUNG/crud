@@ -40,6 +40,10 @@ public class AdminEmployeeDTO implements java.io.Serializable{
 	private String managerName;
 	private String jobCode;
 	private String deptCode;
+	private String originalName;
+	private String savedName;
+	private String savedPath;
+	private String thumbnailPath;
 	
 	private DepartmentDTO dept;
 	private JobDTO job;

@@ -47,28 +47,28 @@ public class BoardService {
 		
 		int result = 0;
 		
-//		int boardResult = boardMapper.insertFreeboard(board);
+		int boardResult = boardMapper.insertFreeboard(board);
 		
-//		if(!board.getBoardFileList().isEmpty()) {
-//			
-//			int boardFile = 0;
-//			
-//			for(BoardFileDTO file : board.getBoardFileList()) {
-//				
-//				boardFile += boardMapper.insertFile(file);
-//				
-//			}
-//			
-//			if(boardResult > 0 && boardFile > board.getBoardFileList().size()) {
-//				
-//				result = 1;
-//				
-//			}
-//		}else {
-//			if(boardResult > 0) {
-//				result = 1;
-//			}
-//		}
+		if(!board.getBoardFileList().isEmpty()) {
+			
+			int boardFile = 0;
+			
+			for(BoardFileDTO file : board.getBoardFileList()) {
+				
+				boardFile += boardMapper.insertFile(file);
+				
+			}
+			
+			if(boardResult > 0 && boardFile > board.getBoardFileList().size()) {
+				
+				result = 1;
+				
+			}
+		}else {
+			if(boardResult > 0) {
+				result = 1;
+			}
+		}
 		
 		return result;
 	}
@@ -137,14 +137,12 @@ public class BoardService {
 		return result;
 	}
 
-
-
-
-
-	
-
-
-
+	public int deleteFile(int writeNo) {
+		
+		int result = boardMapper.deleteFile(writeNo);
+		
+		return result;
+	}
 
 
 

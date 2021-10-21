@@ -1,6 +1,7 @@
 package com.deft.crud.admin.adminemployee.controller;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,9 +23,12 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.deft.crud.admin.adminemployee.model.dto.AdminEmployeeDTO;
 import com.deft.crud.admin.adminemployee.model.dto.DepartmentDTO;
+import com.deft.crud.admin.adminemployee.model.dto.EmployeeImageDTO;
 import com.deft.crud.admin.adminemployee.model.dto.JobDTO;
 import com.deft.crud.admin.adminemployee.model.service.AdminEmployeeService;
 import com.deft.crud.member.model.dto.MemberDTO;
+
+import net.coobird.thumbnailator.Thumbnails;
 
 @Controller
 @RequestMapping("/admin")
@@ -158,42 +162,83 @@ public class AdminEmployeeController {
 	
 	@PostMapping("employeeinfomodify")
 	public ModelAndView employeeModify(ModelAndView mv, @ModelAttribute AdminEmployeeDTO parameters, 
-			@RequestParam MultipartFile imageUpdate,
+			@RequestParam MultipartFile profileThumbNail,
 			HttpServletRequest request) {
 		
+		int result = 0;
+		EmployeeImageDTO employeeImageDTO = new EmployeeImageDTO();
+		if(!profileThumbNail.isEmpty()) {
 		String root = request.getSession().getServletContext().getRealPath("resources");
 		
-		String filePath = root + "\\employeeupload";
+		String fileUploadDirectory = root + "\\upload\\profileImage\\original";
+		String thumbnailDirectory = root + "\\upload\\profileImage\\thumbnail";
 		
-		File mkdir = new File(filePath);
-		if(!mkdir.exists()) {
-			mkdir.mkdirs();
+		File directory = new File(fileUploadDirectory);
+		File directory2 = new File(thumbnailDirectory);
+		
+		/* 이미지를 저장할 폴더가 없을시에 폴더를 생성해준다. */
+		if(!directory.exists() || !directory2.exists()) {
+			System.out.println("폴더생성 : " + directory.mkdirs());
+			System.out.println("폴더생성 : " + directory2.mkdirs());
 		}
 		
-		String originFileName = imageUpdate.getOriginalFilename();
+		/* 이미지 원본파일 */
+		String originFileName = profileThumbNail.getOriginalFilename();
+		
+		/* 이미지 확장자 */
 		String ext = originFileName.substring(originFileName.lastIndexOf("."));
+		
+		/* 이미지파일명이 중복되지 않도록 설정해준다. */
 		String savedName = UUID.randomUUID().toString().replace("-", "") + ext;
 
+		employeeImageDTO.setOriginalName(originFileName);
+		employeeImageDTO.setSavedName(savedName);
+		employeeImageDTO.setSavedPath(fileUploadDirectory);
+		employeeImageDTO.setEmpNo(parameters.getEmployeeNo());
+		
+		/* 썸네일 너비 높이 설정 */
+		int width = 200;
+		int height = 250;
 
 		try {
-			imageUpdate.transferTo(new File(filePath + "\\" + savedName));
+			/* 원본 이미지 저장 */
+			profileThumbNail.transferTo(new File(fileUploadDirectory + "\\" + savedName));
 			
-		} catch (Exception e) {
-			e.printStackTrace();
-			/* 실패시 파일 삭제 */
-			new File(filePath + "\\" + savedName).delete();
-		} 
-
+			/* 썸네일 경로 저장 */
+			Thumbnails.of(fileUploadDirectory + "\\" + savedName)
+			.size(width, height)
+			.toFile(thumbnailDirectory + "\\thumbnail_" + savedName);
+			
+			/* html에서 이미지를 조회할 수 있도록 썸네일 경로를 dto에 담아준다.*/
+			employeeImageDTO.setThumbnailPath("/thumbnail_" + savedName);
 		
-		int result = adminEmployeeService.employeeModify(parameters);
+		}catch (IllegalStateException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			
+			new File(fileUploadDirectory + "\\" + savedName).delete();
+			e.printStackTrace();
+		}
+		
+		result = adminEmployeeService.modifyEmployeeImg(parameters, employeeImageDTO);
+			
+		}else {
+			
+		result = adminEmployeeService.employeeModify(parameters);
+			
+		}
+		
+		
+		String message = "";
 		
 		if(result > 0) {
-			
-			mv.setViewName("redirect:/admin/employeedetail?employeeNo=" + parameters.getEmployeeNo());
-			
+			message = "상품수정에 성공하셨습니다!";
+		} else {
+			message = "상품수정에 실패하셨습니다!";
 		}
 		
 		mv.addObject("parameters", parameters);
+		mv.setViewName("redirect:/admin/employeedetail?employeeNo=" + parameters.getEmployeeNo());
 		
 		return mv;
 	}

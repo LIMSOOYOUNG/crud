@@ -23,6 +23,9 @@ public interface AdminBoardMapper {
 	/* 공지사항 수정 */
 	int noticeModify(BoardDTO parameters);
 
+	/* 게시글 파일 삭제 */
+	int deleteFile(int writeNo);
+
 
 	
 	

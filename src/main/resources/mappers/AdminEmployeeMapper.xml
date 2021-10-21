@@ -23,7 +23,7 @@
 		<result property="deptCode" column="DEPT_CODE"/>
 		<result property="jobCode" column="JOB_CODE"/>
 		
-		<association property="empImage" resultMap="empImageReusltMap"></association>
+		<association property="empImage" resultMap="empImageReusltMap"/>
 		<association property="dept" resultMap="departmentResultMap"/>
 		<association property="job" resultMap="jobResultMap"/> 
 	</resultMap>
@@ -142,4 +142,30 @@
 	      FROM TBL_EMP_INFO E
           JOIN TBL_EMP_INFO B ON ( E.MANAGER_NO = B.EMP_NO )
 	</select>
+	
+	<update id="modifyEmployeeText" parameterType="com.deft.crud.admin.adminemployee.model.dto.AdminEmployeeDTO">
+		UPDATE /* com.deft.crud.admin.adminemployee.model.dto.AdminEmployeeDTO */
+			   TBL_EMP_INFO E
+	       SET E.EMP_EMAIL = #{ email, jdbcType=VARCHAR }
+	         , E.AUTHORITY = #{ authority, jdbcType=VARCHAR }
+	         , E.EMP_ADDRESS = #{ empAddress, jdbcType=VARCHAR }
+	         , E.EMP_PHONE = #{ empPhone, jdbcType=VARCHAR }
+	         , E.EMP_TEL = #{ empTel, jdbcType=VARCHAR }
+			 , E.ENT_YN = #{ entYn, jdbcType=VARCHAR}
+			 , E.ENT_DATE = #{ entDate, jdbcType=DATE }
+			 , E.JOB_CODE = #{ jobCode }
+			 , E.DEPT_CODE = #{ deptCode }
+			 , E.MANAGER_NO = #{ managerNo }
+		 WHERE E.EMP_NO = #{ employeeNo }	 
+	</update>
+	
+	<update id="modifyEmployeeImage" parameterType="com.deft.crud.admin.adminemployee.model.dto.EmployeeImageDTO">
+		UPDATE /* com.deft.crud.admin.adminemployee.model.dto.EmployeeImageDTO */
+			   TBL_EMP_IMAGE E
+		   SET E.ORIGINAL_NAME = #{ originalName }
+		     , E.SAVED_NAME = #{ savedName } 	   
+	         , E.SAVED_PATH = #{ savedPath }
+	         , E.THUMBNAIL_PATH = #{ thumbnailPath }
+	     WHERE E.EMP_NO = #{ empNo }
+	</update>
 </mapper>

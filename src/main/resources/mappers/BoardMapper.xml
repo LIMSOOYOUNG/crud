@@ -12,6 +12,14 @@
 	<result property="type" column="TYPE"/>
 	<result property="empNo" column="EMP_NO"/>
 </resultMap>
+<resultMap type="com.deft.crud.board.model.dto.BoardFileDTO" id="boardFileResultMap">
+	<id property="boardAttatchNo" column="BOARD_ATTATCH_NO"/>
+	<result property="boardNo" column="BOARD_NO"/>
+	<result property="writeNo" column="WRITE_NO"/> 
+	<result property="originalName" column="ORIGINAL_NAME"/>
+	<result property="savedName" column="SAVED_NAME"/>
+	<result property="savedPath" column="SAVED_PATH"/>
+</resultMap>
 	<select id="selectFreeboard" resultMap="boardResultMap">
 		SELECT /*com.deft.crud.board.model.dto.BoardDTO*/
                B.WRITE_NO
@@ -63,6 +71,12 @@
 		DELETE /*com.deft.crud.board.model.dto.BoardDTO*/
 		  FROM TBL_BOARD B
 		 WHERE B.WRITE_NO = #{ writeNo, jdbcType = INTEGER }
+	</delete>
+	
+	<delete id="deleteFile" parameterType="_int">
+		DELETE /* com.deft.crud.board.model.dto.BoardFileDTO */
+	      FROM TBL_BOARD_ATTATCH B
+	     WHERE B.WRITE_NO = #{ writeNo, jdbcType = INTEGER }
 	</delete>
 
 	
@@ -153,4 +167,5 @@
 	    , 2     
 	    )
 	</insert>
+
 </mapper>

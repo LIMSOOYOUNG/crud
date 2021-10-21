@@ -10,11 +10,15 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.deft.crud.admin.adminemployee.model.dao.AdminEmployeeMapper;
 import com.deft.crud.admin.adminemployee.model.dto.AdminEmployeeDTO;
 import com.deft.crud.admin.adminemployee.model.dto.DepartmentDTO;
+import com.deft.crud.admin.adminemployee.model.dto.EmployeeImageDTO;
 import com.deft.crud.admin.adminemployee.model.dto.JobDTO;
 import com.deft.crud.member.model.dto.MemberDTO;
 
@@ -204,6 +208,25 @@ public class AdminEmployeeService {
 		List<MemberDTO> managerList = adminEmployeeMapper.selectManagerList(deptCode);
 		
 		return managerList;
+	}
+	
+	@Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE,
+			rollbackFor = {Exception.class})
+	public int modifyEmployeeImg(AdminEmployeeDTO parameters, EmployeeImageDTO employeeImageDTO) {
+		
+		int result = 0;
+		
+		int modifyEmployeeText = adminEmployeeMapper.modifyEmployeeText(parameters);
+		
+		int modifyEmployeeImage = adminEmployeeMapper.modifyEmployeeImage(employeeImageDTO);
+		
+		
+		if(modifyEmployeeText > 0 && modifyEmployeeImage > 0) {
+			
+			result = 1;
+		}
+		
+		return result;
 	}
 
 	

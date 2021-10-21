@@ -50,6 +50,14 @@ public class AdminBoardService {
 		
 		return result;
 	}
+	
+	/* 게시글 파일 삭제 */
+	public int deleteFile(int writeNo) {
+		
+		int result = adminBoardMapper.deleteFile(writeNo);
+		
+		return result;
+	}
 
 
 	

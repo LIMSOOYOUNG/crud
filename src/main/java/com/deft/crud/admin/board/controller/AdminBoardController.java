@@ -104,13 +104,11 @@ public class AdminBoardController {
 	}
 	
 	/* 공지사항 삭제 */
-	@GetMapping("noticedelete")
-	public void deletenotice() {}
-	
 	@PostMapping("noticedelete")
 	public ModelAndView deleteNotice(ModelAndView mv, @ModelAttribute BoardDTO parameters) throws Exception {
 		
 		/* parameters에 writeNo값을 받아온다. */
+		int writeNoAttatch = adminBoardService.deleteFile(parameters.getWriteNo());
 		int writeNo = adminBoardService.deleteNotice(parameters.getWriteNo());
 		
 		/* /board/selectnotice로 페이지 이동값을 지정한다. */
