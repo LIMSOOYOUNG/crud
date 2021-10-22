@@ -47,5 +47,8 @@ public interface SalesMapper {
 	List<PerformanceDTO> selectCategoryPerformForDate(CollectBillDTO parameters, int refCategoryCode);
 
 	List<PerformanceDTO> selectCategoryPerformDetail(int categoryCode, CollectBillDTO parameters);
+
+	
+	List<PerformanceDTO> productSalesThisMonth(PerformanceDTO empSalesInfo);
 	
 }

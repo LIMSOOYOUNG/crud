@@ -2,8 +2,11 @@ package com.deft.crud.dashboard.model.service;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import org.apache.commons.collections.map.HashedMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,15 +28,19 @@ public class DashBoardService {
 	}
 	
 	/* 사원 실적 그래프 */
-	public List<Integer> userSalesChart(UserImpl loginInfo, int collectBillYear) {
+	public List<Integer> userSalesChart(UserImpl loginInfo) {
 		
+		/* 현재 연도 정보를 LocalDate에서 가지고 온다.*/
+		LocalDate collectBillDate = LocalDate.now();
+		int collectBillYear = collectBillDate.getYear();
+		
+		/* null값도 담아주기 위해서 arrayList 생성 */
 		List<Integer> salesList = new ArrayList<>();
-
-		int empNo = loginInfo.getEmpNo();
 		
+		/* 1월부터 12월까지 실적 조회를 가지고 오기 위해 반복문을 돌리고 null값이 나오면 0 (기본값) 데이터가 있으면 그 값을 넣어준다. */
 		for(int collectBillMonth = 1; collectBillMonth <= 12; collectBillMonth++) {
 			
-			Integer userSales = dashBoardMapper.userSalesChart(empNo, collectBillYear, collectBillMonth);
+			Integer userSales = dashBoardMapper.userSalesChart(loginInfo, collectBillYear, collectBillMonth);
 			
 			System.out.println("userSales : " + userSales);
 			
@@ -49,17 +56,20 @@ public class DashBoardService {
 	}
 	
 	/* 사원 목표 실적 그래프*/
-	public List<Integer> userTargetSalesChart(UserImpl loginInfo, int collectBillYear) {
+	public List<Integer> userTargetSalesChart(UserImpl loginInfo) {
 		
+		/* 현재 연도 정보를 LocalDate에서 가지고 온다.*/
+		LocalDate collectBillDate = LocalDate.now();
+		int collectBillYear = collectBillDate.getYear();
+
 		/* null값도 담아주기 위해서 arrayList 생성 */
 		List<Integer> targetSalesList = new ArrayList<>();
 		
-		int empNo = loginInfo.getEmpNo();
 		
-		/* 반복문을 돌려서 1월 부터 12월까지 조회한다. */
+		/* 1월부터 12월까지 실적 조회를 가지고 오기 위해 반복문을 돌리고 null값이 나오면 0 (기본값) 데이터가 있으면 그 값을 넣어준다. */
 		for(int collectBillMonth = 1; collectBillMonth <= 12; collectBillMonth++) {
 			
-			Integer targetSales = dashBoardMapper.userTargetSalesChart(empNo, collectBillYear, collectBillMonth);
+			Integer targetSales = dashBoardMapper.userTargetSalesChart(loginInfo, collectBillYear, collectBillMonth);
 			
 			if(targetSales == null) {
 				targetSalesList.add(0);
@@ -75,7 +85,7 @@ public class DashBoardService {
 	}
 
 	/* 부서 실적 그래프 */
-	public List<Integer> deptSalesChart(UserImpl empInfo) {
+	public List<Integer> deptSalesChart(UserImpl loginInfo) {
 		
 		/* 현재 연도 정보를 LocalDate에서 가지고 온다.*/
 		LocalDate collectBillDate = LocalDate.now();
@@ -85,10 +95,10 @@ public class DashBoardService {
 		/* null값도 담아주기 위해서 arrayList 생성 */
 		List<Integer> deptSalesList = new ArrayList<>();
 		
-		/* 1월부터 12월까지 실적 조회를 가지고 오기 위해 반복문을 돌리고 null값이 나오면 0 기본값 데이터가 있으면 그 값을 넣어준다. */
+		/* 1월부터 12월까지 실적 조회를 가지고 오기 위해 반복문을 돌리고 null값이 나오면 0 (기본값) 데이터가 있으면 그 값을 넣어준다. */
 		for(int collectBillMonth = 1; collectBillMonth <= 12; collectBillMonth++) {
 			
-			Integer deptSales = dashBoardMapper.deptSalesChart(empInfo, collectBillYear, collectBillMonth); 
+			Integer deptSales = dashBoardMapper.deptSalesChart(loginInfo, collectBillYear, collectBillMonth); 
 			
 			System.out.println("deptSales : " + deptSales);
 			
@@ -103,11 +113,31 @@ public class DashBoardService {
 		return deptSalesList;
 	}
 
-	public List<BusinessChanceDTO> failedChart(int empNo, int businessChanceFailedYear) {
+	public List<Integer> failedBusinessChanceChart(UserImpl loginInfo) {
 		
-		return dashBoardMapper.failedChart(empNo, businessChanceFailedYear);
+		/* 현재 연도 정보를 LocalDate에서 가지고 온다.*/
+		LocalDate failedBusinessChanceDate = LocalDate.now();
+		int failedBusinessChanceYear = failedBusinessChanceDate.getYear();
+		
+		/* null값도 담아주기 위해서 arrayList 생성 */
+		List<Integer> failedBusinessChanceList = new ArrayList<>();
+		
+		/* 1월부터 12월까지 실적 조회를 가지고 오기 위해 반복문을 돌리고 null값이 나오면 0 (기본값) 데이터가 있으면 그 값을 넣어준다. */
+		for(int failedBusinessChanceMonth = 1; failedBusinessChanceMonth <= 12; failedBusinessChanceMonth++) {
+			
+			Integer failedBusinessChance = dashBoardMapper.failedBusinessChanceChart(failedBusinessChanceYear, failedBusinessChanceMonth, loginInfo);
+			
+			System.out.println("failedBusinessChance : " + failedBusinessChance);
+			
+			if(failedBusinessChance == null) {
+				failedBusinessChanceList.add(0);
+			} else {
+				failedBusinessChanceList.add(failedBusinessChance);
+			}
+		}
+		
+		return failedBusinessChanceList;
 	}
-
 
 
 }

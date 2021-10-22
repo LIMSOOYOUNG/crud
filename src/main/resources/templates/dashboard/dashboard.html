@@ -18,17 +18,46 @@
 				<!-- Content -->
 				<div class="container-fluid" id="container-wrapper">
 					<div class="row">
-						<div class="row col-lg-6">
-							<canvas id="empPerformanceChart"></canvas>
+						<div class="col-lg-6">
+							<div class="card mb-4">
+								<canvas class="mx-3 my-3" id="empPerformanceChart"></canvas>
+							</div>
 						</div>
-						<div class="row col-lg-6">
-							<canvas id="deptPerformanceChart"></canvas>
+						<div class="col-lg-6">
+							<div class="card mb-4">
+								<canvas class="mx-3 my-3" id="deptPerformanceChart"></canvas>
+							</div>
 						</div>
-					</div> 
+					</div>
+					
 					<div class="row">
-						<div class="row col-lg-6">
-							<canvas id="failedBusinessChanceChart"></canvas>
-						</div>	
+						<div class="col-lg-6">
+							<div class="card mb-4">
+								<canvas class="mx-3 my-3" id="failedBusinessChanceChart"></canvas>
+							</div>	
+						</div>
+						<div class="col-lg-6">
+							<div class="card mb-4">
+								<div class="table-responsive p-3">
+									<table class="table align-items-center table-flush table-hover" id="dataTableHover">
+										<thead th:align="center" class="thead-light">
+											<tr>
+												<th>상품번호</th>
+												<th>상품명</th>
+												<th>수금현황</th>
+											</tr>
+										</thead>
+										<tbody th:align="center">
+											<tr th:each = "productSales : ${productSalesThisMonth}" >
+												<td th:text = "${productSales.purchaseOrder.productList[0].productNo}"></td>
+												<td th:text = "${productSales.purchaseOrder.productList[0].productName}"></td>
+												<td th:text = "|${#numbers.formatInteger(productSales.collect.collectBillAmount, 0, 'COMMA')}원|"></td>
+											</tr>
+										</tbody>
+									</table>
+								</div>	
+							</div>
+						</div>
 					</div>
 				</div>
 			</div> 
@@ -43,9 +72,18 @@
 	<script th:src="@{/js/demo/chart-pie-demo.js}"></script>
 	<script th:src="@{/js/demo/chart-bar-demo.js}"></script>
 	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+	
 	<script>
+	
+    $(document).ready(function () {
+      $('#dataTable').DataTable(); // ID From dataTable 
+      $('#dataTableHover').DataTable(); // ID From dataTable with Hover
+    });
+	
+		
+		/* 사원 실적조회 및 사원 목표 실적 조회 차트*/
 		$(document).ready(function () {
-			var ctx = document.getElementById('empPerformanceChart');
+			const ctx1 = document.getElementById('empPerformanceChart');
 			
 			$.ajax({
 				url:"/dashboard/emp/sales/selectAll",
@@ -57,8 +95,6 @@
 					
 					console.log(userSales);
 					console.log(userTargetSales);
-					
-					
 					
 					var config = {
 							
@@ -84,7 +120,8 @@
 									borderColor: ['rgba(54, 162, 235, 1)'],
 									borderWidth: 1,
 								
-							}, {									   
+								}, {									   
+									
 									label: '내 목표 실적',
 									data: [userTargetSales[0], 
 											userTargetSales[1], 
@@ -102,7 +139,7 @@
 									backgroundColor: ['rgba(255, 99, 132, 0.2)'],
 									borderColor: ['rgba(255, 99, 132, 1)'],
 								    borderWidth: 1
-							}]
+								}]
 						},
 						options: {
 							scales: {
@@ -112,9 +149,8 @@
 							}
 						}
 					};
-						
-					var empPerformanceChart = new Chart(ctx, config);
 
+					var empPerformanceChart = new Chart(ctx1, config);
 				},
 
 				error: function(xhr, status, error) {
@@ -123,11 +159,10 @@
 			
 			});
 			
-		});
 		
-		$(document).ready(function () {
+// 		/* 부서 실적 조회 차트 */
 		
-			var ctx = document.getElementById('deptPerformanceChart');
+			const ctx2 = document.getElementById('deptPerformanceChart');
 			
 			$.ajax({
 				url:"/dashboard/dept/sales/selectAll",
@@ -172,8 +207,7 @@
 						}
 					};
 						
-					var deptPerformanceChart = new Chart(ctx, config);
-
+					var deptPerformanceChart = new Chart(ctx2, config);
 				},
 
 				error: function(xhr, status, error) {
@@ -181,48 +215,40 @@
 				}
 			
 			});
-		}); 
 		
 		/* 영업기회 실패 조회 */
-		$(document).ready(function () {
 		
-			var ctx = document.getElementById('failedBusinessChanceChart');
+			const ctx3 = document.getElementById('failedBusinessChanceChart');
 			
 			$.ajax({
-				url:"/dashboard/business/failedChance",
+				url:"/dashboard/failed/businessChance",
 				type: 'GET',
 				success: function(data, status, xhr) {
 					
-					const businessChanceFailed = JSON.parse(data.businessChanceFailed);
-					
-					let failedBusinessChanceCount = new Array();
-					
-					for(var i = 0; i < businessChanceFailed.length; i++) {
-						failedBusinessChanceCount[i] = businessChanceFailed[i].failedBusinessChanceCount;
-					}
+					const failedBusinessChance = JSON.parse(data.failedBusinessChanceChart);
 					
 					var config = {
 							
-						type: 'bar',
+						type: 'line',
 						data: {
 							labels: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'],
 							datasets: [{
 								label: '실패한 영업기회',
-								data: [failedBusinessChanceCount[0], 
-										failedBusinessChanceCount[1], 
-										failedBusinessChanceCount[2], 
-										failedBusinessChanceCount[3], 
-										failedBusinessChanceCount[4], 
-										failedBusinessChanceCount[5], 
-										failedBusinessChanceCount[6], 
-										failedBusinessChanceCount[7], 
-										failedBusinessChanceCount[8], 
-										failedBusinessChanceCount[9], 
-										failedBusinessChanceCount[10], 
-										failedBusinessChanceCount[11]
+								data: [failedBusinessChance[0], 
+										failedBusinessChance[1], 
+										failedBusinessChance[2], 
+										failedBusinessChance[3], 
+										failedBusinessChance[4], 
+										failedBusinessChance[5], 
+										failedBusinessChance[6], 
+										failedBusinessChance[7], 
+										failedBusinessChance[8], 
+										failedBusinessChance[9], 
+										failedBusinessChance[10], 
+										failedBusinessChance[11]
 									   ], 
-								backgroundColor: ['rgba(255, 99, 132, 0.2)'],
-								borderColor: ['rgba(255, 99, 132, 1)'],
+							    backgroundColor: ['rgba(153, 102, 255, 0.2)'],
+								borderColor: [ 'rgba(153, 102, 255, 1)'],
 								borderWidth: 1
 							}]
 						},
@@ -234,9 +260,8 @@
 							}
 						}
 					};
-						
-					var failedBusinessChanceChart = new Chart(ctx, config);
-
+					
+					var failedBusinessChanceChart = new Chart(ctx3, config);
 				},
 
 				error: function(xhr, status, error) {
@@ -244,9 +269,8 @@
 				}
 			
 			});
-		}); 
-	
 			
+		});
 		</script>
 		
 </body>
