@@ -1007,34 +1007,11 @@
 
         });
 
+        const message = '[[${ message }]]';
 
-
-
-
-        // /* 검색 자동 완성 기능 */
-        // $(document).ready(function () {
-        //     $('#newManager').autocomplete({
-        //         source: function (request, response) {
-        //             $.ajax({
-        //                 url: "/customer/auto",
-        //                 type: "POST",
-        //                 data: { term : request.term },
-        //                 dataType: "json",
-        //                 success: function (data, textStatus, xhr) {
-        //                     response($.map(data, function (item) {
-        //                         return {
-        //                             label: item.empName,
-        //                             value: item.value
-        //                         };
-        //                     }));
-        //                 },
-        //                 error: function (xhr, status, error) {
-        //                     console.log(xhr);
-        //                 }
-        //             });
-        //         },
-        //     });
-        // });
+        if(message) {
+            alert(message);
+        }
     </script>
 </body>
 

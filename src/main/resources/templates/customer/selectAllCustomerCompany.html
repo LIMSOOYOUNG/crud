@@ -214,6 +214,12 @@
             $('#table_customer').DataTable(); // ID From dataTable with Hover
         });
 
+        const message = '[[${ message }]]';
+
+        if(message) {
+            alert(message);
+        }
+
         $('#insertCompany').click(function () {
             $('#insertModal').modal();
         });

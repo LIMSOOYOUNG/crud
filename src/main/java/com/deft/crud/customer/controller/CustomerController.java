@@ -10,6 +10,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
@@ -110,171 +111,261 @@ public class CustomerController {
 
     /* 고객 기본 정보 수정 */
     @PostMapping("ext/info/basic/modify")
-    public ModelAndView modifyBasicInfo(ModelAndView mv, @ModelAttribute ModifyBasicInfoDTO parameters) {
+    public ModelAndView modifyBasicInfo(ModelAndView mv,
+                                        RedirectAttributes rttr,
+                                        @ModelAttribute ModifyBasicInfoDTO parameters) {
 
         int customerNo = parameters.getCustomerNo();
 
         int result = customerService.modifyBasicInfo(parameters);
 
+        String message = "";
+
         if(result > 0) {
-            mv.setViewName("redirect:/customer/cusinfo?customerNo=" + customerNo);
+            message = "고객의 기본 정보 변경을 성공했습니다!";
+        } else {
+            message = "고객의 기본 정보 변경을 실패했습니다.";
         }
 
+        rttr.addFlashAttribute("message", message);
+        mv.setViewName("redirect:/customer/cusinfo?customerNo=" + customerNo);
         return mv;
     }
 
     /* 분석 고객 기본 정보 수정 */
     @PostMapping("ana/info/basic/modify")
-    public ModelAndView modifyBasicInfoForAnalysis(ModelAndView mv, @ModelAttribute ModifyBasicInfoDTO parameters) {
+    public ModelAndView modifyBasicInfoForAnalysis(ModelAndView mv,
+                                                   RedirectAttributes rttr,
+                                                   @ModelAttribute ModifyBasicInfoDTO parameters) {
 
         int customerNo = parameters.getCustomerNo();
 
         int result = customerService.modifyBasicInfo(parameters);
 
+        String message = "";
+
         if(result > 0) {
-            mv.setViewName("redirect:/customer/anainfo?customerNo=" + customerNo);
+            message = "고객의 기본 정보 변경을 성공했습니다!";
+        } else {
+            message = "고객의 기본 정보 변경을 실패했습니다.";
         }
 
+        rttr.addFlashAttribute("message", message);
+        mv.setViewName("redirect:/customer/anainfo?customerNo=" + customerNo);
         return mv;
     }
 
     /* 기존 고객 상세 정보 수정 */
     @PostMapping("ext/info/detail/modify")
-    public ModelAndView modifyDetailInfo(ModelAndView mv, @ModelAttribute ModifyDetailInfoForExtDTO parameters) {
+    public ModelAndView modifyDetailInfo(ModelAndView mv,
+                                         RedirectAttributes rttr,
+                                         @ModelAttribute ModifyDetailInfoForExtDTO parameters) {
 
         int customerNo = parameters.getCustomerNo();
 
         int customerResult = customerService.modifyDetailInfoToCustomer(parameters);
         int companyResult = customerService.modifyDetailInfoToCompany(parameters);
 
+        String message = "";
+
         if(customerResult > 0 && companyResult > 0) {
-            mv.setViewName("redirect:/customer/cusinfo?customerNo=" + customerNo);
+            message = "고객의 상세정보 변경을 성공했습니다!";
+        } else {
+            message = "고객의 상세정보 변경을 실패했습니다.";
         }
 
+        rttr.addFlashAttribute("message", message);
+        mv.setViewName("redirect:/customer/cusinfo?customerNo=" + customerNo);
         return mv;
     }
 
     /* 분석 고객 상세 정보 수정 */
     @PostMapping("ana/info/detail/modify")
-    public ModelAndView modifyDetailInfoForAnalysis(ModelAndView mv, @ModelAttribute ModifyDetailInfoForExtDTO parameters) {
+    public ModelAndView modifyDetailInfoForAnalysis(ModelAndView mv,
+                                                    RedirectAttributes rttr,
+                                                    @ModelAttribute ModifyDetailInfoForExtDTO parameters) {
 
         int customerNo = parameters.getCustomerNo();
 
         int customerResult = customerService.modifyDetailInfoToCustomer(parameters);
         int companyResult = customerService.modifyDetailInfoToCompany(parameters);
 
+        String message = "";
+
         if(customerResult > 0 && companyResult > 0) {
-            mv.setViewName("redirect:/customer/anainfo?customerNo=" + customerNo);
+            message = "고객의 상세정보 변경을 성공했습니다!";
+        } else {
+            message = "고객의 상세정보 변경을 실패했습니다.";
         }
+
+        rttr.addFlashAttribute("message", message);
+        mv.setViewName("redirect:/customer/anainfo?customerNo=" + customerNo);
 
         return mv;
     }
 
     /* 기존, 해지 고객 상태 변경 */
     @PostMapping("ext/status/modify")
-    public ModelAndView modifyExtCustomerStatus(ModelAndView mv, @RequestParam int customerNo) {
+    public ModelAndView modifyExtCustomerStatus(ModelAndView mv,
+                                                RedirectAttributes rttr,
+                                                @RequestParam int customerNo) {
 
         int result = customerService.modifyExtCustomerStatus(customerNo);
 
+        String message = "";
+
         if(result > 0) {
-            mv.setViewName("redirect:/customer/cusinfo?customerNo=" + customerNo);
+            message = "고객의 상태 변경을 성공했습니다!";
+        } else {
+            message = "고객의 상태 변경을 실패했습니다.";
         }
 
+        rttr.addFlashAttribute("message", message);
+        mv.setViewName("redirect:/customer/cusinfo?customerNo=" + customerNo);
         return mv;
     }
 
     /* 분석 고객 상태 변경 */
     @PostMapping("ana/status/modify")
-    public ModelAndView modifyAnaCustomerStatus(ModelAndView mv, @ModelAttribute AnaCustomerDetailDTO parameters) {
+    public ModelAndView modifyAnaCustomerStatus(ModelAndView mv,
+                                                RedirectAttributes rttr,
+                                                @ModelAttribute AnaCustomerDetailDTO parameters) {
 
         int customerNo = parameters.getCustomerNo();
 
         int result = customerService.modifyAnaCustomerStatus(parameters);
 
+        /* 분석 고객의 상태가 성공고객일 경우 기존 고객으로 등록 */
         if(parameters.getCustomerStatus().equals("성공고객")) {
             int insertResult = customerService.insertExtCustomer(parameters);
         }
 
+        String message = "";
+
         if(result > 0) {
-            mv.setViewName("redirect:/customer/anainfo?customerNo=" + customerNo);
+            message = "고객의 상태 변경을 성공했습니다!";
+        } else {
+            message = "고객의 상태 변경을 실패했습니다.";
         }
 
+        rttr.addFlashAttribute("message", message);
+        mv.setViewName("redirect:/customer/anainfo?customerNo=" + customerNo);
         return mv;
     }
 
     /* 분석 고객 고객화 변경 */
     @PostMapping("/ana/customization/modify")
-    public ModelAndView modifyAnaCustomization(ModelAndView mv, @ModelAttribute AnaCustomerDetailDTO parameters) {
+    public ModelAndView modifyAnaCustomization(ModelAndView mv,
+                                               RedirectAttributes rttr,
+                                               @ModelAttribute AnaCustomerDetailDTO parameters) {
 
         int customerNo = parameters.getCustomerNo();
 
         int modifyResult = customerService.modifyAnaCustomization(parameters);
         int insertResult = customerService.insertAnaCustomizationHistory(parameters);
 
+        String message = "";
+
         if(modifyResult > 0 && insertResult > 0) {
-            mv.setViewName("redirect:/customer/anainfo?customerNo=" + customerNo);
+            message = "고객화 변경을 성공했습니다!";
+        } else {
+            message = "고객화 변경을 실패했습니다.";
         }
 
+        rttr.addFlashAttribute("message", message);
+        mv.setViewName("redirect:/customer/anainfo?customerNo=" + customerNo);
         return mv;
     }
 
     /* 분석 고객 영업활동 등록 */
     @PostMapping("/ana/activity/insert")
-    public ModelAndView insertAnaActivity(ModelAndView mv, @ModelAttribute BusinessActivityDTO parameters) {
+    public ModelAndView insertAnaActivity(ModelAndView mv,
+                                          RedirectAttributes rttr,
+                                          @ModelAttribute BusinessActivityDTO parameters) {
 
         int customerNo = parameters.getCustomerNo();
 
         int result = customerService.insertActivity(parameters);
 
+        String message = "";
+
         if(result > 0) {
-            mv.setViewName("redirect:/customer/anainfo?customerNo=" + customerNo);
+            message = "영업 활동 등록을 성공했습니다!";
+        } else {
+            message = "영업 활동 등록을 실패했습니다.";
         }
 
+        rttr.addFlashAttribute("message", message);
+        mv.setViewName("redirect:/customer/anainfo?customerNo=" + customerNo);
         return mv;
     }
 
     /* 기존 고객 영업활동 등록 */
     @PostMapping("/ext/activity/insert")
-    public ModelAndView insertExtActivity(ModelAndView mv, @ModelAttribute BusinessActivityDTO parameters) {
+    public ModelAndView insertExtActivity(ModelAndView mv,
+                                          RedirectAttributes rttr,
+                                          @ModelAttribute BusinessActivityDTO parameters) {
 
         int customerNo = parameters.getCustomerNo();
 
         int result = customerService.insertActivity(parameters);
 
+        String message = "";
+
         if(result > 0) {
-            mv.setViewName("redirect:/customer/cusinfo?customerNo=" + customerNo);
+            message = "영업 활동 등록을 성공했습니다!";
+        } else {
+            message = "영업 활동 등록을 실패했습니다.";
         }
 
+        rttr.addFlashAttribute("message", message);
+        mv.setViewName("redirect:/customer/cusinfo?customerNo=" + customerNo);
         return mv;
     }
 
     /* 기존 고객 담당사원 변경 */
     @PostMapping("/ext/manager/modify")
-    public ModelAndView modifyExtManager(ModelAndView mv, @ModelAttribute CustomerDTO parameters) {
+    public ModelAndView modifyExtManager(ModelAndView mv,
+                                         RedirectAttributes rttr,
+                                         @ModelAttribute CustomerDTO parameters) {
 
         int customerNo = parameters.getCustomerNo();
 
         int result = customerService.modifyManager(parameters);
 
+        String message = "";
+
         if(result > 0) {
-            mv.setViewName("redirect:/customer/cusinfo?customerNo=" + customerNo);
+            message = "담당 사원 변경을 성공했습니다!";
+        } else {
+            message = "담당 사원 변경을 실패했습니다.";
         }
 
+        rttr.addFlashAttribute("message", message);
+        mv.setViewName("redirect:/customer/cusinfo?customerNo=" + customerNo);
         return mv;
     }
 
     /* 분석 고객 담당사원 변경 */
     @PostMapping("/ana/manager/modify")
-    public ModelAndView modifyAnaManager(ModelAndView mv, @ModelAttribute CustomerDTO parameters) {
+    public ModelAndView modifyAnaManager(ModelAndView mv,
+                                         RedirectAttributes rttr,
+                                         @ModelAttribute CustomerDTO parameters) {
 
         int customerNo = parameters.getCustomerNo();
 
         int result = customerService.modifyManager(parameters);
 
+        String message = "";
+
         if(result > 0) {
-            mv.setViewName("redirect:/customer/anainfo?customerNo=" + customerNo);
+            message = "담당 사원 변경을 성공했습니다!";
+        } else {
+            message = "담당 사원 변경을 실패했습니다.";
         }
 
+        rttr.addFlashAttribute("message", message);
+        mv.setViewName("redirect:/customer/anainfo?customerNo=" + customerNo);
         return mv;
     }
 
@@ -292,61 +383,93 @@ public class CustomerController {
 
     /* 영업 활동 수정 처리 메소드 */
     @PostMapping("/activity/modify")
-    public ModelAndView modifyDetailActivity(ModelAndView mv, @ModelAttribute BusinessActivityDTO parameters) {
+    public ModelAndView modifyDetailActivity(ModelAndView mv,
+                                             RedirectAttributes rttr,
+                                             @ModelAttribute BusinessActivityDTO parameters) {
 
         int customerNo = parameters.getCustomerNo();
 
         int result = customerService.modifyActivity(parameters);
 
+        String message = "";
+
         if(result > 0) {
-            mv.setViewName("redirect:/customer/cusinfo?customerNo=" + customerNo);
+            message = "영업 활동 삭제를 성공했습니다!";
+        } else {
+            message = "영업 활동 삭제를 실패했습니다.";
         }
 
+        rttr.addFlashAttribute("message", message);
+        mv.setViewName("redirect:/customer/cusinfo?customerNo=" + customerNo);
         return mv;
     }
 
     /* 영업 활동 삭제 */
     @PostMapping("activity/delete")
-    public ModelAndView deleteDetailActivity(ModelAndView mv, @ModelAttribute BusinessActivityDTO parameters) {
+    public ModelAndView deleteDetailActivity(ModelAndView mv,
+                                             RedirectAttributes rttr,
+                                             @ModelAttribute BusinessActivityDTO parameters) {
 
         int customerNo = parameters.getCustomerNo();
 
         int result = customerService.deleteActivity(parameters);
 
+        String message = "";
+
         if(result > 0) {
-            mv.setViewName("redirect:/customer/cusinfo?customerNo=" + customerNo);
+            message = "영업 활동 삭제를 성공했습니다!";
+        } else {
+            message = "영업 활동 삭제를 실패했습니다.";
         }
 
+        rttr.addFlashAttribute("message", message);
+        mv.setViewName("redirect:/customer/cusinfo?customerNo=" + customerNo);
         return mv;
     }
 
     /* 분석 고객 영업 활동 수정 처리 */
     @PostMapping("/ana/activity/modify")
-    public ModelAndView modifyAnaDetailActivity(ModelAndView mv, @ModelAttribute BusinessActivityDTO parameters) {
+    public ModelAndView modifyAnaDetailActivity(ModelAndView mv,
+                                                RedirectAttributes rttr,
+                                                @ModelAttribute BusinessActivityDTO parameters) {
 
         int customerNo = parameters.getCustomerNo();
 
         int result = customerService.modifyActivity(parameters);
 
+        String message = "";
+
         if(result > 0) {
-            mv.setViewName("redirect:/customer/anainfo?customerNo=" + customerNo);
+            message = "영업 활동 수정을 성공했습니다!";
+        } else {
+            message = "영업 활동 수정을 실패했습니다.";
         }
 
+        rttr.addFlashAttribute("message", message);
+        mv.setViewName("redirect:/customer/anainfo?customerNo=" + customerNo);
         return mv;
     }
 
     /* 분석 고객 영업 활동 삭제 */
     @PostMapping("ana/activity/delete")
-    public ModelAndView deleteAnaDetailActivity(ModelAndView mv, @ModelAttribute BusinessActivityDTO parameters) {
+    public ModelAndView deleteAnaDetailActivity(ModelAndView mv,
+                                                RedirectAttributes rttr,
+                                                @ModelAttribute BusinessActivityDTO parameters) {
 
         int customerNo = parameters.getCustomerNo();
 
         int result = customerService.deleteActivity(parameters);
 
+        String message = "";
+
         if(result > 0) {
-            mv.setViewName("redirect:/customer/anainfo?customerNo=" + customerNo);
+            message = "영업 활동 삭제를 성공했습니다!";
+        } else {
+            message = "영업 활동 삭제를 실패했습니다.";
         }
 
+        rttr.addFlashAttribute("message", message);
+        mv.setViewName("redirect:/customer/anainfo?customerNo=" + customerNo);
         return mv;
     }
 
@@ -376,46 +499,76 @@ public class CustomerController {
 
     /* 고객사 정보 수정 */
     @PostMapping("/company/modify")
-    public ModelAndView modifyDetailInfoToCustomerCompany(ModelAndView mv, @ModelAttribute CustomerCompanyDTO parameters) {
+    public ModelAndView modifyDetailInfoToCustomerCompany(ModelAndView mv,
+                                                          RedirectAttributes rttr,
+                                                          @ModelAttribute CustomerCompanyDTO parameters) {
 
         int result = customerService.modifyDetailInfoToCustomerCompany(parameters);
 
+        String message = "";
+
         if(result > 0) {
-            mv.setViewName("redirect:/customer/company");
+            message = "고객사 정보 수정을 성공했습니다!";
+        } else {
+            message = "고객사 정보 수정을 실패했습니다.";
         }
+
+        rttr.addFlashAttribute("message", message);
+        mv.setViewName("redirect:/customer/company");
 
         return mv;
     }
 
     /* 고객사 정보 삭제 */
     @PostMapping("/company/delete")
-    public ModelAndView deleteCustomerCompany(ModelAndView mv, @ModelAttribute CustomerCompanyDTO parameters) {
+    public ModelAndView deleteCustomerCompany(ModelAndView mv,
+                                              RedirectAttributes rttr,
+                                              @ModelAttribute CustomerCompanyDTO parameters) {
 
         int result = customerService.deleteCustomerCompany(parameters);
 
+        String message = "";
+
         if(result > 0) {
-            mv.setViewName("redirect:/customer/company");
+            message = "고객사 삭제를 성공했습니다!";
+        } else {
+            message = "고객사 삭제를 실패했습니다.";
         }
+
+        rttr.addFlashAttribute("message", message);
+        mv.setViewName("redirect:/customer/company");
 
         return mv;
     }
 
     /* 고객사 등록 */
     @PostMapping("/company/insert")
-    public ModelAndView insertCustomerCompany(ModelAndView mv, @ModelAttribute CustomerCompanyDTO parameters) {
+    public ModelAndView insertCustomerCompany(ModelAndView mv,
+                                              RedirectAttributes rttr,
+                                              @ModelAttribute CustomerCompanyDTO parameters) {
 
         int result = customerService.insertCustomerCompany(parameters);
 
+        String message = "";
+
         if(result > 0) {
-            mv.setViewName("redirect:/customer/company");
+            message = "고객사 등록을 성공했습니다!";
+        } else {
+            message = "고객사 등록을 실패했습니다.";
         }
+
+        rttr.addFlashAttribute("message", message);
+        mv.setViewName("redirect:/customer/company");
 
         return mv;
     }
 
-    /* 고객 등록 */
+    /* 분석 고객 등록 */
     @PostMapping("/ana/insert")
-    public ModelAndView insertCustomer(ModelAndView mv, @ModelAttribute InsertCustomerDTO parameters, @RequestParam List<Integer> productNo) {
+    public ModelAndView insertCustomer(ModelAndView mv,
+                                       RedirectAttributes rttr,
+                                       @ModelAttribute InsertCustomerDTO parameters,
+                                       @RequestParam List<Integer> productNo) {
 
         int customerResult = customerService.insertCustomer(parameters);
 
@@ -428,10 +581,16 @@ public class CustomerController {
         int detailResult = customerService.insertDetail(parameters);
         int productResult = customerService.insertProduct(products);
 
+        String message = "";
+
         if(customerResult > 0 && detailResult > 0 && productResult > 0) {
-            mv.setViewName("redirect:/customer/ana");
+            message = "분석고객 등록을 성공했습니다!";
+        } else {
+            message = "분석고객 등록을 실패했습니다.";
         }
 
+        rttr.addFlashAttribute("message", message);
+        mv.setViewName("redirect:/customer/ana");
         return mv;
     }
 
