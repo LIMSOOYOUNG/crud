@@ -6,6 +6,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -49,17 +50,14 @@ public class BoardService {
 		
 		int boardResult = boardMapper.insertFreeboard(board);
 		
-		if(!board.getBoardFileList().isEmpty()) {
+		BoardFileDTO file = board.getBoardFileList();
+		
+		if(file != null) {
 			
-			int boardFile = 0;
+			int boardFile = boardMapper.insertFile(file);
 			
-			for(BoardFileDTO file : board.getBoardFileList()) {
-				
-				boardFile += boardMapper.insertFile(file);
-				
-			}
-			
-			if(boardResult > 0 && boardFile > board.getBoardFileList().size()) {
+		
+			if(boardResult > 0 && boardFile > 0) {
 				
 				result = 1;
 				
@@ -73,8 +71,6 @@ public class BoardService {
 		return result;
 	}
 	
-
-
 
 	/* 자유게시글 보기*/
 	public BoardDTO freeboardDetail(int writeNo) {
@@ -111,6 +107,7 @@ public class BoardService {
 
 	}
 	/* 수정페이지에 값전달 */
+	@Transactional
 	public BoardDTO freeboardModifyForm(int writeNo) {
 		 
 		BoardDTO boardDTO = boardMapper.freeboardModifyForm(writeNo);
@@ -119,6 +116,7 @@ public class BoardService {
 	}
 
 	/* 자유게시글 수정 서비스*/
+	@Transactional
 	public int freeboardModify(BoardDTO parameters) {
 		
 		System.out.println("서비스 쪽의 DTO 입니다:" + parameters);
@@ -130,6 +128,7 @@ public class BoardService {
 	}
 
 	/* 자유게시글 삭제 */
+	@Transactional
 	public int deleteFreeboard(int writeNo) {
 		
 		int result = boardMapper.deleteFreeboard(writeNo);
@@ -137,6 +136,7 @@ public class BoardService {
 		return result;
 	}
 
+	@Transactional
 	public int deleteFile(int writeNo) {
 		
 		int result = boardMapper.deleteFile(writeNo);
@@ -144,9 +144,28 @@ public class BoardService {
 		return result;
 	}
 
+	@Transactional
 	public BoardFileDTO freeboardFile(int writeNo) {
 		
 		BoardFileDTO result = boardMapper.detailFile(writeNo);
+		
+		return result;
+	}
+
+	@Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE,
+			rollbackFor = {Exception.class})
+	public int modifyFreeboardFile(BoardDTO parameters, BoardFileDTO boardFileDTO) {
+		
+		int result = 0;
+		
+		int modifyFreeboardText = boardMapper.modifyFreeboardText(parameters);
+		
+		int modifyFreeboardFile = boardMapper.modifyFreeboardFile(boardFileDTO);
+		
+		if(modifyFreeboardFile > 0 && modifyFreeboardText > 0) {
+			
+			result = 1;
+		}
 		
 		return result;
 	}

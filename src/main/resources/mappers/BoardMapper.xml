@@ -11,7 +11,10 @@
 	<result property="contents" column="CONTENTS"/>
 	<result property="type" column="TYPE"/>
 	<result property="empNo" column="EMP_NO"/>
+	
+	<association property="boardFileList" resultMap="boardFileResultMap"/>
 </resultMap>
+
 <resultMap type="com.deft.crud.board.model.dto.BoardFileDTO" id="boardFileResultMap">
 	<id property="boardAttatchNo" column="BOARD_ATTATCH_NO"/>
 	<result property="boardNo" column="BOARD_NO"/>
@@ -80,7 +83,7 @@
 	</delete>
 
 	
-	<select id="freeboardDetail" parameterType="_int" resultType="com.deft.crud.board.model.dto.BoardDTO">
+	<select id="freeboardDetail" parameterType="_int" resultMap="boardResultMap">
 		SELECT /*com.deft.crud.board.model.dto.BoardDTO*/
 		       B.BOARD_NO
 		     , B.WRITE_NO
@@ -94,7 +97,7 @@
          WHERE B.BOARD_NO = 2
            AND B.WRITE_NO = #{ writeNo }
 	</select>
-	<select id="noticeDetail" parameterType="_int" resultType="com.deft.crud.board.model.dto.BoardDTO">
+	<select id="noticeDetail" parameterType="_int" resultMap="boardResultMap">
 		SELECT /*com.deft.crud.board.model.dto.BoardDTO*/
 		       B.BOARD_NO
 		     , B.WRITE_NO
@@ -108,7 +111,7 @@
          WHERE B.BOARD_NO = 1
            AND B.WRITE_NO = #{ writeNo }
 	</select>
-	<update id="freeboardviewCount">
+	<update id="freeboardviewCount" parameterType="_int">
 		UPDATE TBL_BOARD B /*com.deft.crud.board.model.dto.BoardDTO*/
 	   	   SET B.VIEWS = VIEWS + 1
 	     WHERE B.WRITE_NO = #{ writeNo } 
@@ -126,7 +129,7 @@
 	     WHERE SEQUENCE_NAME = 'SEQ_WRITE_NO'
 	</select>
 	
-	<select id="freeboardModifyForm" parameterType="_int" resultType="com.deft.crud.board.model.dto.BoardDTO">
+	<select id="freeboardModifyForm" parameterType="_int" resultMap="boardResultMap">
 		SELECT /*com.deft.crud.board.model.dto.BoardDTO*/
 		       B.BOARD_NO
 		     , B.WRITE_NO
@@ -168,10 +171,28 @@
 	    )
 	</insert>
 
-	<select id="detailFile" parameterType="_int"  resultType="com.deft.crud.board.model.dto.BoardFileDTO">
+	<select id="detailFile" parameterType="_int" resultMap="boardFileResultMap">
 		SELECT /* com.deft.crud.board.model.dto.BoardFileDTO */
 	           B.ORIGINAL_NAME
 	      FROM TBL_BOARD_ATTATCH B
 	     WHERE B.WRITE_NO = #{ writeNo }
 	</select>
+	<update id="modifyFreeboardText" parameterType="com.deft.crud.board.model.dto.BoardDTO">
+		UPDATE /*com.deft.crud.board.model.dto.BoardDTO*/
+	           TBL_BOARD B
+	       SET B.BOARD_NAME = #{ boardName,jdbcType=VARCHAR }
+	         , B.CONTENTS = #{ contents,jdbcType=VARCHAR }
+	     WHERE B.WRITE_NO = #{ writeNo }    
+	</update>
+	
+	<update id="modifyFreeboardFile" parameterType="com.deft.crud.board.model.dto.BoardFileDTO">
+		UPDATE /* com.deft.crud.board.model.dao.BoardMapper#modifyFreeboardFile() */
+	           TBL_BOARD_ATTATCH B
+	       SET B.ORIGINAL_NAME = #{ originalName }
+	         , B.SAVED_NAME = #{ savedName }
+	         , B.SAVED_PATH = #{ savedPath }
+		 WHERE B.WRITE_NO = #{ writeNo } 	
+	</update>
+	
+	
 </mapper>
