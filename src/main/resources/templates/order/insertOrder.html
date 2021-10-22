@@ -114,8 +114,8 @@
 											</select>
 										</div>
 										<div class="form-group row mb-2" th:align="right">
-											<label for="sumPrice" class="col-form-label col-lg-1">합계금액</label>
-											<input type="text" class="form-control col-lg-4" th:field="*{sumPrice}" readonly>
+											<label for="orderTotal" class="col-form-label col-lg-1">합계금액</label>
+											<input type="text" class="form-control col-lg-4" id="orderTotal" th:field="*{sumPrice}" readonly>
 											<h5 class="col-lg-4" id="orderTotalKor" th:align="left"></h5>
 										</div>
 									</div>
@@ -125,7 +125,7 @@
 								<!-- OrderProductList -->
 								<div class="card mb-4">
 									<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-										<h6 class="m-0 font-weight-bold text-primary" id="tableTitle">견적 품목</h6>
+										<h6 class="m-0 font-weight-bold text-primary" id="tableTitle">주문 품목</h6>
 									</div>
 									<div class="table-responsible">
 										<table class="table align-items-center table-flush" id="orderProductTable">
@@ -185,7 +185,7 @@
 									<div class="row">
 										<div class="col-lg-12">
 											<div class="card mb-4">
-												<div class="table-responsive p-3" style="height:500px; overflow:auto;">
+												<div class="table p-3" style="height:500px; overflow:auto;">
 													<table class="table align-items-center table-flush table-hover" id="estimateTable">
 														<thead class="thead-light" th:align="center">
 															<tr>
@@ -205,6 +205,8 @@
 																<td th:text="*{customer.customerName}"></td>
 																<td th:text="*{estimateDate}"></td>
 																<td>
+																	<input type="hidden" th:value="*{customer.customerNo}">
+																	<input type="hidden" th:value="|*{customer.empInfo.empName} *{customer.empInfo.job.jobName}">
 																	<button type="button" class="btn btn-sm btn-dark" name="selectEstimateBtn"
 																			data-dismiss="modal">선택</button>
 																</td>
@@ -373,10 +375,40 @@
 		});
 
 		$("button[name='selectEstimateBtn']").on("click", function() {
-			$td = $(this).parent();
+			const estimateNo = $(this).parent().siblings().eq(0).text();
 
-			const estimateNo = $td.siblings().eq(0).text();
-			console.log(estimateNo);
+			$.ajax({
+				url: "/order/estimate/select",
+				type: "GET",
+				data: {"estimateNo": estimateNo},
+				success: function(data, status, xhr) {
+					const estimate = JSON.parse(data.estimate);
+					const productList = estimate.estimateProductList;
+
+					console.table(productList);
+
+					$("#orderTitle").val(estimate.estimateTitle);
+					$("#customerNo").val(estimate.customer.customerNo);
+					$("#customerCompany").val(estimate.customer.company.companyName);
+					$("#customerName").val(estimate.customer.customerName);
+					$("#resEmpName").val(estimate.customer.empInfo.empName + " " + estimate.customer.empInfo.job.jobName);
+					if(estimate.discountStatus == "Y") {
+						$("#noApplyDiscount").attr("checked", false);
+						$("#applyDiscount").attr("checked", true);
+						$("#discountRate").attr("disabled", false);
+					} else {
+						$("#applyDiscount").attr("checked", false);
+						$("#noApplyDiscount").attr("checked", true);
+						$("#discountRate").attr("disabled", true);
+					}
+					$("#discountRate").val(estimate.discountRate);
+					$("#orderTotal").val(estimate.estimateTotal);
+				},
+				error: function(xhr, status, error) {
+					console.log(error);
+				}
+			});
+
 		});
 		
 		/* 고객 목록 중 선택하여 정보 입력 */
@@ -546,7 +578,7 @@
 			return "일금 " + result + "원";
 		}
 
-		/* 입력된 견적서 정보를 post 방식으로 전송 */
+		/* 입력된 주문서 정보를 post 방식으로 전송 */
 		$(document).on("click", "#registOrderBtn", function() {
 
 			const $orderProduct = $("#orderProductTable tbody");
@@ -573,7 +605,7 @@
 							"orderStatus" : $("#orderStatus option:selected").text(),
 							"orderProductList" : productList};
 
-			if(confirm("견적서를 등록하시겠습니까?")) {
+			if(confirm("주문서를 등록하시겠습니까?")) {
 				$.ajax({
 					url: "/order/insert",
 					type: "POST",

@@ -43,10 +43,10 @@
 										<thead class="thead-light" th:align="center">
 											<tr>
 												<th>주문번호</th>
-												<th>고객명</th>
 												<th>제목</th>
-												<th>금액</th>
-												<th>결제방법</th>
+												<th>고객사</th>
+												<th>고객명</th>
+												<th>금액(원)</th>
 												<th>주문일</th>
 												<th>납기요청일</th>
 												<th>출고상태</th>
@@ -56,10 +56,10 @@
 										<tbody>
 											<tr th:each="order : ${orderList}" th:object="${order}" th:align="center">
 												<td th:text="*{orderNo}"></td>
-												<td th:text="*{customer.customerName}"></td>
 												<td th:text="*{orderTitle}"></td>
+												<td th:text="*{customer.company.companyName}"></td>
+												<td th:text="*{customer.customerName}"></td>
 												<td th:text="*{sumPrice}"></td>
-												<td th:text="*{paymentStatus}"></td>
 												<td th:text="*{orderDate}"></td>
 												<td th:text="*{dueDate}"></td>
 												<td th:switch="*{orderYn}">
