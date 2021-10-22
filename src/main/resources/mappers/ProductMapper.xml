@@ -54,9 +54,9 @@
 		<result property="productNo" column="PRODUCT_NO"/>
 		<result property="thumbnailPath" column="THUMBNAIL_PATH"/>
 	
-	
 	</resultMap>
 	
+	<!-- 상품 정보 조회 -->
 	<select id="allProductList" resultMap="productResultMap">
 	    SELECT /*com.deft.crud.product.model.dao.ProductMapper#allProductList()*/
 	           P.PRODUCT_NO
@@ -70,6 +70,7 @@
 	       LEFT JOIN TBL_PRODUCT_CATEGORY B ON(A.REF_CATEGORY_CODE = B.CATEGORY_CODE)
 	</select>
 	
+	<!-- 카테고리 정보 조회 -->
 	<select id="allCategoryList" resultMap="productCategoryResultMap">
 		SELECT /*com.deft.crud.product.model.dao.ProductMapper#allCategoryList()*/
 			   A.CATEGORY_CODE
@@ -79,9 +80,9 @@
 			 , B.CATEGORY_NAME "REF_CATEGORY_NAME"
 		  FROM TBL_PRODUCT_CATEGORY A
 	      LEFT JOIN TBL_PRODUCT_CATEGORY B ON (A.REF_CATEGORY_CODE = B.CATEGORY_CODE)		
-	      		
 	</select>
 	
+	<!-- 상품 정보 조회 -->
 	<select id="refCategoryList" resultMap="productCategoryResultMap">
 		 SELECT /*com.deft.crud.product.model.dao.ProductMapper#refCategoryList()*/
        	        A.CATEGORY_CODE "REF_CATEGORY_CODE"
@@ -89,9 +90,9 @@
      	   	  , A.CATEGORY_STATUS
   	       FROM TBL_PRODUCT_CATEGORY A
  		  WHERE REF_CATEGORY_CODE IS NULL
-	
 	</select>
 	
+	<!-- 상품 정보 조회 -->
 	<select id="categoryList" resultMap="productCategoryResultMap">
 		SELECT /*com.deft.crud.product.model.dao.ProductMapper#categoryList()*/
         	   A.CATEGORY_CODE 
@@ -102,6 +103,7 @@
          WHERE A.REF_CATEGORY_CODE IS NOT NULL
 	</select>
 	
+	<!-- 상품 정보 조회 -->
 	<select id="manufacturerList" resultMap="manufacturerResultMap">
 		SELECT /*com.deft.crud.product.model.dao.ProductMapper#manufacturerList()*/
 			   A.MANUFACTURER_NO
@@ -109,7 +111,7 @@
 		  FROM TBL_MANUFACTURER A
 	</select>
 	
-	
+	<!-- 상품 정보 조회 -->
 	<select id="productDetail" resultMap="productResultMap">
 		 SELECT /*com.deft.crud.product.model.dao.ProductMapper#productDetail()*/
                 P.PRODUCT_NO
@@ -130,6 +132,7 @@
 	      WHERE P.PRODUCT_NO = #{ productNo }
 	</select>
 	
+	<!-- 상품 정보 조회 -->
 	<select id="selectProductImage" resultMap="productImageMap">
 		SELECT /*com.deft.crud.product.model.dao.ProductMapper#selectProductImage()*/
 			   P.PRODUCT_IMAGE_NO
@@ -142,6 +145,7 @@
 	     WHERE P.PRODUCT_NO = #{ productNo }
 	</select>
 	
+	<!-- 상품 정보 조회 -->
 	<select id="selectSmallCategoryList" resultMap="productCategoryResultMap">
 		SELECT /*com.deft.crud.product.model.dao.ProductMapper#selectSmallCategoryList()*/
 			   PC.CATEGORY_CODE
@@ -152,16 +156,16 @@
 			   
 	</select>
 	
+	<!-- 상품 정보 조회 -->
 	<select id="accountList" resultMap="accountResultMap">
 		SELECT /*com.deft.crud.product.model.dao.ProductMapper#accountList()*/
 			   A.ACCOUNT_NO
 			 , A.COMPANY_NAME
 		  FROM TBL_ACCOUNT A
-	
 	</select>
 	
 	
-	
+	<!-- 상품 정보 조회 -->
 	<insert id="insertRefCategory" parameterType="com.deft.crud.product.model.dto.ProductCategoryDTO">
 		INSERT /*com.deft.crud.product.model.dao.ProductMapper#insertRefCategory()*/
 		  INTO TBL_PRODUCT_CATEGORY T
@@ -174,6 +178,7 @@
 		)
 	</insert>
 	
+	<!-- 상품 정보 조회 -->
 	<insert id="insertCategory" parameterType="com.deft.crud.product.model.dto.ProductCategoryDTO">
 		INSERT /*com.deft.crud.product.model.dao.ProductMapper#insertCategory()*/
 		  INTO TBL_PRODUCT_CATEGORY T
@@ -184,9 +189,9 @@
 		(
 		  SEQ_CATEGORY_CODE.NEXTVAL, #{ categoryName }, #{ refCategoryCode }, #{ categoryStatus }
 		)
-	
 	</insert>
 	
+	<!-- 상품 정보 조회 -->
 	<update id="updateRefCategory" parameterType="com.deft.crud.product.model.dto.ProductCategoryDTO">
 		UPDATE /*com.deft.crud.product.model.dao.ProductMapper#updateRefCategory()*/
 			   TBL_PRODUCT_CATEGORY P
@@ -195,6 +200,7 @@
 		 WHERE P.CATEGORY_CODE = #{ refCategoryCode } 
 	</update>
 	
+	<!-- 상품 정보 조회 -->
 	<insert id="insertProduct" parameterType="com.deft.crud.product.model.dto.InsertProductDTO">
 		INSERT /*com.deft.crud.product.model.dao.ProductMapper#insertProduct()*/
 		  INTO TBL_PRODUCT P
@@ -204,8 +210,8 @@
 		)
 		VALUES
 		(
-		 SEQ_PRODUCT_NO.NEXTVAL, #{ sellStatus }, #{ productName }, #{ purchasePrice }, 
-		 #{ sellingPrice }, #{ unit }, #{ categoryCode }, #{ accountNo }, #{ manufacturerNo }
+		 SEQ_PRODUCT_NO.NEXTVAL, #{ sellStatus }, #{ productName }, #{ purchasePrice } 
+		, #{ sellingPrice }, #{ unit }, #{ categoryCode }, #{ accountNo }, #{ manufacturerNo }
 		)
 	</insert>
 	
@@ -246,6 +252,7 @@
 		 WHERE A.PRODUCT_NO = #{ productNo } 
 	</update>
 	
+	<!-- 상품 정보 조회 -->
 	<update id="modifyProductImage" parameterType="com.deft.crud.product.model.dto.ProductImageDTO">
 		UPDATE /*com.deft.crud.product.model.dao.ProductMapper#modifyProductForText()*/
 			   TBL_PRODUCT_IMAGE P
@@ -256,6 +263,7 @@
 		 WHERE P.PRODUCT_NO = #{ productNo }
 	</update>
 	
+	<!-- 상품 정보 조회 -->
 	<select id="selectOneCategory" resultMap="productCategoryResultMap">
 		SELECT /*com.deft.crud.product.model.dao.ProductMapper#selectOneCategory()*/
 			   C.CATEGORY_CODE
@@ -267,6 +275,7 @@
 	     WHERE C.CATEGORY_CODE = #{ selectedCategory }
 	</select>
 	
+	<!-- 상품 정보 조회 -->
 	<update id="updateCategory" parameterType="com.deft.crud.product.model.dto.ProductCategoryDTO">
 		UPDATE /*com.deft.crud.product.model.dao.ProductMapper#updateCategory()*/
 			   TBL_PRODUCT_CATEGORY P
@@ -275,7 +284,5 @@
              , P.CATEGORY_STATUS = #{ categoryStatus }
          WHERE CATEGORY_CODE = #{ categoryCode }
 	</update>
-	
-	
 	
 </mapper>

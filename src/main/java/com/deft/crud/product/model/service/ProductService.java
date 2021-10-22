@@ -33,44 +33,50 @@ public class ProductService {
 		return productMapper.allProductList();
 	}
 
-
+	
+	/* 모든 카테고리 조회*/
 	public List<ProductCategoryDTO> allCategoryList() {
 
 		return productMapper.allCategoryList();
 	}
-
+	
+	/* 상위 카테고리 조회 */
 	public List<ProductCategoryDTO> refCategoryList() {
 		
 		return productMapper.refCategoryList();
 	} 
-
+	
+	/* 하위 카테고리 조회 */
 	public List<ProductCategoryDTO> categoryList() {
 		
 		return productMapper.categoryList();
 	}
-
+	
+	/* 제조사 정보 조회 */
 	public List<ManufacturerDTO> manufacturerList() {
 
 		return productMapper.manufacturerList();
 	}
 	
+	/* 상품 상세 정보 */
 	public ProductDTO productDetail(int productNo) {
 
 		return productMapper.productDetail(productNo);
 	}
 
-	/* 상품이미지 조회 */
+	/* 상품 상세정보에서 이미지 조회 */
 	public ProductImageDTO selectProductImage(int productNo) {
 
 		return productMapper.selectProductImage(productNo);
 	}
-
+	
+	/* 다중 카테고리 */
 	public List<ProductCategoryDTO> selectSmallCategoryList(int refCategoryCode) {
 		
 		return productMapper.selectSmallCategoryList(refCategoryCode);
 	}
 
-
+	/* 거래처 정보 조회 */
 	public List<AccountDTO> accountList() {
 
 		return productMapper.accountList();
@@ -139,35 +145,34 @@ public class ProductService {
 		return productMapper.modifyProductForText(parameters);
 	}
 	
-	/* 카테고리(중) 등록 */
+	/* 상위 카테고리 등록 */
 	@Transactional
 	public int insertRefCategory(ProductCategoryDTO parameter) {
 
 		return productMapper.insertRefCategory(parameter);
 	}
 	
-	/* 카테고리(소) 등록 */
+	/* 하위 카테고리 등록 */
 	@Transactional
 	public int insertCategory(ProductCategoryDTO parameters) {
 
 		return productMapper.insertCategory(parameters);
 	}
 	
-	/* 카테고리(중) 업데이트 */
+	/* 상위 카테고리 업데이트 */
 	@Transactional
 	public int updateRefCategory(ProductCategoryDTO parameters) {
 
 		return productMapper.updateRefCategory(parameters);
 	}
 	
-	
+	/* 하위 카테고리 수정을 위해 상위카테고리 정보 조회*/
 	public ProductCategoryDTO selectOneCategory(int selectedCategory) {
-
 		
 		return productMapper.selectOneCategory(selectedCategory);
 	}
 
-	/* 카테고리(소) 업데이트*/
+	/* 하위 카테고리 업데이트*/
 	public int updateCategory(ProductCategoryDTO parameters) {
 		
 		return productMapper.updateCategory(parameters);
