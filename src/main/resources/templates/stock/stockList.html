@@ -92,11 +92,10 @@ input {
 
 												<!-- 관리자 권한이 있는 아이디일경우 재고관리페이지로 이동하는 버튼 -->
 												<!-- <th:if sec:authorize-expr ="hasRole('ROLE_ADMIN')"> -->
-												<td>
+												<td th:if="${ authority } == 'ROLE_MANAGER' or ${ authority } == 'ROLE_ADMIN'">
 													<button class="btn btn-sm btn-dark btn-icon-split"
 															id="stockManagerBtn" name="stockManagerBtn"
-															data-toggle="modal"
-															data-target="#stockManagerModal"
+															data-toggle="modal" data-target="#stockManagerModal"
 															th:data-product-no="${stock.productNo}">
 														<span class="icon text-white-50">
 															<i class="fas fa-clipboard-list"></i></span>

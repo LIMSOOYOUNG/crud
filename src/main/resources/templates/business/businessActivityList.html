@@ -447,6 +447,8 @@
     $(document).on('click', '#modifyActivity', function () {
 
         $('input').attr('readonly', false);
+        $('#customerName').attr('readonly', true);
+        $('#empName').attr('readonly', true);
         $('textarea').attr('disabled', false);
 
         var text = $('#modifyActivity').text();

@@ -260,10 +260,10 @@
 		  LEFT JOIN TBL_CUSTOMER C ON(A.CUSTOMER_NO = C.CUSTOMER_NO)
 		  LEFT JOIN TBL_EMP_INFO B ON(C.EMP_NO = B.EMP_NO)
 		<choose>
-			<when test="authority == '담당자'">
+			<when test="authority == 'ROLE_MANAGER'">
 				WHERE B.MANAGER_NO = #{ empNo }
 			</when>
-			<when test="authority != '담당자'">
+			<when test="authority != 'ROLE_MANAGER'">
 				WHERE B.EMP_NO = #{ empNo }
 			</when>
 		</choose>

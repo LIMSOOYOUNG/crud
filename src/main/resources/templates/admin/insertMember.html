@@ -45,7 +45,7 @@ input {
 												<div align="center">
 													<label>프로필 사진</label>
 													<div class="form-group" id="profileImgArea">
-														<img id="profileImg" width="253px" height="200px">
+														<img id="profileImg" width="200px" height="253px">
 													<div class="thumbnail-file-area">
 														<input type="file" id="profileThumbNail" name="profileThumbNail" onchange="loadImg(this,1)" required>
 													</div>
@@ -90,8 +90,7 @@ input {
 												<div class="row">
 													<div class="form-group col-xl-6">
 														<label>담당자</label> 
-															<select id="managerName" name="empNo" class="form-control">
-															
+															<select id="managerName" name="managerNo" class="form-control">
 															
 															</select>
 													</div>
@@ -99,9 +98,9 @@ input {
 														<label>권한</label> 
 														<select id="authority" name="authority" class="form-control">
 															<option selected>-</option>
-															<option th:text="사원" th:value="사원"></option>
-															<option th:text="담당자" th:value="담당자"></option>
-															<option th:text="관리자" th:value="관리자"></option>
+															<option th:text="사원" th:value="ROLE_EMP"></option>
+															<option th:text="담당자" th:value="ROLE_MANAGER"></option>
+															<option th:text="관리자" th:value="ROLE_ADMIN"></option>
 																	
 														</select>	
 													</div>

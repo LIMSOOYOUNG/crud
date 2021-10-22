@@ -68,11 +68,12 @@ public class StockController {
 		/* 결재 담당자 목록 */
 		String deptCode = userInfo.getDeptCode();
 		List<MemberDTO> managerList = adminEmployeeService.selectManagerList(deptCode);
-
-		System.out.println(managerList);
 		
-		System.out.println("@@@ 주문서목록 :  " + orderList);
+		/* 사용자의 권한 */
 		
+		String authority = userInfo.getAuthority();
+		
+		mv.addObject("authority", authority);
 		mv.addObject("managerList", managerList);
 		mv.addObject("orderList", orderList);
 		mv.addObject("stockList", stockList);
@@ -182,8 +183,6 @@ public class StockController {
 		
 		receivingReqList = stockService.selectReceivingReqAll(userInfo);	
 		
-		System.out.println("@@@요청목록 전체 조회 : " + receivingReqList);
-		
 		mv.addObject("receivingReqList", receivingReqList);
 		mv.setViewName("stock/requestList");
 		
@@ -236,12 +235,8 @@ public class StockController {
 			
 			int releaseNo = stockService.selectReleaseNoByApprovalNo(approvalNo);		//출고요청번호 찾아옴
 			
-			System.out.println("출고요청서 번호 : " + releaseNo);
-			
 			ReceivingReqDTO releaseInfo = stockService.selectReleaseInfo(approvalNo);	//출고요청서 기본정보(결재문서관련)
 			releaseInfo.setReleaseReqNo(releaseNo);
-			
-			System.out.println("출고요청서 기본정보 : " + releaseInfo);
 			
 			OrderDTO order = orderService.selectOrderDetail(orderNo);					//출고요청서 상세정보(주문서정보 + 요청상품정보)
 			
@@ -250,9 +245,6 @@ public class StockController {
 		}
 		
 		String authority = userInfo.getAuthority();
-		System.out.println("@@@ 권한 : " + authority);
-		System.out.println(receivingReqInfo);
-		System.out.println(receivingReqProductList);
 		
 		mv.addObject("authority", objectMapper.writeValueAsString(authority));		//접속중인 사용자의 권한
 		mv.setViewName("jsonView");
@@ -264,10 +256,6 @@ public class StockController {
 	@PostMapping("approvalStatus/modify")
 	public ModelAndView modifyApprovalStatus(ModelAndView mv, RedirectAttributes rttr
 											, @ModelAttribute ApprovalModifyDTO parameters) {
-		
-		System.out.println("입고요청서 결재처리 컨트롤러로 이동");
-		
-		System.out.println(parameters);
 		
 		boolean result = stockService.modifyApprovalStatus(parameters);
 	

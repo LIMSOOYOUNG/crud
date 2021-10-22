@@ -31,6 +31,7 @@ public class AdminEmployeeDTO implements java.io.Serializable{
 	private String deptName;
 	private String jobName;
 	private String authority;
+	private String authorityName;
 	private int managerNo;
 	private String entYn;
 	@DateTimeFormat(pattern = "yyyy-MM-dd")

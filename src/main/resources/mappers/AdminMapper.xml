@@ -12,6 +12,7 @@
 		<result property="empBirth" column="EMP_BIRTH"/>
 		<result property="hireYn" column="HIRE_YN"/>
 		<result property="authority" column="AUTHORITY"/>
+		<result property="authorityName" column="AUTHORITY_NAME"/>
 		<result property="hireDate" column="HIRE_DATE"/>
 		<result property="entDate" column="ENT_DATE"/>
 		<result property="empAddress" column="EMP_ADDRESS"/>
@@ -50,6 +51,7 @@
 		 , A.EMP_GENDER  
 		 , A.EMP_BIRTH  
 		 , A.AUTHORITY  
+		 , A.AUTHORITY_NAME  
 		 , A.HIRE_DATE  
 		 , A.EMP_PHONE  
 		 , A.JOB_CODE  
@@ -67,6 +69,11 @@
 		 , #{empGender}
 		 , #{empBirth}  
 		 , #{authority}  
+		 , <choose>
+		 	<when test="authority == 'ROLE_EMP'">'사원'</when>	
+		 	<when test="authority == 'ROLE_MANAGER'">'담당자'</when>	
+		 	<when test="authority == 'ROLE_ADMIN'">'관리자'</when>	
+		   </choose>
 		 , #{hireDate}  
 		 , #{empPhone}  
 		 , #{jobCode}  
@@ -131,7 +138,7 @@
 	      FROM TBL_EMP_INFO E
           JOIN TBL_DEPARTMENT D ON ( E.DEPT_CODE = D.DEPT_CODE )
          WHERE D.DEPT_CODE = #{ deptCode } 
-           AND AUTHORITY = '담당자'
+           AND AUTHORITY = 'ROLE_MANAGER'
 	</select>
 </mapper>
 

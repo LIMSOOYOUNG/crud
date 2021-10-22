@@ -395,7 +395,7 @@
     	      // 결재상태가 승인 or 반려 상태일경우 selectBox 변경 불가     
     	      var statusOption = $('#approvalStatus').val();
     	    	  		     
-    	      if(authority == "담당자") {
+    	      if(authority == "ROLE_MANAGER") {
     	    	  			 
     	          if(statusOption != "대기중") {
     	    	      $("#approvalStatus").not("option[value*='대기중']").prop('disabled',true);
@@ -475,7 +475,7 @@
     	    	      // 결재상태가 승인 or 반려 상태일경우 selectBox 변경 불가     
     	    	      var statusOption = $('#releaseStatus').val();
     	    	    	  		     
-    	    	      if(authority == "담당자") {
+    	    	      if(authority == "ROLE_MANAGER") {
     	    	    	  			 
     	    	          if(statusOption != "대기중") {
     	    	    	      $("#releaseStatus").not("option[value*='대기중']").prop('disabled',true);
