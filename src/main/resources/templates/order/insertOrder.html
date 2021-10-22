@@ -69,7 +69,7 @@
 										</div>
 										<div class="form-group row mb-2" th:align="right">
 											<label for="orderStatus" class="col-form-label col-lg-1">출고상태</label>
-											<select class="form-control col-lg-4" th:field="*{orderYn}">
+											<select class="form-control col-lg-4" id="orderStatus" th:field="*{orderYn}">
 												<option th:value="N">미출고</option>
 												<option th:value="Y">출고</option>
 											</select>
@@ -80,7 +80,7 @@
 										</div>
 										<div class="form-group row mb-2" th:align="right">
 											<label for="dueDate" class="col-form-label col-lg-1">납기요청일</label>
-											<input type="date" class="form-control col-lg-4" th:field="*{dueDate}">
+											<input type="date" class="form-control col-lg-4" th:field="*{dueDate}" required>
 											<label for="zipCode" class="col-form-label col-lg-2">납품장소</label>
 											<input type="text" class="form-control col-lg-1" id="zipCode" readonly>
 											<input type="text" class="form-control col-lg-3" id="address1" readonly>
@@ -90,7 +90,7 @@
 										</div>
 										<div class="form-group row mb-2" th:align="right">
 											<label class="col-lg-7"></label>
-											<input type="text" class="form-control col-lg-4" id="address2">
+											<input type="text" class="form-control col-lg-4" id="address2" required>
 										</div>
 										<hr>
 										
@@ -383,9 +383,7 @@
 				data: {"estimateNo": estimateNo},
 				success: function(data, status, xhr) {
 					const estimate = JSON.parse(data.estimate);
-					const productList = estimate.estimateProductList;
-
-					console.table(productList);
+					const estimateProductList = estimate.estimateProductList;
 
 					$("#orderTitle").val(estimate.estimateTitle);
 					$("#customerNo").val(estimate.customer.customerNo);
@@ -403,12 +401,47 @@
 					}
 					$("#discountRate").val(estimate.discountRate);
 					$("#orderTotal").val(estimate.estimateTotal);
+
+					const $orderProduct = $("#orderProductTable tbody");
+					$orderProduct.html("");
+
+					for(let index in estimateProductList) {
+						let estimateProduct = estimateProductList[index];
+
+						$tr = $("<tr>");
+						$noTd = $("<td>").text(Number(index) + 1);
+						$productNoTd = $("<td>").text(estimateProduct.productNo);
+						$productNameTd = $("<td>").text(estimateProduct.product.productName);
+						$sellingPriceTd = $("<td>").text(estimateProduct.product.sellingPrice);
+						$discountPriceTd = $("<td>").text(estimateProduct.product.discountedPrice);
+						$unitTd = $("<td>").text(estimateProduct.product.unit);
+						$qtyTd = $("<td>").text(estimateProduct.productAmount)
+								.attr("value", estimateProduct.productAmount)
+								.attr("name", "productAmount");
+						$subtotalTd = $("<td>").text(estimateProduct.product.subtotal);
+						$taxTd = $("<td>").text(estimateProduct.product.tax);
+						$deleteStockBtn = $("<button>").addClass("btn btn-sm btn-outline-dark")
+								.prop("name", "deleteStockBtn").text("삭제");
+						$deleteStockTd = $("<td>").append($deleteStockBtn);
+						
+						$tr.append($noTd);
+						$tr.append($productNoTd);
+						$tr.append($productNameTd);
+						$tr.append($sellingPriceTd);
+						$tr.append($discountPriceTd);
+						$tr.append($unitTd);
+						$tr.append($qtyTd);
+						$tr.append($subtotalTd);
+						$tr.append($taxTd);
+						$tr.append($deleteStockTd);
+						
+						$orderProduct.append($tr);
+					}
 				},
 				error: function(xhr, status, error) {
 					console.log(error);
 				}
 			});
-
 		});
 		
 		/* 고객 목록 중 선택하여 정보 입력 */
@@ -600,9 +633,10 @@
 			const order = {"orderTitle" : $("#orderTitle").val(),
 							"orderNo" : $("#orderNo").val(),
 							"orderDate" : $("#orderDate").val(),
-							"discountRate" : $("#discountRate").val(),
 							"customerNo" : $("#customerNo").val(),
-							"orderStatus" : $("#orderStatus option:selected").text(),
+							"orderYn" : $("#orderStatus option:selected").val(),
+							"discountRate" : $("#discountRate").val(),
+							
 							"orderProductList" : productList};
 
 			if(confirm("주문서를 등록하시겠습니까?")) {

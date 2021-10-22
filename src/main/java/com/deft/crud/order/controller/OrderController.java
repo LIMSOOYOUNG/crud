@@ -4,10 +4,14 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
@@ -114,6 +118,29 @@ public class OrderController {
 		System.out.println(estimate);
 		
 		mv.addObject("estimate", objectMapper.writeValueAsString(estimate));
+		mv.setViewName("jsonView");
+		
+		return mv;
+	}
+	
+	@PostMapping("/insert")
+	public ModelAndView insertOrder(ModelAndView mv, HttpServletResponse response,
+									@RequestBody OrderDTO orderInfo) {
+		
+		response.setContentType("application/json; charset=UTF-8");
+		
+		System.out.println(orderInfo);
+		
+//		int result = orderService.insertOrder(orderInfo);
+//		String message = "";
+//		
+//		if(result > 0) {
+//			message = "견적서가 등록되었습니다.";
+//		} else {
+//			message = "견적서 등록에 실패하였습니다.";
+//		}
+		
+//		mv.addObject("message", message);
 		mv.setViewName("jsonView");
 		
 		return mv;

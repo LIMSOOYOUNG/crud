@@ -135,4 +135,32 @@
           FROM USER_SEQUENCES
          WHERE SEQUENCE_NAME = 'SEQ_ORDER_NO'
 	</select>
+	
+	<insert id="insertOrderInfo" parameterType="com.deft.crud.order.model.dto.OrderDTO">
+        INSERT /* com.deft.crud.order.model.dao.EstimateMapper#insertOrderInfo() */
+          INTO TBL_PURCHASE_ORDER O
+        (
+          O.ORDER_NO
+        , O.ORDER_TITLE
+        , O.CUSTOMER_NO
+        , O.SUM_PRICE
+        , O.DISCOUNT_RATE
+        , O.PAYMENT_STATUS
+        , O.ORDER_DATE
+        , O.DUE_DATE
+        , O.DELIVERY_PLACE
+        , O.PROVIDER_REGIST_NO
+        , O.ORDER_YN
+        )
+        VALUES
+        (
+          REPLACE(#{ estimateNo }, SUBSTR(#{ estimateNo }, -3), LPAD(SEQ_ESTIMATE_NO.NEXTVAL, 3, 0))
+        , #{ estimateDate }
+        , #{ discountRate }
+        , '110-01-12345'
+        , #{ customerNo }
+        , #{ estimateStatus }
+        , #{ estimateTitle }
+        )
+	</insert>
 </mapper>
