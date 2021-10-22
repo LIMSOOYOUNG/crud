@@ -54,7 +54,7 @@
 		 , A.EMP_PHONE  
 		 , A.JOB_CODE  
 		 , A.DEPT_CODE  
-		 , A.MANAGER_NO  
+		 <if test='managerNo != 0'>, A.MANAGER_NO</if>
 		 , A.EMP_TEL
 		 ) 
 		  VALUES
@@ -71,7 +71,7 @@
 		 , #{empPhone}  
 		 , #{jobCode}  
 		 , #{deptCode}  
-		 , #{empNo}  
+		 <if test='managerNo != 0'>, #{managerNo}</if> 
 		 , #{empTel}  
 		 )
 	</insert>

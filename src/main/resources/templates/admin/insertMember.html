@@ -1,193 +1,203 @@
 <!DOCTYPE html>
-<html lang="ko"
-	xmlns:th="https://www.thymeleaf.org"
-	xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-spingsecurity5">
-	
+<html lang="ko" xmlns:th="https://www.thymeleaf.org"
+   xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-spingsecurity5">
 <head>
 <th:block th:replace="@{common/config} :: config"></th:block>
-
 <style>
 input {
-	text-align: center;
+   text-align: center;
 }
 </style>
-
 </head>
 
 <body id="page-top">
-	<div id="wrapper">
+   <div id="wrapper">
 
-		<!-- Sidebar -->
-		<th:block th:replace="@{/common/sidebar} :: sidebar"></th:block>
+      <!-- Sidebar -->
+      <th:block th:replace="@{/common/sidebar} :: sidebar"></th:block>
 
-		<div id="content-wrapper" class="d-flex flex-column">
+      <div id="content-wrapper" class="d-flex flex-column">
+         <div id="content">
 
-			<div id="content">
+            <!-- Header -->
+            <th:block th:replace="@{/common/header} :: header"></th:block>
 
-				<!-- Header -->
-				<th:block th:replace="@{/common/header} :: header"></th:block>
+            <!-- Register Content -->
+            <div class="container-login">
+               <div class="row justify-content-center">
+                  <div class="col-xl-12 col-lg-12 col-md-9">
+                     <div class="card shadow-sm my-5">
+                        <div class="card-body p-0">
+                           <div class="row">
+                              <div class="col-lg-12">
+                                 <div class="login-form">
+                                    <div class="text-center">
+                                       <h1 class="h4 text-gray-900 mb-4">사원등록</h1>
+                                    </div>
+                                    <form action="/admin/emp/insert" method="post"
+                                         enctype="multipart/form-data" onsubmit="return checkInsertMember()">
+                                         
+                                       <div class="row">
+                                          <div class="col-lg-2" style="margin-top: 60px;">
+                                             <div th:align="center">
+                                                <label>프로필 사진</label>
+                                                <div class="form-group" id="profileImgArea">
+                                                   <img id="profileImg" width="200" height="300">
+                                                   <div class="thumbnail-file-area">
+                                                      <input type="file" id="profileThumbNail"
+                                                         name="profileThumbNail" onchange="loadImg(this,1)" required>
+                                                   </div>
+                                                </div>
+                                             </div>
+                                          </div>
+                                          <div class="col-lg-5">
+                                             <div class="form-group">
+                                                <label>ID</label>&nbsp;<span id="checkId"></span>
+                                                <input type="text" class="form-control"
+                                                      id="empId"name="empId" placeholder="ID" required>
+                                                   
+                                             </div>
+                                             <div class="form-group">
+                                                <label>비밀번호</label>&nbsp;<span id="checkPwd1"></span>
+                                                <input type="password" class="form-control"
+                                                      id="pwd1" name="empPwd" placeholder="Password">
+                                                   
+                                             </div>
+                                             <div class="form-group">
+                                                <label>비밀번호 재확인</label>&nbsp;<span id="checkPwd2"></span>
+                                                <input type="password" class="form-control" 
+                                                      id="pwd2" name="empPwd2" placeholder="Repeat Password" required>
+                                             </div>
+                                             <div class="form-group">
+                                                <label>Email</label>
+                                                <input type="email" class="form-control"
+                                                      name="empEmail" aria-describedby="emailHelp"
+                                                      placeholder="Enter Email Address" required>
+                                             </div>
+                                             <div class="row">
+                                                <div class="form-group col-xl-6">
+                                                   <label>부서</label>
+                                                   <select class="form-control" id="deptNmae" name="deptCode">
+                                                      <option selected>-</option>
+                                                      <option th:each="deptList : ${deptList}"
+                                                            th:text="${deptList.deptName}"
+                                                            th:value="${deptList.deptCode}"></option>
+                                                   </select>
+                                                </div>
+                                                <div class="form-group col-xl-6">
+                                                   <label>직급</label>
+                                                   <select class="form-control" id="jobName" name="jobCode">
+                                                      <option selected>-</option>
+                                                      <option th:each="jobList : ${jobList}"
+                                                            th:text="${jobList.jobName}"
+                                                            th:value="${jobList.jobCode}"></option>
+                                                   </select>
+                                                </div>
+                                             </div>
+                                             <div class="row">
+                                                <div class="form-group col-xl-6">
+                                                   <label>담당자</label>
+                                                   <select class="form-control"id="managerName"name="managerNo">
+                                                   </select>
+                                                </div>
+                                                <div class="form-group col-xl-6">
+                                                   <label>권한</label>
+                                                   <select class="form-control" id="authority" name="authority">
+                                                      <option selected>-</option>
+                                                      <option th:text="사원" th:value="사원"></option>
+                                                      <option th:text="담당자" th:value="담당자"></option>
+                                                      <option th:text="관리자" th:value="관리자"></option>
+                                                   </select>
+                                                </div>
+                                             </div>
+                                          </div>
+                                          <div class="col-lg-5">
+                                             <div class="form-group">
+                                                <label>사원명</label>
+                                                <input type="text" class="form-control"
+                                                      name="empName" placeholder="사원명" required>
+                                             </div>
+                                             <div class="row">
+                                                <div class="form-group col-xl-6">
+                                                   <label>생년월일</label>
+                                                   <input type="date" class="form-control"
+                                                         name="empBirth" required>
+                                                </div>
+                                                <div class="form-group col-xl-6">
+                                                   <label>성별</label>
+                                                   <div class="form-control">
+                                                      <input type="radio" name="empGender" value="남" required>
+                                                      <label>남</label>
+                                                      <input type="radio" name="empGender" value="여" required>
+                                                      <label>여</label>
+                                                   </div>
+                                                </div>
+                                             </div>
+                                             <div class="row">
+                                                <div class="form-group col-xl-6">
+                                                   <label>PHONE</label>
+                                                   <input type="text" class="form-control"
+                                                         id="empPhone" name="empPhone" required>
+                                                </div>
+                                                <div class="form-group col-xl-6">
+                                                   <label>자택번호</label>
+                                                   <input type="text" class="form-control" name="empTel">
+                                                </div>
+                                             </div>
+                                             <div class="row">
+                                                <div class="form-group col-xl-6">
+                                                   <label>입사일</label>
+                                                   <input type="date" class="form-control" name="hireDate" required>
+                                                </div>
+                                                <div class="form-group col-xl-6"></div>
+                                             </div>
+                                          </div>
+                                       </div>
+                                       <div class="form-group col-xl-12">
+                                          <br>
+                                          <button type="submit" class="btn btn-primary btn-block">사원등록</button>
+                                       </div>
+                                    </form>
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
 
-	<!-- Register Content -->
-	<div class="container-login">
-		<div class="row justify-content-center">
-			<div class="col-xl-12 col-lg-12 col-md-9">
-				<div class="card shadow-sm my-5">
-					<div class="card-body p-0">
-						<div class="row">
-							<div class="col-lg-12">
-								<div class="login-form">
-									<div class="text-center">
-										<h1 class="h4 text-gray-900 mb-4">사원등록</h1>
-									</div>
-									<form action="/admin/emp/insert" method="post" enctype="multipart/form-data" onsubmit="return checkInsertMember()">
-										<div class="row">
-											<div class="col-lg-2" style="margin-top: 60px;">
-												<div align="center">
-													<label>프로필 사진</label>
-													<div class="form-group" id="profileImgArea">
-														<img id="profileImg" width="200" height="300">
-													<div class="thumbnail-file-area">
-														<input type="file" id="profileThumbNail" name="profileThumbNail" onchange="loadImg(this,1)" required>
-													</div>
-													</div>
-												</div>
-											</div>
-											<div class="col-lg-5">
-												<div class="form-group">
-													<label>ID</label>&nbsp;<span id="checkId"></span> 
-														<input type="text" id="empId" class="form-control" name="empId"	placeholder="ID" required>
-												</div>
-												<div class="form-group">
-													<label>비밀번호</label>&nbsp;<span id="checkPwd1"></span> 
-														<input type="password" class="form-control" name="empPwd" id="pwd1" placeholder="Password">
-												</div>
-												<div class="form-group">
-													<label>비밀번호 재확인</label>&nbsp;<span id="checkPwd2"></span> 
-														<input type="password" name="empPwd2" id="pwd2" class="form-control" placeholder="Repeat Password" required>
-												</div>
-												<div class="form-group">
-													<label>Email</label> 
-														<input type="email" class="form-control" name="empEmail" aria-describedby="emailHelp" placeholder="Enter Email Address" required>
-												</div>
-												<div class="row">
-													<div class="form-group col-xl-6">
-														<label>부서</label> 
-														<select id="deptNmae" name="deptCode" class="form-control">
-															<option selected>-</option>
-															<option th:each="deptList : ${deptList}" 
-																	th:text="${deptList.deptName}" th:value="${deptList.deptCode}"></option>
-														</select>	
-													</div>
-													<div class="form-group col-xl-6">
-														<label>직급</label> 
-														<select id="jobName" name="jobCode" class="form-control">
-															<option selected>-</option>
-															<option th:each="jobList : ${jobList}" 
-																	th:text="${jobList.jobName}" th:value="${jobList.jobCode}"></option>
-														</select>	
-													</div>
-												</div>
-												<div class="row">
-													<div class="form-group col-xl-6">
-														<label>담당자</label> 
-															<select id="managerName" name="empNo" class="form-control">
-															
-															
-															</select>
-													</div>
-													<div class="form-group col-xl-6">
-														<label>권한</label> 
-														<select id="authority" name="authority" class="form-control">
-															<option selected>-</option>
-															<option th:text="사원" th:value="사원"></option>
-															<option th:text="담당자" th:value="담당자"></option>
-															<option th:text="관리자" th:value="관리자"></option>
-																	
-														</select>	
-													</div>
-												</div>
-											</div>
-											<div class="col-lg-5">
-												<div class="form-group">
-													<label>사원명</label> 
-														<input type="text" class="form-control" name="empName" placeholder="사원명" required>
-												</div>
-												<div class="row">
-													<div class="form-group col-xl-6">
-														<label>생년월일</label> 
-															<input type="date" class="form-control" name="empBirth" required>
-													</div>
-													<div class="form-group col-xl-6">
-														<label>성별</label>
-														<div class="form-control">
-															<input type="radio" name="empGender" value="남" required><label>남</label> 
-															<input type="radio" name="empGender" value="여" required><label>여</label>
-														</div>
-													</div>
+   <!-- Register Content -->
+   <th:block th:replace="@{/common/script} :: script"></th:block>
+   <script src="/js/admin/insertMember.js"></script>
+   <script>
+      /* 이미지 선택 */
+      function loadImg(value) {
 
-												</div>
-												<div class="row">
-													<div class="form-group col-xl-6">
-														<label>PHONE</label> 
-															<input type="text" name="empPhone" class="form-control" id="empPhone" required>
-													</div>
-													<div class="form-group col-xl-6">
-														<label>자택번호</label> 
-															<input type="text" class="form-control" name="empTel">
-													</div>
-												</div>
-												<div class="row">
-													<div class="form-group col-xl-6">
-														<label>입사일</label> 
-															<input type="date" class="form-control" name="hireDate" required>
-													</div>
-													<div class="form-group col-xl-6">
-													</div>
-												</div>
-											</div>
-										</div>
-										<div class="form-group col-xl-12">
-											<br>
-											<button type="submit" class="btn btn-primary btn-block">사원등록</button>
-										</div>
-									</form>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	
-</div>
-</div>
-</div>
-	
-	<!-- Register Content -->
-	<th:block th:replace="@{/common/script} :: script"></th:block>
-	<script src="/js/admin/insertMember.js"></script>
-<script>
+         if (value.files && value.files[0]) {
 
-/* 이미지 선택 */
-function loadImg(value) {
-	if(value.files && value.files[0]) {
-		const reader = new FileReader();
-		reader.onload = function(e) {
-			document.getElementById("profileImg").src = e.target.result;
-		}
-		reader.readAsDataURL(value.files[0]);
-	}
-}
+            const reader = new FileReader();
 
-/* 사원등록 여부 확인 버튼 */
-function checkInsertMember() {
-	
-	if(!confirm("신규사원을 등록하시겠습니까?")) {
-		return false;
-	} 
-}
-</script>	
-	
+            reader.onload = function(e) {
+
+               document.getElementById("profileImg").src = e.target.result;
+            }
+            
+            reader.readAsDataURL(value.files[0]);
+         }
+      }
+
+      /* 사원등록 여부 확인 버튼 */
+      function checkInsertMember() {
+
+         if (!confirm("신규사원을 등록하시겠습니까?")) {
+            return false;
+         }
+      }
+   </script>
+
 </body>
 </html>
