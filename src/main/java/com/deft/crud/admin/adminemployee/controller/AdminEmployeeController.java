@@ -168,13 +168,13 @@ public class AdminEmployeeController {
 		int result = 0;
 		EmployeeImageDTO employeeImageDTO = new EmployeeImageDTO();
 		if(!profileThumbNail.isEmpty()) {
-		String root = request.getSession().getServletContext().getRealPath("resources");
-		
-		String fileUploadDirectory = root + "\\upload\\profileImage\\original";
-		String thumbnailDirectory = root + "\\upload\\profileImage\\thumbnail";
-		
-		File directory = new File(fileUploadDirectory);
-		File directory2 = new File(thumbnailDirectory);
+			String root = request.getSession().getServletContext().getRealPath("resources");
+			
+			String fileUploadDirectory = root + "\\upload\\profileImage\\original";
+			String thumbnailDirectory = root + "\\upload\\profileImage\\thumbnail";
+			
+			File directory = new File(fileUploadDirectory);
+			File directory2 = new File(thumbnailDirectory);
 		
 		/* 이미지를 저장할 폴더가 없을시에 폴더를 생성해준다. */
 		if(!directory.exists() || !directory2.exists()) {

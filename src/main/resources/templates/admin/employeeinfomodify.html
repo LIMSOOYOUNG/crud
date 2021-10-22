@@ -42,7 +42,6 @@
 														<img id="profileImg" width="253px" height="200px" th:if="${employeeDTO.empImage != null}" th:src="|@{/upload/profileImage/thumbnail}${employeeDTO.empImage.thumbnailPath}|">
 													</div>
                         								<input type="file" id="profileThumbNail" name="profileThumbNail" onchange="loadImg(this,1)" required th:for="profileImg">
-                        								
 												</div>
 											</div>
 											<div class="col-lg-5">

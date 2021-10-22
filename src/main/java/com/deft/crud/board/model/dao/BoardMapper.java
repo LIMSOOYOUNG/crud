@@ -51,6 +51,9 @@ public interface BoardMapper {
 	/* 게시글 삭제시 파일 삭제 */
 	int deleteFile(int writeNo);
 
+	/* 게시글 파일 */
+	BoardFileDTO detailFile(int writeNo);
+
 
 
 
