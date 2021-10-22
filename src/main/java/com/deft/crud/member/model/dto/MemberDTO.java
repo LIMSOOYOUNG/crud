@@ -31,6 +31,7 @@ public class MemberDTO {
 	private java.sql.Date entDate;
 	private String entYn;
 	private String authority;
+	private String authorityName;
 	private String jobCode;
 	private String jobName;
 	private String deptCode;

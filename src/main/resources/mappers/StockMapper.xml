@@ -347,10 +347,10 @@
         LEFT JOIN TBL_RECEIVING_REQ B ON (A.APPROVAL_DOCUMENT_NO = B.APPROVAL_DOCUMENT_NO)
         LEFT JOIN TBL_RELEASE_REQ Q ON(A.APPROVAL_DOCUMENT_NO = Q.APPROVAL_DOCUMENT_NO)
       <choose>
-      	<when test="authority == '담당자'">
+      	<when test="authority == 'ROLE_MANAGER'">
      		 WHERE A.MANAGER_NO = #{ empNo }
       	</when>
-      	<when test="authority != '담당자'">
+      	<when test="authority != 'ROLE_MANAGER'">
      		 WHERE A.EMP_NO = #{ empNo } 
       	</when>
       </choose> 
@@ -376,10 +376,10 @@
         LEFT JOIN TBL_RECEIVING_REQ B ON (A.APPROVAL_DOCUMENT_NO = B.APPROVAL_DOCUMENT_NO)
         LEFT JOIN TBL_RELEASE_REQ Q ON(A.APPROVAL_DOCUMENT_NO = Q.APPROVAL_DOCUMENT_NO)
        <choose>
-      		<when test="userInfo.authority == '담당자'">
+      		<when test="userInfo.authority == 'ROLE_MANAGER'">
      			 WHERE A.MANAGER_NO = #{ userInfo.empNo }
       		</when>
-      		<when test="userInfo.authority != '담당자'">
+      		<when test="userInfo.authority != 'ROLE_MANAGER'">
      			 WHERE A.EMP_NO = #{ userInfo.empNo } 
       		</when>
       </choose> 
@@ -541,8 +541,6 @@
 	         FROM TBL_RELEASE_REQ
 	        WHERE APPROVAL_DOCUMENT_NO = #{ approvalNo }     
 	</select>
-	
-	
 </mapper>
 
 
