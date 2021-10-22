@@ -32,8 +32,10 @@ public interface CustomerMapper {
     /* 고객 기본 정보 수정 */
     int modifyBasicInfo(ModifyBasicInfoDTO parameters);
 
-    /* 고객 상세 정보 수정 */
+    /* 고객 상세 정보 수정(고객 정보) */
     int modifyDetailInfoToCustomer(ModifyDetailInfoForExtDTO parameters);
+
+    /* 고객 상세 정보 수정(고객사 정보) */
     int modifyDetailInfoToCompany(ModifyDetailInfoForExtDTO parameters);
 
     /* 기존, 해지 고객 상태 변경 */

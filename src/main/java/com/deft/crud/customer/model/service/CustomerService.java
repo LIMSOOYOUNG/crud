@@ -68,12 +68,14 @@ public class CustomerService {
         return customerMapper.modifyBasicInfo(parameters);
     }
 
-    /* 고객 상세 정보 수정 */
+    /* 고객 상세 정보 수정(고객 정보) */
     @Transactional
     public int modifyDetailInfoToCustomer(ModifyDetailInfoForExtDTO parameters) {
 
         return customerMapper.modifyDetailInfoToCustomer(parameters);
     }
+
+    /* 고객 상세 정보 수정(고객사 정보) */
     @Transactional
     public int modifyDetailInfoToCompany(ModifyDetailInfoForExtDTO parameters) {
 
@@ -113,7 +115,7 @@ public class CustomerService {
         return customerMapper.insertActivity(parameters);
     }
 
-    /* 사원 정보 조회 */
+    /* 담당사원 정보 조회 */
     public List<EmpInfoDTO> selectEmpInfo() {
 
         return customerMapper.selectEmpInfo();

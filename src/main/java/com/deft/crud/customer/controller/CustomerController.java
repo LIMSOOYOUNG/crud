@@ -60,10 +60,11 @@ public class CustomerController {
         return mv;
     }
 
-    /* 기존 고객 기본 정보 조회 */
+    /* 기존 고객 기본, 상세 정보 조회 */
     @GetMapping("/cusinfo")
     public ModelAndView selectCustomerInfo(ModelAndView mv, @RequestParam int customerNo) {
 
+        /* 차례대로 고객 정보, 고객 영업활동, 담당사원 정보, 구매내역 조회 */
         CustomerCompanyDTO customerInfo = customerService.selectCustomerInfo(customerNo);
         List<BusinessActivityDTO> businessActivityList = customerService.selectBusinessActivity(customerNo);
         List<EmpInfoDTO> empInfoList = customerService.selectEmpInfo();
@@ -78,10 +79,11 @@ public class CustomerController {
         return mv;
     }
 
-    /* 분석 고객 기본정보 조회 */
+    /* 분석 고객 기본, 상세 정보 조회 */
     @GetMapping("/anainfo")
     public ModelAndView selectAnalysisCustomerInfo(ModelAndView mv, @RequestParam int customerNo) {
 
+        /* 차례대로 고객 정보, 고객 영업활동, 담당사원 정보, 고객화 이력 조회 */
         CustomerCompanyDTO customerInfo = customerService.selectAnalysisCustomerInfo(customerNo);
         List<BusinessActivityDTO> businessActivityList = customerService.selectBusinessActivity(customerNo);
         List<EmpInfoDTO> empInfoList = customerService.selectEmpInfo();
@@ -163,6 +165,8 @@ public class CustomerController {
 
         int customerNo = parameters.getCustomerNo();
 
+        /* 고객의 정보와 고객사의 정보를 모두 수정해야 하므로 Business Logic 두 번 수행
+        *  차례대로 고객 정보 수정, 고객사 정보 수정 */
         int customerResult = customerService.modifyDetailInfoToCustomer(parameters);
         int companyResult = customerService.modifyDetailInfoToCompany(parameters);
 
@@ -381,7 +385,7 @@ public class CustomerController {
         return mv;
     }
 
-    /* 영업 활동 수정 처리 메소드 */
+    /* 기존 고객 영업 활동 수정 */
     @PostMapping("/activity/modify")
     public ModelAndView modifyDetailActivity(ModelAndView mv,
                                              RedirectAttributes rttr,
@@ -404,7 +408,7 @@ public class CustomerController {
         return mv;
     }
 
-    /* 영업 활동 삭제 */
+    /* 기존 고객 영업 활동 삭제 */
     @PostMapping("activity/delete")
     public ModelAndView deleteDetailActivity(ModelAndView mv,
                                              RedirectAttributes rttr,
@@ -427,7 +431,7 @@ public class CustomerController {
         return mv;
     }
 
-    /* 분석 고객 영업 활동 수정 처리 */
+    /* 분석 고객 영업 활동 수정 */
     @PostMapping("/ana/activity/modify")
     public ModelAndView modifyAnaDetailActivity(ModelAndView mv,
                                                 RedirectAttributes rttr,

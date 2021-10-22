@@ -290,7 +290,7 @@
          WHERE C.CUSTOMER_NO = #{ customerNo }
     </update>
 
-    <!-- 기존 고객 상세 정보 수정 -->
+    <!-- 기존 고객 상세 정보 수정(고객 정보) -->
     <update id="modifyDetailInfoToCustomer" parameterType="com.deft.crud.customer.model.dto.ModifyDetailInfoForExtDTO">
         UPDATE /* com.deft.crud.customer.model.dao.CustomerMapper#modifyDetailInfoToCustomer() */
                TBL_CUSTOMER C
@@ -301,6 +301,8 @@
              , C.CUSTOMER_ADDRESS = #{ customerAddress }
          WHERE C.CUSTOMER_NO = #{ customerNo }
     </update>
+
+    <!-- 기존 고객 상세 정보 수정(고객사 정보) -->
     <update id="modifyDetailInfoToCompany" parameterType="com.deft.crud.customer.model.dto.ModifyDetailInfoForExtDTO">
         UPDATE /* com.deft.crud.customer.model.dao.CustomerMapper#modifyDetailInfoToCompany() */
                TBL_CUSTOMER_COMPANY CP
@@ -542,6 +544,8 @@
           LEFT JOIN TBL_EMP_INFO E ON (C.EMP_NO = E.EMP_NO)
          WHERE BA.CUSTOMER_NO = #{ customerNo }
     </select>
+
+    <!-- 영업 활동 상세 조회 -->
     <select id="selectBusinessActivityByActivityNo"
             resultMap="businessActivityResultMap">
         SELECT /* com.deft.crud.customer.model.dao.CustomerMapper#selectBusinessActivity() */
