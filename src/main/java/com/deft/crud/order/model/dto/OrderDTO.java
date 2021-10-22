@@ -30,6 +30,9 @@ public class OrderDTO implements Serializable {
 	private String dueDate;
 	private String orderYn;
 	private String deliveryPlace;
+	private String zipCode;
+	private String address;
+	private String addressDetail;
 	private String providerRegistNo;
 	
 	private CustomerDTO customer;

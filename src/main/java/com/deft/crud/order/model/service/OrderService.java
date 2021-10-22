@@ -32,6 +32,17 @@ public class OrderService {
 		
 		OrderDTO order = orderMapper.selectOrderDetail(orderNo);
 		
+		/* 저장된 주소를 우편번호, 주소, 상세주소로 나눠서 전달 */
+		String deliveryPlace = order.getDeliveryPlace();
+		
+		String zipCode = deliveryPlace.split("\\$")[0];
+		String address = order.getDeliveryPlace().split("\\$")[1];
+		String addressDetail = order.getDeliveryPlace().split("\\$")[2];
+		
+		order.setZipCode(zipCode);
+		order.setAddress(address);
+		order.setAddressDetail(addressDetail);
+		
 		/* 할인 적용 여부 확인 */
 		int discountRate = order.getDiscountRate();
 		
@@ -67,7 +78,7 @@ public class OrderService {
 	public String selectOrderNo(String newOrderDate) {
 		
 		String newOrderSeq = orderMapper.selectLastOrderSeq();
-		String newOrderNo = "E" + newOrderDate.replace("-", "") + "-" + newOrderSeq;
+		String newOrderNo = "O" + newOrderDate.replace("-", "") + "-" + newOrderSeq;
 		
 		return newOrderNo;
 	}
@@ -76,8 +87,30 @@ public class OrderService {
 			rollbackFor = {Exception.class})
 	public int insertOrder(OrderDTO orderInfo) {
 		
+		/* 우편번호, 주소, 상세주소를 하나의 주소로 변환하여 전달 */
+		String deliveryPlace = orderInfo.getZipCode()
+							+ "$" + orderInfo.getAddress()
+							+ "$" + orderInfo.getAddressDetail();
+		
+		orderInfo.setDeliveryPlace(deliveryPlace);
+		
 		int orderInfoResult = orderMapper.insertOrderInfo(orderInfo);
 		
-		return 0;
+		List<OrderProductDTO> productList = orderInfo.getOrderProductList();
+		
+		int orderProductResult = 0;
+		for(OrderProductDTO product : productList) {
+			product.setOrderNo(orderInfo.getOrderNo());
+			
+			orderProductResult += orderMapper.insertOrderProduct(product);
+		}
+		
+		int result = 0;
+		
+		if(orderInfoResult > 0 && orderProductResult == productList.size()) {
+			result = 1;
+		}
+		
+		return result;
 	}
 }

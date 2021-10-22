@@ -89,7 +89,7 @@ public class EstimateService {
 		for(EstimateProductDTO product : productList) {
 			product.setEstimateNo(estimateInfo.getEstimateNo());
 			
-			estimateProductResult = estimateMapper.insertEstimateProduct(product);
+			estimateProductResult += estimateMapper.insertEstimateProduct(product);
 		}
 		
 		int result = 0; 

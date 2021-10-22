@@ -80,12 +80,12 @@
 										<label for="dueDate" class="col-form-label col-lg-1">납기요청일</label>
 										<input type="date" class="form-control col-lg-4" th:field="*{dueDate}" readonly>
 										<label for="zipCode" class="col-form-label col-lg-2">납품장소</label>
-										<input type="text" class="form-control col-lg-1" id="zipCode" readonly>
-										<input type="text" class="form-control col-lg-3" id="address1" readonly>
+										<input type="text" class="form-control col-lg-1" th:field="*{zipCode}" readonly>
+										<input type="text" class="form-control col-lg-3" th:field="*{address}" readonly>
 									</div>
 									<div class="form-group row mb-2" th:align="right">
 										<label class="col-lg-7"></label>
-										<input type="text" class="form-control col-lg-4" id="address2" readonly>
+										<input type="text" class="form-control col-lg-4" th:field="*{addressDetail}" readonly>
 									</div>
 									<hr>
 
@@ -93,12 +93,12 @@
 										<label for="discountRate" class="col-form-label col-lg-1">금액할인</label>
 										<div class="custom-control custom-radio mt-2 col-lg-1">
 											<input type="radio" class="custom-control-input" id="noApplyDiscount" name="discountStatus"
-											th:checked="*{discountStatus == 'N'}" disabled>
+													th:checked="*{discountStatus == 'N'}" disabled>
 											<label for="noApplyDiscount" class="custom-control-label">미적용</label>
 										</div>
 										<div class="custom-control custom-radio mt-2 col-lg-1">
 											<input type="radio" class="custom-control-input" id="applyDiscount" name="discountStatus"
-											th:checked="*{discountStatus == 'Y'}" disabled>
+													th:checked="*{discountStatus == 'Y'}" disabled>
 											<label for="applyDiscount" class="custom-control-label">적용</label>
 										</div>
 										<div class="input-group bootstrap-touchspin bootstrap-touchspin-injected col-lg-2">
@@ -106,8 +106,8 @@
 										</div>
 										<label for="paymentStatus" class="col-form-label col-lg-2">결제방법</label>
 										<select class="form-control col-lg-4" name="paymentStatus" disabled>
-											<option th:selected="*{paymentStatus == '카드'}">카드</option>
 											<option th:selected="*{paymentStatus == '세금계산서'}">세금계산서</option>
+											<option th:selected="*{paymentStatus == '카드'}">카드</option>
 										</select>
 									</div>
 									<div class="form-group row mb-2" th:align="right">
