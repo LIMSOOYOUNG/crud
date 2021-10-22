@@ -33,20 +33,16 @@
 									<div class="text-center">
 										<h1 class="h4 text-gray-900 mb-4"><span th:text="${ employeeDTO.employeeName }"></span>님 정보 수정</h1>
 									</div>
-									<form action="employeeinfomodify" method="post">
+									<form action="employeeinfomodify" method="post" enctype="multipart/form-data">
 										<div class="row">
 											<div class="col-lg-2" style="margin-top: 60px;">
 												<div align="center">
 													<label>프로필 사진</label>
 													<div style="height: 253px; width: 200px; border: 1px solid black; ">
-														<img th:if="${employeeDTO.empImage != null}" th:src="|@{/upload/profileImage/thumbnail}${employeeDTO.empImage.thumbnailPath}|">
+														<img id="profileImg" width="253px" height="200px" th:if="${employeeDTO.empImage != null}" th:src="|@{/upload/profileImage/thumbnail}${employeeDTO.empImage.thumbnailPath}|">
 													</div>
-													<br>
-													<div class="form-group">
-                      									<div class="thumbnail-file-area">
-                        									<input type="file" id="profileThumbNail" name="profileThumbNail" onchange="loadImg(this,1)" required>
-                      									</div>
-                    								</div>
+                        								<input type="file" id="profileThumbNail" name="profileThumbNail" onchange="loadImg(this,1)" required th:for="profileImg">
+                        								
 												</div>
 											</div>
 											<div class="col-lg-5">
@@ -174,6 +170,16 @@
 	<!-- Script -->
 	<th:block th:replace="@{/common/script} :: script"></th:block>
 	<script>
+	function loadImg(value) {
+		if(value.files && value.files[0]) {
+			const reader = new FileReader();
+			reader.onload = function(e) {
+				document.getElementById("profileImg").src = e.target.result;
+			}
+			reader.readAsDataURL(value.files[0]);
+		}
+	}
+	
 	$("#updatebtn").click(function(){
 		if(confirm("수정하시겠습니까?") == true){
 			alert("수정되었습니다.")
