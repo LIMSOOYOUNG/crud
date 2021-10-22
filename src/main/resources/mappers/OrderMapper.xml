@@ -14,7 +14,6 @@
 		<result property="deliveryPlace" column="DELIVERY_PLACE"/>
 		<result property="providerRegistNo" column="PROVIDER_REGIST_NO"/>
 		
-		
 		<association property="customer" resultMap="customerResultMap"/>
 		<association property="provider" resultMap="providerResultMap"/>
 		<collection property="orderProductList" resultMap="orderProductResultMap"/>
@@ -79,9 +78,10 @@
 	<select id="selectOrderList" resultMap="orderSelectResultMap">
         SELECT /* com.deft.crud.estimate.model.dao.OrderMapper#selectOrderList() */
                O.ORDER_NO
+             , O.ORDER_TITLE
              , O.CUSTOMER_NO
              , C.CUSTOMER_NAME
-             , O.ORDER_TITLE
+             , CC.COMPANY_NAME
              , O.SUM_PRICE
              , O.PAYMENT_STATUS
              , TO_CHAR(O.ORDER_DATE, 'YYYY-MM-DD') "ORDER_DATE"
@@ -89,6 +89,7 @@
              , O.ORDER_YN
           FROM TBL_PURCHASE_ORDER O
           LEFT JOIN TBL_CUSTOMER C ON (O.CUSTOMER_NO = C.CUSTOMER_NO)
+          LEFT JOIN TBL_CUSTOMER_COMPANY CC ON (C.CUSTOMER_COMPANY_NO = CC.CUSTOMER_COMPANY_NO)
          WHERE C.EMP_NO = #{ empNo }
          ORDER BY O.ORDER_NO DESC
 	</select>

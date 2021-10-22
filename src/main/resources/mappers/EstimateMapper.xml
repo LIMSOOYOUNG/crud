@@ -87,15 +87,18 @@
         SELECT /* com.deft.crud.estimate.model.dao.EstimateMapper#selectEstimateListByStatus() */
                E.ESTIMATE_NO
              , E.ESTIMATE_TITLE
+             , C.CUSTOMER_NO
              , CC.COMPANY_NAME
              , C.CUSTOMER_NAME
              , E.ESTIMATE_STATUS
              , EI.EMP_NAME
+             , J.JOB_NAME
              , TO_CHAR(E.ESTIMATE_DATE, 'YYYY-MM-DD') "ESTIMATE_DATE"
           FROM TBL_ESTIMATE E
           LEFT JOIN TBL_CUSTOMER C ON (E.CUSTOMER_NO = C.CUSTOMER_NO)
           LEFT JOIN TBL_CUSTOMER_COMPANY CC ON (C.CUSTOMER_COMPANY_NO = CC.CUSTOMER_COMPANY_NO)
           LEFT JOIN TBL_EMP_INFO EI ON (C.EMP_NO = EI.EMP_NO)
+          LEFT JOIN TBL_JOB J ON (EI.JOB_CODE = J.JOB_CODE)
          WHERE C.EMP_NO = #{ empNo }
 		<choose>
 			<when test="estimateStatus == 'progress'">

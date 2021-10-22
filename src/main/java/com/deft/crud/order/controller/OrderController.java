@@ -21,6 +21,7 @@ import com.deft.crud.order.model.dto.OrderDTO;
 import com.deft.crud.order.model.service.OrderService;
 import com.deft.crud.stock.model.dto.StorageDTO;
 import com.deft.crud.stock.model.service.StockService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Controller
@@ -92,11 +93,28 @@ public class OrderController {
 		/* 상품 목록 조회 */
 		List<StorageDTO> stockList = stockService.selectSellableProductAll();
 		
+		for(EstimateDTO estimate : estimateList) {
+			System.out.println(estimate);
+		}
+		
 		mv.addObject("order", order);
 		mv.addObject("estimateList", estimateList);
 		mv.addObject("customerList", extCustomerList);
 		mv.addObject("stockList", stockList);
 		mv.setViewName("order/insertOrder");
+		
+		return mv;
+	}
+	
+	@GetMapping("/estimate/select")
+	public ModelAndView selectEstimateDetail(ModelAndView mv, @RequestParam String estimateNo) throws JsonProcessingException {
+		
+		EstimateDTO estimate = estimateService.selectEstimateDetail(estimateNo);
+		
+		System.out.println(estimate);
+		
+		mv.addObject("estimate", objectMapper.writeValueAsString(estimate));
+		mv.setViewName("jsonView");
 		
 		return mv;
 	}
