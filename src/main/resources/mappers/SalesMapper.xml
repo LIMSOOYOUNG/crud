@@ -502,4 +502,27 @@
 		 ORDER BY CB.COLLECT_BILL_DATE DESC
 	
 	</select>
+	
+	<select id="productSalesThisMonth" resultMap="performResultMap" parameterType="com.deft.crud.sales.model.dto.PerformanceDTO">
+		SELECT /*com.deft.crud.product.model.dao.SalesMapper#productSalesThisMonth()*/
+               P.PRODUCT_NO
+             , P.PRODUCT_NAME
+             , SUM(CB.COLLECT_BILL_AMOUNT) "COLLECT_BILL_AMOUNT"
+          FROM TBL_PERFORMANCE PE
+          JOIN TBL_COLLECT_BILL CB ON (PE.COLLECT_BILL_NO = CB.COLLECT_BILL_NO)
+  		  JOIN TBL_CHARGE CH ON ( CH.CHARGE_NO = CB.CHARGE_NO)
+		  JOIN TBL_PURCHASE_ORDER PO ON (PO.ORDER_NO = CH.ORDER_NO)
+		  JOIN TBL_PURCHASE_ORDER_PRODUCT POP ON (POP.ORDER_NO = PO.ORDER_NO)
+		  JOIN TBL_PRODUCT P ON ( P.PRODUCT_NO = POP.PRODUCT_NO)
+		  JOIN TBL_PRODUCT_CATEGORY A ON ( A.CATEGORY_CODE = P.CATEGORY_CODE)
+		  JOIN TBL_PRODUCT_CATEGORY B ON (B.CATEGORY_CODE = A.REF_CATEGORY_CODE)
+  		 WHERE CB.COLLECT_BILL_STATUS = '수금'
+           AND EXTRACT(YEAR FROM CB.COLLECT_BILL_DATE) = #{ collect.collectBillYear }
+           AND EXTRACT(MONTH FROM CB.COLLECT_BILL_DATE) = #{ collect.collectBillMonth }
+           AND PE.EMP_NO = #{ empNo }
+         GROUP BY P.PRODUCT_NO
+         	    , P.PRODUCT_NAME
+		
+		
+	</select>
 </mapper>

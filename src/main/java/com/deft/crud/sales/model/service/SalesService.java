@@ -1,5 +1,6 @@
 package com.deft.crud.sales.model.service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -161,6 +162,29 @@ public class SalesService {
 	public List<PerformanceDTO> selectCategoryPerformDetail(int categoryCode, CollectBillDTO parameters) {
 
 		return salesMapper.selectCategoryPerformDetail(categoryCode, parameters);
+	}
+	
+	/* 대시보드 화면에서 사원이 현재 가지고 있는 상품 정보*/
+	public List<PerformanceDTO> productSalesThisMonth(UserImpl loginInfo) {
+
+		/* 현재 연도 정보를 LocalDate에서 가지고 온다.*/
+		LocalDate collectBillDate = LocalDate.now();
+		int collectBillYear = collectBillDate.getYear();
+		int collectBillMonth = collectBillDate.getMonthValue();
+		int empNo = loginInfo.getEmpNo();
+		
+		
+		CollectBillDTO collect = new CollectBillDTO();
+		
+		PerformanceDTO empSalesInfo = new PerformanceDTO();
+		empSalesInfo.setCollect(collect);
+		empSalesInfo.getCollect().setCollectBillYear(collectBillYear);
+		empSalesInfo.getCollect().setCollectBillMonth(collectBillMonth);
+		empSalesInfo.setEmpNo(empNo);
+		
+		System.out.println("empSalesInfo :" + empSalesInfo);
+		
+		return salesMapper.productSalesThisMonth(empSalesInfo);
 	}
 
 
