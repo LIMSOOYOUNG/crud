@@ -14,4 +14,6 @@ public interface OrderMapper {
 	OrderDTO selectOrderDetail(String orderNo);
 
 	String selectLastOrderSeq();
+
+	int insertOrderInfo(OrderDTO orderInfo);
 }

@@ -4,6 +4,9 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.deft.crud.order.model.dao.OrderMapper;
 import com.deft.crud.order.model.dto.OrderDTO;
@@ -67,5 +70,14 @@ public class OrderService {
 		String newOrderNo = "E" + newOrderDate.replace("-", "") + "-" + newOrderSeq;
 		
 		return newOrderNo;
+	}
+
+	@Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE,
+			rollbackFor = {Exception.class})
+	public int insertOrder(OrderDTO orderInfo) {
+		
+		int orderInfoResult = orderMapper.insertOrderInfo(orderInfo);
+		
+		return 0;
 	}
 }
