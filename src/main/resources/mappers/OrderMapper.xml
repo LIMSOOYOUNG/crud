@@ -76,7 +76,7 @@
 	</resultMap>
 	
 	<select id="selectOrderList" resultMap="orderSelectResultMap">
-        SELECT /* com.deft.crud.estimate.model.dao.OrderMapper#selectOrderList() */
+        SELECT /* com.deft.crud.order.model.dao.OrderMapper#selectOrderList() */
                O.ORDER_NO
              , O.ORDER_TITLE
              , O.CUSTOMER_NO
@@ -95,7 +95,7 @@
 	</select>
 	
 	<select id="selectOrderDetail" resultMap="orderSelectResultMap">
-        SELECT /* com.deft.crud.estimate.model.dao.OrderMapper#selectOrderDetail() */
+        SELECT /* com.deft.crud.order.model.dao.OrderMapper#selectOrderDetail() */
                O.ORDER_NO
              , O.ORDER_TITLE
              , O.CUSTOMER_NO
@@ -111,6 +111,7 @@
              , O.PAYMENT_STATUS
              , TO_CHAR(O.ORDER_DATE, 'YYYY-MM-DD') "ORDER_DATE"
              , TO_CHAR(O.DUE_DATE, 'YYYY-MM-DD') "DUE_DATE"
+             , O.DELIVERY_PLACE
              , O.ORDER_YN
              , P.PRODUCT_NO
              , P.PRODUCT_NAME
@@ -137,7 +138,7 @@
 	</select>
 	
 	<insert id="insertOrderInfo" parameterType="com.deft.crud.order.model.dto.OrderDTO">
-        INSERT /* com.deft.crud.order.model.dao.EstimateMapper#insertOrderInfo() */
+        INSERT /* com.deft.crud.order.model.dao.OrderMapper#insertOrderInfo() */
           INTO TBL_PURCHASE_ORDER O
         (
           O.ORDER_NO
@@ -154,13 +155,33 @@
         )
         VALUES
         (
-          REPLACE(#{ estimateNo }, SUBSTR(#{ estimateNo }, -3), LPAD(SEQ_ESTIMATE_NO.NEXTVAL, 3, 0))
-        , #{ estimateDate }
-        , #{ discountRate }
-        , '110-01-12345'
+          REPLACE(#{ orderNo }, SUBSTR(#{ orderNo }, -3), LPAD(SEQ_ORDER_NO.NEXTVAL, 3, 0))
+        , #{ orderTitle }
         , #{ customerNo }
-        , #{ estimateStatus }
-        , #{ estimateTitle }
+        , #{ sumPrice }
+        , #{ discountRate }
+        , #{ paymentStatus }
+        , #{ orderDate }
+        , #{ dueDate }
+        , #{ deliveryPlace }
+        , '110-01-12345'
+        , #{ orderYn }
+        )
+	</insert>
+	
+	<insert id="insertOrderProduct" parameterType="com.deft.crud.order.model.dto.OrderProductDTO">
+        INSERT /* com.deft.crud.order.model.dao.OrderMapper#insertOrderProduct() */
+          INTO TBL_PURCHASE_ORDER_PRODUCT OP
+        (
+          OP.ORDER_NO
+        , OP.PRODUCT_NO
+        , OP.PRODUCT_AMOUNT
+        )
+        VALUES
+        (
+          REPLACE(#{ orderNo }, SUBSTR(#{ orderNo }, -3), LPAD(SEQ_ORDER_NO.CURRVAL, 3, 0))
+        , #{ productNo }
+        , #{ productAmount }
         )
 	</insert>
 </mapper>

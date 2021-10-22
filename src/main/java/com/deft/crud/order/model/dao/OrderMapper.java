@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.deft.crud.order.model.dto.OrderDTO;
+import com.deft.crud.order.model.dto.OrderProductDTO;
 
 @Mapper
 public interface OrderMapper {
@@ -16,4 +17,6 @@ public interface OrderMapper {
 	String selectLastOrderSeq();
 
 	int insertOrderInfo(OrderDTO orderInfo);
+
+	int insertOrderProduct(OrderProductDTO product);
 }

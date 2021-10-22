@@ -67,6 +67,8 @@ public class OrderController {
 		
 		OrderDTO order = orderService.selectOrderDetail(orderNo);
 		
+		System.out.println(order);
+		
 		mv.addObject("order", order);
 		mv.setViewName("order/selectOrder");
 		
@@ -86,9 +88,10 @@ public class OrderController {
 		order.setOrderNo(newOrderNo);
 		order.setOrderDate(newOrderDate);
 		
-		/* 견적서 불러오기(진행중 또는 보류) */
+		/* 진행 중인 견적서 불러오기 */
 		String estimateStatus = "progress";
 		int empNo = userInfo.getEmpNo();
+		
 		List<EstimateDTO> estimateList = estimateService.selectEstimateListByStatus(estimateStatus, empNo);
 		
 		/* 기존 고객 조회 (해지 고객 제외) */
@@ -96,10 +99,6 @@ public class OrderController {
 		
 		/* 상품 목록 조회 */
 		List<StorageDTO> stockList = stockService.selectSellableProductAll();
-		
-		for(EstimateDTO estimate : estimateList) {
-			System.out.println(estimate);
-		}
 		
 		mv.addObject("order", order);
 		mv.addObject("estimateList", estimateList);
@@ -115,8 +114,6 @@ public class OrderController {
 		
 		EstimateDTO estimate = estimateService.selectEstimateDetail(estimateNo);
 		
-		System.out.println(estimate);
-		
 		mv.addObject("estimate", objectMapper.writeValueAsString(estimate));
 		mv.setViewName("jsonView");
 		
@@ -129,20 +126,41 @@ public class OrderController {
 		
 		response.setContentType("application/json; charset=UTF-8");
 		
-		System.out.println(orderInfo);
+		int result = orderService.insertOrder(orderInfo);
+		String message = "";
 		
-//		int result = orderService.insertOrder(orderInfo);
-//		String message = "";
-//		
-//		if(result > 0) {
-//			message = "견적서가 등록되었습니다.";
-//		} else {
-//			message = "견적서 등록에 실패하였습니다.";
-//		}
+		if(result > 0) {
+			message = "주문서가 등록되었습니다.";
+		} else {
+			message = "주문서 등록에 실패하였습니다.";
+		}
 		
-//		mv.addObject("message", message);
+		mv.addObject("message", message);
 		mv.setViewName("jsonView");
 		
 		return mv;
+	}
+	
+	@GetMapping("/modify")
+	public ModelAndView modifyOrder(ModelAndView mv, @RequestParam String orderNo) {
+		
+		/* 주문서 정보 조회 */
+		OrderDTO order = orderService.selectOrderDetail(orderNo);
+		
+		/* 고객 목록 조회 */
+		List<ExtCustomerDTO> extCustomerList = customerService.selectExtCustomerList();
+		
+		/* 상품 목록 조회 */
+		List<StorageDTO> stockList = stockService.selectSellableProductAll();
+		
+		System.out.println(order);
+		
+		mv.addObject("order", order);
+		mv.addObject("customerList", extCustomerList);
+		mv.addObject("stockList", stockList);
+		mv.setViewName("order/modifyOrder");
+		
+		return mv;
+		
 	}
 }
