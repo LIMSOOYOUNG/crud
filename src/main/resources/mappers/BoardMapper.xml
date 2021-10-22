@@ -168,4 +168,10 @@
 	    )
 	</insert>
 
+	<select id="detailFile" parameterType="_int"  resultType="com.deft.crud.board.model.dto.BoardFileDTO">
+		SELECT /* com.deft.crud.board.model.dto.BoardFileDTO */
+	           B.ORIGINAL_NAME
+	      FROM TBL_BOARD_ATTATCH B
+	     WHERE B.WRITE_NO = #{ writeNo }
+	</select>
 </mapper>

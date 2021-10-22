@@ -144,6 +144,13 @@ public class BoardService {
 		return result;
 	}
 
+	public BoardFileDTO freeboardFile(int writeNo) {
+		
+		BoardFileDTO result = boardMapper.detailFile(writeNo);
+		
+		return result;
+	}
+
 
 
 

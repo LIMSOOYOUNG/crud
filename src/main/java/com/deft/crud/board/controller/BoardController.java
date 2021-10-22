@@ -173,6 +173,8 @@ public class BoardController {
 		
 		/* writeNo의 값을 서비스에 전달한다. */
 		BoardDTO boardDTO = boardService.freeboardDetail(writeNo); 
+		BoardFileDTO boardFileDTO = boardService.freeboardFile(writeNo);
+		
 		/* 조회수 카운터 */
 		boardService.freeboardviewCount(writeNo);
 		
@@ -181,7 +183,7 @@ public class BoardController {
 		
 		/* key값과 value값을 지정한다. */
 		mv.addObject("boardDTO", boardDTO);
-		
+		mv.addObject("boardFileDTO", boardFileDTO);
 		
 		return mv;
 	}
@@ -212,28 +214,62 @@ public class BoardController {
 		/* BoardDTO를 writeNo 값을 담아서 서비스에 전달한다. */
 		BoardDTO boardDTO = boardService.freeboardModifyForm(writeNo);
 		
+		BoardFileDTO boardFileDTO = boardService.freeboardFile(writeNo);
+		
 		/* 페이지 이동값을 board/freeboardmodify 지정한다. */
 		mv.setViewName("board/freeboardmodify");
 		
 		mv.addObject("boardDTO", boardDTO);
+		mv.addObject("boardFileDTO", boardFileDTO);
 		
 		
 		return mv;
 	}
 	
 	@PostMapping("freeboardmodify")
-	public ModelAndView freeboardForm(ModelAndView mv, @ModelAttribute BoardDTO parameters,@AuthenticationPrincipal UserImpl loginInfo) {
+	public ModelAndView freeboardForm(ModelAndView mv, @ModelAttribute BoardDTO parameters,@AuthenticationPrincipal UserImpl loginInfo 
+			,@RequestParam MultipartFile freeboardUpdate
+			,HttpServletRequest request) {
+		int result = 0;
+		BoardFileDTO boardFileDTO = new BoardFileDTO();
+		if(!freeboardUpdate.isEmpty()) {
+			String root = request.getSession().getServletContext().getRealPath("resources");
+			
+			String fileUploadDirectory = root + "\\upload\\freeboard";
+			
+			File directory = new File(fileUploadDirectory);
+			
+			if(directory.exists()) {
+				System.out.println("폴더생성 : " + directory.mkdirs());
+			}
+			
+			/* 원본 파일 */
+			String originFileName = freeboardUpdate.getOriginalFilename();
+			
+			/* 텍스트 확장자 */
+			String ext = originFileName.substring(originFileName.lastIndexOf("."));
+			
+			/* 파일명이 중복되지 않도록 설정 */
+			String savedName = UUID.randomUUID().toString().replace("-", "") + ext;
+			
+			boardFileDTO.setOriginalName(originFileName);
+			boardFileDTO.setSavedName(savedName);
+			boardFileDTO.setSavedPath(fileUploadDirectory);
+			boardFileDTO.setWriteNo(parameters.getWriteNo());
+			
+			
+		}
+		
 		
 		/* parameters(BoardDTO)를 서비스에 전달한다. */
-		int result = boardService.freeboardModify(parameters);
+//		int result = boardService.freeboardModify(parameters);
 		
 		/* result 값이 1 이상이면 페이지 이동값을 /board/freeboarddetail?writeNo로 지정한다. parameters에 있는 writeNo값을 받아온다.  */
 		if(result > 0) {
 			
-			mv.setViewName("redirect:/board/freeboarddetail?writeNo=" + parameters.getWriteNo());
-			
 		}
 		
+		mv.setViewName("redirect:/board/freeboarddetail?writeNo=" + parameters.getWriteNo());
 		mv.addObject("parameters", parameters);
 		
 		return mv;
