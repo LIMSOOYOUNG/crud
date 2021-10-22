@@ -122,25 +122,11 @@ public class ProductController {
 		return mv;
 	}
 	
-	/* 다중 셀렉트박스를 구현하기 위해 선택한 상위 카테고리의 번호를 인자값으로 넘겨 카테고리(소) 조회 */
-	@GetMapping(value = "/selectCategoryCode", produces = "application/json; charset=UTF-8")
-	@ResponseBody
-	public List<ProductCategoryDTO>	selectCategoryList(@RequestParam("refCategoryCode") int refCategoryCode) {
-		
-		return productService.selectSmallCategoryList(refCategoryCode);
-		
-	}
-	
 	/* 상품 등록 */
 	@PostMapping("/insert")
 	public ModelAndView insertProduct(ModelAndView mv, @ModelAttribute InsertProductDTO parameters,
 			@RequestParam MultipartFile productThumbNail, HttpServletRequest request, RedirectAttributes rttr) {
 		
-		System.out.println("parameters : " + parameters);
-		
-		System.out.println("$%$%$%$%$%$%$%");
-		System.out.println("$%$%$%$%$%$%$%");
-		System.out.println("$%$%$%$%$%$%$%");
 		System.out.println("productThumbNail : " + productThumbNail);
 		
 		/* 절대경로를 변수에 초기화한다. */
@@ -224,7 +210,6 @@ public class ProductController {
 		mv.setViewName("redirect:/product/selectAll");
 		return mv;
 	}
-	
 	
 	/* 상품 업데이트 */
 	@PostMapping("/modify") 
@@ -342,7 +327,7 @@ public class ProductController {
 		/* 모달창에 하위카테고리 등록을 위해 조회*/
 		List<ProductCategoryDTO> refCategoryList = productService.refCategoryList();
 		
-		/* 카테고리(소) 리스트 조회 */
+		/* 하위 카테고리 리스트 조회 */
 		List<ProductCategoryDTO> categoryList = productService.categoryList();
 		
 		System.out.println("allCategoryList : " + allCategoryList);
@@ -356,7 +341,7 @@ public class ProductController {
 		
 	}
 	
-	/*카테고리(중) 등록*/
+	/*상위 카테고리 등록*/
 	@PostMapping("/category/medium/insert")
 	public ModelAndView insertRefCategory(ModelAndView mv, @ModelAttribute ProductCategoryDTO parameter,  
 			RedirectAttributes rttr) {
@@ -378,7 +363,7 @@ public class ProductController {
 		return mv;
 	}
 	
-	/*카테고리(소) 등록*/
+	/*하위 카테고리 등록*/
 	@PostMapping("/category/small/insert")
 	public ModelAndView insertChildCategory(ModelAndView mv, @ModelAttribute ProductCategoryDTO parameters,  
 			RedirectAttributes rttr) {
@@ -400,7 +385,7 @@ public class ProductController {
 		return mv;
 	}
 	
-	/* 카테고리(중) 수정*/
+	/* 상위 카테고리 수정*/
 	@PostMapping("/category/medium/modify")
 	public ModelAndView updateMediumCategory(ModelAndView mv, @ModelAttribute ProductCategoryDTO parameters,
 			RedirectAttributes rttr) {
@@ -422,8 +407,17 @@ public class ProductController {
 		return mv;
 	}
 	
+	/* 다중 셀렉트박스를 구현하기 위해 선택한 상위 카테고리의 번호를 인자값으로 넘겨 하위 카테고리 조회 */
+	@GetMapping(value = "/selectCategoryCode", produces = "application/json; charset=UTF-8")
+	@ResponseBody
+	public List<ProductCategoryDTO>	selectCategoryList(@RequestParam("refCategoryCode") int refCategoryCode) {
+		
+		return productService.selectSmallCategoryList(refCategoryCode);
+		
+	}
 	
-	/* 카테고리(소) 수정하기 위한 메소드*/
+	
+	/* 하위 카테고리 수정하기 위한 메소드*/
 	@GetMapping("/category/small/selectAll")
 	public ModelAndView selectMediumCategory(ModelAndView mv, HttpServletResponse response) throws JsonProcessingException {
 		
@@ -439,17 +433,11 @@ public class ProductController {
 		return mv;
 	}
 	
-	/* 카테고리(소) 수정을 위해 상위카테고리 정보를 가지고 온다.*/
+	/* 하위 카테고리 수정을 위해 상위카테고리 정보를 가지고 온다.*/
 	@GetMapping("/editCategory")
 	public ModelAndView editCategory(ModelAndView mv, HttpServletResponse response, @RequestParam int selectedCategory)throws JsonProcessingException {
 		
 		response.setContentType("application/json; 	charset=UTF-8");
-		
-		System.out.println(selectedCategory);
-		System.out.println(selectedCategory);
-		System.out.println(selectedCategory);
-		System.out.println(selectedCategory);
-		System.out.println(selectedCategory);
 
 		ProductCategoryDTO selectOneCategory = productService.selectOneCategory(selectedCategory);
 		
@@ -460,6 +448,7 @@ public class ProductController {
 
 	}
 	
+	/* 하위 카테고리 수정*/
 	@PostMapping("/category/small/modify")
 	public ModelAndView updateSmallCategory(ModelAndView mv, @ModelAttribute ProductCategoryDTO parameters,
 			RedirectAttributes rttr) {
