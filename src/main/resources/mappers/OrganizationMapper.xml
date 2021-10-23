@@ -16,7 +16,7 @@
 	</resultMap>
 	
 	<select id="selectDepartment" resultMap="departmentResultMap">
-		SELECT
+		SELECT /* com.deft.crud.organization.model.dao.OrganizationMapper#selectDepartment() */
                D.DEPT_CODE
              , D.DEPT_NAME
              , D.DEPT_FAX
@@ -26,7 +26,7 @@
 	</select>
 	
 	<select id="selectJob" resultMap="jobResultMap">
-		SELECT
+		SELECT /* com.deft.crud.organization.model.dao.OrganizationMapper#selectDepartment() */
                J.JOB_CODE
              , J.JOB_NAME
              , J.JOB_STATUS
@@ -34,7 +34,7 @@
 	</select>
 
 	<insert id="departmentInsert" parameterType="com.deft.crud.organization.model.dto.DepartmentDTO">
-		INSERT
+		INSERT /* com.deft.crud.organization.model.dao.OrganizationMapper#departmentInsert() */
 		  INTO TBL_DEPARTMENT D
 		     (
 		       D.DEPT_CODE
@@ -54,7 +54,7 @@
 	</insert>
 	
 	<insert id="jobInsert" parameterType="com.deft.crud.organization.model.dto.JobDTO">
-		INSERT
+		INSERT /* com.deft.crud.organization.model.dao.OrganizationMapper#jobInsert() */
 		  INTO TBL_JOB J
 		     (
 		       J.JOB_CODE
@@ -70,7 +70,7 @@
 	</insert>
 	
 	<update id="departmentModify" parameterType="com.deft.crud.organization.model.dto.DepartmentDTO">
-		UPDATE 
+		UPDATE /* com.deft.crud.organization.model.dao.OrganizationMapper#departmentModify() */
 		       TBL_DEPARTMENT D
 	       SET D.DEPT_NAME = #{ deptName }
 	         , D.DEPT_FAX = #{ deptFax }
@@ -80,7 +80,7 @@
 	</update>
 
 	<update id="jobModify" parameterType="com.deft.crud.organization.model.dto.JobDTO">
-		UPDATE 
+		UPDATE /* com.deft.crud.organization.model.dao.OrganizationMapper#jobModify() */
 		       TBL_JOB J
 	       SET J.JOB_NAME = #{ jobName }
 	         , J.JOB_STATUS = #{ jobStatus }
@@ -89,15 +89,16 @@
 	
 	
 	<select id="jobModifyForm" parameterType="_int" resultType="com.deft.crud.organization.model.dto.JobDTO">
-		SELECT
+		SELECT /* com.deft.crud.organization.model.dao.OrganizationMapper#jobModifyForm() */
                J.JOB_CODE
              , J.JOB_NAME
              , J.JOB_STATUS
           FROM TBL_JOB J
          WHERE J.JOB_CODE = #{ jobCode }
 	</select>
+	
 	<select id="deptModifyForm" parameterType="_int" resultType="com.deft.crud.organization.model.dto.DepartmentDTO">
-		SELECT
+		SELECT /* com.deft.crud.organization.model.dao.OrganizationMapper#deptModifyForm() */
                D.DEPT_CODE
              , D.DEPT_NAME
              , D.DEPT_FAX
