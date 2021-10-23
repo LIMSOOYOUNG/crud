@@ -30,7 +30,7 @@
                <!-- Row -->
                <div class="row">
                
-               <!-- DataTable with Hover -->
+               <!-- table_activity with Hover -->
                   <div class="col-lg-4">
                      <div style="background: lightgray;">
                         <div th:align="center"
@@ -68,7 +68,7 @@
                         </div>
                       </div>
 
-                  <!-- DataTable with Hover -->
+                  <!-- activityTable with Hover -->
                   <div class="col-lg-8">
                      <div class="card mb-4">
                         <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
@@ -359,13 +359,15 @@
 	}
    
     $(document).ready(function () {
-      $("#dataTable").DataTable(); // ID From dataTable 
-      $("#activityTable").DataTable({
+   	    // ID From activityTable
+        $("#activityTable").DataTable({
     	  order:[]
-      }); // ID From activityTable
-      $("#table_activity").DataTable({
+        }); 
+   	  
+        // ID From table_activity
+	    $("#table_activity").DataTable({
     	  order:[]
-      }); // ID From table_activity
+        }); 
     });
     
     /* 영업활동 등록 버튼 클릭시 동작 */
@@ -530,8 +532,6 @@
              }
           });
     	});
-
-    
   </script>
   
 </body>

@@ -20,6 +20,7 @@
 		<result property="deptName" column="DEPT_NAME"/>
 		<result property="managerNo" column="MANAGER_NO"/>
 	</resultMap>
+	
 	<select id="selectEmployee" resultMap="employeeResultMap">
 		SELECT
 			   E.EMP_NO

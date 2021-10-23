@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ko"
+	xmlns:th="https://www.thymeleaf.org">
+<head>
+	<th:block th:replace="@{common/config} :: config"></th:block>
+</head>
+
+<body id="page-top">
+	<div id="wrapper" style="margin: auto;">
+		<!-- Sidebar -->
+		<th:block th:replace="@{/common/sidebar} :: sidebar"></th:block>
+
+		<div id="content-wrapper" class="d-flex flex-column">
+			<div id="content">
+				<!-- Header -->
+				<th:block th:replace="@{/common/header} :: header"></th:block>
+
+				<!-- Content -->
+				<div class="container-fluid" id="container-wrapper">
+					
+				<div class="text-center">
+           			<img th:src="@{/images/error.svg}" style="max-height: 100px;" class="mb-3">
+            		<h3 class="text-gray-800 font-weight-bold">Oopss!</h3>
+            		<p class="lead text-gray-800 mx-auto font-weight-bold">권한이 없는 페이지 요청입니다.</p>
+            		<a href="/main">&larr; 대쉬보드로 이동</a>
+         		</div>
+
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Script -->
+    <th:block th:replace="@{/common/script} :: script"></th:block>
+</body>
+
+</html>
+

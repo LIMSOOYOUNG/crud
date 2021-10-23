@@ -33,14 +33,14 @@
 	</resultMap>
 
 	<select id="checkUserId" parameterType="String" resultType="_int">
-		SELECT
+		SELECT /* com.deft.crud.admin.adminemployee.model.dao.AdminEmployeeMapper#checkUserId() */
 		       COUNT(*)
 		  FROM TBL_EMP_INFO
 		 WHERE EMP_ID = #{ empId }     
 	</select>
 
 	<insert id="insertMember" parameterType="com.deft.crud.member.model.dto.MemberDTO">
-		INSERT
+		INSERT /* com.deft.crud.admin.adminemployee.model.dao.AdminEmployeeMapper#insertMember() */
 		  INTO TBL_EMP_INFO A
 		 (
 		   A.EMP_NO
@@ -84,7 +84,7 @@
 	</insert>
 	
 	<insert id="insetProfileImg" parameterType="com.deft.crud.member.model.dto.MemberDTO">
-        INSERT
+        INSERT /* com.deft.crud.admin.adminemployee.model.dao.AdminEmployeeMapper#insetProfileImg() */
 		  INTO TBL_EMP_IMAGE A
 		 (
 		   A.EMP_IMG_NO
@@ -103,7 +103,6 @@
 		 , #{savedPath}  
 		 , #{thumbnailPath}  
 		 )	       
-	
 	</insert>
 	
 	<select id="selectJobList" resultMap="memberesultMap">
@@ -117,15 +116,6 @@
 	<select id="selectDeptList" resultMap="memberesultMap">
 		SELECT /* com.deft.crud.admin.adminemployee.model.dao.AdminEmployeeMapper#selectDeptList() */
 		       DEPT_CODE
-		     , DEPT_NAME  
-		  FROM TBL_DEPARTMENT
-		 WHERE DEPT_STATUS = 'Y' 
-	</select>
-
-
-	<select id="selectAuthorityList" resultMap="memberesultMap">
-		SELECT /* com.deft.crud.admin.adminemployee.model.dao.AdminEmployeeMapper#selectAuthorityList() */
-		       AUTHORITY
 		     , DEPT_NAME  
 		  FROM TBL_DEPARTMENT
 		 WHERE DEPT_STATUS = 'Y' 

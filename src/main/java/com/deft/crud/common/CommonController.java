@@ -8,7 +8,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/common")
 public class CommonController {
 	
-	@GetMapping("/denied")
-	public void deniedPage() {}
+	@GetMapping("/authority/check")
+	public String deniedPage() {
+		
+		return "/common/authorityCheck";
+	}
 
 }

@@ -49,7 +49,6 @@
 										</button>
 									</div>
 								</div>
-								
 								<ul class="nav nav-tabs nav-justfied">
 									<li class="nav-item">
 										<a th:href="@{ #businessChanceTable }" th:name="status" th:value="all" class="nav-link active" data-toggle="tab">전체</a>
@@ -67,7 +66,6 @@
 										<a th:href="@{ #businessChanceTable }" th:name="status" th:value="failed" class="nav-link" data-toggle="tab">실패</a>
 									</li>
 								</ul>
-
 								<div class="table-responsive p-3">
 									<table class="table align-items-center table-flush table-hover" id="businessChanceTable">
 										<thead th:align="center" class="thead-light">
@@ -82,7 +80,6 @@
 												<th>관리</th>
 											</tr>
 										</thead>
-										
 										<tbody th:align="center">
 											<tr th:each="chanceList : ${businessChanceList}">
 												<td th:text="${chanceList.businessChanceNo}"></td>
@@ -259,29 +256,29 @@
 		</div>
 	</div>
 
-	<!-- Script -->
-	<th:block th:replace="@{/common/script} :: script"></th:block>
+<!-- Script -->
+<th:block th:replace="@{/common/script} :: script"></th:block>
 
 <script>
-	$(document).ready(function () {
-		// ID From dataTable with Hover
-		$('#businessChanceTable').DataTable({     
-			order:[]
-		});
-
-		$('#customerListTable').DataTable({     
-			order:[]
-		});
-	
-	});
-	
 	/* 메세지 출력 */
 	const message = '[[${ message }]]';
 
 	if(message) {
 		alert(message);
 	}
-    
+
+	$(document).ready(function () {
+		// ID From businessChanceTable with Hover
+		$('#businessChanceTable').DataTable({     
+			order:[]
+		});
+
+		// ID From customerListTable with Hover
+		$('#customerListTable').DataTable({     
+			order:[]
+		});
+	});
+	
  	// 테이블 (진행상태)별 검색 결과 
     $(document).on('click', "a[name=status]",  function() {
     	
@@ -356,7 +353,7 @@
 		});
     });
     
- 	/* 영업기회 상세보기 버튼 클릭 시 동작 */
+ 	/* 영업기회 [상세보기] 버튼 클릭 시 동작 */
     $(document).on("click", "button[name='businessChanceDetailBtn']", function() {
 		const businessChanceNo = $(this).parent().parent().children().eq(0).text();
 		const customerNo = $(this).parent().parent().children().eq(2).text();
@@ -364,7 +361,7 @@
 		location.href="/business/chance/selectBasicInfo?businessChanceNo=" + businessChanceNo + "&customerNo=" + customerNo;
 	});
     
-    /* 영업기회등록버튼(영업기회등록 form(modal 실행) */
+    /* [영업기회등록] 버튼(영업기회등록 form(modal 실행) */
     $("button[name='insertBusinessChnace']").on("click", function() {
     	
 		$("#insertBusinessChanceForm").find('input').each(function(){ $(this).val(''); });
@@ -377,7 +374,7 @@
 	
 	});
 
-    /* 영업기회등록 form 안의 영업기회 등록 버튼을 눌렀을경우 동작 */
+    /* 영업기회등록 form 안의 [영업기회등록] 버튼을 눌렀을경우 동작 */
     $("button[name='insertBusinessChanceBtn']").on("click", function() {
     	
     	if($('#customerNo').val() == "") {
@@ -411,7 +408,6 @@
 			success: function(data, status, xhr) {
 				
 				const customerList = JSON.parse(data.customerList);
-				
 				const $table = $('#customerListTable tbody');
 				
 				$table.html("");
@@ -435,14 +431,13 @@
 					$tr.append($cNoTd);
 					$tr.append($customerNameTd);
 					$tr.append($detailTd);
-					
 					$table.append($tr);
 				}
 			}
 		});
     });
     
-    /* 추가버튼 눌렀을시 동작 */
+    /* [선택] 버튼 눌렀을시 동작 */
 	$(document).on("click", "button[name='addBtn']", function() {
 		
 		let customerNo = $(this).parent().siblings().eq(0).text();

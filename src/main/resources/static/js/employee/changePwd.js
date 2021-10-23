@@ -13,16 +13,14 @@ const changePwd = {
 		document.getElementById('changePwdBtn').addEventListener('click', changePwd.changePassword)		
 	},
 	
+	// 현재 사용중인 비밀번호와 입력한 비밀번호 일치 여부 확인
 	onKeyupUserPwdCheck: function(changePwd) {
-		/*const test = document.getElementById('pwdCheck').value
-		console.log(test);*/
 		
 		if(changePwd === '' || typeof changePwd === 'undefined')
 			return document.getElementById('checkPwdSpan').innerHTML = ""	
 		
 		const userPwd = document.getElementById('pwdCheck').value
 		
-		console.log(userPwd);
 		const request = {userPwd: userPwd}
 		let queryString = '?' + $.param(request)
 
@@ -30,7 +28,6 @@ const changePwd = {
 			type: "GET",
 			url: "/employee/pwd/check" + queryString,
 			success: function(res) {
-				console.log(res)
 				
 				if(document.getElementById('pwdCheck').value === '') {
 					document.getElementById('checkPwdSpan').innerHTML = ""	
@@ -46,6 +43,7 @@ const changePwd = {
 		})
 	},
 	
+	// 유효성검사와 비밀번호 재확인 값 일치여부 확인 함수 실행
 	onKeyupPassword: function() {
 		const password = document.getElementById('pwdCheck1').value
 		
@@ -54,9 +52,9 @@ const changePwd = {
 		//유효성 검사
 		if(! changePwd.validPassword(password))
 			return
-		
 	},
 	
+	// 변경하려는 비밀번호 유효성 검사
 	validPassword: function(password) {
 		//비밀번호가 없는 경우
 		if(password === '' || typeof password === 'undefined')
@@ -81,7 +79,6 @@ const changePwd = {
  		
  		const inputChangePwd = document.getElementById('pwdCheck1').value
 		
-		console.log(inputChangePwd);
 		const request = {userPwd: inputChangePwd}
 		let queryString = '?' + $.param(request)
 
@@ -89,7 +86,6 @@ const changePwd = {
 			type: "GET",
 			url: "/employee/pwd/check" + queryString,
 			success: function(res) {
-				console.log(res)
 				
 				if(document.getElementById('pwdCheck1').value === '') {
 					document.getElementById('checkPwdSpan1').innerHTML = ""	
@@ -107,6 +103,7 @@ const changePwd = {
  		return document.getElementById('checkPwdSpan1').innerHTML = ""	
 	},
 	
+	// 비밀번호 재확인 일치여부 확인 && 기존에 사용중이던 비밀번호와 변경하려는 비밀번호가 같은지 여부 확인
 	equalsPassword: function() {
 		const password = document.getElementById('pwdCheck1').value
 		const checkPassword = document.getElementById('pwdCheck2').value
@@ -128,6 +125,7 @@ const changePwd = {
 		}
 	},
 	
+	// 모든조건이 만족되었을 때 비밀번호 변경 컨트롤러로 submit 실행
 	changePassword: function() {
 		
 		if(document.getElementById('checkPwdSpan').style.color == "green" && 
@@ -139,9 +137,7 @@ const changePwd = {
 		} else {
 			alert("비밀번호 변경 조건을 확인해주세요")
 		}
-		
 	}
-	
 }
 
 changePwd.init()

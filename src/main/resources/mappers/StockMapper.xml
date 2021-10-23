@@ -65,6 +65,8 @@
         <result property="sellStatus" column="SELL_STATUS"/>
         <result property="productStock" column="PRODUCT_STOCK"/>
         <result property="unit" column="UNIT"/>
+        <result property="thumbnailPath" column="THUMBNAIL_PATH" />
+
     </resultMap>
      
   <!-- 입고요청서 DTO  -->
@@ -163,7 +165,7 @@
    <select id="selectOneProductInfoByNo" resultMap="productStockInfoResultMap">
    SELECT /* com.deft.crud.stock.model.dao.StockMapper#selectOneProductInfoByNo() */
           RC.CATEGORY_NAME "REF_CATEGORY_NAME"
-         , C.CATEGORY_NAME
+        , C.CATEGORY_NAME
         , A.PRODUCT_NO
         , A.PRODUCT_NAME
         , A.SELLING_PRICE
@@ -172,13 +174,15 @@
         , B.PRODUCT_STOCK
         , B.STORAGE_SECTION
         , B.STORAGE_SPACE
-         , T.MANUFACTURER_NAME
-         , D.COMPANY_NAME
+        , T.MANUFACTURER_NAME
+        , D.COMPANY_NAME
+        , PI.THUMBNAIL_PATH
      FROM TBL_PRODUCT A
+     LEFT JOIN TBL_PRODUCT_IMAGE PI ON (A.PRODUCT_NO = PI.PRODUCT_NO)
      LEFT JOIN TBL_PRODUCT_CATEGORY C ON (A.CATEGORY_CODE = C.CATEGORY_CODE)
-      LEFT JOIN TBL_PRODUCT_CATEGORY RC ON (RC.CATEGORY_CODE = C.REF_CATEGORY_CODE)
+     LEFT JOIN TBL_PRODUCT_CATEGORY RC ON (RC.CATEGORY_CODE = C.REF_CATEGORY_CODE)
      LEFT JOIN TBL_STORAGE B ON (A.PRODUCT_NO = B.PRODUCT_NO)
-      LEFT JOIN TBL_ACCOUNT D ON(A.ACCOUNT_NO = D.ACCOUNT_NO)
+     LEFT JOIN TBL_ACCOUNT D ON(A.ACCOUNT_NO = D.ACCOUNT_NO)
      LEFT JOIN TBL_MANUFACTURER T ON(A.MANUFACTURER_NO = T.MANUFACTURER_NO)
     WHERE A.PRODUCT_NO = #{ productNo }
    </select>
@@ -354,7 +358,7 @@
      		 WHERE A.EMP_NO = #{ empNo } 
       	</when>
       </choose> 
-       ORDER BY A.DOCUMENT_WRITE_DATE DESC
+       ORDER BY (CASE WHEN A.DOCUMENT_STATUS = '대기중' THEN 1 ELSE 2 END), A.DOCUMENT_WRITE_DATE DESC
    </select>
    
    <!-- 요청목록 결재상태별 조회(담당자 or 사원) -->
@@ -396,7 +400,7 @@
       			 AND A.DOCUMENT_STATUS = '반려' 
       		</when>
       	</choose>	
-       ORDER BY A.DOCUMENT_WRITE_DATE DESC
+      	ORDER BY (CASE WHEN A.DOCUMENT_STATUS = '대기중' THEN 1 ELSE 2 END), A.DOCUMENT_WRITE_DATE DESC
    </select>
    
    <!-- 선택한 입고 요청서 상세정보 -->
@@ -494,10 +498,6 @@
         WHERE A.APPROVAL_DOCUMENT_NO = #{ approvalDocumentNo }   
    </update>
    
-   <!-- 출고 요청서 결재 상태 변경 후 요청 상품수량 만큼 상품별로 재고수량 차감 -->
-   
-   
-   
    <!-- 출고 요청서 결재처리 후 결재이력 생성 -->
    <insert id="insertReleaseReqHistoryParameter" parameterType="com.deft.crud.stock.model.dto.approval.ReceivingReqDTO">
       INSERT /* com.deft.crud.stock.model.dao.StockMapper#insertReleaseReqHistoryParameter() */
@@ -542,19 +542,6 @@
 	        WHERE APPROVAL_DOCUMENT_NO = #{ approvalNo }     
 	</select>
 </mapper>
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

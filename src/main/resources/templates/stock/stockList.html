@@ -71,7 +71,9 @@ input {
 												<th>단위</th>
 												<th>상태</th>
 												<th>창고보관위치</th>
+												<th:block sec:authorize="hasRole('MANAGER')">
 												<th>관리</th>
+												</th:block>
 											</tr>
 										</thead>
 
@@ -84,16 +86,15 @@ input {
 												<td th:text="${stock.product.unit}"></td>
 												<td th:switch="${stock.product.sellStatus}">
 												<h5><span th:case="'판매'" class="badge badge-success"
-													  	  th:text="${stock.product.sellStatus}"></span></h5>
-												<h5><span th:case="'미판매'" class="badge badge-danger"
+													  	  th:text="${stock.product.sellStatus}"></span>
+												<span th:case="'미판매'" class="badge badge-danger"
 													 	  th:text="${stock.product.sellStatus}"></span></h5>
 												</td>
 												<td	th:text="|${stock.storageSection} - ${stock.storageSpace}|"></td>
 
-												<!-- 관리자 권한이 있는 아이디일경우 재고관리페이지로 이동하는 버튼 -->
-												<!-- <th:if sec:authorize ="hasRole('ROLE_ADMIN')"> -->
-												<!-- <td th:if="${ authority } == 'ROLE_MANAGER' or ${ authority } == 'ROLE_ADMIN'"> -->
-												<td th:if sec:authorize ="hasRole('ROLE_ADMIN')">
+												<!-- 권한이 담당자인 경우에만 재고관리 버튼 보여짐 -->
+												<th:block sec:authorize="hasRole('MANAGER')">
+												<td>
 													<button class="btn btn-sm btn-dark btn-icon-split"
 															id="stockManagerBtn" name="stockManagerBtn"
 															data-toggle="modal" data-target="#stockManagerModal"
@@ -103,6 +104,7 @@ input {
 														<span class="text-sm text-white">재고관리</span>
 													</button>
 												</td>
+												</th:block>
 											</tr>
 										</tbody>
 									</table>
@@ -420,11 +422,9 @@ input {
 									<div class="card-header flex-row align-items-center justify-content-between">
 										<h6 class="m-0 font-weight-bold text-primary">상품이미지</h6>
 									</div>
-									<div th:align="center" class="card-body" style="width: 90%; height: 300px;">
 										<div th:align="center" class="form-group">
-											<img alt="noImage" src="" width=80%; height=80%;>
+											<img alt="noImage" id="thumbnailPath" width=300px; height=300px;>
 										</div>
-									</div>
 								</div>
 							</div>
 							<div class="col-lg-4">
@@ -520,7 +520,7 @@ input {
 									<div class="form-group col-xl-6" th:align="center">
 										<label for="orderStockAmount">추가 or 삭제할 수량</label>
 										<input type="number" class="form-control"
-											   id="orderStockAmount" name="orderStockAmount" min="-${ '#prodcutStock' }.val()" required>
+											   id="orderStockAmount" name="orderStockAmount" min="-${ '#prodcutStock' }.val()" th:value="0" required>
 									</div>
 									<div class="form-group col-xl-3"></div>
 								</div>
@@ -565,9 +565,13 @@ input {
 		
 		$('#table_activity').DataTable({
 			 order:[]
-		}); 								// ID From dataTable with Hover
-		$('#stockManagerModal').on('show.bs.modal', function(event) {   //입고요청서 작성 모달창이 보여질때 동작
+		}); 		
+		
+		// 재고관리 버튼 눌렀을 경우 동작
+		$('#stockManagerModal').on('show.bs.modal', function(event) {   //재고관리 모달창이 보여질때 동작
 
+			$('#orderStockAmount').val(0);
+			
 			const productNo = $(event.relatedTarget).data('product-no');
 
 			 	$.ajax({
@@ -580,6 +584,7 @@ input {
 						
 						let minOrderStockAmount = (-1 * productInfo.productStock);
 						
+						$('#thumbnailPath').attr("src", "/upload/productImage/thumbnail" + productInfo.thumbnailPath);
 						$('#stockRefCategoryName').val(productInfo.stockRefCategoryName);
 						$('#stockProductNo').val(productInfo.stockProductNo);
 						$('#companyName').val(productInfo.companyName);
@@ -738,7 +743,7 @@ input {
 		}
 		
 		
-		/* 재고관리버튼 눌렀을경우 이전값 현재값 비교 */
+		/* 재고상태변경 버튼 눌렀을경우 이전값 현재값 비교 */
 		function check() {
 			
 			const productNo = $('#stockProductNo').val();

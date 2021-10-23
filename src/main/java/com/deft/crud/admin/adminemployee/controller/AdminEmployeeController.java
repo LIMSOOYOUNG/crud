@@ -51,9 +51,6 @@ public class AdminEmployeeController {
 		/* 직급목록 가져오기 */
 		List<MemberDTO> deptList = adminEmployeeService.selectDeptList();
 		
-		/* 권한목록 가져오기 */
-//		List<MemberDTO> authorityList = adminEmployeeService.selectAuthorityList();
-		
 		mv.addObject("jobList", jobList);
 		mv.addObject("deptList", deptList);
 		mv.setViewName("/admin/insertMember");
@@ -114,12 +111,9 @@ public class AdminEmployeeController {
 	/* 사원상세 정보 */
 	@GetMapping("employeedetail")
 	public ModelAndView employeeDetailSelect(ModelAndView mv, @RequestParam int employeeNo)  {
-
-		System.out.println("@@@ 사원번호 : " + employeeNo);
 		
 		/* employeeDTO를 employeeNo를 담아서 서비스에 전달한다.  */
 		AdminEmployeeDTO employeeDTO = adminEmployeeService.empDetail(employeeNo);
-		
 		
 		/* 페이지 이동값을 admin/employeedetail 지정한다.*/
 		mv.setViewName("admin/employeedetail");
@@ -150,7 +144,6 @@ public class AdminEmployeeController {
 		mv.addObject("managerList", managerList);
 		mv.addObject("jobList", jobList);
 		mv.addObject("deptList", deptList);
-		
 		
 		return mv;
 	}
@@ -223,7 +216,6 @@ public class AdminEmployeeController {
 			
 		}
 		
-		
 		String message = "";
 		
 		if(result > 0) {
@@ -237,6 +229,5 @@ public class AdminEmployeeController {
 		
 		return mv;
 	}
-	
 	
 }

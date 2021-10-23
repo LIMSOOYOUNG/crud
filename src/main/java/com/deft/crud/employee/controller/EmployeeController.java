@@ -60,15 +60,13 @@ public class EmployeeController {
 
 		if(encoder.matches(userPwd, empPwd)) {
 			
-			System.out.println("비밀번호 일치");
 			 pwdCheckResult = true;
 			
 		} else {
-			System.out.println("비밀번호 불일치");
+		
 		}
 		
 		return pwdCheckResult;
-	       
 	}
 	
 	/* 비밀번호 변경 */
@@ -92,7 +90,6 @@ public class EmployeeController {
 		  
 		return mv;
 	}
-	
 }
 
 
