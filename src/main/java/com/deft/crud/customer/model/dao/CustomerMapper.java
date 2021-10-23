@@ -1,6 +1,7 @@
 package com.deft.crud.customer.model.dao;
 
 import com.deft.crud.customer.model.dto.*;
+import com.deft.crud.member.model.service.UserImpl;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -9,16 +10,22 @@ import java.util.List;
 public interface CustomerMapper {
 
     /* 기존 고객 조회 */
-    List<CustomerCompanyDTO> selectAllCustomer();
+    List<CustomerCompanyDTO> selectAllCustomer(UserImpl userInfo);
 
     /* 기존 고객 조회 (해지 고객 제외) */
     List<ExtCustomerDTO> selectExtCustomerList();
 
     /* 분석 고객 조회 */
-    List<CustomerCompanyDTO> selectAllAnalysisCustomer();
+    List<CustomerCompanyDTO> selectAllAnalysisCustomer(UserImpl userInfo);
 
     /* 상품 조회 */
     List<ProductDTO> selectProduct();
+
+    /* 사원 정보 조회 */
+    List<EmpInfoDTO> selectEmpInfo();
+
+    /* 고객사 전체 조회 */
+    List<CustomerCompanyDTO> selectAllCustomerCompany();
 
     /* 기존 고객 정보 조회 */
     CustomerCompanyDTO selectCustomerInfo(int customerNo);
@@ -29,14 +36,8 @@ public interface CustomerMapper {
     /* 영업 활동 조회 */
     List<BusinessActivityDTO> selectBusinessActivity(int customerNo);
 
-    /* 사원 정보 조회 */
-    List<EmpInfoDTO> selectEmpInfo();
-
     /* 고객화 변경 이력 조회 */
     List<AnaCustomerDetailHisDTO> selectCustomizationHistory(int customerNo);
-
-    /* 고객사 전체 조회 */
-    List<CustomerCompanyDTO> selectAllCustomerCompany();
 
     /* 영업 활동 선택 조회 */
     BusinessActivityDTO selectBusinessActivityByActivityNo(int activityNo);
@@ -104,8 +105,8 @@ public interface CustomerMapper {
     List<OrderChargeDTO> selectChargeByCustomerNo(int customerNo);
 
     /* 고객 정렬 조회 */
-    List<CustomerCompanyDTO> selectCustomerByStatus(String customerStatus);
+    List<CustomerCompanyDTO> selectCustomerByStatus(String customerStatus, UserImpl userInfo);
 
     /* 분석 고객 정렬 조회 */
-    List<CustomerCompanyDTO> selectAnaCustomerByStatus(String customerStatus);
+    List<CustomerCompanyDTO> selectAnaCustomerByStatus(String customerStatus, UserImpl userInfo);
 }

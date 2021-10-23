@@ -4,6 +4,7 @@ import com.deft.crud.configuration.CrudApplication;
 import com.deft.crud.customer.model.dto.BusinessActivityDTO;
 import com.deft.crud.customer.model.dto.CustomerCompanyDTO;
 import com.deft.crud.customer.model.dto.CustomerDTO;
+import com.deft.crud.member.model.service.UserImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -32,33 +33,33 @@ public class CustomerServiceTests {
 //    public void init() {
 //    }
 
-    /* 기존 고객 조회용 테스트 코드 */
-    @Test
-    @Disabled
-    public void testSelectAllCustomer() {
+//    /* 기존 고객 조회용 테스트 코드 */
+//    @Test
+//    @Disabled
+//    public void testSelectAllCustomer() {
+//
+//        List<CustomerCompanyDTO> customerList = customerService.selectAllCustomer(UserImpl userInfo);
+//
+//        assertNotNull(customerList);
+//
+//        for(CustomerCompanyDTO customer : customerList) {
+//            System.out.println(customer);
+//        }
+//    }
 
-        List<CustomerCompanyDTO> customerList = customerService.selectAllCustomer();
-
-        assertNotNull(customerList);
-
-        for(CustomerCompanyDTO customer : customerList) {
-            System.out.println(customer);
-        }
-    }
-
-    /* 분석 고객 조회용 테스트 코드 */
-    @Test
-    @Disabled
-    public void testSelectAllAnalysisCustomer() {
-
-        List<CustomerCompanyDTO> customerList = customerService.selectAllAnalysisCustomer();
-
-        assertNotNull(customerList);
-
-        for(CustomerCompanyDTO customer : customerList) {
-            System.out.println(customer);
-        }
-    }
+//    /* 분석 고객 조회용 테스트 코드 */
+//    @Test
+//    @Disabled
+//    public void testSelectAllAnalysisCustomer() {
+//
+//        List<CustomerCompanyDTO> customerList = customerService.selectAllAnalysisCustomer();
+//
+//        assertNotNull(customerList);
+//
+//        for(CustomerCompanyDTO customer : customerList) {
+//            System.out.println(customer);
+//        }
+//    }
 
     /* 기존 고객 기본정보 조회용 테스트 코드 */
     @Test

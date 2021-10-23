@@ -32,9 +32,9 @@ public class CustomerController {
 
     /* 전체 고객 조회 */
     @GetMapping("/all")
-    public ModelAndView selectAllCustomer(ModelAndView mv) {
+    public ModelAndView selectAllCustomer(ModelAndView mv, @AuthenticationPrincipal UserImpl userInfo) {
 
-        List<CustomerCompanyDTO> customerList = customerService.selectAllCustomer();
+        List<CustomerCompanyDTO> customerList = customerService.selectAllCustomer(userInfo);
 
         mv.addObject("customerCompanyList", customerList);
         mv.setViewName("customer/selectAllCustomer");
@@ -44,10 +44,10 @@ public class CustomerController {
 
     /* 분석 고객 조회 */
     @GetMapping("/ana")
-    public ModelAndView selectAllAnalysisCustomer(ModelAndView mv) {
+    public ModelAndView selectAllAnalysisCustomer(ModelAndView mv, @AuthenticationPrincipal UserImpl userInfo) {
 
         /* 차례대로 고객 정보, 관심 상품, 담당 사원 정보, 고객사 정보 조회 */
-        List<CustomerCompanyDTO> customerList = customerService.selectAllAnalysisCustomer();
+        List<CustomerCompanyDTO> customerList = customerService.selectAllAnalysisCustomer(userInfo);
         List<ProductDTO> productList = customerService.selectProduct();
         List<EmpInfoDTO> empInfoList = customerService.selectEmpInfo();
         List<CustomerCompanyDTO> companyList = customerService.selectAllCustomerCompany();
@@ -615,7 +615,7 @@ public class CustomerController {
 
         response.setContentType("application/json; charset=UTF-8");
 
-        List<CustomerCompanyDTO> customerCompanyList = customerService.selectCustomerByStatus(customerStatus);
+        List<CustomerCompanyDTO> customerCompanyList = customerService.selectCustomerByStatus(customerStatus, userInfo);
 
         mv.addObject("customerCompanyList", objectMapper.writeValueAsString(customerCompanyList));
         mv.setViewName("jsonView");
@@ -632,7 +632,7 @@ public class CustomerController {
 
         response.setContentType("application/json; charset=UTF-8");
 
-        List<CustomerCompanyDTO> customerCompanyList = customerService.selectAnaCustomerByStatus(customerStatus);
+        List<CustomerCompanyDTO> customerCompanyList = customerService.selectAnaCustomerByStatus(customerStatus, userInfo);
 
         mv.addObject("customerCompanyList", objectMapper.writeValueAsString(customerCompanyList));
         mv.setViewName("jsonView");

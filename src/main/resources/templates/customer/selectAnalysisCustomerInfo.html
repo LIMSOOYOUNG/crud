@@ -28,13 +28,15 @@
 
                         <div class="col-lg-3">
                             <h3>고객화 단계 이력</h3>
-
-                            <ul class="navbar-nav">
-                                <li class="alert alert-light mb-1"
-                                    th:each="his : ${ hisList }"
-                                    th:text="${ customerInfo.customerList[0].empInfo.empName } + '님이 ' + '고객화 단계를 '
-                                            + ${ his.customizationLevel } + '고객화 가능성을 ' + ${ his.customizationPosibillity }
-                                            + '% 로 수정하셨습니다.'"></li>
+                            <ul class="navbar-nav" th:each="his : ${ hisList }" th:align="center">
+                                <li class="alert alert-light mb-1">
+                                    <span th:text="|[${customerInfo.customerList[0].empInfo.empName}] 님이|"></span><br>
+                                    <span th:if="${his.customizationLevel} != null"
+                                          th:utext="|고객화 단계를 [${his.customizationLevel}] 상태로 &lt;br /&gt;|"></span>
+                                    <span th:if="${his.customizationPosibillity} != null"
+                                          th:utext="|고객화 가능성을 [${his.customizationPosibillity}%] 로 &lt;br /&gt;|"></span>
+                                    <span th:text="변경하였습니다."></span><br>
+                                </li>
                             </ul>
                         </div>
 
