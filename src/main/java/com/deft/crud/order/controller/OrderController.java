@@ -67,8 +67,6 @@ public class OrderController {
 		
 		OrderDTO order = orderService.selectOrderDetail(orderNo);
 		
-		System.out.println(order);
-		
 		mv.addObject("order", order);
 		mv.setViewName("order/selectOrder");
 		
@@ -161,6 +159,26 @@ public class OrderController {
 		mv.setViewName("order/modifyOrder");
 		
 		return mv;
+	}
+	
+	@PostMapping("/modify")
+	public ModelAndView modifyEstimate(ModelAndView mv, HttpServletResponse response,
+									@RequestBody OrderDTO orderInfo) {
 		
+		response.setContentType("application/json; charset=UTF-8");
+		
+		int result = orderService.modifyOrder(orderInfo);
+		String message = "";
+		
+		if(result > 0) {
+			message = "주문서가 수정되었습니다.";
+		} else {
+			message = "주문서 수정에 실패하였습니다.";
+		}
+		
+		mv.addObject("message", message);
+		mv.setViewName("jsonView");
+		
+		return mv;
 	}
 }

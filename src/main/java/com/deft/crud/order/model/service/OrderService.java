@@ -113,4 +113,37 @@ public class OrderService {
 		
 		return result;
 	}
+
+	@Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE,
+			rollbackFor = {Exception.class})
+	public int modifyOrder(OrderDTO orderInfo) {
+		
+		String deliveryPlace = orderInfo.getZipCode()
+							+ "$" + orderInfo.getAddress()
+							+ "$" + orderInfo.getAddressDetail();
+		
+		orderInfo.setDeliveryPlace(deliveryPlace);
+		
+		int orderInfoResult = orderMapper.updateOrderInfo(orderInfo);
+		
+		String orderNo = orderInfo.getOrderNo();
+		int deleteProductResult = orderMapper.deleteOrderProduct(orderNo);
+		
+		List<OrderProductDTO> productList = orderInfo.getOrderProductList();
+		
+		int updateProductResult = 0;
+		for(OrderProductDTO product : productList) {
+			product.setOrderNo(orderInfo.getOrderNo());
+			
+			updateProductResult = orderMapper.updateOrderProduct(product);
+		}
+		
+		int result = 0; 
+		
+		if(orderInfoResult > 0 || (deleteProductResult > 0 && updateProductResult == productList.size())) {
+			result = 1;
+		}
+		
+		return result;
+	}
 }

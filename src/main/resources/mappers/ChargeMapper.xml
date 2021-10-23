@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.deft.crud.charge.model.dao.ChargeMapper">
+	<resultMap type="com.deft.crud.charge.model.dto.ChargeDTO" id="chargeSelectResultMap">
+		<id property="chargeNo" column="CHARGE_NO"/>
+		<result property="orderNo" column="ORDER_NO"/>
+		<result property="chargeStatus" column="CHARGE_STATUS"/>
+		<result property="chargeDate" column="CHARGE_DATE"/>
+		
+		<association property="order" resultMap="orderResultMap"/>
+	</resultMap>
+	
+	<resultMap type="com.deft.crud.order.model.dto.OrderDTO" id="orderResultMap">
+		<id property="orderNo" column="ORDER_NO"/>
+		<result property="orderTitle" column="ORDER_TITLE"/>
+		<result property="customerNo" column="CUSTOMER_NO"/>
+		<result property="sumPrice" column="SUM_PRICE"/>
+		<result property="discountRate" column="DISCOUNT_RATE"/>
+		<result property="paymentStatus" column="PAYMENT_STATUS"/>
+		<result property="orderDate" column="ORDER_DATE"/>
+		<result property="dueDate" column="DUE_DATE"/>
+		<result property="orderYn" column="ORDER_YN"/>
+		<result property="deliveryPlace" column="DELIVERY_PLACE"/>
+		<result property="providerRegistNo" column="PROVIDER_REGIST_NO"/>
+		
+		<association property="customer" resultMap="customerResultMap"/>
+		<association property="provider" resultMap="providerResultMap"/>
+		<collection property="orderProductList" resultMap="orderProductResultMap"/>
+	</resultMap>
+	
+	<resultMap type="com.deft.crud.customer.model.dto.CustomerDTO" id="customerResultMap">
+		<id property="customerNo" column="CUSTOMER_NO"/>
+        <result property="customerName" column="CUSTOMER_NAME"/>
+        <result property="customerPhone" column="CUSTOMER_PHONE"/>
+        <result property="customerAddress" column="CUSTOMER_ADDRESS"/>
+        <result property="empNo" column="EMP_NO"/>
+		
+		<association property="company" resultMap="companyResultMap"/>
+		<association property="empInfo" resultMap="empInfoResultMap"/>
+	</resultMap>
+	
+	<resultMap type="com.deft.crud.customer.model.dto.CustomerCompanyDTO" id="companyResultMap">
+		<id property="customerCompanyNo" column="CUSTOMER_COMPANY_NO"/>
+		<result property="companyName" column="COMPANY_NAME"/>
+	</resultMap>
+
+	<resultMap type="com.deft.crud.customer.model.dto.EmpInfoDTO" id="empInfoResultMap">
+		<id property="empNo" column="EMP_NO"/>
+        <result property="empName" column="EMP_NAME"/>
+        
+		<association property="job" resultMap="jobResultMap"/>
+	</resultMap>
+	
+	<resultMap type="com.deft.crud.customer.model.dto.JobDTO" id="jobResultMap">
+		<id property="jobCode" column="JOB_CODE"/>
+		<result property="jobName" column="JOB_NAME"/>
+	</resultMap>
+	
+	<resultMap type="com.deft.crud.estimate.model.dto.ProviderDTO" id="providerResultMap">
+		<id property="providerRegistNo" column="PROVIDER_REGIST_NO"/>
+		<result property="providerName" column="PROVIDER_NAME"/>
+		<result property="providerCeo" column="PROVIDER_CEO"/>
+		<result property="providerAddress" column="PROVIDER_ADDRESS"/>
+		<result property="providerBusinessStatus" column="PROVIDER_BUSINESS_STATUS"/>
+		<result property="providerBusinessType" column="PROVIDER_BUSINESS_TYPE"/>
+	</resultMap>
+	
+	<resultMap type="com.deft.crud.order.model.dto.OrderProductDTO" id="orderProductResultMap">
+		<id property="orderNo" column="ORDER_NO"/>
+		<id property="productNo" column="PRODUCT_NO"/>
+		<result property="productStock" column="PRODUCT_STOCK" />
+		<result property="productAmount" column="PRODUCT_AMOUNT"/>
+		
+		<association property="product" resultMap="productResultMap"/>
+	</resultMap>
+	
+	<resultMap type="com.deft.crud.product.model.dto.ProductDTO" id="productResultMap">
+		<id property="productNo" column="PRODUCT_NO"/>
+		<result property="sellStatus" column="SELL_STATUS"/>
+		<result property="productName" column="PRODUCT_NAME"/>
+		<result property="purchasePrice" column="PURCHASE_PRICE"/>
+		<result property="sellingPrice" column="SELLING_PRICE"/>
+		<result property="unit" column="UNIT"/>
+	</resultMap>
+	
+	<select id="selectChargeList" resultMap="chargeSelectResultMap">
+        SELECT
+               CH.CHARGE_NO
+             , O.ORDER_TITLE
+             , O.CUSTOMER_NO
+             , C.CUSTOMER_NAME
+             , CC.COMPANY_NAME
+             , O.SUM_PRICE
+             , CH.CHARGE_DATE
+             , O.PAYMENT_STATUS
+             , CH.CHARGE_STATUS
+          FROM TBL_CHARGE CH
+          LEFT JOIN TBL_PURCHASE_ORDER O ON (CH.ORDER_NO = O.ORDER_NO)
+          LEFT JOIN TBL_CUSTOMER C ON (O.CUSTOMER_NO = C.CUSTOMER_NO)
+          LEFT JOIN TBL_CUSTOMER_COMPANY CC ON (C.CUSTOMER_COMPANY_NO = CC.CUSTOMER_COMPANY_NO)
+          LEFT JOIN TBL_RELEASE_REQ RL ON (O.ORDER_NO = RL.ORDER_NO)
+          LEFT JOIN TBL_APPROVAL_DOCUMENT A ON (RL.APPROVAL_DOCUMENT_NO = A.APPROVAL_DOCUMENT_NO)
+         WHERE A.DOCUMENT_STATUS = '승인'
+           AND C.EMP_NO = #{ empNo }
+         ORDER BY CH.CHARGE_NO DESC
+	</select>
+</mapper>

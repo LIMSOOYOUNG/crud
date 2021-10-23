@@ -162,8 +162,6 @@ public class EstimateController {
 		
 		response.setContentType("application/json; charset=UTF-8");
 		
-		System.out.println(estimateInfo);
-		
 		int result = estimateService.modifyEstimate(estimateInfo);
 		String message = "";
 		
