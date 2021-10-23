@@ -91,8 +91,9 @@ input {
 												<td	th:text="|${stock.storageSection} - ${stock.storageSpace}|"></td>
 
 												<!-- 관리자 권한이 있는 아이디일경우 재고관리페이지로 이동하는 버튼 -->
-												<!-- <th:if sec:authorize-expr ="hasRole('ROLE_ADMIN')"> -->
-												<td th:if="${ authority } == 'ROLE_MANAGER' or ${ authority } == 'ROLE_ADMIN'">
+												<!-- <th:if sec:authorize ="hasRole('ROLE_ADMIN')"> -->
+												<!-- <td th:if="${ authority } == 'ROLE_MANAGER' or ${ authority } == 'ROLE_ADMIN'"> -->
+												<td th:if sec:authorize ="hasRole('ROLE_ADMIN')">
 													<button class="btn btn-sm btn-dark btn-icon-split"
 															id="stockManagerBtn" name="stockManagerBtn"
 															data-toggle="modal" data-target="#stockManagerModal"
@@ -308,10 +309,11 @@ input {
 										<label for="titleOrder" class="col-form-label col-lg-1">제목</label>
 										<input type="text" id="titleOrder" name="titleOrder" class="form-control col-lg-5">
 										<label for="approvalManager" class="col-form-label col-lg-2">결재담당자</label>
-										<select type="text" id="approvalManager" class="form-control col-lg-3">
-											<option th:each="managerList : ${ managerList }" th:text="${managerList.empName}" th:value="${managerList.empNo}"></option>
+										<select id="approvalManager" class="form-control col-lg-3">
+											<option th:each="managerList : ${ managerList }" th:text="${managerList.empName}"
+												    th:value="${managerList.empNo}">
+											</option>
 										</select> 
-												 
 										<input type="hidden" class="form-control" id="customerNo" >
 									</div>
 									<div class="form-group row mb-2" th:align="right">
@@ -339,10 +341,12 @@ input {
 												 readonly>
 									</div>
 									<div class="form-group row mb-4" th:align="right">
-										<label for="customerAddress" class="col-form-label col-lg-1">주소</label>
-										<input type="text" class="form-control col-lg-4" id="customerAddress" name="customerAddress" readonly>
+										<label for="deliveryPlace" class="col-form-label col-lg-1">배송주소</label>
+										<div class="form-control col-lg-5" style="overflow-x: auto; white-space:nowrap;"
+											 id="deliveryPlace" name="deliveryPlace" readonly>
+										</div>
 										<label for="orderDueDate" class="col-form-label col-lg-2">납기요청일</label>
-										<input type="text" id="orderDueDate" class="form-control col-lg-4"readonly>
+										<input type="text" id="orderDueDate" class="form-control col-lg-3" readonly>
 									</div>
 									<div class="form-group col-xl-12">
 										<label>요청사유</label>
@@ -614,7 +618,6 @@ input {
 			$('#stockOrderModal').modal();
 		
 		});
-
 		
 		/* 출고요청서 작성 버튼 클릭시 동작 */
 		$('#releaseRequestBtn').click(function() { 		
@@ -810,6 +813,7 @@ input {
 					$("#orderNo").val(orderInfo.orderNo);
 					$("#orderDate").val(orderInfo.orderDate);
 					$("#customerCompany").val(orderInfo.customer.company.companyName);
+					$("#deliveryPlace").text(orderInfo.deliveryPlace);
 					$("#customerName").val(orderInfo.customer.customerName);
 					$("#customerPhone").val(orderInfo.customer.customerPhone);
 					$("#paymentStatus").val(orderInfo.paymentStatus);

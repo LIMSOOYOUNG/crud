@@ -33,7 +33,7 @@ public class MemberServiceImpl implements MemberService {
       }
       
       List<GrantedAuthority> authorities = new ArrayList<>();
-      authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+      authorities.add(new SimpleGrantedAuthority(member.getAuthority()));
       
       UserImpl user = new UserImpl(member.getEmpId(), member.getEmpPwd(), authorities);
       user.setDetails(member);

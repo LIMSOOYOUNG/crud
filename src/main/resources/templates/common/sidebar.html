@@ -1,5 +1,6 @@
 <html lang="ko"
-	xmlns:th="https://www.thymeleaf.org">
+	xmlns:th="https://www.thymeleaf.org" 
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 	<!-- Sidebar -->
 	<th:block th:fragment="sidebar">
@@ -133,6 +134,7 @@
 			</li>	<!-- End EmpSidebar -->
 
 			<!-- Start AdminSidebar -->
+			<span th:if="${#authentication.principal.authority != 'ROLE_EMP'}">
 			<hr class="sidebar-divider">
 			<div class="sidebar-heading">ADMIN</div>
 			<li class="nav-item">
@@ -174,6 +176,7 @@
 					</div>
 				</div>
 			</li>	<!-- End AdminSidebar -->
+			</span>
 		</ul>
 	</th:block>
 
