@@ -233,8 +233,8 @@
 		)
 		VALUES
 		(
-		  SEQ_PRODUCT_IMG_NO.NEXTVAL, #{ originalName }, #{ savedName },
-		  #{ savedPath }, #{ productNo }, #{ thumbnailPath } 
+		  SEQ_PRODUCT_IMG_NO.NEXTVAL, #{ originalName }, #{ savedName }
+		, #{ savedPath }, #{ productNo }, #{ thumbnailPath } 
 		)
 	</insert>
 	
