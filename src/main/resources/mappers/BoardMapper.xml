@@ -150,7 +150,7 @@
 	</update>
 	
 	<insert id="insertFile" parameterType="com.deft.crud.board.model.dto.BoardFileDTO">
-		INSERT /*com.deft.crud.board.model.dto.BoardFileDTO*/
+		INSERT /* com.deft.crud.board.model.dao.BoardMapper#insertFile() */
 		  INTO TBL_BOARD_ATTATCH
 		(
 		  BOARD_ATTATCH_NO
@@ -172,13 +172,13 @@
 	</insert>
 
 	<select id="detailFile" parameterType="_int" resultMap="boardFileResultMap">
-		SELECT /* com.deft.crud.board.model.dto.BoardFileDTO */
+		SELECT /* com.deft.crud.board.model.dao.BoardMapper */
 	           B.ORIGINAL_NAME
 	      FROM TBL_BOARD_ATTATCH B
 	     WHERE B.WRITE_NO = #{ writeNo }
 	</select>
 	<update id="modifyFreeboardText" parameterType="com.deft.crud.board.model.dto.BoardDTO">
-		UPDATE /*com.deft.crud.board.model.dto.BoardDTO*/
+		UPDATE /* com.deft.crud.board.model.dao.BoardMapper#modifyFreeboardText */
 	           TBL_BOARD B
 	       SET B.BOARD_NAME = #{ boardName,jdbcType=VARCHAR }
 	         , B.CONTENTS = #{ contents,jdbcType=VARCHAR }
@@ -194,5 +194,11 @@
 		 WHERE B.WRITE_NO = #{ writeNo } 	
 	</update>
 	
+	<select id="noticeFile" parameterType="_int" resultMap="boardFileResultMap">
+		SELECT /* com.deft.crud.board.model.dao.BoardMapper#noticeFile() */
+	           B.ORIGINAL_NAME
+	      FROM TBL_BOARD_ATTATCH B
+	     WHERE B.WRITE_NO = #{ writeNo }
+	</select>
 	
 </mapper>

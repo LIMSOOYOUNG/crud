@@ -12,7 +12,7 @@
 	<result property="type" column="TYPE"/>
 	<result property="empNo" column="EMP_NO"/>
 </resultMap>
-<resultMap type="com.deft.crud.admin.board.model.dto.BoardFileDTO" id="boardFileResultMap">
+<resultMap type="com.deft.crud.board.model.dto.BoardFileDTO" id="boardFileResultMap">
 	<id property="boardAttatchNo" column="BOARD_ATTATCH_NO"/>
 	<result property="boardNo" column="BOARD_NO"/>
 	<result property="writeNo" column="WRITE_NO"/> 
@@ -21,7 +21,7 @@
 	<result property="savedPath" column="SAVED_PATH"/>
 </resultMap>
 	<insert id="noticeInsert" parameterType="com.deft.crud.admin.board.model.dto.AdminBoardDTO">
-		INSERT /*com.deft.crud.admin.board.model.dto.AdminBoardDTO*/
+		INSERT /*com.deft.crud.admin.board.model.dao.AdminBoardMapper#noticeInsert() */
 		  INTO TBL_BOARD B
 		     (
 		       B.WRITE_NO
@@ -43,14 +43,35 @@
 		     , '공지사항'
 		     )
 	</insert>
+	<insert id="insertFile" parameterType="com.deft.crud.board.model.dto.BoardFileDTO">
+		INSERT /* com.deft.crud.board.model.dto.BoardFileDTO#insertFile() */
+		  INTO TBL_BOARD_ATTATCH
+		(
+		  BOARD_ATTATCH_NO
+		, WRITE_NO   
+        , ORIGINAL_NAME
+        , SAVED_NAME
+        , SAVED_PATH
+        , BOARD_NO
+        )
+	    VALUES
+	    (
+	      SEQ_BOARD_ATTATCH.NEXTVAL
+	    , #{ writeNo }  
+	    , #{ originalName }     
+	    , #{ savedName }     
+	    , #{ savedPath }
+	    , 1     
+	    )
+	</insert>
 	<select id="selectSeqNoticeNo" resultType="_int">
-		SELECT /*com.deft.crud.board.model.dto.BoardDTO*/
+		SELECT /*com.deft.crud.admin.board.model.dao.AdminBoardMapper#selectSeqNoticeNo() */
 		       LAST_NUMBER
 		  FROM USER_SEQUENCES
 	     WHERE SEQUENCE_NAME = 'SEQ_WRITE_NO'
 	</select>
 	<select id="noticeModifyform" parameterType="_int" resultType="com.deft.crud.admin.board.model.dto.AdminBoardDTO">
-		SELECT /*com.deft.crud.board.model.dto.BoardDTO*/
+		SELECT /*com.deft.crud.admin.board.model.dao.AdminBoardMapper#noticeModifyform() */
 		       B.BOARD_NO
 		     , B.WRITE_NO
              , B.BOARD_NAME
@@ -61,7 +82,7 @@
            AND B.WRITE_NO = #{ writeNo }
 	</select>
 	<update id="noticeModify" parameterType="com.deft.crud.admin.board.model.dto.AdminBoardDTO">
-		UPDATE /*com.deft.crud.admin.board.model.dto.AdminBoardDTO*/
+		UPDATE /*com.deft.crud.admin.board.model.dao.AdminBoardMapper#noticeModify() */
 	           TBL_BOARD B
 	       SET B.BOARD_NAME = #{ boardName,jdbcType=VARCHAR }
 	         , B.CONTENTS = #{ contents,jdbcType=VARCHAR }
@@ -70,14 +91,39 @@
 
 		
 	<delete id="deleteNotice" parameterType="_int">
-		DELETE /*com.deft.crud.admin.board.model.dto.AdminBoardDTO*/
+		DELETE /*com.deft.crud.admin.board.model.dao.AdminBoardMapper#deleteNotice() */
 		  FROM TBL_BOARD B
 		 WHERE B.WRITE_NO = #{ writeNo, jdbcType = INTEGER }
 	</delete>
 	<delete id="deleteFile" parameterType="_int">
-		DELETE /* com.deft.crud.board.model.dto.BoardFileDTO */
+		DELETE /* com.deft.crud.admin.board.model.dao.AdminBoardMapper#deleteFile() */
 	      FROM TBL_BOARD_ATTATCH B
 	     WHERE B.WRITE_NO = #{ writeNo, jdbcType = INTEGER }
 	</delete>
+	
+	<select id="noticeFileLook" parameterType="_int" resultMap="boardFileResultMap">
+		SELECT /* com.deft.crud.admin.board.model.dao.AdminBoardMapper#noticeFileLook() */
+	           B.ORIGINAL_NAME
+	      FROM TBL_BOARD_ATTATCH B
+	     WHERE B.WRITE_NO = #{ writeNo }
+	</select>
+	
+	<update id="modifyNoticeText" parameterType="com.deft.crud.admin.board.model.dto.BoardFileDTO">
+		UPDATE /* com.deft.crud.admin.board.model.dao.AdminBoardMapper#modifyNoticeText() */
+	           TBL_BOARD B
+	       SET B.BOARD_NAME = #{ boardName,jdbcType=VARCHAR }
+	         , B.CONTENTS = #{ contents,jdbcType=VARCHAR }
+	     WHERE B.WRITE_NO = #{ writeNo }    
+	</update>
+	
+	<update id="modifyNoticeFile" parameterType="com.deft.crud.board.model.dto.BoardFileDTO">
+		UPDATE /* com.deft.crud.board.model.dao.BoardMapper#modifyNoticeFile() */
+	           TBL_BOARD_ATTATCH B
+	       SET B.ORIGINAL_NAME = #{ originalName }
+	         , B.SAVED_NAME = #{ savedName }
+	         , B.SAVED_PATH = #{ savedPath }
+		 WHERE B.WRITE_NO = #{ writeNo }
+	</update>
+	
 
 </mapper>

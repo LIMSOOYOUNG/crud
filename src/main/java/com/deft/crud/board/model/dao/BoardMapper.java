@@ -60,6 +60,10 @@ public interface BoardMapper {
 	/* 게시글 파일 수정 */
 	int modifyFreeboardFile(BoardFileDTO boardFileDTO);
 
+	/* 공지사항 보기 (파일) */
+	BoardFileDTO noticeFile(int writeNo);
+
+
 
 
 

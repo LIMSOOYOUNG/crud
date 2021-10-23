@@ -48,7 +48,7 @@ public class BoardController {
 		List<BoardDTO> freeboardList = boardService.selectFreeboard();
 		
 		/* 페이지 이동값을 board/selectfreeboard로 지정한다. */
-		mv.setViewName("board/selectfreeboard");
+		mv.setViewName("/board/selectfreeboard");
 		
 		/* key값과 value값을 지정한다. */
 		mv.addObject("freeboardList", freeboardList);
@@ -64,7 +64,7 @@ public class BoardController {
 		List<BoardDTO> noticeList = boardService.selectNotice();
 		
 		/* 페이지 이동값을 board/selectnotice로 지정한다. */
-		mv.setViewName("board/selectnotice");
+		mv.setViewName("/board/selectnotice");
 		
 		/* key값과 value값을 지정한다. */
 		mv.addObject("noticeList", noticeList);
@@ -92,14 +92,15 @@ public class BoardController {
 			,HttpServletRequest request) 
 					throws Exception {
 		
-		
+		/* 로그인한 정보 */
 	    int loginEmpNo = loginInfo.getEmpNo();
+	    
+	    /* BoardDTO에 로그인 값을 넣는다. */
 	    parameters.setEmpNo(loginEmpNo);
 
 	    if(!freeboardUpload.isEmpty()) {
 	    
 		    String root = request.getSession().getServletContext().getRealPath("\\");
-		    System.out.println("rrrrrrrrrrerrrrrrrrr" + root);
 		    
 		    String filePath  = root + "\\upload\\freeboard";
 		    
@@ -145,6 +146,7 @@ public class BoardController {
 		String message = "";
 		
 		if(result > 0) {
+			
 			message = "자유게시글등록에 성공하셨습니다";
 		}
 		mv.setViewName("redirect:/board/selectfreeboard");
@@ -180,12 +182,14 @@ public class BoardController {
 	public ModelAndView noticedetail(ModelAndView mv, @RequestParam int writeNo) {
 		
 		BoardDTO boardDTO = boardService.noticeDetail(writeNo);
+		BoardFileDTO boardFileDTO = boardService.noticeFile(writeNo);
 		
 		boardService.noticeviewCount(writeNo);
 		
 		mv.setViewName("/board/noticedetail");
 		
 		mv.addObject("boardDTO", boardDTO);
+		mv.addObject("boardFileDTO", boardFileDTO);
 		
 		return mv;
 	}
@@ -273,7 +277,6 @@ public class BoardController {
 		
 		rttr.addFlashAttribute("message", message);
 		mv.setViewName("redirect:/board/freeboarddetail\\?writeNo=" + parameters.getWriteNo());
-		System.out.println("나는 나다");
 		
 		return mv;
 	}

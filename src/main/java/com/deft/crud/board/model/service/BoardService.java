@@ -44,7 +44,6 @@ public class BoardService {
 	@Transactional
 	public int insertFreeboard(BoardDTO board) {
 		
-		System.out.println("sdasdasdasda" + board);
 		
 		int result = 0;
 		
@@ -152,6 +151,7 @@ public class BoardService {
 		return result;
 	}
 
+	/* 자유게시글 수정 */
 	@Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE,
 			rollbackFor = {Exception.class})
 	public int modifyFreeboardFile(BoardDTO parameters, BoardFileDTO boardFileDTO) {
@@ -168,6 +168,13 @@ public class BoardService {
 		}
 		
 		return result;
+	}
+
+	public BoardFileDTO noticeFile(int writeNo) {
+		
+		BoardFileDTO boardFileDTO = boardMapper.noticeFile(writeNo);
+		
+		return boardFileDTO;
 	}
 
 
