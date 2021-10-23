@@ -79,6 +79,9 @@ public class OrganizationController {
 	}
 	
 	/* 직급 등록 */
+	@GetMapping("jobinsert")
+	public void jobInsert() {}
+	
 	@PostMapping("jobinsert")
 	public ModelAndView joinInsertForm(ModelAndView mv, RedirectAttributes rttr
 			                          , @RequestParam String jobName, @RequestParam String jobStatus) {
