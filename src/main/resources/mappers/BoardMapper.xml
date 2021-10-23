@@ -97,6 +97,7 @@
          WHERE B.BOARD_NO = 2
            AND B.WRITE_NO = #{ writeNo }
 	</select>
+	
 	<select id="noticeDetail" parameterType="_int" resultMap="boardResultMap">
 		SELECT /*com.deft.crud.board.model.dto.BoardDTO*/
 		       B.BOARD_NO
