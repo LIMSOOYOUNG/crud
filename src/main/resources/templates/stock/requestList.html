@@ -212,7 +212,7 @@
 
 					<div id="buttonArea" th:align="center">
 						<button type="button" id="approvalBtn" name="approvalBtn" class="btn btn-primary mx-2">결재</button>
-						<button type="reset" id="modalCloseBtn" data-dismiss='modal' class="btn btn-outline-danger mx-2">취소</button>
+						<button type="reset" id="modalCloseBtn" data-dismiss='modal' class="btn btn-outline-danger mx-2">뒤로가기</button>
 					</div>
 				</form>
             </div>
@@ -269,8 +269,8 @@
 												 readonly>
 									</div>
 									<div class="form-group row mb-2" th:align="right">
-										<label for="customerAddress" class="col-form-label col-lg-1">주소</label>
-										<input type="text" class="form-control col-lg-4" id="customerAddress" name="customerAddress" readonly>
+										<label for="deliveryPlace" class="col-form-label col-lg-1">배송주소</label>
+										<input type="text" class="form-control col-lg-4" id="deliveryPlace" name="deliveryPlace" readonly>
 										<label for="orderDueDate" class="col-form-label col-lg-2">납기요청일</label>
 										<input type="text" id="orderDueDate" class="form-control col-lg-4"readonly>
 									</div>
@@ -333,7 +333,7 @@
 
 					<div id="releasebuttonArea" th:align="center">
 						<button type="button" id="releaseBtn" name="releaseBtn" class="btn btn-primary mx-2">결재</button>
-						<button type="reset" id="releaselBtnModalCloseBtn" data-dismiss='modal' class="btn btn-outline-danger mx-2">취소</button>
+						<button type="reset" id="releaselBtnModalCloseBtn" data-dismiss='modal' class="btn btn-outline-danger mx-2">뒤로가기</button>
 					</div>
             	</div>
         	 </div>
@@ -399,16 +399,16 @@
     	    	  			 
     	          if(statusOption != "대기중") {
     	    	      $("#approvalStatus").not("option[value*='대기중']").prop('disabled',true);
-    	    	  	  $('#buttonArea').attr('hidden', true);
+    	    	  	  $('#approvalBtn').attr('hidden', true);
     	    	  
     	          } else {
     	    	  	  $("#approvalStatus").not("option[value*='대기중']").prop('disabled',false);
-    	    	  	  $('#buttonArea').attr('hidden', false);
+    	    	  	  $('#approvalBtn').attr('hidden', false);
     	          }
     	      
     	      } else {
     	          $("#approvalStatus").not("option[value*='대기중']").prop('disabled',true);
-    	    	  $('#buttonArea').attr('hidden', true);
+    	    	  $('#approvalBtn').attr('hidden', true);
     	      }
     	    	  			
     		  $('#receivingReqProductTable > tbody').html("");
@@ -464,7 +464,7 @@
     	    	      $('#customerName').val(order.customer.customerName); 
     	    	      $('#customerPhone').val(order.customer.customerPhone); 
     	    	      $('#paymentStatus').val(order.paymentStatus); 
-    	    	      $('#customerAddress').val(order.customer.customerAddress); 
+    	    	      $('#deliveryPlace').val(order.deliveryPlace); 
     	    	      $('#orderDueDate').val(order.dueDate); 
     	    	      $('#processDate').val(releaseInfo.approvalDocumentDTO.documentProcessDate); 
     	    	      $('#orderReason').val(releaseInfo.approvalDocumentDTO.reqReason); 
@@ -479,37 +479,38 @@
     	    	    	  			 
     	    	          if(statusOption != "대기중") {
     	    	    	      $("#releaseStatus").not("option[value*='대기중']").prop('disabled',true);
-    	    	    	  	  $('#releaseBtn').attr('hidden', true);
+    	    	    	  	  $("[name=releaseBtn]").attr('hidden', true);
+    	    	    	  	  
     	    	    	  
     	    	          } else {
     	    	    	  	  $("#releaseStatus").not("option[value*='대기중']").prop('disabled',false);
-    	    	    	  	  $('#releaselBtn').attr('hidden', false);
+    	    	    	  	  $("[name=releaseBtn]").attr('hidden', false);
     	    	          }
     	    	      
     	    	      } else {
     	    	          $("#releaseStatus").not("option[value*='대기중']").prop('disabled',true);
-    	    	    	  $('#releaseBtn').attr('hidden', true);
+    	    	    	  $("[name=releaseBtn]").attr('hidden', true);
     	    	      }
     	    	    	  			
     	    		  $('#releaseReqProductTable > tbody').html("");
     	    		  
     	    	      for(let i = 0; i < order.orderProductList.length; i++) {
     	    	    	  				
-    	    	    	      var no = i + 1;
-    	    	    	      var productName = order.orderProductList[i].product.productName;
-    	    	    	      var productNo = order.orderProductList[i].product.productNo;
-    	    	    	  	  var productStock = order.orderProductList[i].productStock;
-    	    	    	  	  var unit = order.orderProductList[i].product.unit;
-    	    	    	  	  var requestOrderStock = order.orderProductList[i].productAmount;
+    	    	    	  var no = i + 1;
+    	    	    	  var productName = order.orderProductList[i].product.productName;
+    	    	    	  var productNo = order.orderProductList[i].product.productNo;
+    	    	    	  var productStock = order.orderProductList[i].productStock;
+    	    	    	  var unit = order.orderProductList[i].product.unit;
+    	    	    	  var requestOrderStock = order.orderProductList[i].productAmount;
     	    	    	  					
-    	    	    	  	  $('#releaseReqProductTable > tbody:last').append(
-    	    	    															 '<tr><td id="no" name="number">' + no + '</td>'
-    	    	    														   + '<td id="releaseProductNo" name="releaseProductNo">' + productNo + '</td>'
-    	    	    														   + '<td id="releaseProductName">' + productName + '</td>'
-    	    	    														   + '<td id="releaseProductStock" name="releaseProductStock">' + productStock + '</td>'
-    	    	    														   + '<td id="productUnit">' + unit	+ '</td>'
-    	    	    														   + '<td id="releaseProductAmount" name="releaseProductAmount">' + requestOrderStock + '</td>'
-    	    	    														   + '</tr>');
+    	    	    	  $('#releaseReqProductTable > tbody:last').append(
+    	    	    												'<tr><td id="no" name="number">' + no + '</td>'
+    	    	    											  + '<td id="releaseProductNo" name="releaseProductNo">' + productNo + '</td>'
+    	    	    											  + '<td id="releaseProductName">' + productName + '</td>'
+    	    	    											  + '<td id="releaseProductStock" name="releaseProductStock">' + productStock + '</td>'
+    	    	    											  + '<td id="productUnit">' + unit	+ '</td>'
+    	    	    											  + '<td id="releaseProductAmount" name="releaseProductAmount">' + requestOrderStock + '</td>'
+    	    	    											  + '</tr>');
     	    	    	  		}		
     	    	    	  	},
     	    	    	  	error : function(xhr, status, error) {
@@ -642,14 +643,19 @@
  		
  		const productCount = $('#releaseReqProductTable > tbody > tr').length;
  		
+ 		let check = 0;
  		for(let i = 0; i < productCount; i++) {
  			
  		const productNo = $('[name=releaseProductNo]').eq(i).text();
  		const productStock = $('[name=releaseProductStock]').eq(i).text();
  		const productAmount = $('[name=releaseProductAmount]').eq(i).text();
  		
+ 		if(productStock < productAmount) {
+ 			check++;
+ 		}
  		productList.push({productNo, productStock, productAmount})
  		}
+
  		
  		const request = { approvalDocumentNo: approvalDocumentNo, releaseReqNo: releaseReqNo,
  						orderNo: orderNo, approvalDocumentDTO: {documentStatus: documentStatus},
@@ -662,6 +668,12 @@
  			alert("결재상태를 변경해 주세요")
  			valueStatus = false;
  			return;
+ 			
+ 		} else if(documentStatus == "승인" && check > 0) {	
+ 			alert("현재 창고재고수량을 확인해주세요!")
+ 			valueStatus = false;
+ 			return;
+ 			
  		} else if(!confirm("결재상태를 \n" + "[" + releaseStatus + "]" + " 상태로 변경하시겠습니까? \n"
  							+ "(※ 결재처리 시 상태 재변경이 불가능합니다.)")){
  			valueStatus = false;

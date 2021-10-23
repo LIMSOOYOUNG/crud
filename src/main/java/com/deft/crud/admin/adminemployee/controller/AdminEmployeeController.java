@@ -56,7 +56,6 @@ public class AdminEmployeeController {
 		
 		mv.addObject("jobList", jobList);
 		mv.addObject("deptList", deptList);
-		
 		mv.setViewName("/admin/insertMember");
 		
 		return mv;
@@ -66,8 +65,6 @@ public class AdminEmployeeController {
 	@GetMapping("manager/find")
 	@ResponseBody
 	public List<MemberDTO> selectManagerList(@RequestParam String deptCode) {
-		
-		System.out.println("선택한 부서코드 확인 : " + deptCode);
 		
 		List<MemberDTO> managerList = adminEmployeeService.selectManagerList(deptCode);
 		
@@ -81,8 +78,6 @@ public class AdminEmployeeController {
 											@ModelAttribute MemberDTO member,
 											HttpServletRequest request,
 											@RequestParam MultipartFile profileThumbNail) {
-		
-		System.out.println(member);
 		
 		int result = adminEmployeeService.insertMember(request, member, profileThumbNail);
 		

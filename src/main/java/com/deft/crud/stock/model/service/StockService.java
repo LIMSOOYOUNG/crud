@@ -291,6 +291,7 @@ public class StockService {
 		return purchaseOrderList;
 	}
 
+	/* 출고요청서 상세정보 조회 */
 	public OrderDTO selectOrderDetail(String orderNo) {
 		OrderDTO order = orderMapper.selectOrderDetail(orderNo);
 		
@@ -321,6 +322,9 @@ public class StockService {
 			total += subtotal + tax;
 		}
 		
+		String deliveryPlace =  order.getDeliveryPlace().replace("$", " ");
+		
+		order.setDeliveryPlace(deliveryPlace);
 		order.setSumPrice(total);
 		
 		return order;

@@ -238,7 +238,7 @@ public class StockController {
 			ReceivingReqDTO releaseInfo = stockService.selectReleaseInfo(approvalNo);	//출고요청서 기본정보(결재문서관련)
 			releaseInfo.setReleaseReqNo(releaseNo);
 			
-			OrderDTO order = orderService.selectOrderDetail(orderNo);					//출고요청서 상세정보(주문서정보 + 요청상품정보)
+			OrderDTO order = stockService.selectOrderDetail(orderNo);					//출고요청서 상세정보(주문서정보 + 요청상품정보)
 			
 			mv.addObject("releaseInfo", objectMapper.writeValueAsString(releaseInfo));
 			mv.addObject("order", objectMapper.writeValueAsString(order));

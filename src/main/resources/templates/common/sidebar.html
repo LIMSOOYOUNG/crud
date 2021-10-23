@@ -2,6 +2,7 @@
 	xmlns:th="https://www.thymeleaf.org"
 	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 
+
 	<!-- Sidebar -->
 	<th:block th:fragment="sidebar">
 		<ul class="navbar-nav sidebar sidebar-light accordion" id="accordionSidebar">
@@ -136,6 +137,7 @@
 			</li>	<!-- End EmpSidebar -->
 
 			<!-- Start AdminSidebar -->
+			<span th:if="${#authentication.principal.authority != 'ROLE_EMP'}">
 			<hr class="sidebar-divider">
 			<div class="sidebar-heading">ADMIN</div>
 			<li class="nav-item">
@@ -177,6 +179,7 @@
 					</div>
 				</div>
 			</li>	<!-- End AdminSidebar -->
+			</span>
 		</ul>
 	</th:block>
 
