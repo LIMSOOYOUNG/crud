@@ -24,7 +24,7 @@
 	<result property="savedPath" column="SAVED_PATH"/>
 </resultMap>
 	<select id="selectFreeboard" resultMap="boardResultMap">
-		SELECT /*com.deft.crud.board.model.dto.BoardDTO*/
+		SELECT /* com.deft.crud.board.model.dao.BoardMapper#selectFreeboard() */
                B.WRITE_NO
              , B.BOARD_NAME
              , E.EMP_NAME
@@ -35,7 +35,7 @@
          WHERE B.TYPE LIKE '자유게시판'
 	</select>
 	<select id="selectNotice" resultMap="boardResultMap">
-		SELECT /*com.deft.crud.board.model.dto.BoardDTO*/ 
+		SELECT /* com.deft.crud.board.model.dao.BoardMapper#selectNotice() */ 
                B.WRITE_NO
              , B.BOARD_NAME
              , E.EMP_NAME
@@ -47,7 +47,7 @@
 	</select>
 	
 	<insert id="insertFreeboard" parameterType="com.deft.crud.board.model.dto.BoardDTO">
-		INSERT /*com.deft.crud.board.model.dto.BoardDTO*/
+		INSERT /* com.deft.crud.board.model.dao.BoardMapper#insertFreeboard() */
 		  INTO TBL_BOARD B
 		(
 		  B.WRITE_NO
@@ -71,20 +71,20 @@
 	</insert>
 	
 	<delete id="deleteFreeboard" parameterType="_int">
-		DELETE /*com.deft.crud.board.model.dto.BoardDTO*/
+		DELETE /* com.deft.crud.board.model.dao.BoardMapper#deleteFreeboard(writeNo) */
 		  FROM TBL_BOARD B
 		 WHERE B.WRITE_NO = #{ writeNo, jdbcType = INTEGER }
 	</delete>
 	
 	<delete id="deleteFile" parameterType="_int">
-		DELETE /* com.deft.crud.board.model.dto.BoardFileDTO */
+		DELETE /* com.deft.crud.board.model.dao.BoardMapper#deleteFile(writeNo) */
 	      FROM TBL_BOARD_ATTATCH B
 	     WHERE B.WRITE_NO = #{ writeNo, jdbcType = INTEGER }
 	</delete>
 
 	
 	<select id="freeboardDetail" parameterType="_int" resultMap="boardResultMap">
-		SELECT /*com.deft.crud.board.model.dto.BoardDTO*/
+		SELECT /* com.deft.crud.board.model.dao.BoardMapper#freeboardDetail(writeNo) */
 		       B.BOARD_NO
 		     , B.WRITE_NO
              , B.BOARD_NAME
@@ -92,13 +92,14 @@
              , B.CONTENTS
              , B.WRITE_DATE
              , B.VIEWS
+             , B.EMP_NO
           FROM TBL_BOARD B
           JOIN TBL_EMP_INFO E ON (E.EMP_NO = B.EMP_NO)
          WHERE B.BOARD_NO = 2
            AND B.WRITE_NO = #{ writeNo }
 	</select>
 	<select id="noticeDetail" parameterType="_int" resultMap="boardResultMap">
-		SELECT /*com.deft.crud.board.model.dto.BoardDTO*/
+		SELECT /* com.deft.crud.board.model.dao.BoardMapper#noticeDetail(writeNo) */
 		       B.BOARD_NO
 		     , B.WRITE_NO
              , B.BOARD_NAME
@@ -112,25 +113,25 @@
            AND B.WRITE_NO = #{ writeNo }
 	</select>
 	<update id="freeboardviewCount" parameterType="_int">
-		UPDATE TBL_BOARD B /*com.deft.crud.board.model.dto.BoardDTO*/
+		UPDATE TBL_BOARD B /* com.deft.crud.board.model.dao.BoardMapper#freeboardviewCount(writeNo) */
 	   	   SET B.VIEWS = VIEWS + 1
 	     WHERE B.WRITE_NO = #{ writeNo } 
 	</update>
 	<update id="noticeviewCount" parameterType="_int">
-		UPDATE TBL_BOARD B /*com.deft.crud.board.model.dto.BoardDTO*/
+		UPDATE TBL_BOARD B /* com.deft.crud.board.model.dao.BoardMapper#noticeviewCount(writeNo) */
 	   	   SET B.VIEWS = VIEWS + 1
 	     WHERE B.WRITE_NO = #{ writeNo } 
 	</update>
 	
 	<select id="selectSeqFreeboardNo" resultType="_int">
-		SELECT /*com.deft.crud.board.model.dto.BoardDTO*/
+		SELECT /* com.deft.crud.board.model.dao.BoardMapper#selectSeqFreeboardNo() */
 		       LAST_NUMBER
 		  FROM USER_SEQUENCES
 	     WHERE SEQUENCE_NAME = 'SEQ_WRITE_NO'
 	</select>
 	
 	<select id="freeboardModifyForm" parameterType="_int" resultMap="boardResultMap">
-		SELECT /*com.deft.crud.board.model.dto.BoardDTO*/
+		SELECT /* com.deft.crud.board.model.dao.BoardMapper#freeboardModifyForm(writeNo) */
 		       B.BOARD_NO
 		     , B.WRITE_NO
              , B.BOARD_NAME
@@ -142,7 +143,7 @@
 	</select>
 	
 	<update id="freeboardModify" parameterType="com.deft.crud.board.model.dto.BoardDTO">
-		UPDATE /*com.deft.crud.board.model.dto.BoardDTO*/
+		UPDATE /* com.deft.crud.board.model.dao.BoardMapper#freeboardModify(writeNo) */
 	           TBL_BOARD B
 	       SET B.BOARD_NAME = #{ boardName,jdbcType=VARCHAR }
 	         , B.CONTENTS = #{ contents,jdbcType=VARCHAR }
@@ -172,13 +173,13 @@
 	</insert>
 
 	<select id="detailFile" parameterType="_int" resultMap="boardFileResultMap">
-		SELECT /* com.deft.crud.board.model.dao.BoardMapper */
+		SELECT /* com.deft.crud.board.model.dao.BoardMapper#detailFile(writeNo) */
 	           B.ORIGINAL_NAME
 	      FROM TBL_BOARD_ATTATCH B
 	     WHERE B.WRITE_NO = #{ writeNo }
 	</select>
 	<update id="modifyFreeboardText" parameterType="com.deft.crud.board.model.dto.BoardDTO">
-		UPDATE /* com.deft.crud.board.model.dao.BoardMapper#modifyFreeboardText */
+		UPDATE /* com.deft.crud.board.model.dao.BoardMapper#modifyFreeboardText(writeNo) */
 	           TBL_BOARD B
 	       SET B.BOARD_NAME = #{ boardName,jdbcType=VARCHAR }
 	         , B.CONTENTS = #{ contents,jdbcType=VARCHAR }
@@ -186,7 +187,7 @@
 	</update>
 	
 	<update id="modifyFreeboardFile" parameterType="com.deft.crud.board.model.dto.BoardFileDTO">
-		UPDATE /* com.deft.crud.board.model.dao.BoardMapper#modifyFreeboardFile() */
+		UPDATE /* com.deft.crud.board.model.dao.BoardMapper#modifyFreeboardFile(writeNo) */
 	           TBL_BOARD_ATTATCH B
 	       SET B.ORIGINAL_NAME = #{ originalName }
 	         , B.SAVED_NAME = #{ savedName }
@@ -195,7 +196,7 @@
 	</update>
 	
 	<select id="noticeFile" parameterType="_int" resultMap="boardFileResultMap">
-		SELECT /* com.deft.crud.board.model.dao.BoardMapper#noticeFile() */
+		SELECT /* com.deft.crud.board.model.dao.BoardMapper#noticeFile(writeNo) */
 	           B.ORIGINAL_NAME
 	      FROM TBL_BOARD_ATTATCH B
 	     WHERE B.WRITE_NO = #{ writeNo }

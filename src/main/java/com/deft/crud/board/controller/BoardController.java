@@ -100,6 +100,7 @@ public class BoardController {
 
 	    if(!freeboardUpload.isEmpty()) {
 	    
+	    	/* root값 지정 */
 		    String root = request.getSession().getServletContext().getRealPath("\\");
 		    
 		    String filePath  = root + "\\upload\\freeboard";
@@ -109,10 +110,7 @@ public class BoardController {
 			if(!mkdir.exists()) {
 				mkdir.mkdirs();
 			}
-	
-		    
-		   
-		    	
+
 		    	String originFileName = freeboardUpload.getOriginalFilename();
 		    	String ext = originFileName.substring(originFileName.lastIndexOf("."));
 				String savedName = UUID.randomUUID().toString().replace("-", "") + ext;
@@ -123,10 +121,7 @@ public class BoardController {
 				file.setSavedPath(filePath);
 				file.setWriteNo(writeNo);
 				
-	
 				parameters.setBoardFileList(file);
-		    
-		    
 		    
 		    try {
 		    		
@@ -140,7 +135,7 @@ public class BoardController {
 		    }
 	    }
 	    
-	    /* parameters(BoardDTO)를 서비스에 전달한다. */
+	    /* parameters(BoardDTO)값을 서비스에 전달한다. */
 		int result = boardService.insertFreeboard(parameters);
 		
 		String message = "";
@@ -149,6 +144,8 @@ public class BoardController {
 			
 			message = "자유게시글등록에 성공하셨습니다";
 		}
+		
+		/* 페이지 이동값 지정 */
 		mv.setViewName("redirect:/board/selectfreeboard");
 
 		return mv;
@@ -163,10 +160,10 @@ public class BoardController {
 		BoardDTO boardDTO = boardService.freeboardDetail(writeNo); 
 		BoardFileDTO boardFileDTO = boardService.freeboardFile(writeNo);
 		
-		/* 조회수 카운터 */
+		/* 조회수 증가 */
 		boardService.freeboardviewCount(writeNo);
 		
-		/* 페이지 이동값을 board/freeboarddetail 지정한다. */
+		/* 페이지 이동값 지정 */
 		mv.setViewName("/board/freeboarddetail");
 		
 		/* key값과 value값을 지정한다. */
@@ -181,13 +178,17 @@ public class BoardController {
 	@GetMapping("/noticedetail")
 	public ModelAndView noticedetail(ModelAndView mv, @RequestParam int writeNo) {
 		
+		/* writeNo값을 서비스 쪽으로 넘겨준다. */
 		BoardDTO boardDTO = boardService.noticeDetail(writeNo);
 		BoardFileDTO boardFileDTO = boardService.noticeFile(writeNo);
 		
+		/* 조회수 증가 */
 		boardService.noticeviewCount(writeNo);
 		
+		/* 페이지 이동값 지정 */
 		mv.setViewName("/board/noticedetail");
 		
+		/* key값과 value값을 지정한다. */
 		mv.addObject("boardDTO", boardDTO);
 		mv.addObject("boardFileDTO", boardFileDTO);
 		
