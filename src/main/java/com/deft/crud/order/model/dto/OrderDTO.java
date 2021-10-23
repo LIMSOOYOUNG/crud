@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.deft.crud.customer.model.dto.CustomerDTO;
 import com.deft.crud.estimate.model.dto.ProviderDTO;
+import com.deft.crud.stock.model.dto.approval.ReceivingReqDTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

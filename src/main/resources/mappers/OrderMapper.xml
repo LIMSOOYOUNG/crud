@@ -60,7 +60,6 @@
 		<id property="orderNo" column="ORDER_NO"/>
 		<id property="productNo" column="PRODUCT_NO"/>
 		<result property="productStock" column="PRODUCT_STOCK" />
-
 		<result property="productAmount" column="PRODUCT_AMOUNT"/>
 		
 		<association property="product" resultMap="productResultMap"/>
@@ -98,6 +97,8 @@
         SELECT /* com.deft.crud.order.model.dao.OrderMapper#selectOrderDetail() */
                O.ORDER_NO
              , O.ORDER_TITLE
+             , TO_CHAR(O.ORDER_DATE, 'YYYY-MM-DD') "ORDER_DATE"
+             , O.ORDER_YN
              , O.CUSTOMER_NO
              , C.CUSTOMER_NAME
              , C.CUSTOMER_ADDRESS
@@ -106,13 +107,11 @@
              , EI.EMP_NAME
              , C.EMP_NO
              , J.JOB_NAME
-             , O.SUM_PRICE
-             , O.DISCOUNT_RATE
-             , O.PAYMENT_STATUS
-             , TO_CHAR(O.ORDER_DATE, 'YYYY-MM-DD') "ORDER_DATE"
              , TO_CHAR(O.DUE_DATE, 'YYYY-MM-DD') "DUE_DATE"
              , O.DELIVERY_PLACE
-             , O.ORDER_YN
+             , O.DISCOUNT_RATE
+             , O.SUM_PRICE
+             , O.PAYMENT_STATUS
              , P.PRODUCT_NO
              , P.PRODUCT_NAME
              , P.SELLING_PRICE
@@ -143,29 +142,29 @@
         (
           O.ORDER_NO
         , O.ORDER_TITLE
-        , O.CUSTOMER_NO
-        , O.SUM_PRICE
-        , O.DISCOUNT_RATE
-        , O.PAYMENT_STATUS
         , O.ORDER_DATE
+        , O.CUSTOMER_NO
+        , O.ORDER_YN
         , O.DUE_DATE
         , O.DELIVERY_PLACE
+        , O.DISCOUNT_RATE
+        , O.SUM_PRICE
+        , O.PAYMENT_STATUS
         , O.PROVIDER_REGIST_NO
-        , O.ORDER_YN
         )
         VALUES
         (
           REPLACE(#{ orderNo }, SUBSTR(#{ orderNo }, -3), LPAD(SEQ_ORDER_NO.NEXTVAL, 3, 0))
         , #{ orderTitle }
-        , #{ customerNo }
-        , #{ sumPrice }
-        , #{ discountRate }
-        , #{ paymentStatus }
         , #{ orderDate }
+        , #{ customerNo }
+        , #{ orderYn }
         , #{ dueDate }
         , #{ deliveryPlace }
+        , #{ discountRate }
+        , #{ sumPrice }
+        , #{ paymentStatus }
         , '110-01-12345'
-        , #{ orderYn }
         )
 	</insert>
 	
@@ -180,6 +179,42 @@
         VALUES
         (
           REPLACE(#{ orderNo }, SUBSTR(#{ orderNo }, -3), LPAD(SEQ_ORDER_NO.CURRVAL, 3, 0))
+        , #{ productNo }
+        , #{ productAmount }
+        )
+	</insert>
+	
+	<update id="updateOrderInfo" parameterType="com.deft.crud.order.model.dto.OrderDTO">
+        UPDATE /* com.deft.crud.order.model.dao.OrderMapper#updateOrderInfo() */
+               TBL_PURCHASE_ORDER O
+           SET O.ORDER_TITLE = #{ orderTitle }
+             , O.CUSTOMER_NO = #{ customerNo }
+             , O.ORDER_YN = #{ orderYn }
+             , O.DUE_DATE = #{ dueDate }
+             , O.DELIVERY_PLACE = #{ deliveryPlace }
+             , O.DISCOUNT_RATE = #{ discountRate }
+             , O.SUM_PRICE = #{ sumPrice }
+             , O.PAYMENT_STATUS = #{ paymentStatus }
+         WHERE O.ORDER_NO = #{ orderNo }
+	</update>
+	
+	<delete id="deleteOrderProduct" parameterType="java.lang.String">
+        DELETE
+          FROM TBL_PURCHASE_ORDER_PRODUCT OP
+         WHERE OP.ORDER_NO = #{ orderNo }
+	</delete>
+	
+	<insert id="updateOrderProduct" parameterType="com.deft.crud.order.model.dto.OrderProductDTO">
+        INSERT /* com.deft.crud.order.model.dao.OrderMapper#updateOrderProduct() */
+          INTO TBL_PURCHASE_ORDER_PRODUCT OP
+        (
+          OP.ORDER_NO
+        , OP.PRODUCT_NO
+        , OP.PRODUCT_AMOUNT
+        )
+        VALUES
+        (
+          #{ orderNo }
         , #{ productNo }
         , #{ productAmount }
         )

@@ -19,4 +19,10 @@ public interface OrderMapper {
 	int insertOrderInfo(OrderDTO orderInfo);
 
 	int insertOrderProduct(OrderProductDTO product);
+
+	int updateOrderInfo(OrderDTO orderInfo);
+
+	int deleteOrderProduct(String orderNo);
+
+	int updateOrderProduct(OrderProductDTO product);
 }
