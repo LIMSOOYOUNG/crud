@@ -24,9 +24,7 @@
 					<div align="right">
 						<form action="/board/deletefreeboard" method="post">
 							<input type="hidden" name="writeNo" th:value="${boardDTO.writeNo}">
-							<span th:if="${#authentication.principal.empNo == boardDTO.empNo}">
-								<button type="submit"  class="btn btn-primary" id="deletebtn">삭제</button>
-							</span>
+							<button type="submit"  class="btn btn-primary" id="deletebtn" >삭제</button>
 						</form>
 					</div>
 					<br>
@@ -64,9 +62,7 @@
                             	</div>
                             	
                             	<div align="right">
-                            		<span th:if="${#authentication.principal.empNo == boardDTO.empNo}">	
-                            			<button type="button" class="btn btn-primary" th:onclick="|location.href='@{/board/freeboardmodify(writeNo=${boardDTO.writeNo})}'|">수정</button>
-                            		</span>
+                            		<button type="button" class="btn btn-primary" th:onclick="|location.href='@{/board/freeboardmodify(writeNo=${boardDTO.writeNo})}'|">수정</button>
                             		<button type="button" class="btn btn-primary" th:onclick="history.back()">뒤로가기</button>
                         		</div> 
 						</div>

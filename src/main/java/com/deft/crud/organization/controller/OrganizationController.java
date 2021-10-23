@@ -31,13 +31,9 @@ public class OrganizationController {
 	@GetMapping("/selectdepartment")
 	public ModelAndView selectOrganization(ModelAndView mv) {
 		
-		/* DepartmentDTO를 리스트에 담아 서비스에 보내준다. */
 		List<DepartmentDTO> departmentList = organizationService.selectOrganization();
-		
-		/* 페이지 이동값을 지정한다. */
-		mv.setViewName("/organization/selectdepartment");
-		
-		/* key값과 value값 지정 */
+		System.out.println("1111111111" + departmentList);
+		mv.setViewName("organization/selectdepartment");
 		mv.addObject("departmentList", departmentList);
 		
 		return mv;
@@ -47,13 +43,9 @@ public class OrganizationController {
 	@GetMapping("/selectjob")
 	public ModelAndView selectJob(ModelAndView mv) {
 		
-		/* JobDTO를 리스트에 담아 서비스에 보내준다. */
 		List<JobDTO> jobList = organizationService.selectJob();
 		
-		/* 페이지 이동값 지정 */
-		mv.setViewName("/organization/selectjob");
-		
-		/* key값과 value값 지정 */
+		mv.setViewName("organization/selectjob");
 		mv.addObject("jobList", jobList);
 		
 		return mv;
@@ -67,7 +59,7 @@ public class OrganizationController {
 		
 		DepartmentDTO departDTO = new DepartmentDTO();
 		
-		/* DepartmentDTO에 RequestParam 값들을 받는다. */
+		/* DTO에 값 전달 */
 		departDTO.setDeptName(deptName);
 		departDTO.setDeptFax(deptFax);
 		departDTO.setDeptTel(deptTel);
@@ -87,21 +79,23 @@ public class OrganizationController {
 	}
 	
 	/* 직급 등록 */
+	@GetMapping("jobinsert")
+	public void jobInsert() {}
+	
 	@PostMapping("jobinsert")
 	public ModelAndView joinInsertForm(ModelAndView mv, RedirectAttributes rttr
 			                          , @RequestParam String jobName, @RequestParam String jobStatus) {
 		
-		/* JobDTO에 RequestParam 값들을 받는다. */
 		JobDTO jobDTO = new JobDTO();
 		jobDTO.setJobName(jobName);
 		jobDTO.setJobStatus(jobStatus);
 		
-		/* JobDTO를 담아 서비스에 전달한다. */
+		System.out.println(jobDTO);
+		
 		int result = organizationService.jobInsert(jobDTO);
 		
 		if(result > 0) {
 			
-			/* 페이지 이동값 지정 */
 			mv.setViewName("redirect:/organization/selectjob");
 			
 		}
@@ -112,14 +106,12 @@ public class OrganizationController {
 	/* 부서 수정 */
 	@GetMapping("departmentmodify")
 	public ModelAndView departmentModify(ModelAndView mv, @RequestParam String deptCode) {
-
-		/* DepartmentDTO에 deptCode를 담아 서비스에 전달 */
+		
 		DepartmentDTO deptDTO = organizationService.deptModifyForm(deptCode);
 		
-		/* 페이지 이동값 지정 */
-		mv.setViewName("organization/departmentmodify");
+		System.out.println(".1.1.1.1.1.1" + deptDTO);
 		
-		/* key값과 value값 지정 */
+		mv.setViewName("organization/departmentmodify");
 		mv.addObject("deptDTO", deptDTO);
 		
 		return mv;
@@ -129,7 +121,6 @@ public class OrganizationController {
 	public ModelAndView departmentModifyForm(ModelAndView mv, @RequestParam String deptCode
 		     , @RequestParam String deptName, @RequestParam String deptFax, @RequestParam String deptTel, @RequestParam String deptStatus){
 		
-		/* DepartmentDTO에 RequestParam 값들을 받는다. */
 		DepartmentDTO departmentDTO = new DepartmentDTO();
 		departmentDTO.setDeptCode(deptCode);
 		departmentDTO.setDeptName(deptName);
@@ -137,7 +128,8 @@ public class OrganizationController {
 		departmentDTO.setDeptTel(deptTel);
 		departmentDTO.setDeptStatus(deptStatus);
 		
-		/* DepartmentDTO 값을 서비스에 전달한다. */
+		System.out.println("............" + departmentDTO);
+		
 		int result = organizationService.departmentModify(departmentDTO);
 		
 		if(result > 0) {
@@ -152,14 +144,12 @@ public class OrganizationController {
 	@GetMapping("jobmodify")
 	public ModelAndView jobModify(ModelAndView mv, @RequestParam String jobCode) {
 		
-		/* JobDTO에 jobCode를 담아 서비스에 전달 */
 		JobDTO jobDTO = organizationService.jobModifyForm(jobCode);
+		System.out.println("............................."+ jobDTO);
 		
-		/* 페이지 이동값 지정 */
-		mv.setViewName("/organization/jobmodify");
-		
-		/* key값과 value값을 지정한다. */
+		mv.setViewName("organization/jobmodify");
 		mv.addObject("jobDTO", jobDTO);
+		
 		
 		return mv;
 	}
@@ -169,20 +159,20 @@ public class OrganizationController {
 	public ModelAndView jobModifyForm(ModelAndView mv, @RequestParam String jobCode
             , @RequestParam String jobName, @RequestParam String jobStatus){
 		
-		/* JobDTO에 RequestParam값을 받아온다. */
 		JobDTO jobDTO = new JobDTO();
 		jobDTO.setJobCode(jobCode);
 		jobDTO.setJobName(jobName);
 		jobDTO.setJobStatus(jobStatus);
 		
-		/* 서비스에 JobDTO값을 전달한다. */
+		System.out.println(jobDTO);
+		
 		int result = organizationService.jobModify(jobDTO);
 		
 		if(result > 0) {
 			
-			/* 페이지 이동값을 지정한다. */
 			mv.setViewName("redirect:/organization/selectjob");
 		}
+		
 		
 		return mv;
 	}
