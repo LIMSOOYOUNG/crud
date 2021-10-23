@@ -37,15 +37,24 @@
 											th:value="${ boardDTO.boardName }">
 									</div>
 								</div>
-								<div class="form-group mb-3">
-									<div class="input-group-prepend">
-								</div>
+						<div class="form-group mb-3">
+							<div class="input-group-prepend">
+							</div>
 								<div class="form-group">
 									<textarea rows="20" cols="150" class="form-control"
 										id="exampleFormControlTextarea1" name="contents"
 										th:text="${ boardDTO.contents }" th:value="${ boardDTO.contents }"></textarea>
 								</div>
-								</div>
+						</div>
+							<div class="form-group">
+									<div>
+										<input th:if="${boardFileDTO}!=null" class="form-control"  aria-describedby="basic-addon3" th:value="${boardFileDTO.originalName}" th:readonly="readonly">
+									</div>
+									<br>
+									<div class="custom-file">
+                     						<input type="file" name="noticeUpdate" class="form-control" >
+                      				</div>
+							</div>
 								<div align="right">
 									<button type="submit" class="btn btn-primary" id="updatebtn">수정</button>
 									<button type="button" class="btn btn-primary" th:onclick="history.back()">취소</button>

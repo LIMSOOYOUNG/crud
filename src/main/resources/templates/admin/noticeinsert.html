@@ -33,7 +33,7 @@ xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-spingsecurity5">
 					<div class="row">
                         
                         <!-- 게시판 폼 -->
-                                <form action="noticeinsert" method="post">
+                                <form action="noticeinsert" method="post" enctype="multipart/form-data">
                                 <input type="hidden" name="writeNo" th:value="${writeNo}">
                                 <div class="input-group-md mb-3">
                             		<div class="input-group-prepend">
@@ -48,8 +48,7 @@ xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-spingsecurity5">
                             	</div>
                             		<div class="form-group">
                      					<div class="custom-file">
-                        					<input type="file" class="custom-file-input" id="customFile">
-                        					<label class="custom-file-label" for="customFile">Choose file</label>
+                     						<input type="file" name="noticeUpload" class="form-control" value="" >
                       					</div>
                    					</div>
                             		<br>

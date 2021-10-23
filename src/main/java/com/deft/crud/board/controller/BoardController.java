@@ -1,6 +1,7 @@
 package com.deft.crud.board.controller;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -47,7 +48,7 @@ public class BoardController {
 		List<BoardDTO> freeboardList = boardService.selectFreeboard();
 		
 		/* 페이지 이동값을 board/selectfreeboard로 지정한다. */
-		mv.setViewName("board/selectfreeboard");
+		mv.setViewName("/board/selectfreeboard");
 		
 		/* key값과 value값을 지정한다. */
 		mv.addObject("freeboardList", freeboardList);
@@ -63,7 +64,7 @@ public class BoardController {
 		List<BoardDTO> noticeList = boardService.selectNotice();
 		
 		/* 페이지 이동값을 board/selectnotice로 지정한다. */
-		mv.setViewName("board/selectnotice");
+		mv.setViewName("/board/selectnotice");
 		
 		/* key값과 value값을 지정한다. */
 		mv.addObject("noticeList", noticeList);
@@ -87,23 +88,19 @@ public class BoardController {
 	@PostMapping("/freeboardinsert")
 	public ModelAndView insertfreeboardForm(ModelAndView mv, @ModelAttribute BoardDTO parameters,
 			@AuthenticationPrincipal UserImpl loginInfo,  @RequestParam int writeNo
-			, @RequestParam(required = false) List<MultipartFile> freeboardUpload
+			, @RequestParam(required = false) MultipartFile freeboardUpload
 			,HttpServletRequest request) 
 					throws Exception {
 		
-		System.out.println("sasaaaaaaaaaaaaaaaaaa" + freeboardUpload);
-		
+		/* 로그인한 정보 */
 	    int loginEmpNo = loginInfo.getEmpNo();
-	    parameters.setEmpNo(loginEmpNo);
 	    
-	    System.out.println("dasdasdasdas" + CollectionUtils.isEmpty(freeboardUpload));
-	    for(MultipartFile file : freeboardUpload) {
-	    	System.out.println("1234567890" + file);
-	    }
+	    /* BoardDTO에 로그인 값을 넣는다. */
+	    parameters.setEmpNo(loginEmpNo);
+
 	    if(!freeboardUpload.isEmpty()) {
 	    
 		    String root = request.getSession().getServletContext().getRealPath("\\");
-		    System.out.println("rrrrrrrrrrerrrrrrrrr" + root);
 		    
 		    String filePath  = root + "\\upload\\freeboard";
 		    
@@ -113,11 +110,10 @@ public class BoardController {
 				mkdir.mkdirs();
 			}
 	
-		    List<BoardFileDTO> files = new ArrayList<>();
 		    
-		    for(int i = 0; i < freeboardUpload.size(); i++) {
+		   
 		    	
-		    	String originFileName = freeboardUpload.get(i).getOriginalFilename();
+		    	String originFileName = freeboardUpload.getOriginalFilename();
 		    	String ext = originFileName.substring(originFileName.lastIndexOf("."));
 				String savedName = UUID.randomUUID().toString().replace("-", "") + ext;
 	
@@ -127,30 +123,21 @@ public class BoardController {
 				file.setSavedPath(filePath);
 				file.setWriteNo(writeNo);
 				
-				files.add(file);	
 	
-		    }
+				parameters.setBoardFileList(file);
 		    
-		    parameters.setBoardFileList(files);
+		    
 		    
 		    try {
-		    	for(int i = 0; i < freeboardUpload.size(); i++) {
 		    		
-		    		BoardFileDTO file = files.get(i);
-		    		
-		    		freeboardUpload.get(i).transferTo(new File(filePath + "\\" + file.getSavedName()));
-		    	}
+		    		freeboardUpload.transferTo(new File(filePath + "\\" + file.getSavedName()));
+		    	
 		    }catch (Exception e) {
 		    	e.printStackTrace();
-		    	
-		    	for(int i = 0; i < freeboardUpload.size(); i++) {
-		    		BoardFileDTO file = files.get(i);
 					
 					new File(filePath + "\\" + file.getSavedName()).delete();
 	
-		    	}
 		    }
-	    
 	    }
 	    
 	    /* parameters(BoardDTO)를 서비스에 전달한다. */
@@ -159,6 +146,7 @@ public class BoardController {
 		String message = "";
 		
 		if(result > 0) {
+			
 			message = "자유게시글등록에 성공하셨습니다";
 		}
 		mv.setViewName("redirect:/board/selectfreeboard");
@@ -179,7 +167,7 @@ public class BoardController {
 		boardService.freeboardviewCount(writeNo);
 		
 		/* 페이지 이동값을 board/freeboarddetail 지정한다. */
-		mv.setViewName("board/freeboarddetail");
+		mv.setViewName("/board/freeboarddetail");
 		
 		/* key값과 value값을 지정한다. */
 		mv.addObject("boardDTO", boardDTO);
@@ -194,12 +182,14 @@ public class BoardController {
 	public ModelAndView noticedetail(ModelAndView mv, @RequestParam int writeNo) {
 		
 		BoardDTO boardDTO = boardService.noticeDetail(writeNo);
+		BoardFileDTO boardFileDTO = boardService.noticeFile(writeNo);
 		
 		boardService.noticeviewCount(writeNo);
 		
-		mv.setViewName("board/noticedetail");
+		mv.setViewName("/board/noticedetail");
 		
 		mv.addObject("boardDTO", boardDTO);
+		mv.addObject("boardFileDTO", boardFileDTO);
 		
 		return mv;
 	}
@@ -208,7 +198,7 @@ public class BoardController {
 	/* GET방식과 POST방식을 쓴 이유는 페이지에 GET방식으로 writeNo를 전달하고  
 	 * POST방식으로 수정된 값을 전달하기위해 썻습니다
 	 * */
-	@GetMapping("freeboardmodify")
+	@GetMapping("/freeboardmodify")
 	public ModelAndView freeboardModify(ModelAndView mv, @RequestParam int writeNo) throws Exception {
 		
 		/* BoardDTO를 writeNo 값을 담아서 서비스에 전달한다. */
@@ -217,23 +207,23 @@ public class BoardController {
 		BoardFileDTO boardFileDTO = boardService.freeboardFile(writeNo);
 		
 		/* 페이지 이동값을 board/freeboardmodify 지정한다. */
-		mv.setViewName("board/freeboardmodify");
+		mv.setViewName("/board/freeboardmodify");
 		
 		mv.addObject("boardDTO", boardDTO);
 		mv.addObject("boardFileDTO", boardFileDTO);
 		
-		
 		return mv;
 	}
 	
-	@PostMapping("freeboardmodify")
+	@PostMapping("/freeboardmodify")
 	public ModelAndView freeboardForm(ModelAndView mv, @ModelAttribute BoardDTO parameters,@AuthenticationPrincipal UserImpl loginInfo 
 			,@RequestParam MultipartFile freeboardUpdate
-			,HttpServletRequest request) {
+			,HttpServletRequest request
+			,RedirectAttributes rttr) {
 		int result = 0;
 		BoardFileDTO boardFileDTO = new BoardFileDTO();
 		if(!freeboardUpdate.isEmpty()) {
-			String root = request.getSession().getServletContext().getRealPath("resources");
+			String root = request.getSession().getServletContext().getRealPath("\\");
 			
 			String fileUploadDirectory = root + "\\upload\\freeboard";
 			
@@ -257,20 +247,36 @@ public class BoardController {
 			boardFileDTO.setSavedPath(fileUploadDirectory);
 			boardFileDTO.setWriteNo(parameters.getWriteNo());
 			
+			try {
+				
+				freeboardUpdate.transferTo(new File(fileUploadDirectory + "\\" + savedName));
+				
+			}catch (IllegalStateException e) {
+				
+				e.printStackTrace();
+				
+			} catch (IOException e) {
+				
+				new File(fileUploadDirectory + "\\" + savedName).delete();
+				e.printStackTrace();
+			}
 			
+			result = boardService.modifyFreeboardFile(parameters, boardFileDTO);
+		}else {
+			
+			result = boardService.freeboardModify(parameters);
 		}
 		
+		String message= "";
 		
-		/* parameters(BoardDTO)를 서비스에 전달한다. */
-//		int result = boardService.freeboardModify(parameters);
-		
-		/* result 값이 1 이상이면 페이지 이동값을 /board/freeboarddetail?writeNo로 지정한다. parameters에 있는 writeNo값을 받아온다.  */
 		if(result > 0) {
-			
+			message = "게시판 수정 완료";
+		}else {
+			message = "게시판 수정 실패";
 		}
 		
-		mv.setViewName("redirect:/board/freeboarddetail?writeNo=" + parameters.getWriteNo());
-		mv.addObject("parameters", parameters);
+		rttr.addFlashAttribute("message", message);
+		mv.setViewName("redirect:/board/freeboarddetail\\?writeNo=" + parameters.getWriteNo());
 		
 		return mv;
 	}

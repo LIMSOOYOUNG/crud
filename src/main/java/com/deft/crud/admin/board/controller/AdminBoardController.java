@@ -1,6 +1,9 @@
 package com.deft.crud.admin.board.controller;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -19,6 +22,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.deft.crud.admin.board.model.dto.AdminBoardDTO;
 import com.deft.crud.admin.board.model.service.AdminBoardService;
 import com.deft.crud.board.model.dto.BoardDTO;
+import com.deft.crud.board.model.dto.BoardFileDTO;
 import com.deft.crud.member.model.service.UserImpl;
 
 @Controller
@@ -48,8 +52,9 @@ public class AdminBoardController {
 	/* POST방식을 써서 입력된 값을 DB에 전달 시켜준다. */
 	@PostMapping("noticeinsert")
 	public ModelAndView noticeInsertForm(ModelAndView mv, @ModelAttribute BoardDTO parameters,
-			@AuthenticationPrincipal UserImpl loginInfo) 
-					throws Exception{
+			@AuthenticationPrincipal UserImpl loginInfo, @RequestParam int writeNo
+			, @RequestParam(required = false) MultipartFile noticeUpload
+			, HttpServletRequest request) throws Exception{
 		
 		/* 로그인한 정보 */
 		int loginEmpNo = loginInfo.getEmpNo();
@@ -57,13 +62,53 @@ public class AdminBoardController {
 		/* BoardDTO에 로그인 값을 넣는다. */
 		parameters.setEmpNo(loginEmpNo);
 		
+		 if(!noticeUpload.isEmpty()) {
+			 
+			 String root = request.getSession().getServletContext().getRealPath("\\");
+			 
+			 String filePath  = root + "\\upload\\notice";
+			 
+			 File mkdir = new File(filePath);
+				if(!mkdir.exists()) {
+					mkdir.mkdirs();
+				}
+				
+				String originFileName = noticeUpload.getOriginalFilename();
+		    	String ext = originFileName.substring(originFileName.lastIndexOf("."));
+				String savedName = UUID.randomUUID().toString().replace("-", "") + ext;
+	
+				BoardFileDTO file = new BoardFileDTO();
+				file.setOriginalName(originFileName);
+				file.setSavedName(savedName);
+				file.setSavedPath(filePath);
+				file.setWriteNo(writeNo);
+				
+	
+				parameters.setBoardFileList(file);
+				
+				try {
+			    		
+					noticeUpload.transferTo(new File(filePath + "\\" + file.getSavedName()));
+			    	
+			    }catch (Exception e) {
+			    	e.printStackTrace();
+						
+						new File(filePath + "\\" + file.getSavedName()).delete();
+		
+			    }
+		 }
+		
 		/* 서비스에 BoardDTO를 담아서 보내준다. */
 		int result = adminBoardService.noticeInsert(parameters);
 		
+		String message = "";
+		
 		if(result > 0) {
-			mv.setViewName("redirect:/board/selectnotice");
+			
+			message = "공지사항 등록에 성공하셨습니다";
 		}
 		
+		mv.setViewName("redirect:/board/selectnotice");
 		return mv;
 	}
 	
@@ -76,28 +121,79 @@ public class AdminBoardController {
 		
 		AdminBoardDTO boardDTO = adminBoardService.noticeModifyform(writeNo);
 		
+		BoardFileDTO boardFileDTO = adminBoardService.noticeFileLook(writeNo);
+		
 		System.out.println("여기는 수정페이지입니다." + boardDTO);
 		
 		mv.setViewName("admin/noticemodify");
 		mv.addObject("boardDTO", boardDTO);
+		mv.addObject("boardFileDTO", boardFileDTO);
 		
 		return mv;
 	}
 	
 	@PostMapping("noticemodify")
 	public ModelAndView noticeModifyForm(ModelAndView mv, @ModelAttribute BoardDTO parameters
-			,@AuthenticationPrincipal UserImpl loginInfo) {
-		
-		/* parameters를 서비스에 전달한다. */
-		int result = adminBoardService.noticeModify(parameters);
-		
-		if(result > 0) {
+			,@AuthenticationPrincipal UserImpl loginInfo
+			,@RequestParam MultipartFile noticeUpdate
+			,HttpServletRequest request
+			,RedirectAttributes rttr) {
+		int result = 0;
+		BoardFileDTO boardFileDTO = new BoardFileDTO();
+		if(!noticeUpdate.isEmpty()) {
+			String root = request.getSession().getServletContext().getRealPath("\\");
 			
-			mv.setViewName("redirect:/board/noticedetail?writeNo=" + parameters.getWriteNo());
+			String fileUploadDirectory = root + "\\upload\\notice";
 			
+			File directory = new File(fileUploadDirectory);
+			
+			if(directory.exists()) {
+				System.out.println("폴더생성 : " + directory.mkdirs());
+			}
+			
+			/* 원본 파일 */
+			String originFileName = noticeUpdate.getOriginalFilename();
+			
+			/* 텍스트 확장자 */
+			String ext = originFileName.substring(originFileName.lastIndexOf("."));
+			
+			/* 파일명이 중복되지 않도록 설정 */
+			String savedName = UUID.randomUUID().toString().replace("-", "") + ext;
+			
+			boardFileDTO.setOriginalName(originFileName);
+			boardFileDTO.setSavedName(savedName);
+			boardFileDTO.setSavedPath(fileUploadDirectory);
+			boardFileDTO.setWriteNo(parameters.getWriteNo());
+			
+			try {
+				
+				noticeUpdate.transferTo(new File(fileUploadDirectory + "\\" + savedName));
+				
+			}catch (IllegalStateException e) {
+				
+				e.printStackTrace();
+				
+			} catch (IOException e) {
+				
+				new File(fileUploadDirectory + "\\" + savedName).delete();
+				e.printStackTrace();
+			}
+			
+			result = adminBoardService.noticeTextFileModify(parameters, boardFileDTO);
+		}else {
+			result = adminBoardService.noticeModify(parameters);
 		}
 		
-		mv.addObject("parameters", parameters);
+		String message= "";
+		
+		if(result > 0) {
+			message = "게시판 수정 완료";
+		}else {
+			message = "게시판 수정 실패";
+		}
+		
+		rttr.addFlashAttribute("message", message);
+		mv.setViewName("redirect:/board/noticedetail\\?writeNo=" + parameters.getWriteNo());
 		
 		return mv;
 		

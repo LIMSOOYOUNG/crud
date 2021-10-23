@@ -54,6 +54,16 @@ public interface BoardMapper {
 	/* 게시글 파일 */
 	BoardFileDTO detailFile(int writeNo);
 
+	/* 게시글 수정 */
+	int modifyFreeboardText(BoardDTO parameters);
+
+	/* 게시글 파일 수정 */
+	int modifyFreeboardFile(BoardFileDTO boardFileDTO);
+
+	/* 공지사항 보기 (파일) */
+	BoardFileDTO noticeFile(int writeNo);
+
+
 
 
 

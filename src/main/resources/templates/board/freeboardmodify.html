@@ -26,7 +26,7 @@
 
 						<!-- 게시판 폼 -->
 						<div class="col-lg-12">
-							<form th:action="freeboardmodify" method="post" enctype="multipart/form-data">
+							<form th:action="@{/board/freeboardmodify}" method="post" enctype="multipart/form-data">
 							<input type="hidden" name="writeNo" th:value="${boardDTO.writeNo}">
 							<input type="hidden" name="boardNo" th:value="${boardDTO.boardNo}">
 								<div class="input-group-md mb-3">
@@ -39,7 +39,7 @@
 								</div>
 								<div class="form-group mb-3">
 									<div class="input-group-prepend">
-								</div>
+								   </div>
 								<div class="form-group">
 									<textarea rows="20" cols="150" class="form-control"
 										id="exampleFormControlTextarea1" name="contents"
@@ -48,11 +48,11 @@
 								</div>
 								<div class="form-group">
 										<div>
-											<input th:if="${boardFileDTO}!=null" class="form-control" id="basic-url" aria-describedby="basic-addon3" th:value="${boardFileDTO.originalName}" th:readonly="readonly">
+											<input th:if="${boardFileDTO}!=null" class="form-control"  aria-describedby="basic-addon3" th:value="${boardFileDTO.originalName}" th:readonly="readonly">
 										</div>
 										<br>
                      					<div class="custom-file">
-                     						<input type="file" name="freeboardUpdate" class="form-control" multiple >
+                     						<input type="file" name="freeboardUpdate" class="form-control" >
                       					</div>
                    					</div>
                             		<br>
