@@ -25,7 +25,9 @@
 						</ol>
 					</div>
 					<div align="right">
-						<button type="button" class="btn btn-primary" th:onclick="|location.href='@{/admin/noticeinsert}'|">공지사항 등록</button>
+						<span th:if="${#authentication.principal.authority != 'ROLE_EMP'}">
+							<button type="button" class="btn btn-primary" th:onclick="|location.href='@{/admin/noticeinsert}'|">공지사항 등록</button>
+						</span>
 					</div>
 					<br>
 
@@ -75,6 +77,7 @@
 			</div>
 		</div>
 	</div>
+
 
 	<!-- Script -->
 	<th:block th:replace="@{/common/script} :: script"></th:block>

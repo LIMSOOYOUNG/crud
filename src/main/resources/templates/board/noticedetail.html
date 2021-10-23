@@ -23,7 +23,9 @@
 					<div align="right">
 						<form action="/admin/noticedelete" method="post">
 							<input type="hidden" name="writeNo" th:value="${boardDTO.writeNo}">
-							<button type="submit"  class="btn btn-primary" id="deletebtn" >삭제</button>
+							<span th:if="${#authentication.principal.authority != 'ROLE_EMP'}">	
+								<button type="submit"  class="btn btn-primary" id="deletebtn" >삭제</button>
+							</span>
 						</form>
 					</div>
 					<br>
@@ -62,7 +64,9 @@
                             		<textarea rows="20" cols="150" class="form-control" id="exampleFormControlTextarea1" th:text="${boardDTO.contents}" th:readonly="readonly"></textarea>
                             	</div>
                             	<div align="right">
-                            		<button type="button" class="btn btn-primary" th:onclick="|location.href='@{/admin/noticemodify(writeNo=${boardDTO.writeNo})}'|">수정</button>
+                            		<span th:if="${#authentication.principal.authority != 'ROLE_EMP'}">
+                            			<button type="button" class="btn btn-primary" th:onclick="|location.href='@{/admin/noticemodify(writeNo=${boardDTO.writeNo})}'|">수정</button>
+                            		</span>
                             		<button type="button" class="btn btn-primary" th:onclick="history.back()">뒤로가기</button>
                         		</div> 
                             	</div>
@@ -71,6 +75,7 @@
 			</div>
 		</div>
 	</div>
+
 
 	<!-- Script -->
 	<th:block th:replace="@{/common/script} :: script"></th:block>

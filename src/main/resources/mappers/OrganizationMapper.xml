@@ -26,7 +26,7 @@
 	</select>
 	
 	<select id="selectJob" resultMap="jobResultMap">
-		SELECT /* com.deft.crud.organization.model.dao.OrganizationMapper#selectDepartment() */
+		SELECT /* com.deft.crud.organization.model.dao.OrganizationMapper#selectJob() */
                J.JOB_CODE
              , J.JOB_NAME
              , J.JOB_STATUS
@@ -96,7 +96,6 @@
           FROM TBL_JOB J
          WHERE J.JOB_CODE = #{ jobCode }
 	</select>
-	
 	<select id="deptModifyForm" parameterType="_int" resultType="com.deft.crud.organization.model.dto.DepartmentDTO">
 		SELECT /* com.deft.crud.organization.model.dao.OrganizationMapper#deptModifyForm() */
                D.DEPT_CODE
