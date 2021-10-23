@@ -1,5 +1,6 @@
 <html lang="ko"
-	xmlns:th="https://www.thymeleaf.org">
+	xmlns:th="https://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 
 	<!-- Sidebar -->
 	<th:block th:fragment="sidebar">
@@ -76,6 +77,7 @@
 					</div>
 				</div>
 			</li>
+			<th:block sec:authorize="hasRole('MANAGER')">
 			<li class="nav-item">
 				<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseIncome" aria-expanded="true"
 				   aria-controls="collapseIncome">
@@ -92,6 +94,7 @@
 					</div>
 				</div>
 			</li>
+			</th:block>
 			<li class="nav-item">
 				<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseInventory" aria-expanded="true"
 				   aria-controls="collapseInventory">
