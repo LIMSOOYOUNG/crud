@@ -401,7 +401,9 @@
     </delete>
 
     <!-- 전체 고객 조회 -->
-    <select id="selectAllCustomer" resultMap="customerCompanyResultMap">
+    <select id="selectAllCustomer"
+            resultMap="customerCompanyResultMap"
+            parameterType="com.deft.crud.member.model.service.UserImpl">
         SELECT /* com.deft.crud.customer.model.dao.CustomerMapper#selectAllCustomer() */
                C.CUSTOMER_NAME
              , CP.COMPANY_NAME
@@ -415,11 +417,21 @@
           LEFT JOIN TBL_EMP_INFO E ON (C.EMP_NO = E.EMP_NO)
           LEFT JOIN TBL_EXT_CUSTOMER_DETAIL EX ON (C.CUSTOMER_NO = EX.CUSTOMER_NO)
          WHERE EX.CUSTOMER_STATUS IS NOT NULL
-         ORDER BY C.CUSTOMER_NO DESC
+        <choose>
+            <when test="authority == 'ROLE_MANAGER'">
+                AND E.MANAGER_NO = #{ empNo }
+            </when>
+            <when test="authority != 'ROLE_MANAGER'">
+                AND E.EMP_NO = #{ empNo }
+            </when>
+        </choose>
+        ORDER BY C.CUSTOMER_NO DESC
     </select>
 
     <!-- 기존 고객 조회(해지 고객 제외) -->
-    <select id="selectExtCustomerList" resultMap="extCustomerResultMap">
+    <select id="selectExtCustomerList"
+            resultMap="extCustomerResultMap"
+            parameterType="com.deft.crud.member.model.service.UserImpl">
         SELECT /* com.deft.crud.customer.model.dao.CustomerMapper#selectCustomerList() */
                C.CUSTOMER_NO
              , C.CUSTOMER_NAME
@@ -435,11 +447,21 @@
           LEFT JOIN TBL_JOB J ON (E.JOB_CODE = J.JOB_CODE)
           JOIN TBL_EXT_CUSTOMER_DETAIL EX ON (C.CUSTOMER_NO = EX.CUSTOMER_NO)
          WHERE EX.CUSTOMER_STATUS = '기존고객'
+        <choose>
+            <when test="authority == 'ROLE_MANAGER'">
+                AND E.MANAGER_NO = #{ empNo }
+            </when>
+            <when test="authority != 'ROLE_MANAGER'">
+                AND E.EMP_NO = #{ empNo }
+            </when>
+        </choose>
          ORDER BY C.CUSTOMER_NO DESC
     </select>
 
     <!-- 분석 고객 조회 -->
-    <select id="selectAllAnalysisCustomer" resultMap="customerCompanyResultMap">
+    <select id="selectAllAnalysisCustomer"
+            resultMap="customerCompanyResultMap"
+            parameterType="com.deft.crud.member.model.service.UserImpl">
         SELECT /* com.deft.crud.customer.model.dao.CustomerMapper#selectAllAnalysisCustomer() */
                C.CUSTOMER_NAME
              , C.CUSTOMER_NO
@@ -454,7 +476,16 @@
           LEFT JOIN TBL_ANA_CUSTOMER_DETAIL AN ON (C.CUSTOMER_NO = AN.CUSTOMER_NO)
           LEFT JOIN TBL_CUSTOMER_PRODUCT CD ON (AN.CUSTOMER_NO = CD.CUSTOMER_NO)
           LEFT JOIN TBL_PRODUCT P ON (P.PRODUCT_NO = CD.PRODUCT_NO)
-         WHERE CD.CUSTOMER_NO IS NOT NULL GROUP BY C.CUSTOMER_NAME, CP.COMPANY_NAME
+         WHERE CD.CUSTOMER_NO IS NOT NULL
+        <choose>
+            <when test="authority == 'ROLE_MANAGER'">
+                AND E.MANAGER_NO = #{ empNo }
+            </when>
+            <when test="authority != 'ROLE_MANAGER'">
+                AND E.EMP_NO = #{ empNo }
+            </when>
+        </choose>
+         GROUP BY C.CUSTOMER_NAME, CP.COMPANY_NAME
              , E.EMP_NAME, AN.CUSTOMER_STATUS, CP.BUSINESS_STATUS, C.CUSTOMER_NO
          ORDER BY C.CUSTOMER_NO DESC
     </select>
@@ -668,7 +699,7 @@
 
     <!-- 고객 정렬 조회 -->
     <select id="selectCustomerByStatus"
-            parameterType="string"
+            parameterType="com.deft.crud.member.model.service.UserImpl"
             resultMap="customerCompanyResultMap">
         SELECT /* com.deft.crud.customer.model.dao.CustomerMapper#selectCustomerByStatus() */
                C.CUSTOMER_NAME
@@ -684,6 +715,14 @@
           LEFT JOIN TBL_EXT_CUSTOMER_DETAIL EX ON (C.CUSTOMER_NO = EX.CUSTOMER_NO)
          WHERE EX.CUSTOMER_STATUS IS NOT NULL
         <choose>
+            <when test="userInfo.authority == 'ROLE_MANAGER'">
+                AND E.MANAGER_NO = #{ userInfo.empNo }
+            </when>
+            <when test="userInfo.authority != 'ROLE_MANAGER'">
+                AND E.EMP_NO = #{ userInfo.empNo }
+            </when>
+        </choose>
+        <choose>
             <when test="customerStatus == 'existing'">
                 AND EX.CUSTOMER_STATUS = '기존고객'
             </when>
@@ -696,7 +735,7 @@
 
     <!-- 분석 고객 정렬 조회 -->
     <select id="selectAnaCustomerByStatus"
-            parameterType="string"
+            parameterType="com.deft.crud.member.model.service.UserImpl"
             resultMap="customerCompanyResultMap">
         SELECT /* com.deft.crud.customer.model.dao.CustomerMapper#selectAllAnalysisCustomer() */
                C.CUSTOMER_NAME
@@ -713,20 +752,28 @@
           LEFT JOIN TBL_CUSTOMER_PRODUCT CD ON (AN.CUSTOMER_NO = CD.CUSTOMER_NO)
           LEFT JOIN TBL_PRODUCT P ON (P.PRODUCT_NO = CD.PRODUCT_NO)
          WHERE CD.CUSTOMER_NO IS NOT NULL
-           <choose>
-               <when test="customerStatus == 'potential'">
-                   AND AN.CUSTOMER_STATUS = '잠재고객'
-               </when>
-               <when test="customerStatus == 'hold'">
-                   AND AN.CUSTOMER_STATUS = '보류고객'
-               </when>
-               <when test="customerStatus == 'success'">
-                   AND AN.CUSTOMER_STATUS = '성공고객'
-               </when>
-               <when test="customerStatus == 'failed'">
-                   AND AN.CUSTOMER_STATUS = '실패고객'
-               </when>
-           </choose>
+        <choose>
+            <when test="userInfo.authority == 'ROLE_MANAGER'">
+                AND E.MANAGER_NO = #{ userInfo.empNo }
+            </when>
+            <when test="userInfo.authority != 'ROLE_MANAGER'">
+                AND E.EMP_NO = #{ userInfo.empNo }
+            </when>
+        </choose>
+        <choose>
+            <when test="customerStatus == 'potential'">
+                AND AN.CUSTOMER_STATUS = '잠재고객'
+            </when>
+            <when test="customerStatus == 'hold'">
+                AND AN.CUSTOMER_STATUS = '보류고객'
+            </when>
+            <when test="customerStatus == 'success'">
+                AND AN.CUSTOMER_STATUS = '성공고객'
+            </when>
+            <when test="customerStatus == 'failed'">
+                AND AN.CUSTOMER_STATUS = '실패고객'
+            </when>
+        </choose>
          GROUP BY C.CUSTOMER_NAME, CP.COMPANY_NAME
              , E.EMP_NAME, AN.CUSTOMER_STATUS, CP.BUSINESS_STATUS, C.CUSTOMER_NO
          ORDER BY C.CUSTOMER_NO DESC

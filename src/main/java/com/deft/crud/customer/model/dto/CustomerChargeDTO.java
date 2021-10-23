@@ -11,7 +11,7 @@ import java.io.Serializable;
 @ToString
 public class CustomerChargeDTO implements Serializable {
 
-    private int chargeNo;
+    private String chargeNo;
     private String orderNo;
     private String chargeStatus;
     private String collectBillStatus;

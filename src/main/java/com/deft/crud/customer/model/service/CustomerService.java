@@ -2,6 +2,7 @@ package com.deft.crud.customer.model.service;
 
 import com.deft.crud.customer.model.dao.CustomerMapper;
 import com.deft.crud.customer.model.dto.*;
+import com.deft.crud.member.model.service.UserImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,9 +20,9 @@ public class CustomerService {
     }
 
     /* 전체 고객 조회 */
-    public List<CustomerCompanyDTO> selectAllCustomer() {
+    public List<CustomerCompanyDTO> selectAllCustomer(UserImpl userInfo) {
 
-        return customerMapper.selectAllCustomer();
+        return customerMapper.selectAllCustomer(userInfo);
     }
 
     /* 기존 고객 조회 (해지 고객 제외) */
@@ -31,15 +32,21 @@ public class CustomerService {
     }
 
     /* 분석 고객 조회 */
-    public List<CustomerCompanyDTO> selectAllAnalysisCustomer() {
+    public List<CustomerCompanyDTO> selectAllAnalysisCustomer(UserImpl userInfo) {
 
-        return customerMapper.selectAllAnalysisCustomer();
+        return customerMapper.selectAllAnalysisCustomer(userInfo);
     }
 
     /* 상품 조회 */
     public List<ProductDTO> selectProduct() {
 
         return customerMapper.selectProduct();
+    }
+
+    /* 담당사원 정보 조회 */
+    public List<EmpInfoDTO> selectEmpInfo() {
+
+        return customerMapper.selectEmpInfo();
     }
 
     /* 고객사 전체 조회 */
@@ -64,12 +71,6 @@ public class CustomerService {
     public List<BusinessActivityDTO> selectBusinessActivity(int customerNo) {
 
         return customerMapper.selectBusinessActivity(customerNo);
-    }
-
-    /* 담당사원 정보 조회 */
-    public List<EmpInfoDTO> selectEmpInfo() {
-
-        return customerMapper.selectEmpInfo();
     }
 
     /* 고객화 변경 이력 조회 */
@@ -223,14 +224,14 @@ public class CustomerService {
     }
 
     /* 고객 정렬 조회 */
-    public List<CustomerCompanyDTO> selectCustomerByStatus(String customerStatus) {
+    public List<CustomerCompanyDTO> selectCustomerByStatus(String customerStatus, UserImpl userInfo) {
 
-        return customerMapper.selectCustomerByStatus(customerStatus);
+        return customerMapper.selectCustomerByStatus(customerStatus, userInfo);
     }
 
     /* 분석 고객 정렬 조회 */
-    public List<CustomerCompanyDTO> selectAnaCustomerByStatus(String customerStatus) {
+    public List<CustomerCompanyDTO> selectAnaCustomerByStatus(String customerStatus, UserImpl userInfo) {
 
-        return customerMapper.selectAnaCustomerByStatus(customerStatus);
+        return customerMapper.selectAnaCustomerByStatus(customerStatus, userInfo);
     }
 }
