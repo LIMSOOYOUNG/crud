@@ -23,10 +23,10 @@ public class CustomerService {
 
         return customerMapper.selectAllCustomer();
     }
-    
+
     /* 기존 고객 조회 (해지 고객 제외) */
     public List<ExtCustomerDTO> selectExtCustomerList() {
-    	
+
     	return customerMapper.selectExtCustomerList();
     }
 
@@ -34,6 +34,18 @@ public class CustomerService {
     public List<CustomerCompanyDTO> selectAllAnalysisCustomer() {
 
         return customerMapper.selectAllAnalysisCustomer();
+    }
+
+    /* 상품 조회 */
+    public List<ProductDTO> selectProduct() {
+
+        return customerMapper.selectProduct();
+    }
+
+    /* 고객사 전체 조회 */
+    public List<CustomerCompanyDTO> selectAllCustomerCompany() {
+
+        return customerMapper.selectAllCustomerCompany();
     }
 
     /* 기존 고객 정보 조회 */
@@ -44,15 +56,26 @@ public class CustomerService {
 
     /* 분석 고객 정보 조회 */
     public CustomerCompanyDTO selectAnalysisCustomerInfo(int customerNo) {
-    	CustomerCompanyDTO customer = customerMapper.selectAnalysisCustomerInfo(customerNo);
-    	System.out.println("고객상세정보 : " + customer);
-        return customer;
+
+    	return customerMapper.selectAnalysisCustomerInfo(customerNo);
     }
 
     /* 영업 활동 조회 */
     public List<BusinessActivityDTO> selectBusinessActivity(int customerNo) {
 
         return customerMapper.selectBusinessActivity(customerNo);
+    }
+
+    /* 담당사원 정보 조회 */
+    public List<EmpInfoDTO> selectEmpInfo() {
+
+        return customerMapper.selectEmpInfo();
+    }
+
+    /* 고객화 변경 이력 조회 */
+    public List<AnaCustomerDetailHisDTO> selectCustomizationHistory(int customerNo) {
+
+        return customerMapper.selectCustomizationHistory(customerNo);
     }
 
     /* 영업 활동 선택 조회 */
@@ -96,6 +119,13 @@ public class CustomerService {
         return customerMapper.modifyAnaCustomerStatus(parameters);
     }
 
+    /* 분석고객 -> 기존고객 변경 */
+    @Transactional
+    public int insertExtCustomer(AnaCustomerDetailDTO parameters) {
+
+        return customerMapper.insertExtCustomer(parameters);
+    }
+
     /* 분석 고객 고객화 수정 */
     @Transactional
     public int modifyAnaCustomization(AnaCustomerDetailDTO parameters) {
@@ -103,9 +133,11 @@ public class CustomerService {
         return customerMapper.modifyAnaCustomization(parameters);
     }
 
-    public List<EmpInfoDTO> selectEmpName(String term) {
+    /* 고객화 변경 이력 등록 */
+    @Transactional
+    public int insertAnaCustomizationHistory(AnaCustomerDetailDTO parameters) {
 
-        return customerMapper.selectEmpName(term);
+        return customerMapper.insertAnaCustomizationHistory(parameters);
     }
 
     /* 분석 고객 영업활동 등록 */
@@ -113,12 +145,6 @@ public class CustomerService {
     public int insertActivity(BusinessActivityDTO parameters) {
 
         return customerMapper.insertActivity(parameters);
-    }
-
-    /* 담당사원 정보 조회 */
-    public List<EmpInfoDTO> selectEmpInfo() {
-
-        return customerMapper.selectEmpInfo();
     }
 
     /* 담당사원 변경 */
@@ -140,12 +166,6 @@ public class CustomerService {
     public int deleteActivity(BusinessActivityDTO parameters) {
 
         return customerMapper.deleteActivity(parameters);
-    }
-
-    /* 고객사 전체 조회 */
-    public List<CustomerCompanyDTO> selectAllCustomerCompany() {
-
-        return customerMapper.selectAllCustomerCompany();
     }
 
     /* 고객사 상세 조회 */
@@ -175,13 +195,7 @@ public class CustomerService {
         return customerMapper.insertCustomerCompany(parameters);
     }
 
-    /* 상품 조회 */
-    public List<ProductDTO> selectProduct() {
-
-        return customerMapper.selectProduct();
-    }
-
-    /* 고객 기본정보 등록 */
+    /* 분석 고객 기본정보 등록 */
     @Transactional
     public int insertCustomer(InsertCustomerDTO parameters) {
 
@@ -200,26 +214,6 @@ public class CustomerService {
     public int insertProduct(List<CustomerProductDTO> products) {
 
         return customerMapper.insertProduct(products);
-    }
-
-    /* 분석고객 -> 기존고객 변경 */
-    @Transactional
-    public int insertExtCustomer(AnaCustomerDetailDTO parameters) {
-
-        return customerMapper.insertExtCustomer(parameters);
-    }
-
-    /* 고객화 변경 이력 조회 */
-    public List<AnaCustomerDetailHisDTO> selectCustomizationHistory(int customerNo) {
-
-        return customerMapper.selectCustomizationHistory(customerNo);
-    }
-
-    /* 고객화 변경 이력 등록 */
-    @Transactional
-    public int insertAnaCustomizationHistory(AnaCustomerDetailDTO parameters) {
-
-        return customerMapper.insertAnaCustomizationHistory(parameters);
     }
 
     /* 상품 구매 내역 조회 */

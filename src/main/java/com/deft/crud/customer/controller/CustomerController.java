@@ -46,6 +46,7 @@ public class CustomerController {
     @GetMapping("/ana")
     public ModelAndView selectAllAnalysisCustomer(ModelAndView mv) {
 
+        /* 차례대로 고객 정보, 관심 상품, 담당 사원 정보, 고객사 정보 조회 */
         List<CustomerCompanyDTO> customerList = customerService.selectAllAnalysisCustomer();
         List<ProductDTO> productList = customerService.selectProduct();
         List<EmpInfoDTO> empInfoList = customerService.selectEmpInfo();
@@ -191,6 +192,8 @@ public class CustomerController {
 
         int customerNo = parameters.getCustomerNo();
 
+        /* 고객의 정보와 고객사의 정보를 모두 수정해야 하므로 Business Logic 두 번 수행
+         *  차례대로 고객 정보 수정, 고객사 정보 수정 */
         int customerResult = customerService.modifyDetailInfoToCustomer(parameters);
         int companyResult = customerService.modifyDetailInfoToCompany(parameters);
 
@@ -265,6 +268,7 @@ public class CustomerController {
 
         int customerNo = parameters.getCustomerNo();
 
+        /* 고객화 단계를 변경하고, 이력을 남기기 위해 modify 후 이력 테이블에 insert */
         int modifyResult = customerService.modifyAnaCustomization(parameters);
         int insertResult = customerService.insertAnaCustomizationHistory(parameters);
 
@@ -574,14 +578,18 @@ public class CustomerController {
                                        @ModelAttribute InsertCustomerDTO parameters,
                                        @RequestParam List<Integer> productNo) {
 
+        /* 분석 고객 기본 정보 insert */
         int customerResult = customerService.insertCustomer(parameters);
 
+        /* 상품 다중 등록을 위해 List로 선언 후 향상된 for문을 통해 List에 View에서 입력받은 상품 dto add
+        *  이 때, 어떤 고객의 관심상품인지 알기 위해 Primary Key인 customerNo를 이용 */
         List<CustomerProductDTO> products = new ArrayList<>();
 
         for (int integer : productNo) {
             products.add(new CustomerProductDTO(parameters.getCustomerNo(), integer, null));
         }
 
+        /* 등록할 고객의 상태와 관심 상품 insert */
         int detailResult = customerService.insertDetail(parameters);
         int productResult = customerService.insertProduct(products);
 
