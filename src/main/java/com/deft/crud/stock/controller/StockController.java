@@ -248,7 +248,7 @@ public class StockController {
 		
 		String authority = userInfo.getAuthority();
 		
-		mv.addObject("authority", objectMapper.writeValueAsString(authority));		//접속중인 사용자의 권한
+		mv.addObject("authority", objectMapper.writeValueAsString(authority));			//접속중인 사용자의 권한
 		mv.setViewName("jsonView");
 		
 		return mv;

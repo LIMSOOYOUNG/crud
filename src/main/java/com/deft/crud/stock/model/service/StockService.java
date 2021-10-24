@@ -246,16 +246,12 @@ public class StockService {
 		LocalDateTime sysDateLocalDateTime = LocalDateTime.now();
 
 		String sysDate= sysDateLocalDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss"));
-		
-		System.out.println("@@@" + sysDate);
 
 		parameters.getApprovalDocumentDTO().setDocumentProcessDate(sysDate);
 
 		int result = 0;
 
 		int modifyResult = stockMapper.modifyReleaseStatus(parameters);			// 결재상태 변경(결재 처리)
-
-		System.out.println("결재상태 변경 성공 여부 : " + modifyResult);
 		
 		String approvalStatus = parameters.getApprovalDocumentDTO().getDocumentStatus();
 		
@@ -269,7 +265,6 @@ public class StockService {
 				
 				stockMapper.updateStorage(requestStock);		// 출고 요청수량 만큼 창고재고수량 감소
 			}			
-			
 			
 			int hisResult = stockMapper.insertReleaseReqHistoryParameter(parameters);	//결재이력 INSERT 
 
