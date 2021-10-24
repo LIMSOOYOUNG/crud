@@ -109,4 +109,15 @@
            AND B.PROGRESS_STATUS = '실패'
 	</select>
 	
+	<!-- 성공한 영업기회 그래프 -->
+	<select id="successBusinessChanceChart" resultType="_int" parameterType="com.deft.crud.member.model.service.UserImpl">
+		SELECT /*com.deft.crud.product.model.dao.SalesMapper#failedBusinessChanceChart()*/
+               COUNT(B.DUE_DATE) "FAILED_BUSINESS_CHANCE_COUNT"
+          FROM TBL_BUSINESS_CHANCE B
+         WHERE B.EMP_NO = #{ loginInfo.empNo }
+           AND EXTRACT(YEAR FROM B.DUE_DATE) = #{ successBusinessChanceYear }
+           AND EXTRACT(MONTH FROM B.DUE_DATE) = #{ successBusinessChanceMonth } 
+           AND B.PROGRESS_STATUS = '성공'
+	</select>
+	
 </mapper>

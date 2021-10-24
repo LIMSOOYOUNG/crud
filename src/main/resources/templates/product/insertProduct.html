@@ -33,11 +33,9 @@
 									<h6 class="m-0 font-weight-bold text-primary">이미지 등록</h6>
 								</div>
 								<div class="card-body">
-									<div class="form-group" id="productImgArea">
+									<div class="form-group" id="productImgArea" th:align="center">
 										<img id="productImg" width="250" height="300" class="mx-3">
-										<div class="thumbnail-file-area">
-											<input type="file" class="mx-3" id="productThumbNail" name="productThumbNail" onchange="loadImg(this)" required>
-										</div>
+										<input type="file" class="mx-3 col-xl-6" id="productThumbNail" name="productThumbNail" onchange="loadImg(this)" required>
 									</div>
 								</div>
 							</div>

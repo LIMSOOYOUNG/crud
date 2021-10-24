@@ -6,6 +6,8 @@
 	<th:block th:replace="@{common/config} :: config"></th:block>
 </head>
 <script>
+
+	/* 성공 확인 메세지 */
 	const message = '[[${ message }]]';
 	
 	if(message) {
@@ -32,20 +34,15 @@
 							<li class="breadcrumb-item active" aria-current="page">상품조회</li>
 						</ol>
 					</div>
-			
-					<!-- Row -->
 					<div class="row">
-			
-						<!-- DataTable with Hover -->
 						<div class="col-lg-12">
 							<div class="card mb-4">
 								<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
 									<h6 class="m-0 font-weight-bold text-primary">전체상품현황</h6>
 									<a th:href="@{/product/insert}"><input type="button" id="insertProduct" class="btn btn-primary" value="상품등록"></a>
 								</div>
-			
 								<div class="table-responsive p-3">
-									<table class="table align-items-center table-flush table-hover" id="dataTableHover">
+									<table class="table align-items-center table-flush table-hover" id="productTable">
 										<thead th:align="center" class="thead-light">
 											<tr>
 												<th>상품번호</th>
@@ -83,11 +80,10 @@
 	<!-- Script -->
     <th:block th:replace="@{/common/script} :: script"></th:block>
 
-	<!-- Page level custom scripts -->
+	<!-- 테이블 스크립트 -->
 	<script>
     $(document).ready(function () {
-      $('#dataTable').DataTable(); // ID From dataTable 
-      $('#dataTableHover').DataTable(); // ID From dataTable with Hover
+      $('#productTable').DataTable(); // ID From dataTable 
     });
     	
     </script>

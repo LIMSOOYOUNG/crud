@@ -20,11 +20,13 @@
 					<div class="row">
 						<div class="col-lg-6">
 							<div class="card mb-4">
+								<h5 class="m-0 font-weight-bold text-primary mt-3" align="center">내 실적 현황</h5>
 								<canvas class="mx-3 my-3" id="empPerformanceChart"></canvas>
 							</div>
 						</div>
 						<div class="col-lg-6">
 							<div class="card mb-4">
+								<h5 class="m-0 font-weight-bold text-primary mt-3" align="center">부서 실적 현황</h5>
 								<canvas class="mx-3 my-3" id="deptPerformanceChart"></canvas>
 							</div>
 						</div>
@@ -33,11 +35,15 @@
 					<div class="row">
 						<div class="col-lg-6">
 							<div class="card mb-4">
-								<canvas class="mx-3 my-3" id="failedBusinessChanceChart"></canvas>
+								<h5 class="m-0 font-weight-bold text-primary mt-3" align="center">영업기회 현황</h5>
+								<canvas class="mx-3 my-3" id="businessChanceChart"></canvas>
 							</div>	
 						</div>
 						<div class="col-lg-6">
 							<div class="card mb-4">
+								<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+									<h5 class="m-0 font-weight-bold text-primary mt-3" align="center">이번 달 실적 현황</h5>
+								</div>
 								<div class="table-responsive p-3">
 									<table class="table align-items-center table-flush table-hover" id="dataTableHover">
 										<thead th:align="center" class="thead-light">
@@ -92,9 +98,6 @@
 					
 					const userSales = JSON.parse(data.userSalesChart);
 					const userTargetSales = JSON.parse(data.userTargetSalesChart);
-					
-					console.log(userSales);
-					console.log(userTargetSales);
 					
 					var config = {
 							
@@ -161,7 +164,6 @@
 			
 		
 // 		/* 부서 실적 조회 차트 */
-		
 			const ctx2 = document.getElementById('deptPerformanceChart');
 			
 			$.ajax({
@@ -170,8 +172,6 @@
 				success: function(data, status, xhr) {
 					
 					const deptSales = JSON.parse(data.deptSalesChart);
-					
-					console.log(deptSales);
 					
 					var config = {
 							
@@ -216,16 +216,16 @@
 			
 			});
 		
-		/* 영업기회 실패 조회 */
-		
-			const ctx3 = document.getElementById('failedBusinessChanceChart');
+			/* 영업기회 현황 조회 */
+			const ctx3 = document.getElementById('businessChanceChart');
 			
 			$.ajax({
-				url:"/dashboard/failed/businessChance",
+				url:"/dashboard/businessChance",
 				type: 'GET',
 				success: function(data, status, xhr) {
 					
 					const failedBusinessChance = JSON.parse(data.failedBusinessChanceChart);
+					const successBusinessChance = JSON.parse(data.successBusinessChanceChart);
 					
 					var config = {
 							
@@ -247,10 +247,30 @@
 										failedBusinessChance[10], 
 										failedBusinessChance[11]
 									   ], 
+								backgroundColor: ['rgba(255, 99, 132, 0.2)'],
+								borderColor: ['rgba(255, 99, 132, 1)'],
+								borderWidth: 1,
+								
+							}, {
+								label: '성공한 영업기회',
+								data: [successBusinessChance[0], 
+										successBusinessChance[1], 
+										successBusinessChance[2], 
+										successBusinessChance[3], 
+										successBusinessChance[4], 
+										successBusinessChance[5], 
+										successBusinessChance[6], 
+										successBusinessChance[7], 
+										successBusinessChance[8], 
+										successBusinessChance[9], 
+										successBusinessChance[10], 
+										successBusinessChance[11]
+									   ], 
 							    backgroundColor: ['rgba(153, 102, 255, 0.2)'],
 								borderColor: [ 'rgba(153, 102, 255, 1)'],
-								borderWidth: 1
+								borderWidth: 1,
 							}]
+					
 						},
 						options: {
 							scales: {
