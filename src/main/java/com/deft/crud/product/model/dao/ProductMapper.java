@@ -26,7 +26,7 @@ public interface ProductMapper {
 	/* 상품 이미지 조회 */
 	ProductImageDTO selectProductImage(int productNo);
 	
-	/* 다중 카테고리  */
+	/* 다중 카테고리 선택 위해 상위카테고리 선택시 하위카테고리 조회  */
 	List<ProductCategoryDTO> selectSmallCategoryList(int refCategoryCode);
 	
 	/* 상위 카테고리 조회 */
@@ -72,12 +72,5 @@ public interface ProductMapper {
 	/* 하위 카테고리 수정*/
 	int updateCategory(ProductCategoryDTO parameters);
 
-	
-	
-
-	
-
-
-//	ProductCategoryDTO selectRefCategoryForUpdate(int refCategoryCode);
 
 }

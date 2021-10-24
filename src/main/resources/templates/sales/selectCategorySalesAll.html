@@ -116,8 +116,9 @@
     });
 
     /* 연도와 월별 카테고리 실적, 선택한 상위 카테고리 실적만 볼 수 있게 ajax 통신으로 처리 */
-    $(document).on('click', '#selectPerformButton' , function() {
+    $(document).on('click', '#selectPerformButton', function() {
         
+    	/* 선택한 연도와 월 상위카테고리 번호를 data로 설정하고 전달*/
         let collectBillYear = $('#collectBillYear').val();
         let collectBillMonth = $('#collectBillMonth').val();
         let refCategoryCode = $('#refCategoryCode').val();
@@ -129,7 +130,7 @@
         let data = {"collectBillYear" : collectBillYear, "collectBillMonth" : collectBillMonth , "refCategoryCode" : refCategoryCode};
 
         $.ajax({
-            url: "/sales/select/category/peform/date", 
+            url: "/sales/select/category/perform/date", 
             type: "post",
             data: data,
             success: function(data, status, xhr) {

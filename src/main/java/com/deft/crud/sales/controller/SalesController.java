@@ -50,15 +50,16 @@ public class SalesController {
 		 * 폼에다 실적을 등록하기 위한 연과 월을 확인해주기 위해 LocalDate 생성 후 현재 연도와 월의 객체를 뷰에 전달*/
 		LocalDate insertTargetDate = LocalDate.now();
 		
-		String performYear = Integer.toString(insertTargetDate.getYear());				// 디비에 값 저장을 위해 String 타입으로 형변환(연도)
-		String performMonth = Integer.toString(insertTargetDate.getMonthValue());       // 위와 내용 같음 (월)
+		/* 현재 연도와 현재 월을 LocalDate에서 getYear() getMonth() 속성에 있는  */
+		String performYear = Integer.toString(insertTargetDate.getYear());				
+		String performMonth = Integer.toString(insertTargetDate.getMonthValue());
 		
 		TargetPerfomDTO targetPerformDate = new TargetPerfomDTO();
 		targetPerformDate.setPerformYear(performYear);
 		targetPerformDate.setPerformMonth(performMonth);
 		targetPerformDate.setEmpNo(empNo);
 		
-		/* 로그인 된 사원의 목표 실적 조회*/
+		/* 로그인 된 사원의 목표 실적 조회 */
 		List<TargetPerfomDTO> empTargetPerformList = salesService.empTargetPerformList(targetPerformDate);
 		
 		mv.addObject("performYear", performYear);
@@ -76,7 +77,7 @@ public class SalesController {
 		
 		response.setContentType("application/json; charset=UTF-8");
 		
-		/* 세션에 저장된 사원 정보를 가지고 온다. */
+		/* 세션에 저장된 사원 번호를 가지고 온다. */
 		int empNo = loginInfo.getEmpNo();
 		
 		/* 사원 정보와 ajax 통신 할 때 받은 날짜 데이터와 세션에서 가져왔던 사원번호를 값을 담아준다. */
@@ -86,7 +87,6 @@ public class SalesController {
 		
 		/* 사원 실제 월간 실적 조회 */
 		List <PerformanceDTO> empPerformList = salesService.empPerformList(parameters);
-		System.out.println("empPerfomList : " + empPerformList);
 		
 		mv.addObject("empPerformList", objectMapper.writeValueAsString(empPerformList));
 		mv.setViewName("jsonView");
@@ -100,6 +100,7 @@ public class SalesController {
 		
 		response.setContentType("application/json; charset=UTF-8");
 		
+		/* 세션에 저장된 사원 번호를 가지고 온다. */
 		int empNo = loginInfo.getEmpNo();
 		
 		/* 사원 정보와 ajax 통신 할 때 받은 날짜 데이터와 세션에서 가져왔던 사원번호를 값을 담아준다. */
@@ -109,11 +110,9 @@ public class SalesController {
 		
 		/* 뷰에서 선택한 연도의 목표실적 조회 */
 		List<TargetPerfomDTO> checkedEmpTargetPerformList = salesService.checkedEmpTargetPerformList(parameters);
-		System.out.println("checkedEmpTargetPerformList : " + checkedEmpTargetPerformList);
 
 		/* 사원 실제 월간 실적 조회 */
 		List <PerformanceDTO> empPerformList = salesService.empPerformList(parameters);
-		System.out.println("empPerfomList : " + empPerformList);
 		
 		mv.addObject("checkedEmpTargetPerformList", objectMapper.writeValueAsString(checkedEmpTargetPerformList));
 		mv.addObject("empPerformList", objectMapper.writeValueAsString(empPerformList));
@@ -126,12 +125,7 @@ public class SalesController {
 	public ModelAndView selectUserPerformDetail(ModelAndView mv, @RequestParam("empNo") int empNo, 
 			@ModelAttribute CollectBillDTO parameters) {
 		
-		System.out.println("empNo : " + empNo);
-		System.out.println("parameters : " + parameters);
-		
 		List<PerformanceDTO> selectUserPerformDetail = salesService.selectUserPerformDetail(empNo, parameters);
-		
-		System.out.println("selectUserPerformDetail : " + selectUserPerformDetail);
 		
 		mv.addObject("parameters", parameters);
 		mv.addObject("selectUserPerformDetail", selectUserPerformDetail);
@@ -143,45 +137,18 @@ public class SalesController {
 	@GetMapping("/last/month/perform/select")
 	public ModelAndView selectLastMonthPerform(ModelAndView mv, @AuthenticationPrincipal UserImpl loginInfo) throws JsonProcessingException {
 		
-		/* 로그인된 사원의 번호와 부서 코드의 정보를 세션에서 가지고 온다.*/
-		int empNo = loginInfo.getEmpNo();
-		String deptCode = loginInfo.getDeptCode();
-		
-		/* LocalDate로 현재 시간 기준으로 연도와 전 달을 가지고 온다 */
-		LocalDate lastMonth = LocalDate.now().minusMonths(1);
-		
-		int collectBillYear = lastMonth.getYear();
-		int collectBillMonth = lastMonth.getMonthValue();
-		
-		/* 현재 연도와 전 달에 대한 값을 dto에 담아준다. */
-		CollectBillDTO collectBillDate = new CollectBillDTO();
-		collectBillDate.setCollectBillYear(collectBillYear);
-		collectBillDate.setCollectBillMonth(collectBillMonth);
-		
-		/* 사원이 속한 부서 전 달 평균 실적 조회*/
-		PerformanceDTO selectDeptAvgPeform = salesService.selectDeptAvgPeform(deptCode, collectBillDate);
-		
 		/* 사원의 전 달 실적 */
-		PerformanceDTO selectEmpPeformLastMonth = salesService.selectEmpPeformLastMonth(empNo, collectBillDate);
+		PerformanceDTO selectEmpPeformLastMonth = salesService.selectEmpPeformLastMonth(loginInfo);
 		
-		System.out.println("selectDeptAvgPeform : " + selectDeptAvgPeform);
-		
-		mv.addObject("selectDeptAvgPeform", objectMapper.writeValueAsString(selectDeptAvgPeform));
 		mv.addObject("selectEmpPeformLastMonth", objectMapper.writeValueAsString(selectEmpPeformLastMonth));
 		mv.setViewName("jsonView");
 		return mv;
 	}
 	
-	
-	
 	/* 사원 목표 실적 등록*/
 	@PostMapping("/insert/target")
 	public ModelAndView insertTargetSales(ModelAndView mv, @AuthenticationPrincipal UserImpl loginInfo, 
 			@ModelAttribute TargetPerfomDTO parameters, RedirectAttributes rttr) {
-		
-		int empNo = loginInfo.getEmpNo();
-		
-		parameters.setEmpNo(empNo);
 		
 		int result = salesService.insertTargetSales(parameters, loginInfo);
 		
@@ -202,21 +169,17 @@ public class SalesController {
 	@GetMapping("/dept/selectAll")
 	public ModelAndView selectDeptSalesAll(ModelAndView mv) {
 		
+		/* 현재 연도와 월의 정보를 LocalDate에서 가지고 온다.*/
 		LocalDate deptPerformDate = LocalDate.now();
-
-		int collectBillYear = deptPerformDate.getYear(); 										// 디비에 값 저장을 위해 String 타입으로 형변환(연도)
-		int collectBillMonth = deptPerformDate.getMonthValue();								// 위와 내용 같음 (월)
+		int collectBillYear = deptPerformDate.getYear(); 									
+		int collectBillMonth = deptPerformDate.getMonthValue();								
 		
+		/* 현재 연도와 날자를 DTO에 담아준다. */
 		CollectBillDTO collectBillDate = new CollectBillDTO();
 		collectBillDate.setCollectBillYear(collectBillYear);
 		collectBillDate.setCollectBillMonth(collectBillMonth);
 		
-		System.out.println(collectBillDate.getCollectBillYear());
-		System.out.println(collectBillDate.getCollectBillMonth());
-		
 		List<PerformanceDTO> selectDeptPerformList = salesService.selectDeptPerformList(collectBillDate);
-		
-		System.out.println("selectDeptPerformList : " + selectDeptPerformList);
 		
 		/* 연도와 월을 비교하기 위해 */
 		mv.addObject("selectDeptPerformList", selectDeptPerformList);
@@ -236,21 +199,15 @@ public class SalesController {
 		
 		List<PerformanceDTO> selectPerformForDate = salesService.selectPerformForDate(parameters);
 		
-		System.out.println("selectPerformForDate : " + selectPerformForDate);
-		
 		mv.addObject("selectPerformForDate", objectMapper.writeValueAsString(selectPerformForDate));
 		mv.setViewName("jsonView");
 		return mv;
-		
 	}
 	
 	/* 한 부서에 대한 사원들의 영업실적 조회*/
 	@GetMapping("/dept/select")
 	public ModelAndView deptEachPerformList(ModelAndView mv, @RequestParam String deptCode,
 			@ModelAttribute CollectBillDTO parameters) {
-		
-		System.out.println("parameters : " + parameters);
-		System.out.println("deptCode : " + deptCode);
 		
 		/* 첫번째 보여질 페이지는 사원들의 현재 연도의 월에 대한 실적 정보여서 
 		 * 현재 시간기준으로 연도와 월을 포맷한 후 인자값으로 넘긴다.*/
@@ -267,13 +224,9 @@ public class SalesController {
 	public ModelAndView deptTargetPerformList(ModelAndView mv, HttpServletResponse response,
 			@ModelAttribute CollectBillDTO parameters) throws JsonProcessingException {
 		
-		
 		response.setContentType("application/json; charset=UTF-8");
 		
 		List<TargetPerfomDTO> deptTargetPerformList = salesService.deptTargetPerformList(parameters);
-		
-		System.out.println("deptTargetPerformList : " + deptTargetPerformList );
-		System.out.println("parameters : " + parameters);
 		
 		mv.addObject("deptTargetPerformList", objectMapper.writeValueAsString(deptTargetPerformList));
 		mv.setViewName("jsonView");
@@ -287,16 +240,14 @@ public class SalesController {
 		/* 초기화면에 현재 연도와 날짜의 상품을 조회하기 위해 LocalDate로 현재 연도와 월의 정보를 가지고 온다. */
 		LocalDate productPeformDate = LocalDate.now();
 
-		int collectBillYear = productPeformDate.getYear(); 										// 디비에 값 저장을 위해 String 타입으로 형변환(연도)
-		int collectBillMonth = productPeformDate.getMonthValue();								// 위와 내용 같음 (월)
+		int collectBillYear = productPeformDate.getYear(); 										
+		int collectBillMonth = productPeformDate.getMonthValue();								
 		
 		CollectBillDTO collectBillDate = new CollectBillDTO();
 		collectBillDate.setCollectBillYear(collectBillYear);
 		collectBillDate.setCollectBillMonth(collectBillMonth);
 		
 		List<PerformanceDTO> selectProductPerformList = salesService.selectProductPerformList(collectBillDate);
-		
-		System.out.println("selectProductPerformList : " + selectProductPerformList);
 		
 		mv.addObject("collectBillYear", collectBillYear);
 		mv.addObject("collectBillMonth", collectBillMonth);
@@ -310,13 +261,9 @@ public class SalesController {
 	public ModelAndView selectProductPeformForDate(ModelAndView mv, HttpServletResponse response,
 			@ModelAttribute CollectBillDTO parameters) throws JsonProcessingException {
 		
-		System.out.println("parameters : " + parameters);
-		
 		response.setContentType("application/json; charset=UTF-8");
 		
 		List<PerformanceDTO> selectProductPeformForDate = salesService.selectProductPeformForDate(parameters);
-		
-		System.out.println("selectProductPeformForDate : " + selectProductPeformForDate);
 		
 		mv.addObject("selectProductPeformForDate", objectMapper.writeValueAsString(selectProductPeformForDate));
 		mv.setViewName("jsonView");
@@ -330,8 +277,8 @@ public class SalesController {
 		/* 초기화면에 현재 연도와 날짜의 상품을 조회하기 위해 LocalDate로 현재 연도와 월의 정보를 가지고 온다. */
 		LocalDate productPeformDate = LocalDate.now();
 
-		int collectBillYear = productPeformDate.getYear(); 										// 디비에 값 저장을 위해 String 타입으로 형변환(연도)
-		int collectBillMonth = productPeformDate.getMonthValue();								// 위와 내용 같음 (월)
+		int collectBillYear = productPeformDate.getYear(); 										
+		int collectBillMonth = productPeformDate.getMonthValue();								
 		
 		CollectBillDTO collectBillDate = new CollectBillDTO();
 		collectBillDate.setCollectBillYear(collectBillYear);
@@ -339,11 +286,8 @@ public class SalesController {
 		
 		List<PerformanceDTO> selectCategoryPerformList = salesService.selectCategoryPerformList(collectBillDate);
 		
-		/* 상위 카테고리 조회 셀렉트박스에 조회하기 위해서*/
+		/* 상위 카테고리 조회 셀렉트박스에 조회하기 위해서 */
 		List<ProductCategoryDTO> selectRefCategoryList = salesService.selectRefCategoryList(); 
-		
-		System.out.println("selectCategoryPerformList : " + selectCategoryPerformList);
-		System.out.println("selectRefCategoryList : " + selectRefCategoryList);
 		
 		mv.addObject("collectBillYear", collectBillYear);
 		mv.addObject("collectBillMonth", collectBillMonth);
@@ -354,35 +298,26 @@ public class SalesController {
 	}
 	
 	/* 폼에서 선택한 카테고리와 날짜를 기준으로 실적조회 */
-	@PostMapping("/select/category/peform/date") 
-	public ModelAndView selectCategoryPeformForDate(ModelAndView mv, HttpServletResponse response,
+	@PostMapping("/select/category/perform/date") 
+	public ModelAndView selectCategoryPerformForDate(ModelAndView mv, HttpServletResponse response,
 			@ModelAttribute CollectBillDTO parameters, @RequestParam int refCategoryCode) throws JsonProcessingException {
-		
-		System.out.println("  parameters : " +  parameters);
-		System.out.println("  refCategoryCode : " +  refCategoryCode);
 		
 		response.setContentType("UTF-8");
 		
 		List<PerformanceDTO> selectCategoryPerformForDate = salesService.selectCategoryPerformForDate(parameters, refCategoryCode);
-		
-		System.out.println("selectCategoryPerformForDate : " + selectCategoryPerformForDate);
 		
 		mv.addObject("selectCategoryPerformForDate", objectMapper.writeValueAsString(selectCategoryPerformForDate));
 		mv.setViewName("jsonView");
 		return mv;
 	}
 	
-	/* 카테고리 상세보기 페이지*/
+	/* 카테고리 상세보기 페이지 */
 	@GetMapping("/category/select")
 	public ModelAndView selectCategoryPerformDetail(ModelAndView mv, @RequestParam int categoryCode,
 			@ModelAttribute CollectBillDTO parameters) {
 		
-		System.out.println("categoryCode : " + categoryCode);
-		System.out.println("parameters : " + parameters);
-		
 		/* 카테고리 상세 보기 언제 청구 됐고 어떤 사원이 얼마의 실적을 냈는지 조회한다.*/
 		List<PerformanceDTO> selectCategoryPerformDetail = salesService.selectCategoryPerformDetail(categoryCode, parameters);
-		System.out.println("selectCategoryPerformDetail : " + selectCategoryPerformDetail);
 		
 		mv.addObject("parameters", parameters);
 		mv.addObject("selectCategoryPerformDetail", selectCategoryPerformDetail);
