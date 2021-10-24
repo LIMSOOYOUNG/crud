@@ -34,7 +34,7 @@
                
                <div class="col-lg-1"></div>
 
-                  <!-- DataTable with Hover -->
+                  <!-- receivingTable with Hover -->
                   <div class="col-lg-10" style="margin-left: 30px;">
                      <div class="card mb-4">
                         <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
@@ -54,7 +54,6 @@
 										<a th:href="@{/}" name="status" value="reject" class="nav-link" data-toggle="tab">반려</a>
 									</li>
 								</ul>
-						
                         <div class="table-responsive p-3">
                            <table class="table align-items-center table-flush table-hover" id="receivingTable">
                               <thead align="center" class="thead-light">
@@ -207,7 +206,8 @@
 									</tbody>
 								</table>
 							</div>
-						</div>		<!-- End receivingReqProductList -->
+						</div>
+						<!-- End receivingReqProductList -->
 
 					<div id="buttonArea" th:align="center">
 						<button type="button" id="approvalBtn" name="approvalBtn" class="btn btn-primary mx-2">결재</button>
