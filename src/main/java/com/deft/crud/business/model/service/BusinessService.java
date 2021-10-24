@@ -73,6 +73,7 @@ public class BusinessService {
 		return businessActivityList;
 	}
 
+	/* 영업활동내역 상세정보 */
 	public BusinessActivityDTO selectActivityDetailInfoByNo(int activityNo) {
 
 		BusinessActivityDTO activityInfo = businessMapper.selectActivityDetailInfoByNo(activityNo);

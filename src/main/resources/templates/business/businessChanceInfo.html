@@ -32,12 +32,11 @@
 					<!-- Row -->
 					<div class="row">
 
-						<!-- DataTable with Hover -->
+						<!-- start 영업기회 상태변경 이력 -->
 						<div class="col-lg-4" style="padding-left: 50px;">
 							<div style="background: lightgray;">
 								<div th:align="center"
 									style="font-size: 20px; font-weight: bold; padding-top: 5px; padding-bottom: 5px;">영업기회 상태변경 이력</div>
-									
 							</div>
 							<div class="card mb-4"
 								style="overflow-y: scroll; width: 100%; height: 400px;">
@@ -59,7 +58,9 @@
 								</div>
 							</div>
 						</div>
-
+						<!-- end 영업기회 상태변경 이력 -->
+						
+						<!-- start 영업기회 기본정보 -->
 						<div class="col-lg-8" th:align="center">
 								<div style="background: lightgray;">
 									<div th:align="center"
@@ -163,13 +164,13 @@
 										</div>
 									</div>
 								</div>
+							</div>
+							<!-- end 영업기회 기본정보 -->
 						</div>
-					</div>
 
-				<!-- Row -->
+				<!-- start 선택한 영업기회 대상고객에 대한 활동내역 -->
 				<div class="row">
 
-					<!-- DataTable with Hover -->
 					<div class="col-lg-4"></div>
 					<div class="col-lg-8">
 						<div class="card mb-4" style="background: #F6F2FB;">
@@ -217,13 +218,14 @@
 						</div>
 					</div>
 				</div>
+				<!-- end 선택한 영업기회 대상고객에 대한 활동내역 -->
 			</div>
 		</div>
 			<!-- End ContainerFluid -->
 		</div>
 	</div>
 
-	<!------------- 고객상세 정보 Modal --------------->
+	<!------------- start 고객상세정보 Modal --------------->
 	<div class="modal fade" id="detailModal" role="dialog">
 		<div class="modal-dialog modal-xl modal-dialog-centered">
 
@@ -403,7 +405,8 @@
 			</div>
 		</div>
 	</div>
-
+	<!------------- end 고객상세정보 Modal --------------->
+	
 	<!------------- activity DetailInfo Modal --------------->
     <div class="modal fade" id="activityDetailInfoModal" role="dialog">
     	<div class="modal-dialog modal-xl">
