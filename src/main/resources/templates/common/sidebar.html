@@ -137,7 +137,7 @@
 			</li>	<!-- End EmpSidebar -->
 
 			<!-- Start AdminSidebar -->
-			<span th:if="${#authentication.principal.authority != 'ROLE_EMP'}">
+			<th:block sec:authorize="hasRole('ADMIN')">
 			<hr class="sidebar-divider">
 			<div class="sidebar-heading">ADMIN</div>
 			<li class="nav-item">
@@ -179,7 +179,7 @@
 					</div>
 				</div>
 			</li>	<!-- End AdminSidebar -->
-			</span>
+			</th:block>
 		</ul>
 	</th:block>
 

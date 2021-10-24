@@ -305,6 +305,51 @@
 		 WHERE A.EMP_NO = #{ empNo }   
 	</select>
 	
+		<!-- 영업기회 등록 -->
+	<insert id="insertBusinessChance" parameterType="com.deft.crud.business.model.dto.BusinessChanceDTO">
+		INSERT /* com.deft.crud.business.model.dao.BusinessMapper#insertBusinessChance() */
+		  INTO TBL_BUSINESS_CHANCE A
+		(
+		  A.BUSINESS_CHANCE_NO
+		, A.PROGRESS_STATUS
+		, A.SALES_LEVEL
+		, A.SUCCESS_POSIBILLITY
+		, A.BUSINESS_TITLE
+		, A.DUE_DATE
+		, A.EMP_NO
+		, A.CUSTOMER_NO
+		, A.WRITE_DATE
+		)  
+		VALUES
+		(  
+		  SEQ_BUSINESS_CHANCE_NO.NEXTVAL
+		, '진행중'  
+		, <choose>
+      		<when test="salesLevel == 'offer'">
+                '거래제의'
+         	</when>
+      		<when test="salesLevel == 'estimate'">
+                '견적'
+         	</when>
+         	<when test="salesLevel == 'charge'">
+                '청구'
+         	</when>
+         	<when test="salesLevel == 'order'">
+                '발주'
+         	</when>
+         	<when test="salesLevel == 'collect'">
+                '수금'
+         	</when>
+		  </choose>
+		, #{ successPosibillity }
+		, #{ businessTitle }
+		, SYSDATE
+		, #{ empNo }
+		, #{ customerNo }
+		, SYSDATE
+		)
+	</insert>
+	
 	 <!-- 영업 활동 등록 -->
     <insert id="insertActivity" parameterType="com.deft.crud.customer.model.dto.BusinessActivityDTO">
         INSERT /* com.deft.crud.business.model.dao.BusinessMapper#insertActivity() */
@@ -367,50 +412,7 @@
         GROUP BY C.CUSTOMER_NAME, C.CUSTOMER_NO, CP.COMPANY_NAME, E.EMP_NAME, E.EMP_NO
 	</select>
 
-	<!-- 영업기회 등록 -->
-	<insert id="insertBusinessChance" parameterType="com.deft.crud.business.model.dto.BusinessChanceDTO">
-		INSERT /* com.deft.crud.business.model.dao.BusinessMapper#insertBusinessChance() */
-		  INTO TBL_BUSINESS_CHANCE A
-		(
-		  A.BUSINESS_CHANCE_NO
-		, A.PROGRESS_STATUS
-		, A.SALES_LEVEL
-		, A.SUCCESS_POSIBILLITY
-		, A.BUSINESS_TITLE
-		, A.DUE_DATE
-		, A.EMP_NO
-		, A.CUSTOMER_NO
-		, A.WRITE_DATE
-		)  
-		VALUES
-		(  
-		  SEQ_BUSINESS_CHANCE_NO.NEXTVAL
-		, '진행중'  
-		, <choose>
-      		<when test="salesLevel == 'offer'">
-                '거래제의'
-         	</when>
-      		<when test="salesLevel == 'estimate'">
-                '견적'
-         	</when>
-         	<when test="salesLevel == 'charge'">
-                '청구'
-         	</when>
-         	<when test="salesLevel == 'order'">
-                '발주'
-         	</when>
-         	<when test="salesLevel == 'collect'">
-                '수금'
-         	</when>
-		  </choose>
-		, #{ successPosibillity }
-		, #{ businessTitle }
-		, SYSDATE
-		, #{ empNo }
-		, #{ customerNo }
-		, SYSDATE
-		)
-	</insert>
+
 	
 	<!-- 영업기회 내용 수정 -->
 	<update id="modifyBusinessChance">

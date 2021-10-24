@@ -61,7 +61,6 @@
 						</div>
 
 						<div class="col-lg-8" th:align="center">
-							<div class="col-lg-11">
 								<div style="background: lightgray;">
 									<div th:align="center"
 										style="font-size: 25px; font-weight: bold; padding-top: 5px; padding-bottom: 5px;">영업기회정보</div>
@@ -69,7 +68,7 @@
 								<div class="card mb-4">
 									<form id="modifyChanceInfoForm" th:action="@{/business/chance/modify}" method="post"
 										  class="form-group"
-										style="margin-left: 30px; margin-right: 30px; margin-top: 15px;">
+										  style="margin-left: 30px; margin-right: 30px; margin-top: 15px;">
 										<div class="row">
 											<div class="form-group col-xl-1">
 												<label>No</label>
@@ -164,10 +163,8 @@
 										</div>
 									</div>
 								</div>
-							</div>
 						</div>
 					</div>
-				</div>
 
 				<!-- Row -->
 				<div class="row">
@@ -175,7 +172,7 @@
 					<!-- DataTable with Hover -->
 					<div class="col-lg-4"></div>
 					<div class="col-lg-8">
-						<div class="card mb-4" style="background: #F6F2FB; margin-left:30px; margin-right: 30px;">
+						<div class="card mb-4" style="background: #F6F2FB;">
 							<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between"
 								 style="background: lightgray;">
 								<h6 class="m-0 font-weight-bold text-primary">영업활동내역</h6>
@@ -221,7 +218,7 @@
 					</div>
 				</div>
 			</div>
-
+		</div>
 			<!-- End ContainerFluid -->
 		</div>
 	</div>
@@ -409,111 +406,111 @@
 
 	<!------------- activity DetailInfo Modal --------------->
     <div class="modal fade" id="activityDetailInfoModal" role="dialog">
-            <div class="modal-dialog modal-xl">
+    	<div class="modal-dialog modal-xl">
 
-     <!-- Modal content-->
-     <div class="modal-content">
-    <div class="modal-header">
-        <div class="row col-sm-12">
-            <h4 class="modal-title" style="color: #0da8ee; padding: 10px">영업활동 상세정보</h4>
-            <button type="button" class="close" data-dismiss="modal"><i class="far fa-times-circle"></i></button>
-        </div>
-        <div class="row">
-            <div class="form-group col-sm-12"><input type="hidden" th:value="emptyRow"></div>
-        </div>
-        <div class="row">
-            <div class="form-group col-sm-12"><input type="hidden" th:value="emptyRow"></div>
-        </div>
-    </div>
-    <form id="modifyForm">
-        <div class="modal-body">
-            <div class="form-group col-lg-12"><input type="hidden" th:value="emptyRow"></div>
-            <input type="hidden" id="activityNoForm" name="activityNo" >
-            <input type="hidden" id="customerNo" name="customerNo" >
-            <input type="hidden" id="empNo" name="empNo" >
-            <div th:align="right" class="form-group col-lg-12 row">
-                <input type="hidden" th:value="emptyRow">
-                <div class="form-group col-lg-9"></div>
-                <label for="writingTime" th:align="center" style="margin-right: 10px;">작성일시 :</label>
-                <span id="writingTime" th:align="center"></span>
-            </div>
-            <div class="card mb-auto">
-                <div class="row">
-                    <div class="form-group col-lg-12"><input type="hidden" value="emptyRow"></div>
-                </div>
-                <div class="row" id="insertActivityForm">
-                    <div class="form-group col-lg-12 row">
-                        <div class="form-group col-lg-1"><input type="hidden" value="emptyRow"></div>
-                        <label for="businessSubject" class="col-lg-1 form-control-plaintext"
-                               style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF"
-                               th:align="center">활동주제</label>
-                        <input type="text" class="form-control col-lg-4"
-                               id="businessSubject" name="businessSubject" readonly>
-                        <label for="empName" class="col-lg-1 form-control-plaintext"
-                               style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF"
-                               th:align="center">담당자</label>
-                        <input type="text" class="form-control col-lg-4"
-                               id="empNameModal" name="empNameModal" readonly>
-                    </div>
-                    <div class="form-group col-lg-12 row">
-                        <div class="form-group col-lg-1"><input type="hidden" value="emptyRow"></div>
-                        <label for="customerName" class="col-lg-1 form-control-plaintext"
-                               style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF"
-                               th:align="center">고객명</label>
-                        <input type="text" class="form-control col-lg-4"
-                               id="customerNameModal" name="customerNameModal" readonly>
-                        <label for="businessType" class="col-lg-1 form-control-plaintext"
-                               style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF"
-                               th:align="center">유형</label>
-                        <input type="text" class="form-control col-lg-4"
-                               id="businessType" name="businessType" readonly>
-                    </div>
-                    <div class="form-group col-lg-12 row">
-                        <div class="form-group col-lg-1"><input type="hidden" value="emptyRow"></div>
-                        <label for="insertBusinessLocation" class="col-lg-1 form-control-plaintext"
-                               style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF"
-                               th:align="center">장소</label>
-                        <input type="text" class="form-control col-lg-9"
-                               id="businessLocation" name="businessLocation" readonly>
-                    </div>
-                    <div class="form-group col-lg-12 row">
-                        <div class="form-group col-lg-1"><input type="hidden" value="emptyRow"></div>
-                        <label for="insertBusinessPurpose" class="col-lg-1 form-control-plaintext"
-                               style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF"
-                               th:align="center">목적</label>
-                        <input type="text" class="form-control col-lg-9"
-                               id="businessPurpose" name="businessPurpose" readonly>
-                    </div>
-                    <div class="form-group col-lg-12 row">
-                        <div class="form-group col-lg-1"><input type="hidden" value="emptyRow"></div>
-                        <label for="insertBusinessContents" class="col-lg-1 form-control-plaintext"
-                               style="color: #109EDE; background-color: #DEE5FF; padding-top: 85px; padding-bottom: 85px;">활동내용</label>
-                        <textarea type="text" class="form-control col-lg-9" style="resize: none; height: 200px;"
-                                  id="businessContents" name="businessContents" disabled></textarea>
-                    </div>
-                    <div class="form-group col-lg-12 row">
-                        <div class="form-group col-lg-1"><input type="hidden" value="emptyRow"></div>
-                        <label for="activityStartTime" class="col-lg-1 form-control-plaintext"
-                               style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF"
-                               th:align="center">시작시간</label>
-                        <input type="text" class="form-control col-lg-9"
-                               id="activityStartTime" name="activityStartTime" readonly>
-                    </div>
-                    <div class="form-group col-lg-12 row">
-                        <div class="form-group col-lg-1"><input type="hidden" value="emptyRow"></div>
-                        <label for="activityEndTime" class="col-lg-1 form-control-plaintext"
-                               style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF"
-                               th:align="center">종료시간</label>
-                        <input type="text" class="form-control col-lg-9"
-                               id="activityEndTime" name="activityEndTime" readonly>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </form>
-    <div id="count" value="1"></div>
+     		<!-- Modal content-->
+    	<div class="modal-content">
+    		<div class="modal-header">
+        		<div class="row col-sm-12">
+            		<h4 class="modal-title" style="color: #0da8ee; padding: 10px">영업활동 상세정보</h4>
+            		<button type="button" class="close" data-dismiss="modal"><i class="far fa-times-circle"></i></button>
+        		</div>
+        		<div class="row">
+            		<div class="form-group col-sm-12"><input type="hidden" th:value="emptyRow"></div>
+        		</div>
+        		<div class="row">
+            		<div class="form-group col-sm-12"><input type="hidden" th:value="emptyRow"></div>
+        		</div>
+    		</div>
+    		<form id="modifyForm">
+        		<div class="modal-body">
+            		<div class="form-group col-lg-12"><input type="hidden" th:value="emptyRow"></div>
+            		<input type="hidden" id="activityNoForm" name="activityNo" >
+            		<input type="hidden" id="customerNo" name="customerNo" >
+            		<input type="hidden" id="empNo" name="empNo" >
+            		<div th:align="right" class="form-group col-lg-12 row">
+                		<input type="hidden" th:value="emptyRow">
+                		<div class="form-group col-lg-9"></div>
+                		<label for="writingTime" th:align="center" style="margin-right: 10px;">작성일시 :</label>
+               			<span id="writingTime" th:align="center"></span>
+            		</div>
+            		<div class="card mb-auto">
+                		<div class="row">
+                    		<div class="form-group col-lg-12"><input type="hidden" value="emptyRow"></div>
+                		</div>
+                		<div class="row" id="insertActivityForm">
+                    		<div class="form-group col-lg-12 row">
+                        		<div class="form-group col-lg-1"><input type="hidden" value="emptyRow"></div>
+                        		<label for="businessSubject" class="col-lg-1 form-control-plaintext"
+                              	   	   style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF"
+                               	       th:align="center">활동주제</label>
+                        		<input type="text" class="form-control col-lg-4"
+                               	       id="businessSubject" name="businessSubject" readonly>
+                        		<label for="empName" class="col-lg-1 form-control-plaintext"
+                                       style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF"
+                                       th:align="center">담당자</label>
+                        		<input type="text" class="form-control col-lg-4"
+                                       id="empNameModal" name="empNameModal" readonly>
+                    		</div>
+                    		<div class="form-group col-lg-12 row">
+                        		<div class="form-group col-lg-1"><input type="hidden" value="emptyRow"></div>
+                        		<label for="customerName" class="col-lg-1 form-control-plaintext"
+                               	       style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF"
+                                       th:align="center">고객명</label>
+                        		<input type="text" class="form-control col-lg-4"
+                                       id="customerNameModal" name="customerNameModal" readonly>
+                        		<label for="businessType" class="col-lg-1 form-control-plaintext"
+                                       style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF"
+                                       th:align="center">유형</label>
+                        		<input type="text" class="form-control col-lg-4"
+                                       id="businessType" name="businessType" readonly>
+                    		</div>
+                    		<div class="form-group col-lg-12 row">
+                        		<div class="form-group col-lg-1"><input type="hidden" value="emptyRow"></div>
+                        		<label for="insertBusinessLocation" class="col-lg-1 form-control-plaintext"
+                                       style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF"
+                                       th:align="center">장소</label>
+                        		<input type="text" class="form-control col-lg-9"
+                                       id="businessLocation" name="businessLocation" readonly>
+                    		</div>
+                    		<div class="form-group col-lg-12 row">
+                        		<div class="form-group col-lg-1"><input type="hidden" value="emptyRow"></div>
+                        		<label for="insertBusinessPurpose" class="col-lg-1 form-control-plaintext"
+                               	   	   style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF"
+                                       th:align="center">목적</label>
+                        		<input type="text" class="form-control col-lg-9"
+                                       id="businessPurpose" name="businessPurpose" readonly>
+                    		</div>
+                    		<div class="form-group col-lg-12 row">
+                        		<div class="form-group col-lg-1"><input type="hidden" value="emptyRow"></div>
+                        		<label for="insertBusinessContents" class="col-lg-1 form-control-plaintext"
+                                       style="color: #109EDE; background-color: #DEE5FF; padding-top: 85px; padding-bottom: 85px;">활동내용</label>
+                        		<textarea type="text" class="form-control col-lg-9" style="resize: none; height: 200px;"
+                                          id="businessContents" name="businessContents" disabled></textarea>
+                    		</div>
+                    		<div class="form-group col-lg-12 row">
+                        		<div class="form-group col-lg-1"><input type="hidden" value="emptyRow"></div>
+                        		<label for="activityStartTime" class="col-lg-1 form-control-plaintext"
+                                       style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF"
+                                       th:align="center">시작시간</label>
+                        		<input type="text" class="form-control col-lg-9"
+                                       id="activityStartTime" name="activityStartTime" readonly>
+                    		</div>
+                    		<div class="form-group col-lg-12 row">
+                        		<div class="form-group col-lg-1"><input type="hidden" value="emptyRow"></div>
+                        		<label for="activityEndTime" class="col-lg-1 form-control-plaintext"
+                                       style="height: 43px; padding: 10px 0; color: #109EDE; background-color: #DEE5FF"
+                                       th:align="center">종료시간</label>
+                        		<input type="text" class="form-control col-lg-9"
+                                       id="activityEndTime" name="activityEndTime" readonly>
+                    		</div>
+                		</div>
+            		</div>
+        		</div>
+    		</form>
+    		<div id="count" value="1"></div>
+		</div>
 	</div>
-</div>
 </div> 
 
 	<!-- Script -->
@@ -522,15 +519,15 @@
 	<script>
 		$(document).ready(function() {
 			$('#dataTable').DataTable(); // ID From dataTable
-			$('#table_activity').DataTable(); // ID From dataTable with Hover
+			$('#table_activity').DataTable(); // ID Fromtable_activity with Hover
 		});
 
-		/* 영업기회 현황 목록에서 상세정보 버튼 클릭 시 동작 */
+		/* 영업기회 현황 목록에서 [상세정보] 버튼 클릭 시 동작 */
 		$(document).on('click', '#detailInfo', function() {
 			$('#detailModal').modal();
 		});
 	
-		/* 뒤로가기 X 버튼 */
+		/* 뒤로가기 [X] 버튼 */
 		$('#btnBack').click(function() {
 			window.history.back();
 		});
@@ -554,7 +551,7 @@
 			$('#activityDetailInfoModal').modal();
 		});
 
-		/* 수정하기 버튼 눌렀을경우 동작 */
+		/* [수정하기] 버튼 눌렀을경우 동작 */
 		$(document).on('click', '#modifyChanceInfoBtn', function() {
 			
 			const beforeTitle = $('#businessTitle').val();
@@ -586,7 +583,7 @@
 		            $('#dueDate').val(endTime);
 		        } 
 		        
-		        /* 수정완료 버튼 클릭 시 동작(form 전송) */
+		        /* [수정완료] 버튼 클릭 시 동작(form 전송) */
 				 $(document).on('click', '#successmodifyChanceInfoBtn', function() {
 					
 					if(beforeTitle == $('#businessTitle').val() && beforeStatus == $('#progressStatus').val() &&
@@ -603,7 +600,7 @@
 				 });
 		});
 		
-		 /* 취소하기 버튼 클릭 시 동작 */
+		 /* [취소하기] 버튼 클릭 시 동작 */
 		 $(document).on('click', '#backToDetail', function() {
 				
 				$('#businessTitle').attr('readonly', true);

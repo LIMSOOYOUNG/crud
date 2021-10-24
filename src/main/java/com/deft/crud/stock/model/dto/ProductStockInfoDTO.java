@@ -27,5 +27,6 @@ public class ProductStockInfoDTO implements Serializable {
 	private String sellStatus;				//판매상태
 	private int productStock;				//상품재고수량
 	private String unit;					//상품단위
+	private String thumbnailPath;			//상품이미지파일경로
 	
 }

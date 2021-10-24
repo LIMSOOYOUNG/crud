@@ -208,6 +208,27 @@ public class BusinessController {
 		return mv;
     }
     
+    /* 영업기회 등록 */
+    @PostMapping("chance/insert")
+    public ModelAndView insertBusinessChance(ModelAndView mv, RedirectAttributes rttr,
+    		@ModelAttribute BusinessChanceDTO parameters) {
+    	
+    	Boolean result = businessService.insertBusinessChance(parameters);
+    	
+    	String message = "";
+    	
+    	if(result) { 
+    		message = "영업기회 등록완료";
+    	} else { 
+    		message = "영업기회 등록실패!";
+    	}
+    	
+    	rttr.addFlashAttribute("message", message);
+    	mv.setViewName("redirect:/business/chance/selectAll");
+    	
+    	return mv;
+    }
+    
     /* 고객 기본정보 조회 */
     @PostMapping("customerInfo/select")
     public ModelAndView selectCustomerBasicInfo(ModelAndView mv, HttpServletResponse response,
@@ -224,27 +245,8 @@ public class BusinessController {
     	return mv;
     }
     
-    /* 영업기회 등록 */
-    @PostMapping("chance/insert")
-    public ModelAndView insertBusinessChance(ModelAndView mv, RedirectAttributes rttr,
-    										@ModelAttribute BusinessChanceDTO parameters) {
-    	
-    	Boolean result = businessService.insertBusinessChance(parameters);
-    	
-    	String message = "";
-		  
-		  if(result) { 
-			  message = "영업기회 등록완료";
-		  } else { 
-			  message = "영업기회 등록실패!";
-		  }
-
-		  rttr.addFlashAttribute("message", message);
-		  mv.setViewName("redirect:/business/chance/selectAll");
-    	
-    	return mv;
-    }
     
+    /* 영업기회 내용 수정 */
     @PostMapping("chance/modify")
     public ModelAndView modifyBusinessChance(ModelAndView mv, RedirectAttributes rttr,
 											@ModelAttribute BusinessChanceDTO parameters) {

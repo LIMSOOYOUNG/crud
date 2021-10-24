@@ -41,9 +41,10 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter{
 		http.csrf().disable()
 			.authorizeRequests()
 				.antMatchers("/menu/**").authenticated()
-				.antMatchers("/dashboard/**").permitAll()
-				.antMatchers(HttpMethod.GET, "menu/**").hasRole("MEMBER")
-				.antMatchers(HttpMethod.POST, "menu/**").hasRole("ADMIN")
+				.antMatchers("/dashboard/**").hasAnyRole("EMP, MANAGER, ADMIN")
+				.antMatchers("/product/**").hasRole("MANAGER")
+				.antMatchers(HttpMethod.GET, "menu/**").hasAnyRole("EMP, MANAGER, ADMIN")
+				.antMatchers(HttpMethod.POST, "menu/**").hasAnyRole("EMP, MANAGER, ADMIN")
 				.antMatchers("/admin/**").hasRole("ADMIN")
 				.anyRequest().permitAll()
 			.and()
@@ -57,8 +58,8 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter{
 				.invalidateHttpSession(true)
 				.logoutSuccessUrl("/")
 			.and()
-				.exceptionHandling();
-//				.accessDeniedPage("/common/denied");
+				.exceptionHandling()
+				.accessDeniedPage("/common/authority/check");
 	}
 	
 	@Override

@@ -27,8 +27,6 @@ public class EmployeeService {
 
         List<EmployeeDTO> employeeList = employeeMapper.selectEmployee();
 
-        System.out.println("list");
-
         return employeeList;
     }
 

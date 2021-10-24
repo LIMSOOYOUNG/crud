@@ -40,7 +40,6 @@
                         <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                            <h6 class="m-0 font-weight-bold text-primary" id="tableTitle">요청서 목록 (전체)</h6>
                         </div>
-
 						<ul class="nav nav-tabs nav-justfied">
 									<li class="nav-item">
 										<a th:href="@{/}" name="status" value="all" class="nav-link active" data-toggle="tab">전체</a>
@@ -301,10 +300,8 @@
 									</div>
 								</div>
 							</div>
-							<!-- End OrderInfo -->
-							
-							
 						</div>
+							<!-- End OrderInfo -->
 
                         <!-- receivingReqProductList -->
                         <div class="card mb-4" style="overflow-y: scroll; height: 300px;">
@@ -341,10 +338,10 @@
       <div id="count" value="1"></div>
    </div>
 
-   <!-- Script -->
-   <th:block th:replace="@{/common/script} :: script"></th:block>
+<!-- Script -->
+<th:block th:replace="@{/common/script} :: script"></th:block>
 
- 	<script>
+<script>
 	/* 결재완료 후 alert 메세지 출력 */
 	const message = '[[${ message }]]';
 
@@ -358,7 +355,6 @@
       }); 
       
       $('#dataTable').DataTable();       // ID From dataTable
-      
       
       /* 상세보기 버튼 클릭 시 동작 */
       $(document).on('click', 'button[name=detailInfoBtn]', function() {
@@ -470,7 +466,6 @@
     	    	      $('#orderReason').val(releaseInfo.approvalDocumentDTO.reqReason); 
     	    	      $('#releaseStatus').val(releaseInfo.approvalDocumentDTO.documentStatus); 
     	    	      $('#releaseApprovalManagerName').val(releaseInfo.approvalDocumentDTO.managerName); 
-    	    	      
     	    	    	  			
     	    	      // 결재상태가 승인 or 반려 상태일경우 selectBox 변경 불가     
     	    	      var statusOption = $('#releaseStatus').val();
@@ -502,8 +497,8 @@
     	    	    	  var productStock = order.orderProductList[i].productStock;
     	    	    	  var unit = order.orderProductList[i].product.unit;
     	    	    	  var requestOrderStock = order.orderProductList[i].productAmount;
-    	    	    	  					
-    	    	    	  $('#releaseReqProductTable > tbody:last').append(
+    	    	    	  				
+    	    	      	  $('#releaseReqProductTable > tbody:last').append(
     	    	    												'<tr><td id="no" name="number">' + no + '</td>'
     	    	    											  + '<td id="releaseProductNo" name="releaseProductNo">' + productNo + '</td>'
     	    	    											  + '<td id="releaseProductName">' + productName + '</td>'
@@ -511,21 +506,17 @@
     	    	    											  + '<td id="productUnit">' + unit	+ '</td>'
     	    	    											  + '<td id="releaseProductAmount" name="releaseProductAmount">' + requestOrderStock + '</td>'
     	    	    											  + '</tr>');
-    	    	    	  		}		
+    	    	      }		
     	    	    	  	},
     	    	    	  	error : function(xhr, status, error) {
     	    					console.log(error);
-    	    				}
-    	    	      });
-    		 
-    	 }
-    	
+    	    	  			}
+    	      });
+    	  }
       })
-      
-      
   });  
     
-    // 모달창 닫기 X버튼 클릭시 동작 
+    // 모달창 닫기 [X]버튼 클릭시 동작 
 	$(document).on('click', '#modalCloseBtn', function() {
 		$('#receivingReqProductTable > tbody').empty();
 		$('#orderTitle').val().empty();
@@ -605,7 +596,7 @@
 		});
     });
  
-	// 입고요청 결재 버튼 클릭시 동작
+	// 입고요청 [결재] 버튼 클릭시 동작
  	 $(document).on('click', '[name=approvalBtn]', function() {
  		
  		let valueStatus = true;
@@ -631,7 +622,7 @@
  		}
  	});
 	
- 	// 출고요청 결재 버튼 클릭시 동작
+ 	// 출고요청 [결재] 버튼 클릭시 동작
  	 $(document).on('click', "[name=releaseBtn]", function() {
  		
  		const approvalDocumentNo = $('#releaseApprovalNo').val();
@@ -646,14 +637,16 @@
  		let check = 0;
  		for(let i = 0; i < productCount; i++) {
  			
- 		const productNo = $('[name=releaseProductNo]').eq(i).text();
- 		const productStock = $('[name=releaseProductStock]').eq(i).text();
- 		const productAmount = $('[name=releaseProductAmount]').eq(i).text();
+ 			const productNo = $('[name=releaseProductNo]').eq(i).text();
+ 			const productStock = $('[name=releaseProductStock]').eq(i).text();
+ 			const productAmount = $('[name=releaseProductAmount]').eq(i).text();
  		
- 		if(productStock < productAmount) {
- 			check++;
- 		}
+ 			if(productStock < productAmount) {
+ 				check++;
+ 			}
+ 			
  		productList.push({productNo, productStock, productAmount})
+ 		
  		}
 
  		
@@ -702,12 +695,10 @@
  		}) 
  		
  		} else {
- 			
- 		alert("결재처리 실패");
+ 			alert("결재처리 실패");
  		}
  	});
  
- 
-  </script>
+</script>
 </body>
 </html>

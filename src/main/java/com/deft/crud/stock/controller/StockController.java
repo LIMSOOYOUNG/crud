@@ -22,6 +22,7 @@ import com.deft.crud.member.model.dto.MemberDTO;
 import com.deft.crud.member.model.service.UserImpl;
 import com.deft.crud.order.model.dto.OrderDTO;
 import com.deft.crud.order.model.service.OrderService;
+import com.deft.crud.product.model.dto.ProductImageDTO;
 import com.deft.crud.stock.model.dto.ProductStockInfoDTO;
 import com.deft.crud.stock.model.dto.RequestReleaseDTO;
 import com.deft.crud.stock.model.dto.RequestStockDTO;
@@ -91,6 +92,7 @@ public class StockController {
 		response.setContentType("application/json; charset=UTF-8");
 		
 		ProductStockInfoDTO productStockInfo = stockService.selectOneProductInfoByNo(productNo);
+		
 		
 		mv.addObject("productStockInfo", objectMapper.writeValueAsString(productStockInfo));
 		mv.setViewName("jsonView");

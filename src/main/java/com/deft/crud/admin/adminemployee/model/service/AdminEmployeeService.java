@@ -54,8 +54,6 @@ public class AdminEmployeeService {
 	    /* 절대경로를 변수에 초기화한다. */
 		String root = request.getSession().getServletContext().getRealPath("\\");
 		
-		System.out.println("root : " + root);
-		
 		/* 이미지 원본파일과 썸네일을 저장할 경로를 설정해준다.*/
 		String fileUploadDirectory = root + "\\upload\\profileImage\\original";
 		String thumbnailDirectory = root + "\\upload\\profileImage\\thumbnail";
@@ -73,21 +71,15 @@ public class AdminEmployeeService {
 		/* 이미지 원본파일 */
 		String originFileName = profileThumbNail.getOriginalFilename();
 		
-		System.out.println(originFileName);
-		
 		/* 이미지 확장자 */
 		String ext = originFileName.substring(originFileName.lastIndexOf("."));
 		
 		/* 이미지파일명이 중복되지 않도록 설정해준다. */
 		String savedName = UUID.randomUUID().toString().replace("-", "") + ext;
-
-		System.out.println("저장할 파일이름 : " + savedName);
 		
 		member.setOriginalName(originFileName);
 		member.setSavedName(savedName);
 		member.setSavedPath(fileUploadDirectory);
-		
-		System.out.println(member.getEmpId());
 		
 		/* 썸네일 너비 높이 설정 */
 		int width = 200;
@@ -101,7 +93,6 @@ public class AdminEmployeeService {
 	    if(result > 0) {
 	    	
 	    	try {
-				
 				/* 원본 이미지 저장 */
 	    		profileThumbNail.transferTo(new File(fileUploadDirectory + "\\" + savedName));
 				
@@ -125,7 +116,6 @@ public class AdminEmployeeService {
 				/* 어떠한 예외처리가 발생한다면 파일 삭제 */
 				new File(fileUploadDirectory + "\\" + savedName).delete();
 			}
-	    	
 	    }
 		
 		return result;
@@ -147,13 +137,6 @@ public class AdminEmployeeService {
 		return deptList;
 	}
 
-	/* 권한목록 조회 */
-	public List<MemberDTO> selectAuthorityList() {
-
-		List<MemberDTO> authorityList = adminEmployeeMapper.selectAuthorityList();
-		
-		return authorityList;
-	}
 	
 	/* 사원 상세보기 */
 	public AdminEmployeeDTO empDetail(int employeeNo) {
