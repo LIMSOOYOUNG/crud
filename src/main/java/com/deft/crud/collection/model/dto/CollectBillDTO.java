@@ -19,7 +19,7 @@ public class CollectBillDTO {
 	private String collectBillAmount;
 	private LocalDate collectBillDate;
 	private String collectBillStatus;
-	private int chargeNo;
+	private String chargeNo;
 	
 	
 	

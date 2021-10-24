@@ -66,7 +66,6 @@ public class ProductController {
 		/* 카테고리(중) 리스트 조회*/
 		List<ProductCategoryDTO> refCategoryList = productService.refCategoryList();
 		
-		
 		/* 카테고리(소) 리스트 조회 */
 		List<ProductCategoryDTO> categoryList = productService.categoryList();
 		
@@ -87,16 +86,13 @@ public class ProductController {
 	
 	/* 상품 상세 조회 */
 	@GetMapping("/select")
-	public ModelAndView productDetail(ModelAndView mv,
-									  @RequestParam("productNo") int productNo) {
+	public ModelAndView productDetail(ModelAndView mv, @RequestParam("productNo") int productNo) {
 		
 		/* 해당 상품 번호를 인자값으로 넘겨 하나의 상품 정보 조회 */
 		ProductDTO productDetail = productService.productDetail(productNo);
 		
 		/* 상품 이미지 조회 */
 		ProductImageDTO productImage = productService.selectProductImage(productNo);
-		
-		System.out.println("productImage : " + productImage);
 		
 		/* 카테고리(중) 리스트 조회 */
 		List<ProductCategoryDTO> refCategoryList = productService.refCategoryList();
@@ -132,8 +128,6 @@ public class ProductController {
 		/* 절대경로를 변수에 초기화한다. */
 		String root = request.getSession().getServletContext().getRealPath("\\");
 		
-		System.out.println("root : " + root);
-		
 		/* 이미지 원본파일과 썸네일을 저장할 경로를 설정해준다.*/
 		String fileUploadDirectory = root + "\\upload\\productImage\\original";
 		String thumbnailDirectory = root + "\\upload\\productImage\\thumbnail";
@@ -147,7 +141,6 @@ public class ProductController {
 			System.out.println("폴더생성 : " + directory.mkdirs());
 			System.out.println("폴더생성 : " + directory2.mkdirs());
 		}
-		
 		
 		/* 이미지 원본파일 */
 		String originFileName = productThumbNail.getOriginalFilename();
@@ -214,14 +207,7 @@ public class ProductController {
 	/* 상품 업데이트 */
 	@PostMapping("/modify") 
 	public ModelAndView modifyProduct(ModelAndView mv, @ModelAttribute ProductDTO parameters, 
-			HttpServletRequest request, RedirectAttributes rttr, @RequestParam MultipartFile productThumbNail,
-			String productImg) {
-		
-		System.out.println("productImg : " + productImg);
-		
-		System.out.println("parameters : " + parameters);
-		
-		System.out.println("productThumbNail : " + productThumbNail);
+			HttpServletRequest request, RedirectAttributes rttr, @RequestParam MultipartFile productThumbNail) {
 		
 		/* 등록 결과 초기화 */
 		int result = 0;
@@ -229,15 +215,11 @@ public class ProductController {
 		/* 기본 파일 이름, 이미지 파일명, 원본파일 저장경로 ,상품번호, 썸네일로 저장한 파일명을 담아주는 DTO*/
 		ProductImageDTO updateFile = new ProductImageDTO();
 		
-		
 		/* 입력한 파일이 비어있지 않는다면 이미지 수정*/
 		if(!productThumbNail.isEmpty()) {
 		
-		
 			/* 절대경로를 변수에 초기화한다. */
 			String root = request.getSession().getServletContext().getRealPath("\\");
-			
-			System.out.println("root : " + root);
 			
 			/* 이미지 원본파일과 썸네일을 저장할 경로를 설정해준다.*/
 			String fileUploadDirectory = root + "\\upload\\productImage\\original";
@@ -247,11 +229,11 @@ public class ProductController {
 			File directory = new File(fileUploadDirectory);
 			File directory2 = new File(thumbnailDirectory);
 			
-			/* 이미지를 저장할 폴더가 없을시에 폴더를 생성해준다. */
-			if(!directory.exists() || !directory2.exists()) {
-				System.out.println("폴더생성 : " + directory.mkdirs());
-				System.out.println("폴더생성 : " + directory2.mkdirs());
-			}
+//			/* 이미지를 저장할 폴더가 없을시에 폴더를 생성해준다. */
+//			if(!directory.exists() || !directory2.exists()) {
+//				System.out.println("폴더생성 : " + directory.mkdirs());
+//				System.out.println("폴더생성 : " + directory2.mkdirs());
+//			}
 			
 			/* 이미지 원본파일 */
 			String originFileName = productThumbNail.getOriginalFilename();
@@ -268,11 +250,9 @@ public class ProductController {
 			updateFile.setSavedPath(fileUploadDirectory);
 			updateFile.setProductNo(parameters.getProductNo());
 			
-			
 			/* 썸네일 너비 높이 설정 */
 			int width = 250;
 			int height = 250;
-			
 			
 			try {
 					
@@ -330,8 +310,6 @@ public class ProductController {
 		/* 하위 카테고리 리스트 조회 */
 		List<ProductCategoryDTO> categoryList = productService.categoryList();
 		
-		System.out.println("allCategoryList : " + allCategoryList);
-		
 		mv.addObject("refCategoryList", refCategoryList);
 		mv.addObject("categoryList", categoryList);
 		mv.addObject("allCategoryList", allCategoryList);
@@ -345,8 +323,6 @@ public class ProductController {
 	@PostMapping("/category/medium/insert")
 	public ModelAndView insertRefCategory(ModelAndView mv, @ModelAttribute ProductCategoryDTO parameter,  
 			RedirectAttributes rttr) {
-		
-		System.out.println("parameter : " + parameter);
 		
 		int result = productService.insertRefCategory(parameter);
 		
@@ -368,8 +344,6 @@ public class ProductController {
 	public ModelAndView insertChildCategory(ModelAndView mv, @ModelAttribute ProductCategoryDTO parameters,  
 			RedirectAttributes rttr) {
 		
-		System.out.println("parameters : " + parameters);
-		
 		int result = productService.insertCategory(parameters);
 		
 		String message = "";
@@ -389,8 +363,6 @@ public class ProductController {
 	@PostMapping("/category/medium/modify")
 	public ModelAndView updateMediumCategory(ModelAndView mv, @ModelAttribute ProductCategoryDTO parameters,
 			RedirectAttributes rttr) {
-		
-		System.out.println("parameters : " + parameters);
 		
 		int result = productService.updateRefCategory(parameters);
 		
@@ -425,8 +397,6 @@ public class ProductController {
 		
 		List<ProductCategoryDTO> selectCategoryForUdpate = productService.categoryList();
 		
-		System.out.println("selectCategoryForUdpate : " + selectCategoryForUdpate);
-		
 		mv.addObject("selectCategoryForUdpate", objectMapper.writeValueAsString(selectCategoryForUdpate));
 		mv.setViewName("jsonView");
 		
@@ -435,7 +405,7 @@ public class ProductController {
 	
 	/* 하위 카테고리 수정을 위해 상위카테고리 정보를 가지고 온다.*/
 	@GetMapping("/editCategory")
-	public ModelAndView editCategory(ModelAndView mv, HttpServletResponse response, @RequestParam int selectedCategory)throws JsonProcessingException {
+	public ModelAndView editCategory(ModelAndView mv, HttpServletResponse response, @RequestParam int selectedCategory) throws JsonProcessingException {
 		
 		response.setContentType("application/json; 	charset=UTF-8");
 
@@ -444,7 +414,6 @@ public class ProductController {
 		mv.addObject("selectOneCategory", selectOneCategory);
 		mv.setViewName("jsonView");
 		return mv;
-		
 
 	}
 	
@@ -452,13 +421,6 @@ public class ProductController {
 	@PostMapping("/category/small/modify")
 	public ModelAndView updateSmallCategory(ModelAndView mv, @ModelAttribute ProductCategoryDTO parameters,
 			RedirectAttributes rttr) {
-		
-		System.out.println("@");
-		System.out.println("@");
-		System.out.println("@");
-		System.out.println(parameters);
-		
-		System.out.println("parameters : " + parameters);
 		
 		int result = productService.updateCategory(parameters);
 		

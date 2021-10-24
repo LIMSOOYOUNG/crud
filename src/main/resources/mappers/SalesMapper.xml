@@ -106,7 +106,7 @@
 		<result property="purchasePrice" column="PURCHASE_PRICE"/>    
 		<result property="sellingPrice" column="SELLING_PRICE"/>    
 		<result property="unit" column="UNIT"/>    
-		<result property="chargeCount" column="CHARGE_COUNT"/> 						<!-- 상품 계약수를 조회하는 컬럼 -->
+		<result property="chargeCount" column="CHARGE_COUNT"/> 						
 		
 		<association property="category" resultMap="productCategoryResultMap"/>    
     </resultMap>
@@ -185,29 +185,9 @@
 		 WHERE P.EMP_NO = #{ empNo }
 		   AND EXTRACT(YEAR FROM C.CHARGE_DATE) = #{ parameters.collectBillYear }
 		   AND EXTRACT(MONTH FROM C.CHARGE_DATE) = #{ parameters.collectBillMonth }
-			   
 	</select>
 	
-	<!-- 목표 실적 등록하는 폼에 사원이 속한 해당 부서의 전월 실적 조회 -->
-	<select id="selectDeptAvgPeform" resultMap="performResultMap" parameterType="com.deft.crud.sales.model.dto.CollectBillDTO">
-		SELECT /*com.deft.crud.product.model.dao.SalesMapper#selectDeptAvgPeform()*/
-	     	   D.DEPT_CODE
-	     	 , D.DEPT_NAME
-	     	 , COUNT(CH.CHARGE_NO) "CHARGE_COUNT"
-	     	 , AVG(CO.COLLECT_BILL_AMOUNT) "COLLECT_BILL_AMOUNT"
-	      FROM TBL_PERFORMANCE P
-	      JOIN TBL_EMP_INFO E ON ( E.EMP_NO = P.EMP_NO)
-	      JOIN TBL_DEPARTMENT D ON ( D.DEPT_CODE = E.DEPT_CODE)
-	      JOIN TBL_COLLECT_BILL CO ON ( CO.COLLECT_BILL_NO = P.COLLECT_BILL_NO)
-	      JOIN TBL_CHARGE CH ON (CH.CHARGE_NO = CO.CHARGE_NO)
-	     WHERE CO.COLLECT_BILL_STATUS = '수금'
-           AND D.DEPT_CODE = #{ deptCode }
-           AND EXTRACT(YEAR FROM CO.COLLECT_BILL_DATE) = #{ collectBillDate.collectBillYear } 
-           AND EXTRACT(MONTH FROM CO.COLLECT_BILL_DATE) = #{ collectBillDate.collectBillMonth }
-	     GROUP BY D.DEPT_CODE
-		        , D.DEPT_NAME
-	</select>
-	
+	<!--  전 달 사원 실적 조회 -->
 	<select id="selectEmpPeformLastMonth" resultMap="performResultMap" parameterType="com.deft.crud.sales.model.dto.CollectBillDTO">
 		SELECT /*com.deft.crud.product.model.dao.SalesMapper#selectEmpPeformLastMonth()*/
 			   EXTRACT(YEAR FROM B.COLLECT_BILL_DATE) "COLLECT_BILL_YEAR"
@@ -219,7 +199,7 @@
   		  JOIN TBL_EMP_INFO E ON (P.EMP_NO = E.EMP_NO)
           JOIN TBL_CHARGE C ON (C.CHARGE_NO = B.CHARGE_NO)
  		 WHERE B.COLLECT_BILL_STATUS = '수금'
-           AND P.EMP_NO = #{ empNo }
+           AND P.EMP_NO = #{ loginInfo.empNo }
            AND EXTRACT(YEAR FROM B.COLLECT_BILL_DATE) = #{ collectBillDate.collectBillYear } 
            AND EXTRACT(MONTH FROM B.COLLECT_BILL_DATE) = #{ collectBillDate.collectBillMonth } 
          GROUP BY EXTRACT(YEAR FROM B.COLLECT_BILL_DATE) 
@@ -409,7 +389,6 @@
          	    , P.PRODUCT_NO
          	    , PE.EMP_NO
   	     ORDER BY CB.COLLECT_BILL_DATE DESC, P.PRODUCT_NO ASC
-  	     
 	</select>
 	
 	<!-- 카테고리 실적 조회 -->
@@ -503,6 +482,7 @@
 	
 	</select>
 	
+	<!-- 대시보드 화면에서 사원이 현재 가지고 있는 상품실적 정보 -->
 	<select id="productSalesThisMonth" resultMap="performResultMap" parameterType="com.deft.crud.sales.model.dto.PerformanceDTO">
 		SELECT /*com.deft.crud.product.model.dao.SalesMapper#productSalesThisMonth()*/
                P.PRODUCT_NO
@@ -522,7 +502,6 @@
            AND PE.EMP_NO = #{ empNo }
          GROUP BY P.PRODUCT_NO
          	    , P.PRODUCT_NAME
-		
 		
 	</select>
 </mapper>

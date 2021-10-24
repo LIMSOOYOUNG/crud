@@ -45,9 +45,6 @@ public class CollectionController {
 		
 		List<ChargeDTO> selectCollectionAll = collectionService.selectCollectionAll(chargeDate);
 		
-		
-		System.out.println("selectCollectionAll : " + selectCollectionAll);
-		
 		mv.addObject("chargeYear", chargeYear);
 		mv.addObject("chargeMonth", chargeMonth);
 		mv.addObject("selectCollectionAll", selectCollectionAll);
@@ -62,11 +59,7 @@ public class CollectionController {
 		
 		response.setContentType("UTF-8");
 		
-		System.out.println("@@@@@@@@@: " + charge);
-		
 		List<ChargeDTO> selectCollectionForDate = collectionService.selectCollectionForDate(charge);
-		
-		System.out.println("@@@@@@@@@@@@@@@ " + selectCollectionForDate);
 		
 		mv.addObject("selectCollectionForDate", objectMapper.writeValueAsString(selectCollectionForDate));
 		mv.setViewName("jsonView");

@@ -36,7 +36,7 @@
 									<div class="form-group" id="productImgArea">
 										<img id="productImg" width="250" height="300" class="mx-3">
 										<div class="thumbnail-file-area">
-											<input type="file" class="mx-3" id="productThumbNail" name="productThumbNail" onchange="loadImg(this,1)" required>
+											<input type="file" class="mx-3" id="productThumbNail" name="productThumbNail" onchange="loadImg(this)" required>
 										</div>
 									</div>
 								</div>
@@ -135,12 +135,12 @@
 		
 		/* 이미지 선택 */
 		function loadImg(value) {
-			if(value.files && value.files[0]) {
+			if(value.files) {
 				const reader = new FileReader();
 				reader.onload = function(e) {
 					document.getElementById("productImg").src = e.target.result;
 				}
-				reader.readAsDataURL(value.files[0]);
+				reader.readAsDataURL(value.files[0]); 
 			}
 		}
 		

@@ -13,10 +13,9 @@
 
 		<div id="content-wrapper" class="d-flex flex-column">
 			<div id="content"> 
-				<!-- Header -->
+			
 				<th:block th:replace="@{/common/header} :: header"></th:block>
 
-				<!-- Content -->
 				<div class="container-fluid" id="container-wrapper">
 					<div class="d-sm-flex align-items-center justify-content-between mb-4">
 						<h1 class="h3 mb-0 text-gray-800">상품관리</h1>
@@ -34,11 +33,9 @@
 									<h6 class="m-0 font-weight-bold text-primary">Form Basic</h6>
 								</div>
 								<div class="card-body">
-									<div class="form-group" id="productImgArea">
+									<div class="form-group" id="productImgArea" th:align="center">
 										<img th:if="${productImage != null}" th:src="|@{/upload/productImage/thumbnail}${productImage.thumbnailPath}|" width="250" height="300" id="productImg" name="productImg" class="mx-3">
-										<div class="thumbnail-file-area">
-											<input type="file" class="mx-3" id="productThumbNail" name="productThumbNail" onchange="loadImg(this,1)">
-										</div>
+										<input type="file" class="mx-3 col-xl-6" id="productThumbNail" name="productThumbNail" onchange="loadImg(this,1)">
 									</div>
 								</div>
 							</div>
