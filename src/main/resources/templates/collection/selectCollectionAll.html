@@ -86,7 +86,7 @@
                                                     <td th:text = "${collectionList.collectBill[0].collectBillStatus}"></td>
                                                     <td th:text = "${collectionList.chargeDate}"></td>
                                                     <td>
-                                                        <button type="button" id="detailButton" name="detailButton" class="btn btn-primary" th:value="${collectionList.chargeNo}">상세보기</button>
+                                                        <button type="button" id="detailButton" name="detailButton" class="btn btn-primary" th:onclick="|location.href='@{/charge/select(chargeNo=${collectionList.chargeNo})}'|">청구서 상세보기</button>
                                                     </td>
                                                 </tr>
                                             </tbody>

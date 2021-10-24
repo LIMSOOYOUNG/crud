@@ -41,8 +41,6 @@ public class DashboardController {
 		
 		List<PerformanceDTO> productSalesThisMonth = salesService.productSalesThisMonth(loginInfo);
 		
-		System.out.println("productSalesThisMonth : " + productSalesThisMonth);
-		
 		mv.addObject("productSalesThisMonth", productSalesThisMonth);
 		mv.setViewName("dashboard/dashboard");
 		return mv;
@@ -62,8 +60,6 @@ public class DashboardController {
 		/* 사원 목표 실적 조회 */
 		List<Integer> userTargetSalesChart = dashBoardService.userTargetSalesChart(loginInfo);
 		
-		System.out.println("userTargetPerformChart : " + userTargetSalesChart);
-		
 		
 		mv.addObject("userSalesChart", objectMapper.writeValueAsString(userSalesChart));
 		mv.addObject("userTargetSalesChart", objectMapper.writeValueAsString(userTargetSalesChart));
@@ -80,8 +76,6 @@ public class DashboardController {
 		/* 사원 정보와 부서정보를 조건을 주기 위해 인자값으로 넘겨주고 조회를 한다. */
 		List<Integer> deptSalesChart = dashBoardService.deptSalesChart(loginInfo);
 		
-		System.out.println("deptPerformChart : " + deptSalesChart);
-		
 		
 		mv.addObject("deptSalesChart", objectMapper.writeValueAsString(deptSalesChart));
 		mv.setViewName("jsonView");
@@ -89,37 +83,20 @@ public class DashboardController {
 	}
 	
 	/* 영업기회 실패 통계 */
-	@GetMapping("/failed/businessChance")
-	public ModelAndView failedBusinessChanceChart(ModelAndView mv,  HttpServletResponse response, @AuthenticationPrincipal UserImpl loginInfo) throws JsonProcessingException {
+	@GetMapping("/businessChance")
+	public ModelAndView businessChanceChart(ModelAndView mv,  HttpServletResponse response, @AuthenticationPrincipal UserImpl loginInfo) throws JsonProcessingException {
 		
 		response.setCharacterEncoding("UTF-8");
 		
 		List<Integer> failedBusinessChanceChart = dashBoardService.failedBusinessChanceChart(loginInfo);
 		
-		System.out.println("failedBusinessChanceChart" + failedBusinessChanceChart);
+		List<Integer> successBusinessChanceChart = dashBoardService.successBusinessChanceChart(loginInfo);
 		
 		mv.addObject("failedBusinessChanceChart", objectMapper.writeValueAsString(failedBusinessChanceChart));
+		mv.addObject("successBusinessChanceChart", objectMapper.writeValueAsString(successBusinessChanceChart));
 		mv.setViewName("jsonView");
 		return mv;
 	}
-	
-
-//	@GetMapping("/product/sales/selectAll")
-//	public ModelAndView productSalesThisMonth(ModelAndView mv, HttpServletResponse response, @AuthenticationPrincipal UserImpl loginInfo) {
-//		
-//		System.out.println("ajax 통신 ");
-//		response.setCharacterEncoding("UTF-8");
-//		
-//		List<PerformanceDTO> productSalesThisMonth = salesService.productSalesThisMonth(loginInfo);
-//		
-//		System.out.println("productSalesThisMonth : " + productSalesThisMonth);
-//
-//		mv.setViewName("jsonView");
-//		return mv;
-//		
-//	}
-	
-	
 	
 
 }

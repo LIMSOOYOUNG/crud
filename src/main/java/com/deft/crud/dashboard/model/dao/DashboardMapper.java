@@ -20,5 +20,8 @@ public interface DashboardMapper {
 	/* 실패한 영업기회 수 */
 	Integer failedBusinessChanceChart(int failedBusinessChanceYear, int failedBusinessChanceMonth, UserImpl loginInfo);
 	
+	/* 성공한 영업기회 수*/
+	Integer successBusinessChanceChart(int successBusinessChanceYear, int successBusinessChanceMonth, UserImpl loginInfo);
+	
 	
 }
