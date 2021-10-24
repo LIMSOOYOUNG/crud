@@ -26,9 +26,9 @@ public class CustomerService {
     }
 
     /* 기존 고객 조회 (해지 고객 제외) */
-    public List<ExtCustomerDTO> selectExtCustomerList() {
+    public List<ExtCustomerDTO> selectExtCustomerList(UserImpl userInfo) {
 
-    	return customerMapper.selectExtCustomerList();
+    	return customerMapper.selectExtCustomerList(userInfo);
     }
 
     /* 분석 고객 조회 */

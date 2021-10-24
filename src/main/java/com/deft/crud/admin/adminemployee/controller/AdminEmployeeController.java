@@ -127,8 +127,12 @@ public class AdminEmployeeController {
 	@GetMapping("employeeinfomodify")
 	public ModelAndView employeeModifyForm(ModelAndView mv, @RequestParam int employeeNo) {
 		
+		System.out.println(employeeNo);
+		
 		/* AdminEmployeeDTO를 emplyoeeNo값을 담아서 서비스에 전단한다. */
 		AdminEmployeeDTO employeeDTO = adminEmployeeService.empInfoModify(employeeNo);
+		
+		System.out.println(employeeDTO);
 		
 		/* JobDTO를 리스트로 서비스에 전달한다. */
 		List<JobDTO> jobList = adminEmployeeService.jobNameList();

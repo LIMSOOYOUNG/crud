@@ -13,7 +13,7 @@ public interface CustomerMapper {
     List<CustomerCompanyDTO> selectAllCustomer(UserImpl userInfo);
 
     /* 기존 고객 조회 (해지 고객 제외) */
-    List<ExtCustomerDTO> selectExtCustomerList();
+    List<ExtCustomerDTO> selectExtCustomerList(UserImpl userInfo);
 
     /* 분석 고객 조회 */
     List<CustomerCompanyDTO> selectAllAnalysisCustomer(UserImpl userInfo);

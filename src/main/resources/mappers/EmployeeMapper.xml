@@ -28,7 +28,7 @@
              , D.DEPT_NAME
              , J.JOB_NAME
 			 , E.EMP_GENDER
-	    	 , E.EMP_PHONE
+	    	 , E.EMP_EMAIL
              FROM TBL_EMP_INFO E
              JOIN TBL_JOB J ON (E.JOB_CODE = J.JOB_CODE)
              JOIN TBL_DEPARTMENT D ON (E.DEPT_CODE = D.DEPT_CODE)
