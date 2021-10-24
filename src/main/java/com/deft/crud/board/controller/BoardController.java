@@ -95,21 +95,25 @@ public class BoardController {
 
 	    if(!freeboardUpload.isEmpty()) {
 	    
-	    	/* root값 지정 */
+	    	/* 절대경로를 변수에 초기화한다. */
 		    String root = request.getSession().getServletContext().getRealPath("\\");
 		    
+		    /* 원본파일과 저장할 경로를 설정 */
 		    String filePath  = root + "\\upload\\freeboard";
 		    
-		    
+		    /* 파일이 없으면 생성한다. */
 		    File mkdir = new File(filePath);
 			if(!mkdir.exists()) {
 				mkdir.mkdirs();
 			}
-
-		    	String originFileName = freeboardUpload.getOriginalFilename();
+				/* 원본파일 */
+				String originFileName = freeboardUpload.getOriginalFilename();
+		    	/* 확장자 */
 		    	String ext = originFileName.substring(originFileName.lastIndexOf("."));
-				String savedName = UUID.randomUUID().toString().replace("-", "") + ext;
-	
+		    	/* 파일명이 중복되지 않도록 설정해준다. */	
+		    	String savedName = UUID.randomUUID().toString().replace("-", "") + ext;
+		    	
+		    	/* BoardFileDTO에 원본파일 이름, 저장할 이름, 파일경로, writeNo를 담는다. */
 				BoardFileDTO file = new BoardFileDTO();
 				file.setOriginalName(originFileName);
 				file.setSavedName(savedName);
@@ -118,13 +122,14 @@ public class BoardController {
 				
 				parameters.setBoardFileList(file);
 		    
-		    try {
-		    		
+		    try {	
+		    	/* 파일 저장 */
 		    		freeboardUpload.transferTo(new File(filePath + "\\" + file.getSavedName()));
 		    	
 		    }catch (Exception e) {
 		    	e.printStackTrace();
-					
+		    	
+		    		/* 예외처리가 발생한다면 파일 삭제 */
 					new File(filePath + "\\" + file.getSavedName()).delete();
 	
 		    }
@@ -245,6 +250,7 @@ public class BoardController {
 			
 			try {
 				
+				/* 이미지 저장 */
 				freeboardUpdate.transferTo(new File(fileUploadDirectory + "\\" + savedName));
 				
 			}catch (IllegalStateException e) {
@@ -253,6 +259,7 @@ public class BoardController {
 				
 			} catch (IOException e) {
 				
+				/* 예외처리가 발생하면 파일 삭제 */
 				new File(fileUploadDirectory + "\\" + savedName).delete();
 				e.printStackTrace();
 			}
