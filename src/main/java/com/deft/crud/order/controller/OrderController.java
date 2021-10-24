@@ -93,7 +93,7 @@ public class OrderController {
 		List<EstimateDTO> estimateList = estimateService.selectEstimateListByStatus(estimateStatus, empNo);
 		
 		/* 기존 고객 조회 (해지 고객 제외) */
-		List<ExtCustomerDTO> extCustomerList = customerService.selectExtCustomerList();
+		List<ExtCustomerDTO> extCustomerList = customerService.selectExtCustomerList(userInfo);
 		
 		/* 상품 목록 조회 */
 		List<StorageDTO> stockList = stockService.selectSellableProductAll();
@@ -140,13 +140,14 @@ public class OrderController {
 	}
 	
 	@GetMapping("/modify")
-	public ModelAndView modifyOrder(ModelAndView mv, @RequestParam String orderNo) {
+	public ModelAndView modifyOrder(ModelAndView mv, @RequestParam String orderNo
+									, @AuthenticationPrincipal UserImpl userInfo) {
 		
 		/* 주문서 정보 조회 */
 		OrderDTO order = orderService.selectOrderDetail(orderNo);
 		
 		/* 고객 목록 조회 */
-		List<ExtCustomerDTO> extCustomerList = customerService.selectExtCustomerList();
+		List<ExtCustomerDTO> extCustomerList = customerService.selectExtCustomerList(userInfo);
 		
 		/* 상품 목록 조회 */
 		List<StorageDTO> stockList = stockService.selectSellableProductAll();

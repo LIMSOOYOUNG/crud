@@ -13,6 +13,7 @@
 				<div class="sidebar-brand-text mx-3">CRUD</div>
 			</a>
 			<hr class="sidebar-divider my-0">
+			
 			<li class="nav-item">
 				<a class="nav-link collapsed" th:href="@{/}">
 					<i class="fas fa-fw fa-tachometer-alt" style="width:35px;"></i>
@@ -20,168 +21,171 @@
 				</a>
 			</li>
 			<hr class="sidebar-divider">
-
+			
 			<!-- Start EmpSidebar -->
-			<div class="sidebar-heading">MAIN</div>
-			<li class="nav-item">
-				<a class="nav-link collapsed" th:href="@{#}" data-toggle="collapse" data-target="#collapseEmp" aria-expanded="true"
-						aria-controls="collapseEmp">
-					<i class="fas fa-fw fa-address-card" style="width:35px;"></i>
-					<span>사원현황</span>
-				</a>
-				<div id="collapseEmp" class="collapse" aria-labelledby="headingPage" data-parent="#accordionSidebar">
-					<div class="bg-white py-2 collapse-inner rounded">
-						<a class="collapse-item" th:href="@{/employee/selectemployee}">전체 사원 조회</a>
+			<th:block sec:authorize="hasAnyRole('EMP, MANAGER')">
+				<div class="sidebar-heading">MAIN</div>
+				<li class="nav-item">
+					<a class="nav-link collapsed" th:href="@{#}" data-toggle="collapse" data-target="#collapseEmp" aria-expanded="true"
+							aria-controls="collapseEmp">
+						<i class="fas fa-fw fa-address-card" style="width:35px;"></i>
+						<span>사원현황</span>
+					</a>
+					<div id="collapseEmp" class="collapse" aria-labelledby="headingPage" data-parent="#accordionSidebar">
+						<div class="bg-white py-2 collapse-inner rounded">
+							<a class="collapse-item" th:href="@{/employee/selectemployee}">전체 사원 조회</a>
+						</div>
 					</div>
-				</div>
-			</li>
-			<li class="nav-item">
-				<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseCustomer" aria-expanded="true"
-				   aria-controls="collapseCustomer">
-					<i class="fas fa-fw fa-handshake" style="width:35px;"></i>
-					<span>고객관리</span>
-				</a>
-				<div id="collapseCustomer" class="collapse" aria-labelledby="headingPage" data-parent="#accordionSidebar">
-					<div class="bg-white py-2 collapse-inner rounded">
-						<a class="collapse-item" th:href="@{/customer/company}">고객사</a>
-						<a class="collapse-item" th:href="@{/customer/all}">고객</a>
-						<a class="collapse-item" th:href="@{/customer/ana}">분석 고객</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseCustomer" aria-expanded="true"
+					aria-controls="collapseCustomer">
+						<i class="fas fa-fw fa-handshake" style="width:35px;"></i>
+						<span>고객관리</span>
+					</a>
+					<div id="collapseCustomer" class="collapse" aria-labelledby="headingPage" data-parent="#accordionSidebar">
+						<div class="bg-white py-2 collapse-inner rounded">
+							<a class="collapse-item" th:href="@{/customer/company}">고객사</a>
+							<a class="collapse-item" th:href="@{/customer/all}">고객</a>
+							<a class="collapse-item" th:href="@{/customer/ana}">분석 고객</a>
+						</div>
 					</div>
-				</div>
-			</li>
-			<li class="nav-item">
-				<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseSales" aria-expanded="true"
-				   aria-controls="collapseSales">
-					<i class="fas fa-fw fa-headset" style="width:35px;"></i>
-					<span>영업관리</span>
-				</a>
-				<div id="collapseSales" class="collapse" aria-labelledby="headingPage" data-parent="#accordionSidebar">
-					<div class="bg-white py-2 collapse-inner rounded">
-						<a class="collapse-item" th:href="@{/business/chance/selectAll}">영업기회 조회</a>
-						<a class="collapse-item" th:href="@{/opportunity/statistic/selectAll}">영업기회 통계</a>
-						<a class="collapse-item" th:href="@{/business/activity/selectAll}">영업활동</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseSales" aria-expanded="true"
+					aria-controls="collapseSales">
+						<i class="fas fa-fw fa-headset" style="width:35px;"></i>
+						<span>영업관리</span>
+					</a>
+					<div id="collapseSales" class="collapse" aria-labelledby="headingPage" data-parent="#accordionSidebar">
+						<div class="bg-white py-2 collapse-inner rounded">
+							<a class="collapse-item" th:href="@{/business/chance/selectAll}">영업기회 조회</a>
+							<a class="collapse-item" th:href="@{/opportunity/statistic/selectAll}">영업기회 통계</a>
+							<a class="collapse-item" th:href="@{/business/activity/selectAll}">영업활동</a>
+						</div>
 					</div>
-				</div>
-			</li>
-			<li class="nav-item">
-				<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePurchase" aria-expanded="true"
-				aria-controls="collapsePurchase">
-					<i class="far fa-fw fa-credit-card" style="width:35px;"></i>
-					<span>매입주문</span>
-				</a>
-				<div id="collapsePurchase" class="collapse" aria-labelledby="headingPage" data-parent="#accordionSidebar">
-					<div class="bg-white py-2 collapse-inner rounded">
-						<a class="collapse-item" th:href="@{/estimate/selectAll}">견적서 관리</a>
-						<a class="collapse-item" th:href="@{/order/selectAll}">주문서 관리</a>
-						<a class="collapse-item" th:href="@{/charge/insert}">청구서 등록</a>
-						<a class="collapse-item" th:href="@{/charge/selectAll}">청구서 관리</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePurchase" aria-expanded="true"
+					aria-controls="collapsePurchase">
+						<i class="far fa-fw fa-credit-card" style="width:35px;"></i>
+						<span>매입주문</span>
+					</a>
+					<div id="collapsePurchase" class="collapse" aria-labelledby="headingPage" data-parent="#accordionSidebar">
+						<div class="bg-white py-2 collapse-inner rounded">
+							<a class="collapse-item" th:href="@{/estimate/selectAll}">견적서 관리</a>
+							<a class="collapse-item" th:href="@{/order/selectAll}">주문서 관리</a>
+							<a class="collapse-item" th:href="@{/charge/insert}">청구서 등록</a>
+							<a class="collapse-item" th:href="@{/charge/selectAll}">청구서 관리</a>
+						</div>
 					</div>
-				</div>
-			</li>
-			<!-- 담당자만 볼 수 있는 화면 -->
-<!-- 			<th:block sec:authorize="hasRole('MANAGER')">  -->
-			<li class="nav-item">
-				<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseIncome" aria-expanded="true"
-				   aria-controls="collapseIncome">
-					<i class="fas fa-fw fa-chart-line" style="width:35px;"></i>
-					<span>매출관리</span>
-				</a>
-				<div id="collapseIncome" class="collapse" aria-labelledby="headingPage" data-parent="#accordionSidebar">
-					<div class="bg-white py-2 collapse-inner rounded">
-						<a class="collapse-item" th:href="@{/collection/selectAll}">수금현황</a>
-						<a class="collapse-item" th:href="@{/sales/selectAll}">사원실적</a>
-						<a class="collapse-item" th:href="@{/sales/dept/selectAll}">영업그룹별 실적 조회</a>
-						<a class="collapse-item" th:href="@{/sales/category/selectAll}">카테고리별 실적 조회</a>
-						<a class="collapse-item" th:href="@{/sales/product/selectAll}">상품별 실적 조회</a>
+				</li>
+				<!-- 담당자만 볼 수 있는 화면 -->
+	<!-- 			<th:block sec:authorize="hasRole('MANAGER')">  -->
+				<li class="nav-item">
+					<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseIncome" aria-expanded="true"
+					aria-controls="collapseIncome">
+						<i class="fas fa-fw fa-chart-line" style="width:35px;"></i>
+						<span>매출관리</span>
+					</a>
+					<div id="collapseIncome" class="collapse" aria-labelledby="headingPage" data-parent="#accordionSidebar">
+						<div class="bg-white py-2 collapse-inner rounded">
+							<a class="collapse-item" th:href="@{/collection/selectAll}">수금현황</a>
+							<a class="collapse-item" th:href="@{/sales/selectAll}">사원실적</a>
+							<a class="collapse-item" th:href="@{/sales/dept/selectAll}">영업그룹별 실적 조회</a>
+							<a class="collapse-item" th:href="@{/sales/category/selectAll}">카테고리별 실적 조회</a>
+							<a class="collapse-item" th:href="@{/sales/product/selectAll}">상품별 실적 조회</a>
+						</div>
 					</div>
-				</div>
-			</li>
-<!-- 			</th:block> -->
-			<!-- 담당자만 볼 수 있는 화면 -->
-			<li class="nav-item">
-				<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseInventory" aria-expanded="true"
-				   aria-controls="collapseInventory">
-					<i class="fas fa-fw fa-boxes" style="width:35px;"></i>
-					<span>재고관리</span>
-				</a>
-				<div id="collapseInventory" class="collapse" aria-labelledby="headingPage" data-parent="#accordionSidebar">
-					<div class="bg-white py-2 collapse-inner rounded">
-						<a class="collapse-item" th:href="@{/stock/selectAll}">창고 재고 관리</a>
-						<a class="collapse-item" th:href="@{/stock/request/selectAll}">요청목록</a>
+				</li>
+	<!-- 			</th:block> -->
+				<!-- 담당자만 볼 수 있는 화면 -->
+				<li class="nav-item">
+					<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseInventory" aria-expanded="true"
+					aria-controls="collapseInventory">
+						<i class="fas fa-fw fa-boxes" style="width:35px;"></i>
+						<span>재고관리</span>
+					</a>
+					<div id="collapseInventory" class="collapse" aria-labelledby="headingPage" data-parent="#accordionSidebar">
+						<div class="bg-white py-2 collapse-inner rounded">
+							<a class="collapse-item" th:href="@{/stock/selectAll}">창고 재고 관리</a>
+							<a class="collapse-item" th:href="@{/stock/request/selectAll}">요청목록</a>
+						</div>
 					</div>
-				</div>
-			</li>
-			<li class="nav-item">
-				<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseProduct" aria-expanded="true"
-				   aria-controls="collapseProduct">
-					<i class="fas fa-fw fa-archive" style="width:35px;"></i>
-					<span>상품관리</span>
-				</a>
-				<div id="collapseProduct" class="collapse" aria-labelledby="headingPage" data-parent="#accordionSidebar">
-					<div class="bg-white py-2 collapse-inner rounded">
-						<a class="collapse-item" th:href="@{/product/category/selectAll}">카테고리 관리</a>
-						<a class="collapse-item" th:href="@{/product/selectAll}">상품 관리</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseProduct" aria-expanded="true"
+					aria-controls="collapseProduct">
+						<i class="fas fa-fw fa-archive" style="width:35px;"></i>
+						<span>상품관리</span>
+					</a>
+					<div id="collapseProduct" class="collapse" aria-labelledby="headingPage" data-parent="#accordionSidebar">
+						<div class="bg-white py-2 collapse-inner rounded">
+							<a class="collapse-item" th:href="@{/product/category/selectAll}">카테고리 관리</a>
+							<a class="collapse-item" th:href="@{/product/selectAll}">상품 관리</a>
+						</div>
 					</div>
-				</div>
-			</li>
-			<li class="nav-item">
-				<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseBoard" aria-expanded="true"
-				   aria-controls="collapseBoard">
-					<i class="far fa-fw fa-edit" style="width:35px;"></i>
-					<span>게시판</span>
-				</a>
-				<div id="collapseBoard" class="collapse" aria-labelledby="headingPage" data-parent="#accordionSidebar">
-					<div class="bg-white py-2 collapse-inner rounded">
-						<a class="collapse-item" th:href="@{/board/selectnotice}">공지사항</a>
-						<a class="collapse-item" th:href="@{/board/selectfreeboard}">자유게시판</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseBoard" aria-expanded="true"
+					aria-controls="collapseBoard">
+						<i class="far fa-fw fa-edit" style="width:35px;"></i>
+						<span>게시판</span>
+					</a>
+					<div id="collapseBoard" class="collapse" aria-labelledby="headingPage" data-parent="#accordionSidebar">
+						<div class="bg-white py-2 collapse-inner rounded">
+							<a class="collapse-item" th:href="@{/board/selectnotice}">공지사항</a>
+							<a class="collapse-item" th:href="@{/board/selectfreeboard}">자유게시판</a>
+						</div>
 					</div>
-				</div>
-			</li>	<!-- End EmpSidebar -->
+				</li>
+			</th:block>
+			<!-- End EmpSidebar -->
 
 			<!-- Start AdminSidebar -->
 			<th:block sec:authorize="hasRole('ADMIN')">
-			<hr class="sidebar-divider">
-			<div class="sidebar-heading">ADMIN</div>
-			<li class="nav-item">
-				<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseEmpMng" aria-expanded="true"
-				aria-controls="collapseEmpMng">
-					<i class="fas fa-fw fa-user-check" style="width:35px;"></i>
-					<span>사원관리</span>
-				</a>
-				<div id="collapseEmpMng" class="collapse" aria-labelledby="headingPage" data-parent="#accordionSidebar">
-					<div class="bg-white py-2 collapse-inner rounded">
-						<a class="collapse-item" th:href="@{/employee/selectemployee}">전체 사원 관리</a>
-						<a class="collapse-item" th:href="@{/admin/emp/insert}">사원 등록</a>
+				<div class="sidebar-heading">ADMIN</div>
+				<li class="nav-item">
+					<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseEmpMng" aria-expanded="true"
+					aria-controls="collapseEmpMng">
+						<i class="fas fa-fw fa-user-check" style="width:35px;"></i>
+						<span>사원관리</span>
+					</a>
+					<div id="collapseEmpMng" class="collapse" aria-labelledby="headingPage" data-parent="#accordionSidebar">
+						<div class="bg-white py-2 collapse-inner rounded">
+							<a class="collapse-item" th:href="@{/employee/selectemployee}">전체 사원 관리</a>
+							<a class="collapse-item" th:href="@{/admin/emp/insert}">사원 등록</a>
+						</div>
 					</div>
-				</div>
-			</li>
-			<li class="nav-item">
-				<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseOrganizationMng" aria-expanded="true"
-				aria-controls="collapseOrganizationMng">
-					<i class="fas fa-fw fa-sitemap" style="width:35px;"></i>
-					<span>조직도관리</span>
-				</a>
-				<div id="collapseOrganizationMng" class="collapse" aria-labelledby="headingPage" data-parent="#accordionSidebar">
-					<div class="bg-white py-2 collapse-inner rounded">
-						<a class="collapse-item" th:href="@{/organization/selectdepartment}">부서 관리</a>
-						<a class="collapse-item" th:href="@{/organization/selectjob}">직급 관리</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseOrganizationMng" aria-expanded="true"
+					aria-controls="collapseOrganizationMng">
+						<i class="fas fa-fw fa-sitemap" style="width:35px;"></i>
+						<span>조직도관리</span>
+					</a>
+					<div id="collapseOrganizationMng" class="collapse" aria-labelledby="headingPage" data-parent="#accordionSidebar">
+						<div class="bg-white py-2 collapse-inner rounded">
+							<a class="collapse-item" th:href="@{/organization/selectdepartment}">부서 관리</a>
+							<a class="collapse-item" th:href="@{/organization/selectjob}">직급 관리</a>
+						</div>
 					</div>
-				</div>
-			</li>
-			<li class="nav-item">
-				<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseBoardMng" aria-expanded="true"
-				aria-controls="collapseBoardMng">
-					<i class="far fa-fw fa-edit" style="width:35px;"></i>
-					<span>게시판관리</span>
-				</a>
-				<div id="collapseBoardMng" class="collapse" aria-labelledby="headingPage" data-parent="#accordionSidebar">
-					<div class="bg-white py-2 collapse-inner rounded">
-						<a class="collapse-item" th:href="@{/board/selectnotice}">공지사항</a>
-						<a class="collapse-item" th:href="@{/board/selectfreeboard}">자유게시판</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseBoardMng" aria-expanded="true"
+					aria-controls="collapseBoardMng">
+						<i class="far fa-fw fa-edit" style="width:35px;"></i>
+						<span>게시판관리</span>
+					</a>
+					<div id="collapseBoardMng" class="collapse" aria-labelledby="headingPage" data-parent="#accordionSidebar">
+						<div class="bg-white py-2 collapse-inner rounded">
+							<a class="collapse-item" th:href="@{/board/selectnotice}">공지사항</a>
+							<a class="collapse-item" th:href="@{/board/selectfreeboard}">자유게시판</a>
+						</div>
 					</div>
-				</div>
-			</li>	<!-- End AdminSidebar -->
+				</li>
 			</th:block>
+			<!-- End AdminSidebar -->
 		</ul>
 	</th:block>
 

@@ -75,8 +75,7 @@
           LEFT JOIN TBL_EMP_INFO B ON ( A.MANAGER_NO = B.EMP_NO )
           LEFT JOIN TBL_EMP_IMAGE EI ON ( A.EMP_NO = EI.EMP_NO )
           LEFT JOIN TBL_JOB J ON (A.JOB_CODE = J.JOB_CODE)
-          LEFT JOIN TBL_DEPARTMENT D ON (A.DEPT_CODE = D.DEPT_CODE)
-          LEFT JOIN TBL_EMP_INFO B ON ( A.MANAGER_NO = B.EMP_NO )	
+          LEFT JOIN TBL_DEPARTMENT D ON (A.DEPT_CODE = D.DEPT_CODE)	
          WHERE A.EMP_NO = #{ employeeNo }
 	</select>
 	
@@ -99,10 +98,9 @@
 		     , D.DEPT_NAME
 		     , B.EMP_NAME "MANAGER_NAME"
 		  FROM TBL_EMP_INFO A
-          JOIN TBL_EMP_INFO B ON ( A.MANAGER_NO = B.EMP_NO )
+          LEFT JOIN TBL_EMP_INFO B ON ( A.MANAGER_NO = B.EMP_NO )
           JOIN TBL_JOB J ON (A.JOB_CODE = J.JOB_CODE)
-          JOIN TBL_DEPARTMENT D ON (A.DEPT_CODE = D.DEPT_CODE)
-          JOIN TBL_EMP_INFO B ON ( A.MANAGER_NO = B.EMP_NO )	
+          JOIN TBL_DEPARTMENT D ON (A.DEPT_CODE = D.DEPT_CODE)	
          WHERE A.EMP_NO = #{ employeeNo }
 	</select>
 	<update id="employeeModify" parameterType="com.deft.crud.admin.adminemployee.model.dto.AdminEmployeeDTO">

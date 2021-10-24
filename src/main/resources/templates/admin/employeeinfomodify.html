@@ -1,152 +1,149 @@
 <!DOCTYPE html>
-<html xmlns:th="https://www.thymeleaf.org"
-	  xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-spingsecurity5">
+<html lang="ko"
+	xmlns:th="https://www.thymeleaf.org">
 <head>
-<meta charset="utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="description" content="">
-<meta name="author" content="">
-<link href="img/logo/logo.png" rel="icon">
-<link href="/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-<link href="/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css">
-<link href="/css/ruang-admin.min.css" rel="stylesheet">
+	<th:block th:replace="@{common/config} :: config"></th:block>
 </head>
-<body class="bg-gradient-login">
-<div id="wrapper">
-<!-- Sidebar -->
+
+<body id="page-top">
+	<div id="wrapper">
+		<!-- Sidebar -->
 		<th:block th:replace="@{/common/sidebar} :: sidebar"></th:block>
 
 		<div id="content-wrapper" class="d-flex flex-column">
 			<div id="content">
 				<!-- Header -->
 				<th:block th:replace="@{/common/header} :: header"></th:block>
-	<!-- Employeemodify -->
-	<div class="container-login">
-		<div class="row justify-content-center">
-			<div class="col-xl-10 col-lg-12 col-md-9">
-				<div class="card shadow-sm my-5">
-					<div class="card-body p-0">
-						<div class="row">
-							<div class="col-lg-12">
-								<div class="login-form">
-									<div class="text-center">
-										<h1 class="h4 text-gray-900 mb-4"><span th:text="${ employeeDTO.employeeName }"></span>님 정보 수정</h1>
-									</div>
-									<form action="employeeinfomodify" method="post" enctype="multipart/form-data">
-										<div class="row">
-											<div class="col-lg-2" style="margin-top: 60px;">
-												<div align="center">
-													<label>프로필 사진</label>
-													<div style="height: 253px; width: 200px; border: 1px solid black; ">
-														<img id="profileImg" width="253px" height="200px" th:if="${employeeDTO.empImage != null}" th:src="|@{/upload/profileImage/thumbnail}${employeeDTO.empImage.thumbnailPath}|">
-													</div>
-                        								<input type="file" id="profileThumbNail" name="profileThumbNail" onchange="loadImg(this,1)" required th:for="profileImg">
-												</div>
-											</div>
-											<div class="col-lg-5">
-												<div class="form-group">
-													<label>사원번호</label> 
-														<input type="text" class="form-control" name="employeeNo" th:value="${employeeDTO.employeeNo}" th:readonly="readonly">
-												</div>
-												<div class="form-group">
-													<label>ID</label>
-														<input type="text"  class="form-control" name="employeeId" th:value="${employeeDTO.employeeId}" th:readonly="readonly" >
-												</div>
-												<div class="form-group">
-													<label>Email</label> 
-														<input type="email" class="form-control" name="email" th:value="${employeeDTO.email}">
-												</div>
-												<div class="form-group">
-													<label>주소</label> 
-														<input type="text" class="form-control" name="empAddress" th:value="${employeeDTO.empAddress}">
-												</div>
-												<div class="row">
-													<div class="form-group col-xl-6">
-														<label>부서</label> 
-															<select name="deptCode" class="form-control">
-																<option th:each="dept : ${deptList}"
-																        th:value="${dept.deptCode}"
-																        th:utext="${dept.deptName}">
-																</option>
-															</select>
-													</div>
-													<div class="form-group col-xl-6">
-														<label>직급</label> 
-															<select name="jobCode"  class="form-control">
-																<option th:each="job : ${jobList}"
-																        th:value="${job.jobCode}"
-																        th:utext="${job.jobName}">
-																</option>
-															</select>
-													</div>
-												</div>
-												<div class="row">
-													<div class="form-group col-xl-6">
-														<label>담당자</label> 
-															<select name="managerNo" class="form-control">
-																<option th:each="manager : ${managerList}"
-																        th:value="${manager.managerNo}"
-																        th:utext="${manager.managerName}">
-																</option>
-															</select>
-													</div>
-													<div class="form-group col-xl-6">
-														<label>권한</label> 
-															<input type="text" class="form-control" name="authority" th:value="${employeeDTO.authority}">
-													</div>
-												</div>
-											</div>
-											<div class="col-lg-5">
-												<div class="form-group">
-													<label>사원명</label> 
-														<input type="text" class="form-control" name="employeeName" th:value="${employeeDTO.employeeName}">
-												</div>
-												<div class="row">
-													<div class="form-group col-xl-6">
-														<label>생년월일</label> 
-															<input type="date" class="form-control" name="employeeBirth"  th:value="${employeeDTO.employeeBirth}" th:readonly="readonly">
-													</div>
-													<div class="form-group col-xl-6">
-														<label>성별</label>
-														<input type="text" class="form-control" name="gender" th:value="${employeeDTO.gender}" th:readonly="readonly">
-													</div>
 
+				<!-- Employeemodify -->
+				<div class="container-login">
+					<div class="row justify-content-center">
+						<div class="col-xl-10 col-lg-12 col-md-9">
+							<div class="card shadow-sm my-5">
+								<div class="card-body p-0">
+									<div class="row">
+										<div class="col-lg-12">
+											<div class="login-form">
+												<div class="text-center">
+													<h1 class="h4 text-gray-900 mb-4"><span th:text="${ employeeDTO.employeeName }"></span>님 정보 수정</h1>
 												</div>
-												<div class="row">
-													<div class="form-group col-xl-6">
-														<label>PHONE</label> 
-															<input type="text" class="form-control" name="empPhone" th:value="${employeeDTO.empPhone}">
+												<form action="employeeinfomodify" method="post" enctype="multipart/form-data">
+													<div class="row">
+														<div class="col-lg-2" style="margin-top: 60px;">
+															<div th:align="center">
+																<label>프로필 사진</label>
+																<div style="height: 253px; width: 200px; border: 1px solid black; ">
+																	<img id="profileImg" width="253px" height="200px" th:if="${employeeDTO.empImage != null}" th:src="|@{/upload/profileImage/thumbnail}${employeeDTO.empImage.thumbnailPath}|">
+																</div>
+																	<input type="file" id="profileThumbNail" name="profileThumbNail" onchange="loadImg(this,1)" required th:for="profileImg">
+															</div>
+														</div>
+														<div class="col-lg-5">
+															<div class="form-group">
+																<label>사원번호</label> 
+																	<input type="text" class="form-control" name="employeeNo" th:value="${employeeDTO.employeeNo}" th:readonly="readonly">
+															</div>
+															<div class="form-group">
+																<label>ID</label>
+																	<input type="text"  class="form-control" name="employeeId" th:value="${employeeDTO.employeeId}" th:readonly="readonly" >
+															</div>
+															<div class="form-group">
+																<label>Email</label> 
+																	<input type="email" class="form-control" name="email" th:value="${employeeDTO.email}">
+															</div>
+															<div class="form-group">
+																<label>주소</label> 
+																	<input type="text" class="form-control" name="empAddress" th:value="${employeeDTO.empAddress}">
+															</div>
+															<div class="row">
+																<div class="form-group col-xl-6">
+																	<label>부서</label> 
+																		<select name="deptCode" class="form-control">
+																			<option th:each="dept : ${deptList}"
+																					th:value="${dept.deptCode}"
+																					th:utext="${dept.deptName}">
+																			</option>
+																		</select>
+																</div>
+																<div class="form-group col-xl-6">
+																	<label>직급</label> 
+																		<select name="jobCode"  class="form-control">
+																			<option th:each="job : ${jobList}"
+																					th:value="${job.jobCode}"
+																					th:utext="${job.jobName}">
+																			</option>
+																		</select>
+																</div>
+															</div>
+															<div class="row">
+																<div class="form-group col-xl-6">
+																	<label>담당자</label> 
+																		<select name="managerNo" class="form-control">
+																			<option th:each="manager : ${managerList}"
+																					th:value="${manager.managerNo}"
+																					th:utext="${manager.managerName}">
+																			</option>
+																		</select>
+																</div>
+																<div class="form-group col-xl-6">
+																	<label>권한</label> 
+																		<input type="text" class="form-control" name="authority" th:value="${employeeDTO.authority}">
+																</div>
+															</div>
+														</div>
+														<div class="col-lg-5">
+															<div class="form-group">
+																<label>사원명</label> 
+																	<input type="text" class="form-control" name="employeeName" th:value="${employeeDTO.employeeName}">
+															</div>
+															<div class="row">
+																<div class="form-group col-xl-6">
+																	<label>생년월일</label> 
+																		<input type="date" class="form-control" name="employeeBirth"  th:value="${employeeDTO.employeeBirth}" th:readonly="readonly">
+																</div>
+																<div class="form-group col-xl-6">
+																	<label>성별</label>
+																	<input type="text" class="form-control" name="gender" th:value="${employeeDTO.gender}" th:readonly="readonly">
+																</div>
+
+															</div>
+															<div class="row">
+																<div class="form-group col-xl-6">
+																	<label>PHONE</label> 
+																		<input type="text" class="form-control" name="empPhone" th:value="${employeeDTO.empPhone}">
+																</div>
+																<div class="form-group col-xl-6">
+																	<label>자택번호</label> 
+																		<input type="text" class="form-control" name="empTel" th:value="${employeeDTO.empTel}">
+																</div>
+															</div>
+															<div class="row">
+																<div class="form-group col-xl-6">
+																	<label>입사일</label> 
+																		<input type="date" class="form-control" th:readonly="readonly" name="hireDate" th:value="${employeeDTO.hireDate}">
+																</div>
+																<div class="form-group col-xl-6">
+																	<label>퇴사일</label> 
+																		<input type="date" class="form-control" name="entDate"	 th:value="${ employeeDTO.entDate }">
+																</div>
+																<div class="form-group col-xl-6">
+																<label>퇴사 상태</label> 
+																	<select style="width: 100%;" name="entYn" class="form-control" id="entYn">
+																		<option value="Y">Y</option>
+																		<option value="N">N</option>
+																	</select>
+																</div>
+															</div>
+														</div>
 													</div>
-													<div class="form-group col-xl-6">
-														<label>자택번호</label> 
-															<input type="text" class="form-control" name="empTel" th:value="${employeeDTO.empTel}">
+													<div class="form-group col-xl-12" th:align="right">
+														<button type="submit" class="btn btn-primary" id="updatebtn">수정</button>
+														<button type="button" class="btn btn-primary" th:onclick="history.back()">취소</button>
 													</div>
-												</div>
-												<div class="row">
-													<div class="form-group col-xl-6">
-														<label>입사일</label> 
-															<input type="date" class="form-control" th:readonly="readonly" name="hireDate" th:value="${employeeDTO.hireDate}">
-													</div>
-													<div class="form-group col-xl-6">
-														<label>퇴사일</label> 
-															<input type="date" class="form-control" name="entDate"	 th:value="${ employeeDTO.entDate }">
-													</div>
-													<div class="form-group col-xl-6">
-													<label>퇴사 상태</label> 
-														<select style="width: 100%;" name="entYn" class="form-control" id="entYn">
-															<option value="Y">Y</option>
-															<option value="N">N</option>
-														</select>
-													</div>
-												</div>
+												</form>
 											</div>
 										</div>
-										<div class="form-group col-xl-12" align="right">
-											<button type="submit" class="btn btn-primary" id="updatebtn">수정</button>
-											<button type="button" class="btn btn-primary" th:onclick="history.back()">취소</button>
-										</div>
-									</form>
+									</div>
 								</div>
 							</div>
 						</div>
@@ -155,19 +152,10 @@
 			</div>
 		</div>
 	</div>
-	</div>
-	</div>
-	</div>
+
 	<!-- Script -->
 	<th:block th:replace="@{/common/script} :: script"></th:block>
-	<!-- Register Content -->
-	<script src="/vendor/jquery/jquery.min.js"></script>
-	<script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-	<script src="/vendor/jquery-easing/jquery.easing.min.js"></script>
 	<script src="/js/admin/insertMember.js"></script>
-	<script src="/js/ruang-admin.min.js"></script>
-	<!-- Script -->
-	<th:block th:replace="@{/common/script} :: script"></th:block>
 	<script>
 	function loadImg(value) {
 		if(value.files && value.files[0]) {

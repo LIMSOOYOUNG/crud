@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.deft.crud.admin.adminemployee.model.dto.AdminEmployeeDTO;
+import com.deft.crud.admin.adminemployee.model.service.AdminEmployeeService;
 import com.deft.crud.employee.model.dto.EmployeeDTO;
 import com.deft.crud.employee.model.service.EmployeeService;
 import com.deft.crud.member.model.service.UserImpl;
@@ -23,10 +25,12 @@ import com.deft.crud.member.model.service.UserImpl;
 public class EmployeeController {
 
    private EmployeeService employeeService;
+   private AdminEmployeeService adminEmployeeService;
    
    @Autowired
-   public EmployeeController(EmployeeService employeeService) {
+   public EmployeeController(EmployeeService employeeService, AdminEmployeeService adminEmployeeService) {
       this.employeeService = employeeService;
+      this.adminEmployeeService = adminEmployeeService;
    }
    
    /* 사원 조회 */
@@ -44,6 +48,21 @@ public class EmployeeController {
       
       return mv;
    }
+   
+   /* 사원상세 정보 */
+	@GetMapping("employeedetail")
+	public ModelAndView employeeDetailSelect(ModelAndView mv, @RequestParam int employeeNo)  {
+		
+		/* employeeDTO를 employeeNo를 담아서 서비스에 전달한다.  */
+		AdminEmployeeDTO employeeDTO = adminEmployeeService.empDetail(employeeNo);
+		
+		/* 페이지 이동값을 admin/employeedetail 지정한다.*/
+		mv.setViewName("employee/employeedetail");
+		
+		mv.addObject("employeeDTO", employeeDTO);
+		
+		return mv;
+	}
    
 	/* 입력한 비밀번호 일치 여부 확인 */
 	@GetMapping("/pwd/check")

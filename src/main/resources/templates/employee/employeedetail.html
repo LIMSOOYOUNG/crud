@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="ko"
+	xmlns:th="https://www.thymeleaf.org">
+<head>
+	<th:block th:replace="@{common/config} :: config"></th:block>
+</head>
+
+<body id="page-top">
+	<div id="wrapper">
+		<!-- Sidebar -->
+		<th:block th:replace="@{/common/sidebar} :: sidebar"></th:block>
+
+		<div id="content-wrapper" class="d-flex flex-column">
+			<div id="content">
+				<!-- Header -->
+				<th:block th:replace="@{/common/header} :: header"></th:block>
+
+				<!-- Content -->
+				<div class="container-fluid" id="container-wrapper">
+					<div class="container-login">
+						<div class="row justify-content-center">
+							<div class="col-xl-10 col-lg-12 col-md-9">
+								<div class="card shadow-sm my-5">
+									<div class="card-body p-0">
+										<div class="row">
+											<div class="col-lg-12">
+												<div class="login-form">
+													<div class="text-center">
+														<h1 class="h4 text-gray-900 mb-4"><span th:text="${ employeeDTO.employeeName }"></span>님 정보</h1>
+													</div>
+													<form action="employeeinfomodify" method="post">
+														<div class="row">
+															<div class="col-lg-2" style="margin-top: 60px;">
+																<div th:align="center">
+																	<label>프로필 사진</label>
+																	<div style="height: 253px; width: 200px; border: 1px solid black; ">
+																		<img th:if="${employeeDTO.empImage != null}" th:src="|@{/upload/profileImage/thumbnail}${employeeDTO.empImage.thumbnailPath}|">
+																	</div>
+																	<br>
+																		
+																</div>
+															</div>
+															<div class="col-lg-5">
+																<div class="form-group">
+																	<label>사원번호</label> 
+																		<input type="text" class="form-control"  th:value="${employeeDTO.employeeNo}" th:readonly="readonly">
+																</div>
+																<div class="form-group">
+																	<label>ID</label>
+																		<input type="text"  class="form-control"  th:value="${employeeDTO.employeeId}" th:readonly="readonly" >
+																</div>
+																<div class="form-group">
+																	<label>Email</label> 
+																		<input type="email" class="form-control"  th:value="${employeeDTO.email}"  th:readonly="readonly">
+																</div>
+																<div class="form-group">
+																	<label>주소</label> 
+																		<input type="text" class="form-control"  th:value="${employeeDTO.empAddress}"  th:readonly="readonly">
+																</div>
+																<div class="row">
+																	<div class="form-group col-xl-6">
+																		<label>부서</label> 
+																			<input type="text" class="form-control" th:value="${employeeDTO.deptName}" th:readonly="readonly">
+																	</div>
+																	<div class="form-group col-xl-6">
+																		<label>직급</label> 
+																			<input type="text"  class="form-control" th:value="${employeeDTO.jobName}" th:readonly="readonly">
+																	</div>
+																</div>
+																<div class="row">
+																	<div class="form-group col-xl-6">
+																		<label>담당자</label> 
+																			<input type="text" class="form-control" th:value="${ employeeDTO.managerName }" th:readonly="readonly">
+																	</div>
+																	<div class="form-group col-xl-6">
+																		<label>권한</label> 
+																			<input type="text" class="form-control" th:value="${employeeDTO.authorityName}" th:readonly="readonly">
+																	</div>
+																</div>
+															</div>
+															<div class="col-lg-5">
+																<div class="form-group">
+																	<label>사원명</label> 
+																		<input type="text" class="form-control" th:value="${employeeDTO.employeeName}" th:readonly="readonly">
+																</div>
+																<div class="row">
+																	<div class="form-group col-xl-6">
+																		<label>생년월일</label> 
+																			<input type="date" class="form-control"  th:value="${employeeDTO.employeeBirth}" th:readonly="readonly">
+																	</div>
+																	<div class="form-group col-xl-6">
+																		<label>성별</label>
+																		<input type="text" class="form-control" th:value="${employeeDTO.gender}" th:readonly="readonly">
+																	</div>
+				
+																</div>
+																<div class="row">
+																	<div class="form-group col-xl-6">
+																		<label>PHONE</label> 
+																			<input type="text" class="form-control" th:readonly="readonly" th:value="${employeeDTO.empPhone}">
+																	</div>
+																	<div class="form-group col-xl-6">
+																		<label>자택번호</label> 
+																			<input type="text" class="form-control" th:readonly="readonly" th:value="${employeeDTO.empTel}">
+																	</div>
+																</div>
+																<div class="row">
+																	<div class="form-group col-xl-6">
+																		<label>입사일</label> 
+																			<input type="date" class="form-control" th:readonly="readonly" th:value="${employeeDTO.hireDate}">
+																	</div>
+																	<div class="form-group col-xl-6">
+																		<label>퇴사일</label> 
+																			<input type="date" class="form-control"	 th:readonly="readonly" th:value="${ employeeDTO.entDate }">
+																	</div>
+																	<div class="form-group col-xl-6">
+																	<label>퇴사 상태</label> 
+																		<input type="text" class="form-control"	 th:readonly="readonly" th:value="${ employeeDTO.entYn }">
+																	</div>
+																</div>
+															</div>
+														</div>
+														<div class="form-group col-xl-12" th:align="right">
+															<th:block sec:authorize="hasRole('ADMIN')">
+																<button type="button" class="btn btn-primary" th:onclick="|location.href='@{/admin/employeeinfomodify(employeeNo=${employeeDTO.employeeNo})}'|">사원수정</button>
+															</th:block>
+															<button type="button" class="btn btn-primary" th:onclick="history.back()">뒤로가기</button>
+														</div>
+												</form>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Script -->
+    <th:block th:replace="@{/common/script} :: script"></th:block>
+</body>
+
+</html>
