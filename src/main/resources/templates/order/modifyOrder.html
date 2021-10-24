@@ -29,11 +29,11 @@
 					</div>
 
 					<div class="row">
-						<div class="col-lg-12" th:align="center">
+						<div class="col-lg-12" th:align="center" th:object="${order}">
 							<form th:action="@{/order/modify}" method="POST" id="modifyOrder">
 
 								<!-- OrderInfo -->
-								<div class="card mb-4" th:object="${order}">
+								<div class="card mb-4">
 									<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
 										<h6 class="m-0 font-weight-bold text-primary" id="tableTitle">주문서 수정</h6>
 										<button type="button" class="btn btn-info btn-icon-split" id="searchEstimateBtn"
@@ -60,7 +60,7 @@
 											<label for="customerName" class="col-form-label col-lg-2">고객명</label>
 											<input type="text" class="form-control col-lg-4" id="customerName"
 													th:field="*{customer.customerName}" readonly>
-											<input type="hidden" class="form-control" id="customerNo" th:field="*{customer.customerNo}">
+											<input type="hidden" class="form-control" th:field="*{customerNo}">
 											<div class="input-group-btn col-lg-1" th:align="left">
 												<button type="button" class="btn btn-primary" id="searchCustomerBtn"
 														data-toggle="modal" data-target="#customerModal">검색</button>
@@ -148,7 +148,7 @@
 												</tr>
 											</thead>
 											<tbody th:align="center">
-												<tr th:each="orderProduct, i : ${order.orderProductList}" th:object="${orderProduct}">
+												<tr th:each="orderProduct, i : *{orderProductList}" th:object="${orderProduct}">
 													<td th:text="${i.count}"></td>
 													<td th:text="*{productNo}"></td>
 													<td th:text="*{product.productName}"></td>
@@ -182,7 +182,7 @@
 								<div class="mb-4" th:align="center">
 									<button type="button" class="btn btn-primary mx-2" id="modifyOrderBtn">수정</button>
 									<button type="reset" class="btn btn-outline-danger mx-2" id="resetBtn"
-											th:onclick="|location.href='@{/order/select(orderNo=${order.orderNo})}'|">취소</button>
+											th:onclick="|location.href='@{/order/select(orderNo=*{orderNo})}'|">취소</button>
 								</div>
 							</form>
 						</div>
@@ -223,7 +223,7 @@
 																<td th:text="*{customer.customerName}"></td>
 																<td th:text="*{estimateDate}"></td>
 																<td>
-																	<input type="hidden" th:value="*{customer.customerNo}">
+																	<input type="hidden" th:value="*{customerNo}">
 																	<input type="hidden" th:value="|*{customer.empInfo.empName} *{customer.empInfo.job.jobName}">
 																	<button type="button" class="btn btn-sm btn-dark" name="selectEstimateBtn"
 																			data-dismiss="modal">선택</button>
@@ -408,7 +408,7 @@
 					const estimateProductList = estimate.estimateProductList;
 
 					$("#orderTitle").val(estimate.estimateTitle);
-					$("#customerNo").val(estimate.customer.customerNo);
+					$("#customerNo").val(estimate.customerNo);
 					$("#customerCompany").val(estimate.customer.company.companyName);
 					$("#customerName").val(estimate.customer.customerName);
 					$("#resEmpName").val(estimate.customer.empInfo.empName + " " + estimate.customer.empInfo.job.jobName);
@@ -479,16 +479,6 @@
 			$("#customerName").val(customerName);
 			$("#customerNo").val(customerNo);
 			$("#resEmpName").val(empName);
-		});
-
-		/* 할인 적용에 따라 수치 입력 칸 활성화/비활성화 */
-		$("input:radio[name='discountStatus']").on("click", function() {
-			if($(this).val() == "Y") {
-				$("#discountRate").attr("disabled", false);
-			} else {
-				$("#discountRate").val(0).attr("disabled", true);
-				calculateTotal();
-			}
 		});
 
 		/* 우편번호, 주소 API(kakao) */

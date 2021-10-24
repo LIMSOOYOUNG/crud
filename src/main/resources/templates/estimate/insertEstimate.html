@@ -29,7 +29,7 @@
 					</div>
 
 					<div class="row">
-						<div class="col-lg-12" th:align="center">
+						<div class="col-lg-12" th:align="center" th:object="${estimate}">
 							<form th:action="@{/estimate/insert}" method="POST" id="insertEstimate">
 
 								<!-- EstimateInfo -->
@@ -37,7 +37,7 @@
 									<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
 										<h6 class="m-0 font-weight-bold text-primary" id="tableTitle">견적서 등록</h6>
 									</div>
-									<div class="card-body" th:object="${estimate}">
+									<div class="card-body">
 										<div class="form-group row mb-2" th:align="right">
 												<label for="estimateTitle" class="col-form-label col-lg-1">제목</label>
 												<input type="text" class="form-control col-lg-10" th:field="*{estimateTitle}" required>
@@ -70,9 +70,8 @@
 												<option th:value="failed">실패</option>
 											</select>
 											<label for="resEmpName" class="col-form-label col-lg-2">담당사원</label>
-											<input type="text" class="form-control col-lg-4" id="resEmpName" name="empName"
-													th:field="*{customer.empInfo.empName}" readonly>
-											<input type="hidden" class="form-control" id="resEmpNo" th:field="*{customer.empNo}">
+											<input type="text" class="form-control col-lg-4" id="resEmpName" name="empName" readonly>
+											<input type="hidden" class="form-control" id="resEmpNo">
 										</div>
 										<hr>
 
@@ -460,13 +459,13 @@
 				productList.push(product);
 			}
 
-			const estimate = {"estimateTitle" : $("#estimateTitle").val(),
+			const estimate = { "estimateTitle" : $("#estimateTitle").val(),
 							"estimateNo" : $("#estimateNo").val(),
 							"estimateDate" : $("#estimateDate").val(),
 							"discountRate" : $("#discountRate").val(),
 							"customerNo" : $("#customerNo").val(),
 							"estimateStatus" : $("#estimateStatus option:selected").text(),
-							"estimateProductList" : productList};
+							"estimateProductList" : productList };
 
 			if(confirm("견적서를 등록하시겠습니까?")) {
 				$.ajax({

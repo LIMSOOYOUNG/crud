@@ -84,14 +84,14 @@
 	</resultMap>
 	
 	<select id="selectChargeList" resultMap="chargeSelectResultMap">
-        SELECT
+        SELECT /* com.deft.crud.charge.model.dao.ChargeMapper#selectChargeList() */
                CH.CHARGE_NO
              , O.ORDER_TITLE
              , O.CUSTOMER_NO
              , C.CUSTOMER_NAME
              , CC.COMPANY_NAME
              , O.SUM_PRICE
-             , CH.CHARGE_DATE
+             , TO_CHAR(CH.CHARGE_DATE, 'YYYY-MM-DD') "CHARGE_DATE"
              , O.PAYMENT_STATUS
              , CH.CHARGE_STATUS
           FROM TBL_CHARGE CH
@@ -104,4 +104,69 @@
            AND C.EMP_NO = #{ empNo }
          ORDER BY CH.CHARGE_NO DESC
 	</select>
+	
+	<select id="selectChargeDetail" resultMap="chargeSelectResultMap">
+        SELECT /* com.deft.crud.charge.model.dao.ChargeMapper#selectChargeDetail() */
+               CH.CHARGE_NO
+             , CH.ORDER_NO
+             , O.ORDER_TITLE
+             , TO_CHAR(CH.CHARGE_DATE, 'YYYY-MM-DD') "CHARGE_DATE"
+             , O.CUSTOMER_NO
+             , C.CUSTOMER_NAME
+             , CC.COMPANY_NAME
+             , EI.EMP_NAME
+             , J.JOB_NAME
+             , CH.CHARGE_STATUS
+             , O.DISCOUNT_RATE
+             , O.SUM_PRICE
+             , O.PAYMENT_STATUS
+             , P.PRODUCT_NO
+             , P.PRODUCT_NAME
+             , P.SELLING_PRICE
+             , P.UNIT
+             , OP.PRODUCT_AMOUNT
+          FROM TBL_CHARGE CH
+          LEFT JOIN TBL_PURCHASE_ORDER O ON (CH.ORDER_NO = O.ORDER_NO)
+          LEFT JOIN TBL_CUSTOMER C ON (O.CUSTOMER_NO = C.CUSTOMER_NO)
+          LEFT JOIN TBL_CUSTOMER_COMPANY CC ON (C.CUSTOMER_COMPANY_NO = CC.CUSTOMER_COMPANY_NO)
+          LEFT JOIN TBL_EMP_INFO EI ON (C.EMP_NO = EI.EMP_NO)
+          LEFT JOIN TBL_JOB J ON (EI.JOB_CODE = J.JOB_CODE)
+          LEFT JOIN TBL_PURCHASE_ORDER_PRODUCT OP ON (O.ORDER_NO = OP.ORDER_NO)
+          LEFT JOIN TBL_PRODUCT P ON (OP.PRODUCT_NO = P.PRODUCT_NO)
+         WHERE CH.CHARGE_NO = #{ chargeNo }
+         ORDER BY CH.CHARGE_NO DESC
+	</select>
+	
+	<select id="selectLastChargeSeq" resultType="java.lang.String">
+        SELECT /* com.deft.crud.charge.model.dao.ChargeMapper#selectLastChargeSeq() */
+               LPAD(LAST_NUMBER, 3, 0)
+          FROM USER_SEQUENCES
+         WHERE SEQUENCE_NAME = 'SEQ_CHARGE_NO'
+	</select>
+	
+	<insert id="insertCharge" parameterType="com.deft.crud.charge.model.dto.ChargeDTO">
+        INSERT /* com.deft.crud.charge.model.dao.ChargeMapper#insertCharge() */
+          INTO TBL_CHARGE CH
+        (
+          CH.CHARGE_NO
+        , CH.ORDER_NO
+        , CH.CHARGE_STATUS
+        , CH.CHARGE_DATE
+        )
+        VALUES
+        (
+          REPLACE(#{ chargeNo }, SUBSTR(#{ chargeNo }, -3), LPAD(SEQ_CHARGE_NO.NEXTVAL, 3, 0))
+        , #{ orderNo }
+        , #{ chargeStatus }
+        , #{ chargeDate }
+        )
+	</insert>
+	
+	<update id="updateCharge" parameterType="com.deft.crud.charge.model.dto.ChargeDTO">
+        UPDATE
+               TBL_CHARGE CH
+           SET CH.ORDER_NO = #{ orderNo }
+             , CH.CHARGE_STATUS = #{ chargeStatus }
+         WHERE CH.CHARGE_NO = #{ chargeNo }
+	</update>
 </mapper>

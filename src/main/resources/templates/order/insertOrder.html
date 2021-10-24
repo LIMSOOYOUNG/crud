@@ -29,7 +29,7 @@
 					</div>
 
 					<div class="row">
-						<div class="col-lg-12" th:align="center">
+						<div class="col-lg-12" th:align="center" th:object="${order}">
 							<form th:action="@{/order/insert}" method="POST" id="insertOrder">
 
 								<!-- OrderInfo -->
@@ -42,7 +42,7 @@
 											<span class="text text-white">견적서 불러오기</span>
 										</button>
 									</div>
-									<div class="card-body" th:object="${order}">
+									<div class="card-body">
 										<div class="form-group row mb-2" th:align="right">
 												<label for="orderTitle" class="col-form-label col-lg-1">제목</label>
 												<input type="text" class="form-control col-lg-10" th:field="*{orderTitle}" required>
@@ -73,9 +73,8 @@
 												<option th:value="Y">출고</option>
 											</select>
 											<label for="resEmpName" class="col-form-label col-lg-2">담당사원</label>
-											<input type="text" class="form-control col-lg-4" id="resEmpName" name="empName"
-													th:field="*{customer.empInfo.empName}" readonly>
-											<input type="hidden" class="form-control" id="resEmpNo" th:field="*{customer.empNo}">
+											<input type="text" class="form-control col-lg-4" id="resEmpName" name="empName" readonly>
+											<input type="hidden" class="form-control" id="resEmpNo">
 										</div>
 										<div class="form-group row mb-2" th:align="right">
 											<label for="dueDate" class="col-form-label col-lg-1">납기요청일</label>
@@ -204,7 +203,7 @@
 																<td th:text="*{customer.customerName}"></td>
 																<td th:text="*{estimateDate}"></td>
 																<td>
-																	<input type="hidden" th:value="*{customer.customerNo}">
+																	<input type="hidden" th:value="*{customerNo}">
 																	<input type="hidden" th:value="|*{customer.empInfo.empName} *{customer.empInfo.job.jobName}">
 																	<button type="button" class="btn btn-sm btn-dark" name="selectEstimateBtn"
 																			data-dismiss="modal">선택</button>
@@ -386,7 +385,7 @@
 					const estimateProductList = estimate.estimateProductList;
 
 					$("#orderTitle").val(estimate.estimateTitle);
-					$("#customerNo").val(estimate.customer.customerNo);
+					$("#customerNo").val(estimate.customerNo);
 					$("#customerCompany").val(estimate.customer.company.companyName);
 					$("#customerName").val(estimate.customer.customerName);
 					$("#resEmpName").val(estimate.customer.empInfo.empName + " " + estimate.customer.empInfo.job.jobName);

@@ -25,4 +25,6 @@ public interface OrderMapper {
 	int deleteOrderProduct(String orderNo);
 
 	int updateOrderProduct(OrderProductDTO product);
+
+	List<OrderDTO> selectApprovedOrderList(int empNo);
 }

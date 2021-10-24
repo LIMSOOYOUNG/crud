@@ -10,4 +10,12 @@ import com.deft.crud.charge.model.dto.ChargeDTO;
 public interface ChargeMapper {
 
 	List<ChargeDTO> selectChargeList(int empNo);
+
+	ChargeDTO selectChargeDetail(String chargeNo);
+
+	String selectLastChargeSeq();
+
+	int insertCharge(ChargeDTO chargeInfo);
+
+	int updateCharge(ChargeDTO chargeInfo);
 }

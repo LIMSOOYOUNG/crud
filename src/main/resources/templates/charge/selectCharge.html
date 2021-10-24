@@ -20,72 +20,58 @@
 				<!-- Content -->
 				<div class="container-fluid" id="container-wrapper">
 					<div class="d-sm-flex align-items-center justify-content-between mb-4">
-						<h1 class="h3 mb-0 text-gray-800">주문서 관리</h1>
+						<h1 class="h3 mb-0 text-gray-800">청구서 관리</h1>
 						<ol class="breadcrumb">
 							<li class="breadcrumb-item"><a th:href="@{/}">Home</a></li>
-							<li class="breadcrumb-item"><a th:href="@{/order/selectAll}">주문서 조회</a></li>
-							<li class="breadcrumb-item active" aria-current="page">주문서 상세조회</li>
+							<li class="breadcrumb-item"><a th:href="@{/charge/selectAll}">청구서 조회</a></li>
+							<li class="breadcrumb-item active" aria-current="page">청구서 상세조회</li>
 						</ol>
 					</div>
 
 					<div class="row">
 						<div class="col-lg-12" th:align="center">
 
-							<!-- OrderInfo -->
-							<div class="card mb-4" th:object="${order}">
+							<!-- ChargeInfo -->
+							<div class="card mb-4" th:object="${charge}">
 								<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-									<h6 class="m-0 font-weight-bold text-primary" id="tableTitle">주문서 상세조회</h6>
-									<button type="button" class="btn btn-info btn-icon-split" id="modifyOrderBtn"
-											th:onclick="|location.href='@{/order/modify(orderNo=*{orderNo})}'|">
+									<h6 class="m-0 font-weight-bold text-primary" id="tableTitle">청구서 상세조회</h6>
+									<button type="button" class="btn btn-info btn-icon-split" id="modifyChargeBtn"
+											th:onclick="|location.href='@{/charge/modify(chargeNo=*{chargeNo})}'|">
 										<span class="icon text-white"><i class="fas fa-edit"></i></span>
-										<span class="text text-white">주문서 수정</span>
+										<span class="text text-white">청구서 수정</span>
 									</button>
 								</div>
 								<div class="card-body">
 									<div class="form-group row mb-2" th:align="right">
-											<label for="orderTitle" class="col-form-label col-lg-1">제목</label>
-											<input type="text" class="form-control col-lg-10" th:field="*{orderTitle}" readonly>
+										<label for="chargeTitle" class="col-form-label col-lg-1">제목</label>
+										<input type="text" class="form-control col-lg-10" id="chargeTitle"
+												th:field="*{order.orderTitle}" readonly>
 									</div>
 									<div class="form-group row mb-2" th:align="right">
-										<label for="orderNo" class="col-form-label col-lg-1">주문번호</label>
-										<input type="text" class="form-control col-lg-4" th:field="*{orderNo}" readonly>
-										<label for="orderDate" class="col-form-label col-lg-2">주문일자</label>
-										<input type="date" class="form-control col-lg-4" th:field="*{orderDate}" readonly>
+										<label for="chargeNo" class="col-form-label col-lg-1">청구번호</label>
+										<input type="text" class="form-control col-lg-4" th:field="*{chargeNo}" readonly>
+										<label for="chargeDate" class="col-form-label col-lg-2">청구일자</label>
+										<input type="date" class="form-control col-lg-4" th:field="*{chargeDate}" readonly>
 									</div>
 									<div class="form-group row mb-2" th:align="right">
 										<label for="customerCompany" class="col-form-label col-lg-1">고객사</label>
 										<input type="text" class="form-control col-lg-4" id="customerCompany"
-												th:field="*{customer.company.companyName}" readonly>
+												th:field="*{order.customer.company.companyName}" readonly>
 										<label for="customerName" class="col-form-label col-lg-2">고객명</label>
 										<input type="text" class="form-control col-lg-4" id="customerName"
-												th:field="*{customer.customerName}" readonly>
-										<input type="hidden" class="form-control" id="customerNo" th:field="*{customer.customerNo}">
-										<div class="input-group-btn col-lg-1" th:align="left">
-											<button type="button" class="btn btn-primary" id="searchCustomerBtn"
-													data-toggle="modal" data-target="#customerModal" hidden>검색</button>
-										</div>
+												th:field="*{order.customer.customerName}" readonly>
+										<input type="hidden" class="form-control" id="customerNo" th:field="*{order.customerNo}">
 									</div>
 									<div class="form-group row mb-2" th:align="right">
-										<label for="orderYn" class="col-form-label col-lg-1">출고상태</label>
-										<select class="form-control col-lg-4" name="orderYn" disabled>
-											<option th:selected="*{orderYn == 'N'}">미출고</option>
-											<option th:selected="*{orderYn == 'Y'}">출고</option>
+										<label for="chargeStatus" class="col-form-label col-lg-1">청구상태</label>
+										<select class="form-control col-lg-4" name="chargeStatus" disabled>
+											<option th:selected="*{chargeStatus == '미청구'}">미청구</option>
+											<option th:selected="*{chargeStatus == '청구'}">청구</option>
 										</select>
 										<label for="resEmpName" class="col-form-label col-lg-2">담당사원</label>
 										<input type="text" class="form-control col-lg-4" id="resEmpName" name="empName"
-												th:value="|*{customer.empInfo.empName} *{customer.empInfo.job.jobName}|" readonly>
-										<input type="hidden" class="form-control" id="resEmpNo" th:field="*{customer.empNo}">
-									</div>
-									<div class="form-group row mb-2" th:align="right">
-										<label for="dueDate" class="col-form-label col-lg-1">납기요청일</label>
-										<input type="date" class="form-control col-lg-4" th:field="*{dueDate}" readonly>
-										<label for="zipCode" class="col-form-label col-lg-2">납품장소</label>
-										<input type="text" class="form-control col-lg-1" th:field="*{zipCode}" readonly>
-										<input type="text" class="form-control col-lg-3" th:field="*{address}" readonly>
-									</div>
-									<div class="form-group row mb-2" th:align="right">
-										<label class="col-lg-7"></label>
-										<input type="text" class="form-control col-lg-4" th:field="*{addressDetail}" readonly>
+												th:value="|*{order.customer.empInfo.empName} *{order.customer.empInfo.job.jobName}|" readonly>
+										<input type="hidden" class="form-control" id="resEmpNo" th:field="*{order.customer.empNo}">
 									</div>
 									<hr>
 
@@ -93,31 +79,31 @@
 										<label for="discountRate" class="col-form-label col-lg-1">금액할인</label>
 										<div class="custom-control custom-radio mt-2 col-lg-1">
 											<input type="radio" class="custom-control-input" id="noApplyDiscount" name="discountStatus"
-													th:checked="*{discountStatus == 'N'}" disabled>
+													th:checked="*{order.discountStatus == 'N'}" disabled>
 											<label for="noApplyDiscount" class="custom-control-label">미적용</label>
 										</div>
 										<div class="custom-control custom-radio mt-2 col-lg-1">
 											<input type="radio" class="custom-control-input" id="applyDiscount" name="discountStatus"
-													th:checked="*{discountStatus == 'Y'}" disabled>
+													th:checked="*{order.discountStatus == 'Y'}" disabled>
 											<label for="applyDiscount" class="custom-control-label">적용</label>
 										</div>
 										<div class="input-group bootstrap-touchspin bootstrap-touchspin-injected col-lg-2">
-											<input type="text" class="form-control" th:field="*{discountRate}" disabled>
+											<input type="text" class="form-control" id="discountRate" th:field="*{order.discountRate}" disabled>
 										</div>
 										<label for="paymentStatus" class="col-form-label col-lg-2">결제방법</label>
-										<select class="form-control col-lg-4" name="paymentStatus" disabled>
-											<option th:selected="*{paymentStatus == '세금계산서'}">세금계산서</option>
-											<option th:selected="*{paymentStatus == '카드'}">카드</option>
+										<select class="form-control col-lg-4" id="paymentStatus" name="paymentStatus" disabled>
+											<option th:selected="*{order.paymentStatus == '세금계산서'}">세금계산서</option>
+											<option th:selected="*{order.paymentStatus == '카드'}">카드</option>
 										</select>
 									</div>
 									<div class="form-group row mb-2" th:align="right">
-										<label for="sumPrice" class="col-form-label col-lg-1">합계금액</label>
-										<input type="text" class="form-control col-lg-4" th:field="*{sumPrice}" readonly>
-										<h5 class="col-lg-4" id="orderTotalKor" th:align="left"></h5>
+										<label for="chargeTotal" class="col-form-label col-lg-1">합계금액</label>
+										<input type="text" class="form-control col-lg-4" id="chargeTotal" th:field="*{order.sumPrice}" readonly>
+										<h5 class="col-lg-4" id="chargeTotalKor" th:align="left"></h5>
 									</div>
 								</div>
 							</div>
-							<!-- End OrderInfo -->
+							<!-- End ChargeInfo -->
 
 							<!-- OrderProductList -->
 							<div class="card mb-4">
@@ -137,11 +123,10 @@
 												<th>수량</th>
 												<th>합계</th>
 												<th>세액</th>
-												<th></th>
 											</tr>
 										</thead>
 										<tbody th:align="center">
-											<tr th:each="orderProduct, i : ${order.orderProductList}" th:object="${orderProduct}">
+											<tr th:each="orderProduct, i : ${charge.order.orderProductList}" th:object="${orderProduct}">
 												<td th:text="${i.count}"></td>
 												<td th:text="*{productNo}"></td>
 												<td th:text="*{product.productName}"></td>
@@ -151,7 +136,6 @@
 												<td th:text="*{productAmount}"></td>
 												<td th:text="*{product.subtotal}"></td>
 												<td th:text="*{product.tax}"></td>
-												<td></td>
 											</tr>
 										</tbody>
 									</table>
@@ -160,9 +144,9 @@
 							<!-- End OrderProductList -->
 							
 							<div class="mb-4">
-								<button type="button" class="btn btn-primary mx-2" id="printOrderBtn">PDF 출력</button>
+								<button type="button" class="btn btn-primary mx-2" id="printChargeBtn">PDF 출력</button>
 								<button type="button" class="btn btn-outline-danger mx-2" id="resetBtn"
-										th:onclick="|location.href='@{/order/selectAll}'|">뒤로가기</button>
+										th:onclick="|location.href='@{/charge/selectAll}'|">뒤로가기</button>
 							</div>
 						</div>
 					</div>
@@ -175,9 +159,6 @@
 	<th:block th:replace="@{/common/script} :: script"></th:block>
 	<script>
 		$(document).ready(function() {
-			$("#customerTable").DataTable();
-			$("#stockTable").DataTable();
-
 			$("#discountRate").TouchSpin({
 				min: 0,
 				max: 100,
@@ -187,8 +168,8 @@
 				postfix: '%'
 			});
 			
-			let total = $("#sumPrice").val();
-			$("#orderTotalKor").text("(" + translateKor(total) + ")");
+			let total = $("#chargeTotal").val();
+			$("#chargeTotalKor").text("(" + translateKor(total) + ")");
 		});
 
 		/* 금액을 한글로 변경하여 출력 */

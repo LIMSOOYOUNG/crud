@@ -6,24 +6,26 @@
 	<th:block th:replace="@{common/config} :: config"></th:block>
 	<style>
 		body {
-		  background-image: linear-gradient(
-				  rgba(255, 255, 255, 0.8)
-				  rgba(255, 255, 255, 0.8),
-		  ), url('@{/images/bg.jpg}');
-		  background-repeat: no-repeat;
-		  background-size: cover;
+			background-image: linear-gradient(
+				rgba(255, 255, 255, 0.8)
+				rgba(255, 255, 255, 0.8),
+			), url('@{/images/bg.jpg}');
+			background-repeat: no-repeat;
+			background-size: cover;
 		}
-	  </style>
+	</style>
 </head>
 
 <body class="bg-gradient-login">
 
-  	<!-- Start Login Content -->
+	<!-- Start Login Content -->
 	<div class="container-login">
 		<div class="row justify-content-center">
 			<div class="col-xl-4 col-lg-12 col-md-9">
 				<div style="text-align: center;">
-					<img th:src="@{/images/logo/crudLogo2.PNG}" style="width:150px; height:135px; margin-top:10%;" alt="logo">
+					<a th:href="@{/}">
+						<img th:src="@{/images/logo/crudLogo2.PNG}" style="width:150px; height:135px; margin-top:10%;" alt="logo">
+					</a>
 				</div>
 				<div class="card shadow-sm my-5">
 					<div class="card-body p-0">
@@ -31,27 +33,31 @@
 							<div class="col-lg-12">
 								<div class="login-form">
 									<div class="text-center">
-										<h1 class="h4 text-gray-900 mb-4">Login</h1>
+										<h2 class="text-gray-900 mb-4">Login</h2>
 									</div>
 									<form action="/member/login" method="post" class="user">
 										<div class="form-group">
-											<input type="text" class="form-control" id="userid" placeholder="ID" name="username">
+											<input type="text" class="form-control form-control-lg" id="userid" name="username" placeholder="ID">
 										</div>
 										<div class="form-group">
-											<input type="password" class="form-control" id="password" placeholder="Password" name="password">
+											<input type="password" class="form-control form-control-lg" id="password" name="password" placeholder="Password">
 										</div>
-										<div class="form-group">
-											<button type="submit" class="btn btn-primary btn-block">Login</button>
-										</div>
-										<div class="form-group" th:align="center">
-											<a href="/member/findId" class="btn btn-google col-lg-5">
-												<i class="fas fa-search"></i> ID 찾기
-											</a>
-											<a href="/member/findPwd" class="btn btn-facebook col-lg-5">
-												<i class="fas fa-key"></i> PWD 찾기
-											</a>
+										<div class="form-group mt-5">
+											<button type="submit" class="btn btn-lg btn-primary btn-block">Login</button>
 										</div>
 									</form>
+									<hr>
+
+									<div class="form-group" th:align="center">
+										<button type="button" class="btn btn-google col-lg-4 mx-2"
+												th:onclick="|location.href='@{/member/findId}'|">
+											<i class="fas fa-search"></i> ID 찾기
+										</button>	
+										<button type="button" class="btn btn-facebook col-lg-4 mx-2"
+												th:onclick="|location.href='@{/member/findPwd}'|">
+											<i class="fas fa-key"></i> PWD 찾기
+										</button>
+									</div>
 								</div>
 							</div>
 						</div>
@@ -63,7 +69,7 @@
 	<!-- End Login Content -->
 
 	<!-- Script -->
-    <th:block th:replace="@{/common/script} :: script"></th:block>
+	<th:block th:replace="@{/common/script} :: script"></th:block>
 </body>
 
 </html>

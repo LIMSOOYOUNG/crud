@@ -138,12 +138,17 @@ public class OrderService {
 			updateProductResult = orderMapper.updateOrderProduct(product);
 		}
 		
-		int result = 0; 
+		int result = 0;
 		
 		if(orderInfoResult > 0 || (deleteProductResult > 0 && updateProductResult == productList.size())) {
 			result = 1;
 		}
 		
 		return result;
+	}
+	
+	public List<OrderDTO> selectApprovedOrderList(int empNo) {
+		
+		return orderMapper.selectApprovedOrderList(empNo);
 	}
 }
