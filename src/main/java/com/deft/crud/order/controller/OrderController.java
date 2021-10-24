@@ -151,8 +151,6 @@ public class OrderController {
 		/* 상품 목록 조회 */
 		List<StorageDTO> stockList = stockService.selectSellableProductAll();
 		
-		System.out.println(order);
-		
 		mv.addObject("order", order);
 		mv.addObject("customerList", extCustomerList);
 		mv.addObject("stockList", stockList);

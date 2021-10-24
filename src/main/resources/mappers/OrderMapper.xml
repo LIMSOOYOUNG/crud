@@ -219,4 +219,30 @@
         , #{ productAmount }
         )
 	</insert>
+	
+	<select id="selectApprovedOrderList" resultMap="orderSelectResultMap">
+        SELECT /* com.deft.crud.order.model.dao.OrderMapper#selectApprovedOrderList() */
+               O.ORDER_NO
+             , O.ORDER_TITLE
+             , O.CUSTOMER_NO
+             , C.CUSTOMER_NAME
+             , CC.COMPANY_NAME
+             , EI.EMP_NAME
+             , J.JOB_NAME
+             , O.SUM_PRICE
+             , O.PAYMENT_STATUS
+             , TO_CHAR(O.ORDER_DATE, 'YYYY-MM-DD') "ORDER_DATE"
+             , TO_CHAR(O.DUE_DATE, 'YYYY-MM-DD') "DUE_DATE"
+             , O.ORDER_YN
+          FROM TBL_PURCHASE_ORDER O
+          LEFT JOIN TBL_CUSTOMER C ON (O.CUSTOMER_NO = C.CUSTOMER_NO)
+          LEFT JOIN TBL_CUSTOMER_COMPANY CC ON (C.CUSTOMER_COMPANY_NO = CC.CUSTOMER_COMPANY_NO)
+          LEFT JOIN TBL_EMP_INFO EI ON (C.EMP_NO = EI.EMP_NO)
+          LEFT JOIN TBL_JOB J ON (EI.JOB_CODE = J.JOB_CODE)
+          LEFT JOIN TBL_RELEASE_REQ RL ON (O.ORDER_NO = RL.ORDER_NO)
+          LEFT JOIN TBL_APPROVAL_DOCUMENT A ON (RL.APPROVAL_DOCUMENT_NO = A.APPROVAL_DOCUMENT_NO)
+         WHERE A.DOCUMENT_STATUS = '승인'
+           AND C.EMP_NO = #{ empNo }
+         ORDER BY O.ORDER_NO DESC
+	</select>
 </mapper>

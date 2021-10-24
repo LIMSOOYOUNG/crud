@@ -22,7 +22,7 @@ public class ChargeDTO implements Serializable {
 	private String chargeNo;
 	private String orderNo;
 	private String chargeStatus;
-	private LocalDate chargeDate;
+	private String chargeDate;
 	
 	private OrderDTO order;
 }

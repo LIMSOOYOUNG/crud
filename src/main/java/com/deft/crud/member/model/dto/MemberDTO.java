@@ -1,6 +1,5 @@
 package com.deft.crud.member.model.dto;
 
-import com.deft.crud.admin.adminemployee.model.dto.EmployeeImageDTO;
 import com.deft.crud.organization.model.dto.DepartmentDTO;
 import com.deft.crud.organization.model.dto.JobDTO;
 

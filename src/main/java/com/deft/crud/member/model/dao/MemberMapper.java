@@ -9,4 +9,5 @@ public interface MemberMapper {
 
 	MemberDTO findMemberById(String username);
 
+	String selectEmpId(MemberDTO userInfo);
 }

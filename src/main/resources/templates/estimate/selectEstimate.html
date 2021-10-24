@@ -29,10 +29,10 @@
 					</div>
 
 					<div class="row">
-						<div class="col-lg-12" th:align="center">
+						<div class="col-lg-12" th:align="center" th:object="${estimate}">
 
 							<!-- EstimateInfo -->
-							<div class="card mb-4" th:object="${estimate}">
+							<div class="card mb-4">
 								<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
 									<h6 class="m-0 font-weight-bold text-primary" id="tableTitle">견적서 상세조회</h6>
 									<button type="button" class="btn btn-info btn-icon-split" id="modifyEstimateBtn"
@@ -43,8 +43,8 @@
 								</div>
 								<div class="card-body">
 									<div class="form-group row mb-2" th:align="right">
-											<label for="estimateTitle" class="col-form-label col-lg-1">제목</label>
-											<input type="text" class="form-control col-lg-10" th:field="*{estimateTitle}" readonly>
+										<label for="estimateTitle" class="col-form-label col-lg-1">제목</label>
+										<input type="text" class="form-control col-lg-10" th:field="*{estimateTitle}" readonly>
 									</div>
 									<div class="form-group row mb-2" th:align="right">
 										<label for="estimateNo" class="col-form-label col-lg-1">견적번호</label>
@@ -127,7 +127,7 @@
 											</tr>
 										</thead>
 										<tbody th:align="center">
-											<tr th:each="estimateProduct, i : ${estimate.estimateProductList}" th:object="${estimateProduct}">
+											<tr th:each="estimateProduct, i : *{estimateProductList}" th:object="${estimateProduct}">
 												<td th:text="${i.count}"></td>
 												<td th:text="*{productNo}"></td>
 												<td th:text="*{product.productName}"></td>
@@ -161,9 +161,6 @@
 	<th:block th:replace="@{/common/script} :: script"></th:block>
 	<script>
 		$(document).ready(function() {
-			$("#customerTable").DataTable();
-			$("#stockTable").DataTable();
-
 			$("#discountRate").TouchSpin({
 				min: 0,
 				max: 100,
