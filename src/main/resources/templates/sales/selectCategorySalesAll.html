@@ -109,7 +109,7 @@
     <!-- Script -->
     <th:block th:replace="@{/common/script} :: script"></th:block>
 
-	<!-- 카테고리 실적 테이블  -->
+	<!-- 카테고리 실적 테이블 스크립트 -->
 	<script>
     $(document).ready(function () {
       $('#categoryPerform').DataTable(); // ID From dataTable 
@@ -183,7 +183,7 @@
         let categoryCode = $(this).val();
         console.log(categoryCode);
 
-        location.href = "/sales/category/select?collectBillYear=" + collectBillYear + "&collectBillMonth=" + collectBillMonth + "&categoryCode=" + categoryCode;
+        location.href = "/sales/category/select?categoryCode=" + categoryCode + "&collectBillYear=" + collectBillYear + "&collectBillMonth=" + collectBillMonth;
 
     });
         

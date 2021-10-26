@@ -100,13 +100,18 @@
             </div>
         </div>        
     </div>
+    
     <!-- Script -->
     <th:block th:replace="@{/common/script} :: script"></th:block>
 
-	<!-- Page level custom scripts -->
+	
 	<script>
+	
+	/* 상품실적 테이블 스크립트 */
     $(document).ready(function () {
-      $('#productPerform').DataTable(); // ID From dataTable 
+      $('#productPerform').DataTable({ 			// ID From dataTable
+			order:[]
+      	});
     });
 
     /* 날짜별 실적 확인 */
@@ -117,10 +122,11 @@
     	
     	console.log(collectBillYear);
     	console.log(collectBillMonth);
-
+		
+    	/* data를 변수로 초기화 하고 ajax 통신으로 해당 연도와 월에 대한 상품 실적 조회*/
         let data = {"collectBillYear" : collectBillYear, "collectBillMonth" : collectBillMonth};
 
-        
+        /* ajax 통신으로 상품 연도와 월에 대한 상품 실적 조회 */
         $.ajax({
             url: "/sales/select/product/peform/date",
             data: data,
