@@ -108,6 +108,7 @@ public class BusinessController {
 		
 		mv.addObject("businessActivityList", businessActivityList);		// 전체영업활동 내역
 		mv.addObject("customerList", customerList);		// 담당중인 고객 리스트
+		
 		mv.setViewName("business/businessActivityList");
 		
 		return mv;
