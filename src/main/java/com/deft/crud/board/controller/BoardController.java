@@ -74,6 +74,7 @@ public class BoardController {
 		/* writeNo 변수를 생성하여 서비스에 전달한다. */
 		int writeNo = boardService.selectSeqFreeboardNo();
 		
+		/* key값과 value값 지정 */
 		mv.addObject("writeNo", writeNo);
 		
 		return mv;
@@ -108,8 +109,10 @@ public class BoardController {
 			}
 				/* 원본파일 */
 				String originFileName = freeboardUpload.getOriginalFilename();
-		    	/* 확장자 */
+		    	
+				/* 확장자 */
 		    	String ext = originFileName.substring(originFileName.lastIndexOf("."));
+		    	
 		    	/* 파일명이 중복되지 않도록 설정해준다. */	
 		    	String savedName = UUID.randomUUID().toString().replace("-", "") + ext;
 		    	
@@ -123,7 +126,7 @@ public class BoardController {
 				parameters.setBoardFileList(file);
 		    
 		    try {	
-		    	/* 파일 저장 */
+		    		/* 파일 저장 */
 		    		freeboardUpload.transferTo(new File(filePath + "\\" + file.getSavedName()));
 		    	
 		    }catch (Exception e) {
@@ -202,14 +205,14 @@ public class BoardController {
 	@GetMapping("/freeboardmodify")
 	public ModelAndView freeboardModify(ModelAndView mv, @RequestParam int writeNo) throws Exception {
 		
-		/* BoardDTO를 writeNo 값을 담아서 서비스에 전달한다. */
+		/* BoardDTO,BoardFileDTO를 writeNo 값을 담아서 서비스에 전달한다. */
 		BoardDTO boardDTO = boardService.freeboardModifyForm(writeNo);
-		
 		BoardFileDTO boardFileDTO = boardService.freeboardFile(writeNo);
 		
 		/* 페이지 이동값을 board/freeboardmodify 지정한다. */
 		mv.setViewName("/board/freeboardmodify");
 		
+		/* key값과 value값을 지정한다. */
 		mv.addObject("boardDTO", boardDTO);
 		mv.addObject("boardFileDTO", boardFileDTO);
 		
@@ -221,11 +224,14 @@ public class BoardController {
 			,@RequestParam MultipartFile freeboardUpdate
 			,HttpServletRequest request
 			,RedirectAttributes rttr) {
+		
 		int result = 0;
 		BoardFileDTO boardFileDTO = new BoardFileDTO();
+		
 		if(!freeboardUpdate.isEmpty()) {
 			String root = request.getSession().getServletContext().getRealPath("\\");
 			
+			/* 원본파일을 저장할 경로 설정 */
 			String fileUploadDirectory = root + "\\upload\\freeboard";
 			
 			File directory = new File(fileUploadDirectory);
@@ -250,7 +256,7 @@ public class BoardController {
 			
 			try {
 				
-				/* 이미지 저장 */
+				/* 파일 저장 */
 				freeboardUpdate.transferTo(new File(fileUploadDirectory + "\\" + savedName));
 				
 			}catch (IllegalStateException e) {

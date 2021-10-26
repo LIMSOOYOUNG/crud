@@ -62,6 +62,7 @@ public class AdminBoardService {
 		return adminBoardDTO;
 	}
 
+	/* 공지사항 수정 */
 	public int noticeModify(BoardDTO parameters) {
 		
 		int result = adminBoardMapper.noticeModify(parameters);
@@ -69,6 +70,7 @@ public class AdminBoardService {
 		return result;
 	}
 
+	/* 공지사항 삭제 */
 	public int deleteNotice(int writeNo) {
 		
 		int result = adminBoardMapper.deleteNotice(writeNo);
@@ -83,12 +85,16 @@ public class AdminBoardService {
 		
 		return result;
 	}
+	
+	/* 원본파일명 불러오기 */
 	public BoardFileDTO noticeFileLook(int writeNo) {
 		
 		BoardFileDTO result = adminBoardMapper.noticeFileLook(writeNo);
 		
 		return result;
 	}
+	
+	/**/
 	@Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE,
 			rollbackFor = {Exception.class})
 	public int noticeTextFileModify(BoardDTO parameters, BoardFileDTO boardFileDTO) {

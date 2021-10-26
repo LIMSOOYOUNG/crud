@@ -23,6 +23,7 @@ public class EmployeeService {
         this.passwordEncoder = passwordEncoder;
     }
 
+    /* 사원 전체 조회 */
     public List<EmployeeDTO> selectEmployee(){
 
         List<EmployeeDTO> employeeList = employeeMapper.selectEmployee();

@@ -100,11 +100,13 @@ public class BoardService {
 		
 	}
 
+	/* 자유게시글 등록 writeNo찾기 */
 	public int selectSeqFreeboardNo() {
 		
 		return boardMapper.selectSeqFreeboardNo();
 
 	}
+	
 	/* 수정페이지에 값전달 */
 	@Transactional
 	public BoardDTO freeboardModifyForm(int writeNo) {
@@ -135,6 +137,7 @@ public class BoardService {
 		return result;
 	}
 
+	/* 자유게시글 파일 삭제 */
 	@Transactional
 	public int deleteFile(int writeNo) {
 		
@@ -143,6 +146,7 @@ public class BoardService {
 		return result;
 	}
 
+	/* 원본 파일명 불러오기 */
 	@Transactional
 	public BoardFileDTO freeboardFile(int writeNo) {
 		

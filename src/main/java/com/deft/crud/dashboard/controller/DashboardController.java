@@ -41,6 +41,8 @@ public class DashboardController {
 		
 		List<PerformanceDTO> productSalesThisMonth = salesService.productSalesThisMonth(loginInfo);
 		
+		System.out.println("productSalesThisMonth : " + productSalesThisMonth);
+		
 		mv.addObject("productSalesThisMonth", productSalesThisMonth);
 		mv.setViewName("dashboard/dashboard");
 		return mv;
@@ -60,6 +62,8 @@ public class DashboardController {
 		/* 사원 목표 실적 조회 */
 		List<Integer> userTargetSalesChart = dashBoardService.userTargetSalesChart(loginInfo);
 		
+		System.out.println("userTargetPerformChart : " + userTargetSalesChart);
+		
 		
 		mv.addObject("userSalesChart", objectMapper.writeValueAsString(userSalesChart));
 		mv.addObject("userTargetSalesChart", objectMapper.writeValueAsString(userTargetSalesChart));
@@ -76,6 +80,8 @@ public class DashboardController {
 		/* 사원 정보와 부서정보를 조건을 주기 위해 인자값으로 넘겨주고 조회를 한다. */
 		List<Integer> deptSalesChart = dashBoardService.deptSalesChart(loginInfo);
 		
+		System.out.println("deptPerformChart : " + deptSalesChart);
+		
 		
 		mv.addObject("deptSalesChart", objectMapper.writeValueAsString(deptSalesChart));
 		mv.setViewName("jsonView");
@@ -83,17 +89,18 @@ public class DashboardController {
 	}
 	
 	/* 영업기회 실패 통계 */
-	@GetMapping("/businessChance")
-	public ModelAndView businessChanceChart(ModelAndView mv,  HttpServletResponse response, @AuthenticationPrincipal UserImpl loginInfo) throws JsonProcessingException {
+	@GetMapping("/failed/businessChance")
+	public ModelAndView failedBusinessChanceChart(ModelAndView mv,  HttpServletResponse response
+			, @AuthenticationPrincipal UserImpl loginInfo) throws JsonProcessingException {
 		
+		/* UTF-8 인코딩 */
 		response.setCharacterEncoding("UTF-8");
 		
+		/* 실패한 영업기회의 조건을 주기 위해 인자값으로 넘겨주고 조회를 한다. */
 		List<Integer> failedBusinessChanceChart = dashBoardService.failedBusinessChanceChart(loginInfo);
 		
-		List<Integer> successBusinessChanceChart = dashBoardService.successBusinessChanceChart(loginInfo);
-		
+		/* key값과 value 값 지정, JSON을 쓰기위해 objectMapper썻음  */
 		mv.addObject("failedBusinessChanceChart", objectMapper.writeValueAsString(failedBusinessChanceChart));
-		mv.addObject("successBusinessChanceChart", objectMapper.writeValueAsString(successBusinessChanceChart));
 		mv.setViewName("jsonView");
 		return mv;
 	}

@@ -147,6 +147,7 @@ public class AdminEmployeeService {
 	}
 
 
+	/* 사원정보 수정페이지 불러오기 */
 	public AdminEmployeeDTO empInfoModify(int employeeNo) {
 		
 		AdminEmployeeDTO adminEmployeeDTO = adminEmployeeMapper.empInfoModify(employeeNo);
@@ -155,6 +156,7 @@ public class AdminEmployeeService {
 	}
 
 
+	/* 사원정보 수정 */
 	public int employeeModify(AdminEmployeeDTO parameters) {
 		
 		int result = adminEmployeeMapper.employeeModify(parameters);
@@ -163,6 +165,7 @@ public class AdminEmployeeService {
 	}
 
 
+	/* 직급명 조회 */
 	public List<JobDTO> jobNameList() {
 		
 		List<JobDTO> JobList = adminEmployeeMapper.jobNameList();
@@ -171,6 +174,7 @@ public class AdminEmployeeService {
 	}
 
 
+	/* 부서명 조회 */
 	public List<DepartmentDTO> deptNameList() {
 		
 		List<DepartmentDTO> deptList = adminEmployeeMapper.deptNameList();
@@ -178,7 +182,7 @@ public class AdminEmployeeService {
 		return deptList;
 	}
 
-
+	/* 매니저 리스트 */
 	public List<AdminEmployeeDTO> managerList() {
 		
 		List<AdminEmployeeDTO> managerList = adminEmployeeMapper.managerList();
@@ -193,6 +197,7 @@ public class AdminEmployeeService {
 		return managerList;
 	}
 	
+	/* 사원 정보 수정 */
 	@Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE,
 			rollbackFor = {Exception.class})
 	public int modifyEmployeeImg(AdminEmployeeDTO parameters, EmployeeImageDTO employeeImageDTO) {

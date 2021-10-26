@@ -42,6 +42,8 @@ public class DashBoardService {
 			
 			Integer userSales = dashBoardMapper.userSalesChart(loginInfo, collectBillYear, collectBillMonth);
 			
+			System.out.println("userSales : " + userSales);
+			
 			if(userSales == null) {
 				salesList.add(0);
 			} else {
@@ -98,6 +100,8 @@ public class DashBoardService {
 			
 			Integer deptSales = dashBoardMapper.deptSalesChart(loginInfo, collectBillYear, collectBillMonth); 
 			
+			System.out.println("deptSales : " + deptSales);
+			
 			if(deptSales == null) {
 				deptSalesList.add(0);
 			} else {
@@ -109,6 +113,7 @@ public class DashBoardService {
 		return deptSalesList;
 	}
 
+	/* 실패한 영업기회 차트 */
 	public List<Integer> failedBusinessChanceChart(UserImpl loginInfo) {
 		
 		/* 현재 연도 정보를 LocalDate에서 가지고 온다.*/
@@ -123,38 +128,18 @@ public class DashBoardService {
 			
 			Integer failedBusinessChance = dashBoardMapper.failedBusinessChanceChart(failedBusinessChanceYear, failedBusinessChanceMonth, loginInfo);
 			
-			
 			if(failedBusinessChance == null) {
+				
 				failedBusinessChanceList.add(0);
+				
 			} else {
+				
 				failedBusinessChanceList.add(failedBusinessChance);
+				
 			}
 		}
 		
 		return failedBusinessChanceList;
-	}
-
-	public List<Integer> successBusinessChanceChart(UserImpl loginInfo) {
-		
-		/* 현재 연도 정보를 LocalDate에서 가지고 온다.*/
-		LocalDate successBusinessChanceDate = LocalDate.now();
-		int successBusinessChanceYear = successBusinessChanceDate.getYear();
-		
-		List<Integer> successBusinessChanceList = new ArrayList<>();
-		
-		for(int successBusinessChanceMonth = 1; successBusinessChanceMonth <= 12; successBusinessChanceMonth++) {
-			
-			Integer successBusinessChance = dashBoardMapper.successBusinessChanceChart(successBusinessChanceYear, successBusinessChanceMonth, loginInfo);
-			
-			if(successBusinessChance == null) {
-				successBusinessChanceList.add(0);
-			} else {
-				successBusinessChanceList.add(successBusinessChance);
-			}
-			
-		}
-		
-		return successBusinessChanceList;
 	}
 
 
