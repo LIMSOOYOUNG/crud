@@ -86,8 +86,12 @@
 																		</select>
 																</div>
 																<div class="form-group col-xl-6">
-																	<label>권한</label> 
-																		<input type="text" class="form-control" name="authority" th:value="${employeeDTO.authority}">
+																	<label>권한</label>
+																	<select name="authority" class="form-control">
+																		<option th:value="ROLE_EMP">사원</option>
+																		<option th:value="ROLE_MANAGER">담당자</option>
+																		<option th:value="ROLE_ADMIN">관리자</option>
+																	</select>
 																</div>
 															</div>
 														</div>
@@ -129,8 +133,8 @@
 																<div class="form-group col-xl-6">
 																<label>퇴사 상태</label> 
 																	<select style="width: 100%;" name="entYn" class="form-control" id="entYn">
-																		<option value="Y">Y</option>
 																		<option value="N">N</option>
+																		<option value="Y">Y</option>
 																	</select>
 																</div>
 															</div>
@@ -157,24 +161,24 @@
 	<th:block th:replace="@{/common/script} :: script"></th:block>
 	<script src="/js/admin/insertMember.js"></script>
 	<script>
-	function loadImg(value) {
-		if(value.files && value.files[0]) {
-			const reader = new FileReader();
-			reader.onload = function(e) {
-				document.getElementById("profileImg").src = e.target.result;
+		function loadImg(value) {
+			if(value.files && value.files[0]) {
+				const reader = new FileReader();
+				reader.onload = function(e) {
+					document.getElementById("profileImg").src = e.target.result;
+				}
+				reader.readAsDataURL(value.files[0]);
 			}
-			reader.readAsDataURL(value.files[0]);
 		}
-	}
-	
-	$("#updatebtn").click(function(){
-		if(confirm("수정하시겠습니까?") == true){
-			alert("수정되었습니다.")
-		}
-		else{
-			return;
-		}
-	})
+		
+		$("#updatebtn").click(function(){
+			if(confirm("수정하시겠습니까?") == true){
+				alert("수정되었습니다.")
+			}
+			else{
+				return;
+			}
+		});
 	</script>
 </body>
 </html>

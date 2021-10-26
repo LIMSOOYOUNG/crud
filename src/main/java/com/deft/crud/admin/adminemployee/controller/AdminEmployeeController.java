@@ -160,7 +160,7 @@ public class AdminEmployeeController {
 		int result = 0;
 		EmployeeImageDTO employeeImageDTO = new EmployeeImageDTO();
 		if(!profileThumbNail.isEmpty()) {
-			String root = request.getSession().getServletContext().getRealPath("resources");
+			String root = request.getSession().getServletContext().getRealPath("\\");
 			
 			String fileUploadDirectory = root + "\\upload\\profileImage\\original";
 			String thumbnailDirectory = root + "\\upload\\profileImage\\thumbnail";
@@ -168,53 +168,53 @@ public class AdminEmployeeController {
 			File directory = new File(fileUploadDirectory);
 			File directory2 = new File(thumbnailDirectory);
 		
-		/* 이미지를 저장할 폴더가 없을시에 폴더를 생성해준다. */
-		if(!directory.exists() || !directory2.exists()) {
-			System.out.println("폴더생성 : " + directory.mkdirs());
-			System.out.println("폴더생성 : " + directory2.mkdirs());
-		}
-		
-		/* 이미지 원본파일 */
-		String originFileName = profileThumbNail.getOriginalFilename();
-		
-		/* 이미지 확장자 */
-		String ext = originFileName.substring(originFileName.lastIndexOf("."));
-		
-		/* 이미지파일명이 중복되지 않도록 설정해준다. */
-		String savedName = UUID.randomUUID().toString().replace("-", "") + ext;
-
-		employeeImageDTO.setOriginalName(originFileName);
-		employeeImageDTO.setSavedName(savedName);
-		employeeImageDTO.setSavedPath(fileUploadDirectory);
-		employeeImageDTO.setEmpNo(parameters.getEmployeeNo());
-		
-		/* 썸네일 너비 높이 설정 */
-		int width = 200;
-		int height = 250;
-
-		try {
-			/* 원본 이미지 저장 */
-			profileThumbNail.transferTo(new File(fileUploadDirectory + "\\" + savedName));
+			/* 이미지를 저장할 폴더가 없을시에 폴더를 생성해준다. */
+			if(!directory.exists() || !directory2.exists()) {
+				System.out.println("폴더생성 : " + directory.mkdirs());
+				System.out.println("폴더생성 : " + directory2.mkdirs());
+			}
 			
-			/* 썸네일 경로 저장 */
-			Thumbnails.of(fileUploadDirectory + "\\" + savedName)
-			.size(width, height)
-			.toFile(thumbnailDirectory + "\\thumbnail_" + savedName);
+			/* 이미지 원본파일 */
+			String originFileName = profileThumbNail.getOriginalFilename();
 			
-			/* html에서 이미지를 조회할 수 있도록 썸네일 경로를 dto에 담아준다.*/
-			employeeImageDTO.setThumbnailPath("/thumbnail_" + savedName);
-		
-		}catch (IllegalStateException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
+			/* 이미지 확장자 */
+			String ext = originFileName.substring(originFileName.lastIndexOf("."));
 			
-			new File(fileUploadDirectory + "\\" + savedName).delete();
-			e.printStackTrace();
-		}
-		
-		result = adminEmployeeService.modifyEmployeeImg(parameters, employeeImageDTO);
+			/* 이미지파일명이 중복되지 않도록 설정해준다. */
+			String savedName = UUID.randomUUID().toString().replace("-", "") + ext;
+	
+			employeeImageDTO.setOriginalName(originFileName);
+			employeeImageDTO.setSavedName(savedName);
+			employeeImageDTO.setSavedPath(fileUploadDirectory);
+			employeeImageDTO.setEmpNo(parameters.getEmployeeNo());
 			
-		}else {
+			/* 썸네일 너비 높이 설정 */
+			int width = 200;
+			int height = 250;
+	
+			try {
+				/* 원본 이미지 저장 */
+				profileThumbNail.transferTo(new File(fileUploadDirectory + "\\" + savedName));
+				
+				/* 썸네일 경로 저장 */
+				Thumbnails.of(fileUploadDirectory + "\\" + savedName)
+				.size(width, height)
+				.toFile(thumbnailDirectory + "\\thumbnail_" + savedName);
+				
+				/* html에서 이미지를 조회할 수 있도록 썸네일 경로를 dto에 담아준다.*/
+				employeeImageDTO.setThumbnailPath("/thumbnail_" + savedName);
+			
+			} catch (IllegalStateException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				
+				new File(fileUploadDirectory + "\\" + savedName).delete();
+				e.printStackTrace();
+			}
+			
+			result = adminEmployeeService.modifyEmployeeImg(parameters, employeeImageDTO);
+			
+		} else {
 			
 		result = adminEmployeeService.employeeModify(parameters);
 			

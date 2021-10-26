@@ -89,7 +89,7 @@ public class EstimateController {
 	}
 	
 	@GetMapping("/insert")
-	public ModelAndView insertEstimate(ModelAndView mv) {
+	public ModelAndView insertEstimate(ModelAndView mv, @AuthenticationPrincipal UserImpl userInfo) {
 		
 		/* 새로운 견적번호 및 일자 입력 */
 		EstimateDTO estimate = new EstimateDTO();
@@ -102,7 +102,7 @@ public class EstimateController {
 		estimate.setEstimateDate(newEstimateDate);
 		
 		/* 고객 목록 조회 */
-		List<ExtCustomerDTO> extCustomerList = customerService.selectExtCustomerList();
+		List<ExtCustomerDTO> extCustomerList = customerService.selectExtCustomerList(userInfo);
 		
 		/* 상품 목록 조회 */
 		List<StorageDTO> stockList = stockService.selectSellableProductAll();
@@ -137,13 +137,14 @@ public class EstimateController {
 	}
 	
 	@GetMapping("/modify")
-	public ModelAndView modifyEstimate(ModelAndView mv, @RequestParam String estimateNo) {
+	public ModelAndView modifyEstimate(ModelAndView mv, @AuthenticationPrincipal UserImpl userInfo,
+									@RequestParam String estimateNo) {
 		
 		/* 견적서 정보 조회 */
 		EstimateDTO estimate = estimateService.selectEstimateDetail(estimateNo);
 		
 		/* 고객 목록 조회 */
-		List<ExtCustomerDTO> extCustomerList = customerService.selectExtCustomerList();
+		List<ExtCustomerDTO> extCustomerList = customerService.selectExtCustomerList(userInfo);
 		
 		/* 상품 목록 조회 */
 		List<StorageDTO> stockList = stockService.selectSellableProductAll();
