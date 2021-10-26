@@ -519,7 +519,7 @@
    
    <!-- 출고 요청한 수량 만큼 재고보유수량 차감 -->
    <update id="updateStorage" parameterType="com.deft.crud.stock.model.dto.RequestStockDTO">
-		UPDATE 
+		UPDATE /* com.deft.crud.stock.model.dao.StockMapper#updateStorage() */
                TBL_STORAGE A
            SET A.PRODUCT_STOCK = A.PRODUCT_STOCK - #{ orderStockAmount }
          WHERE A.PRODUCT_NO = #{ stockProductNo }
@@ -527,7 +527,7 @@
    
    <!-- 입고요청서 번호 찾기 -->
 	<select id="selectReceivingNoByApprovalNo" resultType="_int" parameterType="_int">
-	       SELECT
+	       SELECT /* com.deft.crud.stock.model.dao.StockMapper#selectReceivingNoByApprovalNo() */
 	              RECEIVING_REQ_NO
 	         FROM TBL_RECEIVING_REQ
 	        WHERE APPROVAL_DOCUMENT_NO = #{ approvalNo }     
@@ -535,7 +535,7 @@
 
    <!-- 출고요청서 번호 찾기 -->
    <select id="selectReleaseNoByApprovalNo" resultType="_int" parameterType="_int">
-	       SELECT
+	       SELECT /* com.deft.crud.stock.model.dao.StockMapper#selectReleaseNoByApprovalNo() */
 	              RELEASE_REQ_NO
 	            , ORDER_NO
 	         FROM TBL_RELEASE_REQ

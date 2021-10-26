@@ -65,7 +65,7 @@ public class BusinessService {
 		return businessActivityList;
 	}
  
-	/* 전체사원 영업활동 목록조회 (담당자용)*/
+	/* 영업활동 목록조회 (담당자/사원)*/
 	public List<BusinessActivityDTO> selectActivityAll(UserImpl userInfo) {
 		
 		List<BusinessActivityDTO> businessActivityList = businessMapper.selectActivityAll(userInfo);
@@ -73,6 +73,14 @@ public class BusinessService {
 		return businessActivityList;
 	}
 
+	/* 담당중인 고객 리스트 */
+	public List<CustomerDTO> selectMyCustomerList(UserImpl userInfo) {
+		
+		List<CustomerDTO> customerList = businessMapper.selectMyCustomerList(userInfo);
+		
+		return customerList;
+	}
+	
 	/* 영업활동내역 상세정보 */
 	public BusinessActivityDTO selectActivityDetailInfoByNo(int activityNo) {
 
@@ -81,13 +89,6 @@ public class BusinessService {
 		return activityInfo;
 	}
 	
-	/* 담당중인 고객 리스트 */
-	public List<CustomerDTO> selectMyCustomerList(UserImpl userInfo) {
-		
-		List<CustomerDTO> customerList = businessMapper.selectMyCustomerList(userInfo);
-		
-		return customerList;
-	}
 
 	/* 영업활동 등록 */
 	public boolean insertActivity(BusinessActivityDTO parameters) {

@@ -278,17 +278,9 @@ public class StockController {
 	/* 선택한 출고 요청서 결재 처리*/
 	@PostMapping("releaseStatus/modify")
 	public ModelAndView modifyReleaseStatus(ModelAndView mv, HttpServletResponse response,
-										@RequestBody ReceivingReqDTO parameters) {
+											@RequestBody ReceivingReqDTO parameters) {
 		
 		response.setContentType("application/json; charset=UTF-8");
-		
-		System.out.println("@@@출고요청서 결재처리 컨트롤러로 이동");
-		for(int i = 0; i < parameters.getReceivingReqProductList().size(); i++) {
-			System.out.println("상품번호 : " +parameters.getReceivingReqProductList().get(i).getProductNo());
-			System.out.println("상품재고 수량" + parameters.getReceivingReqProductList().get(i).getProductStock());
-			System.out.println("출고요청 수량" + parameters.getReceivingReqProductList().get(i).getProductAmount());
-			
-		}			
 		
 		boolean result = stockService.modifyReleaseStatus(parameters);
 	

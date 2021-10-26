@@ -240,7 +240,7 @@ public class StockService {
 	
 	/* 출고요청서 결재상태 변경 후 결재 처리 and 결재 이력 생성 */
 	@Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE,
-			rollbackFor = {Exception.class})
+					rollbackFor = {Exception.class})
 	public boolean modifyReleaseStatus(ReceivingReqDTO parameters) {
 
 		LocalDateTime sysDateLocalDateTime = LocalDateTime.now();
