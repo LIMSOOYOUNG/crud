@@ -127,10 +127,12 @@
 			</div>
 		</div>
 	</div>
+	
+	<!-- script -->
 	<th:block th:replace="@{/common/script} :: script"></th:block>
-
+	
 	<script>
-		
+
 		/* 이미지 선택 */
 		function loadImg(value) {
 			if(value.files) {
@@ -140,12 +142,10 @@
 				}
 				reader.readAsDataURL(value.files[0]); 
 			}
-		}
+		};
 		
 		/* 다중 셀렉트박스 구현을 위한 함수 */
 		function categoryBox(refCategoryCode) {
-
-			console.log(refCategoryCode);
 
 			$.ajax({
 				url: "/product/selectCategoryCode",
@@ -169,7 +169,7 @@
 					console.log(error);
 				}
 			});
-		}
+		};
 		
 		/* 확인 버튼 */
 		function checkProduct() {
@@ -177,12 +177,13 @@
 			if(!confirm("상품을 등록하시겠습니까?")) {
 				return false;
 			} 
-		}
+		};
 
 		/* 뒤로가기 버튼 */
 		function goBack() {
 			window.history.back();
-		}
+		};
+		
 	</script>
 </body>	
 </html>

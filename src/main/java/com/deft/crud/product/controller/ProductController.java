@@ -94,10 +94,10 @@ public class ProductController {
 		/* 상품 이미지 조회 */
 		ProductImageDTO productImage = productService.selectProductImage(productNo);
 		
-		/* 카테고리(중) 리스트 조회 */
+		/* 상위 카테고리 리스트 조회 */
 		List<ProductCategoryDTO> refCategoryList = productService.refCategoryList();
 		
-		/* 카테고리(소) 리스트 조회 */
+		/* 하위 카테고리 리스트 조회 */
 		List<ProductCategoryDTO> categoryList = productService.categoryList();
 		
 		/* 제조사 정보 조회 */
@@ -123,8 +123,6 @@ public class ProductController {
 	public ModelAndView insertProduct(ModelAndView mv, @ModelAttribute InsertProductDTO parameters,
 			@RequestParam MultipartFile productThumbNail, HttpServletRequest request, RedirectAttributes rttr) {
 		
-		System.out.println("productThumbNail : " + productThumbNail);
-		
 		/* 절대경로를 변수에 초기화한다. */
 		String root = request.getSession().getServletContext().getRealPath("\\");
 		
@@ -138,8 +136,8 @@ public class ProductController {
 		
 		/* 이미지를 저장할 폴더가 없을시에 폴더를 생성해준다. */
 		if(!directory.exists() || !directory2.exists()) {
-			System.out.println("폴더생성 : " + directory.mkdirs());
-			System.out.println("폴더생성 : " + directory2.mkdirs());
+			directory.mkdirs();										// 원본파일 폴더 생성
+			directory2.mkdirs();									// 썸네일 폴더 생성
 		}
 		
 		/* 이미지 원본파일 */

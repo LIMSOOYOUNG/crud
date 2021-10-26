@@ -131,6 +131,7 @@
 			</div>
 		</div>
 	</div>
+	
 	<!-- Script -->
     <th:block th:replace="@{/common/script} :: script"></th:block>
 	<script>
@@ -167,19 +168,14 @@
 				url: "/product/selectCategoryCode",
 				data: {"refCategoryCode" : refCategoryCode},
 				success: function(data, status, xhr) {
-					console.log(data)
-					
+
 					const $select = $("#categoryCode");
 					$select.html("")
 					
 					for(let index in data) {
 						$('select').removeAttr('disabled');
 						
-						console.log("categoryCode : " + categoryCode);
-						
 						$select.append("<option value='" + data[index].categoryCode + "'>" + data[index].categoryName + "</option>");
-							
-						console.log($select)
 					}
 					
 				},

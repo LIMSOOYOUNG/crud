@@ -82,7 +82,7 @@ public class ProductService {
 		return productMapper.accountList();
 	}
 	
-	/* 상품 등록 메소드*/
+	/* 상품 등록 */
 	@Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE,
 			rollbackFor = {Exception.class})
 	public int insertProduct(InsertProductDTO parameters, Map<String, String> fileMap) {
@@ -103,8 +103,6 @@ public class ProductService {
 		productImage.setSavedPath(fileMap.get("savedPath"));
 		productImage.setThumbnailPath(fileMap.get("thumbnailPath"));
 		productImage.setProductNo(productNo);
-		
-		System.out.println("productImage : " + productImage);
 		
 		/* 이미지 저장 결과 */
 		int productImageResult = productMapper.insertProductImage(productImage);
