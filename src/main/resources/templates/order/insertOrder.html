@@ -203,7 +203,7 @@
 																<td th:text="*{customer.customerName}"></td>
 																<td th:text="*{estimateDate}"></td>
 																<td>
-																	<input type="hidden" th:value="*{customerNo}">
+																	<input type="hidden" th:value="*{customer.customerNo}">
 																	<input type="hidden" th:value="|*{customer.empInfo.empName} *{customer.empInfo.job.jobName}">
 																	<button type="button" class="btn btn-sm btn-dark" name="selectEstimateBtn"
 																			data-dismiss="modal">선택</button>
@@ -385,7 +385,7 @@
 					const estimateProductList = estimate.estimateProductList;
 
 					$("#orderTitle").val(estimate.estimateTitle);
-					$("#customerNo").val(estimate.customerNo);
+					$("#customerNo").val(estimate.customer.customerNo);
 					$("#customerCompany").val(estimate.customer.company.companyName);
 					$("#customerName").val(estimate.customer.customerName);
 					$("#resEmpName").val(estimate.customer.empInfo.empName + " " + estimate.customer.empInfo.job.jobName);

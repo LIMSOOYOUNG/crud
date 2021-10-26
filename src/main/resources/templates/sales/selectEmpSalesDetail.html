@@ -53,7 +53,7 @@
                                                 <td th:text = "${userPerformDetail.charge.chargeNo}"></td>
                                                 <td th:text = "${userPerformDetail.charge.chargeDate}"></td>
                                                 <td th:text = "${userPerformDetail.purchaseOrder.orderTitle}"></td>
-                                                <td th:text = "${userPerformDetail.collect.collectBillAmount}"></td>
+                                                <td th:text = "|${#numbers.formatDecimal(userPerformDetail.collect.collectBillAmount, 0, 'COMMA', 0, 'POINT')}"></td>
                                                 <td>
 													<button type="button" id="detailButton" name="detailButton" class="btn btn-primary" th:onclick="|location.href='@{/charge/select(chargeNo=${userPerformDetail.charge.chargeNo})}'|">청구서 상세보기</button>
 												</td>
