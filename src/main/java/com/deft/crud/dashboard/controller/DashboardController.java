@@ -90,36 +90,20 @@ public class DashboardController {
 	
 	/* 영업기회 실패 통계 */
 	@GetMapping("/failed/businessChance")
-	public ModelAndView failedBusinessChanceChart(ModelAndView mv,  HttpServletResponse response, @AuthenticationPrincipal UserImpl loginInfo) throws JsonProcessingException {
+	public ModelAndView failedBusinessChanceChart(ModelAndView mv,  HttpServletResponse response
+			, @AuthenticationPrincipal UserImpl loginInfo) throws JsonProcessingException {
 		
+		/* UTF-8 인코딩 */
 		response.setCharacterEncoding("UTF-8");
 		
+		/* 실패한 영업기회의 조건을 주기 위해 인자값으로 넘겨주고 조회를 한다. */
 		List<Integer> failedBusinessChanceChart = dashBoardService.failedBusinessChanceChart(loginInfo);
 		
-		System.out.println("failedBusinessChanceChart" + failedBusinessChanceChart);
-		
+		/* key값과 value 값 지정, JSON을 쓰기위해 objectMapper썻음  */
 		mv.addObject("failedBusinessChanceChart", objectMapper.writeValueAsString(failedBusinessChanceChart));
 		mv.setViewName("jsonView");
 		return mv;
 	}
-	
-
-//	@GetMapping("/product/sales/selectAll")
-//	public ModelAndView productSalesThisMonth(ModelAndView mv, HttpServletResponse response, @AuthenticationPrincipal UserImpl loginInfo) {
-//		
-//		System.out.println("ajax 통신 ");
-//		response.setCharacterEncoding("UTF-8");
-//		
-//		List<PerformanceDTO> productSalesThisMonth = salesService.productSalesThisMonth(loginInfo);
-//		
-//		System.out.println("productSalesThisMonth : " + productSalesThisMonth);
-//
-//		mv.setViewName("jsonView");
-//		return mv;
-//		
-//	}
-	
-	
 	
 
 }

@@ -105,6 +105,7 @@
           JOIN TBL_EMP_INFO B ON ( A.MANAGER_NO = B.EMP_NO )	
          WHERE A.EMP_NO = #{ employeeNo }
 	</select>
+	
 	<update id="employeeModify" parameterType="com.deft.crud.admin.adminemployee.model.dto.AdminEmployeeDTO">
 		UPDATE /* com.deft.crud.admin.adminemployee.model.dto.AdminEmployeeDTO */
 			   TBL_EMP_INFO E
@@ -169,4 +170,5 @@
 	         , E.THUMBNAIL_PATH = #{ thumbnailPath }
 	     WHERE E.EMP_NO = #{ empNo }
 	</update>
+	
 </mapper>

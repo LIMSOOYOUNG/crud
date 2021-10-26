@@ -38,12 +38,15 @@ public interface AdminEmployeeMapper {
 	/* 사원 등록 */
 	int insertMember(MemberDTO member);
 
+	/* 직급명 조회 */
 	List<MemberDTO> selectJobList();
-
+	
+	/* 부서명 조회 */
 	List<MemberDTO> selectDeptList();
 
 	List<MemberDTO> selectAuthorityList();
 
+	/* 매니저 조회 */
 	List<MemberDTO> selectManagerList(String deptCode);
 
 	int insetProfileImg(MemberDTO member);

@@ -113,6 +113,7 @@ public class DashBoardService {
 		return deptSalesList;
 	}
 
+	/* 실패한 영업기회 차트 */
 	public List<Integer> failedBusinessChanceChart(UserImpl loginInfo) {
 		
 		/* 현재 연도 정보를 LocalDate에서 가지고 온다.*/
@@ -127,12 +128,14 @@ public class DashBoardService {
 			
 			Integer failedBusinessChance = dashBoardMapper.failedBusinessChanceChart(failedBusinessChanceYear, failedBusinessChanceMonth, loginInfo);
 			
-			System.out.println("failedBusinessChance : " + failedBusinessChance);
-			
 			if(failedBusinessChance == null) {
+				
 				failedBusinessChanceList.add(0);
+				
 			} else {
+				
 				failedBusinessChanceList.add(failedBusinessChance);
+				
 			}
 		}
 		

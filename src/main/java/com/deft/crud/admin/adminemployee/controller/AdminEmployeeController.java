@@ -158,9 +158,11 @@ public class AdminEmployeeController {
 		if(!profileThumbNail.isEmpty()) {
 			String root = request.getSession().getServletContext().getRealPath("resources");
 			
+			/* 이미지 원본파일과 썸네일을 저장할 경로를 설정해준다.*/
 			String fileUploadDirectory = root + "\\upload\\profileImage\\original";
 			String thumbnailDirectory = root + "\\upload\\profileImage\\thumbnail";
 			
+			/* 디렉토리 생성 */
 			File directory = new File(fileUploadDirectory);
 			File directory2 = new File(thumbnailDirectory);
 		
@@ -201,9 +203,12 @@ public class AdminEmployeeController {
 			employeeImageDTO.setThumbnailPath("/thumbnail_" + savedName);
 		
 		}catch (IllegalStateException e) {
+			
 			e.printStackTrace();
+		
 		} catch (IOException e) {
 			
+			/* 예외처리가 발생하면 파일 삭제 */
 			new File(fileUploadDirectory + "\\" + savedName).delete();
 			e.printStackTrace();
 		}
@@ -219,9 +224,9 @@ public class AdminEmployeeController {
 		String message = "";
 		
 		if(result > 0) {
-			message = "상품수정에 성공하셨습니다!";
+			message = "사원수정에 성공하셨습니다!";
 		} else {
-			message = "상품수정에 실패하셨습니다!";
+			message = "사원수정에 실패하셨습니다!";
 		}
 		
 		mv.addObject("parameters", parameters);

@@ -42,8 +42,10 @@ public class AdminBoardController {
 	@GetMapping("noticeinsert")
 	public ModelAndView noticeinsert(ModelAndView mv) {
 		
+		/* writeNo 변수를 생성하여 서비스에 전달한다. */
 		int writeNo = adminBoardService.selectSeqNoticeNo();
 		
+		/* key값과 value값 지정 */
 		mv.addObject("writeNo", writeNo);
 		
 		return mv;
@@ -64,17 +66,25 @@ public class AdminBoardController {
 		
 		 if(!noticeUpload.isEmpty()) {
 			 
+			 /* 절대경로를 변수에 초기화한다. */
 			 String root = request.getSession().getServletContext().getRealPath("\\");
 			 
+			 /* 원본파일과 저장할 경로를 설정 */
 			 String filePath  = root + "\\upload\\notice";
 			 
+			 /* 파일이 없으면 생성한다. */
 			 File mkdir = new File(filePath);
 				if(!mkdir.exists()) {
 					mkdir.mkdirs();
 				}
 				
+				/* 원본파일 */
 				String originFileName = noticeUpload.getOriginalFilename();
-		    	String ext = originFileName.substring(originFileName.lastIndexOf("."));
+		    	
+				/* 확장자 */
+				String ext = originFileName.substring(originFileName.lastIndexOf("."));
+				
+				/* 파일명이 중복되지 않도록 설정해준다. */	
 				String savedName = UUID.randomUUID().toString().replace("-", "") + ext;
 	
 				BoardFileDTO file = new BoardFileDTO();
@@ -88,11 +98,13 @@ public class AdminBoardController {
 				
 				try {
 			    		
+					/* 파일 저장 */
 					noticeUpload.transferTo(new File(filePath + "\\" + file.getSavedName()));
 			    	
 			    }catch (Exception e) {
 			    	e.printStackTrace();
 						
+			    		/* 예외처리가 발생한다면 파일 삭제 */
 						new File(filePath + "\\" + file.getSavedName()).delete();
 		
 			    }
@@ -119,13 +131,14 @@ public class AdminBoardController {
 	@GetMapping("noticemodify")
 	public ModelAndView noticeModify(ModelAndView mv, @RequestParam int writeNo) {
 		
+		/* BoardDTO,BoardFileDTO를 writeNo 값을 담아서 서비스에 전달한다. */
 		AdminBoardDTO boardDTO = adminBoardService.noticeModifyform(writeNo);
-		
 		BoardFileDTO boardFileDTO = adminBoardService.noticeFileLook(writeNo);
 		
-		System.out.println("여기는 수정페이지입니다." + boardDTO);
-		
+		/* 페이지 이동값 지정 */
 		mv.setViewName("admin/noticemodify");
+		
+		/* key값과 value값을 지정한다. */
 		mv.addObject("boardDTO", boardDTO);
 		mv.addObject("boardFileDTO", boardFileDTO);
 		
@@ -148,7 +161,7 @@ public class AdminBoardController {
 			File directory = new File(fileUploadDirectory);
 			
 			if(directory.exists()) {
-				System.out.println("폴더생성 : " + directory.mkdirs());
+
 			}
 			
 			/* 원본 파일 */
@@ -167,6 +180,7 @@ public class AdminBoardController {
 			
 			try {
 				
+				/* 파일 저장 */
 				noticeUpdate.transferTo(new File(fileUploadDirectory + "\\" + savedName));
 				
 			}catch (IllegalStateException e) {
@@ -175,6 +189,7 @@ public class AdminBoardController {
 				
 			} catch (IOException e) {
 				
+				/* 예외처리가 발생하면 파일 삭제 */
 				new File(fileUploadDirectory + "\\" + savedName).delete();
 				e.printStackTrace();
 			}
