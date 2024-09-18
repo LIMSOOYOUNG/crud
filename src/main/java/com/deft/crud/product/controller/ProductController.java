@@ -72,7 +72,7 @@ public class ProductController {
 		/* 제조사 정보 조회 */
 		List<ManufacturerDTO> manufacturerList = productService.manufacturerList();
 		
-		/* 거래처 정보 조회*/
+		/* 거래처 정보 조회*/ 
 		List<AccountDTO> accountList = productService.accountList();
 		
 		mv.addObject("categoryList", categoryList);
@@ -88,7 +88,7 @@ public class ProductController {
 	@GetMapping("/select")
 	public ModelAndView productDetail(ModelAndView mv, @RequestParam("productNo") int productNo) {
 		
-		/* 해당 상품 번호를 인자값으로 넘겨 하나의 상품 정보 조회 */
+		/* 해당 상품 번호를 인자값으로 넘겨 하나의 상품 정보 조회 */ 
 		ProductDTO productDetail = productService.productDetail(productNo);
 		
 		/* 상품 이미지 조회 */
@@ -114,7 +114,6 @@ public class ProductController {
 		mv.addObject("accountList", accountList);
 
 		mv.setViewName("product/productDetail");
-		
 		return mv;
 	}
 	
@@ -148,7 +147,7 @@ public class ProductController {
 		
 		/* 이미지파일명이 중복되지 않도록 설정해준다. */
 		String savedName = UUID.randomUUID().toString().replace("-", "") + ext;
-		
+
 		/* 맵에다 원본파일명과 저장경로와 저장된 파일명
 		 * 썸네일 사이즈를 설정한 뒤 썸네일 경로까지 담아준다.*/
 		Map<String, String> fileMap = new HashMap<>();
@@ -163,6 +162,7 @@ public class ProductController {
 		/* 등록 결과 초기화 */
 		int result = 0;
 		
+		
 		try {
 			
 			/* 원본 이미지 저장 */
@@ -176,7 +176,7 @@ public class ProductController {
 			/* 썸네일 경로 멥에 담아준다. */
 			fileMap.put("thumbnailPath", "/thumbnail_" + savedName);
 			
-			/* 상품 등록 결과 값이 1이 되면 등록 성공 아니면 실패 */
+			/* 상품 등록 결과 값이 1이 되면 등록 성공 아니면 실패 */ 
 			result = productService.insertProduct(parameters, fileMap);
 			
 		} catch (IllegalStateException e) {
@@ -227,11 +227,11 @@ public class ProductController {
 			File directory = new File(fileUploadDirectory);
 			File directory2 = new File(thumbnailDirectory);
 			
-//			/* 이미지를 저장할 폴더가 없을시에 폴더를 생성해준다. */
-//			if(!directory.exists() || !directory2.exists()) {
-//				System.out.println("폴더생성 : " + directory.mkdirs());
-//				System.out.println("폴더생성 : " + directory2.mkdirs());
-//			}
+			/* 이미지를 저장할 폴더가 없을시에 폴더를 생성해준다. */
+			if(!directory.exists() || !directory2.exists()) {
+				System.out.println("폴더생성 : " + directory.mkdirs());
+				System.out.println("폴더생성 : " + directory2.mkdirs());
+			}
 			
 			/* 이미지 원본파일 */
 			String originFileName = productThumbNail.getOriginalFilename();

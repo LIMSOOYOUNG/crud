@@ -45,7 +45,7 @@
 									<h5 class="m-0 font-weight-bold text-primary mt-3" align="center">이번 달 실적 현황</h5>
 								</div>
 								<div class="table-responsive p-3">
-									<table class="table align-items-center table-flush table-hover" id="dataTableHover">
+									<table class="table align-items-center table-flush table-hover" id="salesTable">
 										<thead th:align="center" class="thead-light">
 											<tr>
 												<th>상품번호</th>
@@ -82,8 +82,7 @@
 	<script>
 	
     $(document).ready(function () {
-      $('#dataTable').DataTable(); // ID From dataTable 
-      $('#dataTableHover').DataTable(); // ID From dataTable with Hover
+      $('#salesTable').DataTable(); // ID From dataTable 
     });
 	
 		
@@ -163,7 +162,7 @@
 			});
 			
 		
-// 		/* 부서 실적 조회 차트 */
+			/* 부서 실적 조회 차트 */
 			const ctx2 = document.getElementById('deptPerformanceChart');
 			
 			$.ajax({

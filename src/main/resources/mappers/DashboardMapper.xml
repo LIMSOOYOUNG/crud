@@ -2,73 +2,17 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.deft.crud.dashboard.model.dao.DashboardMapper">
 
-	<resultMap type="com.deft.crud.sales.model.dto.TargetPerfomDTO" id="targetPerformResultMap">
-		<id property="targetNo" column="TARGET_NO"/>
-		<result property="empNo" column="EMP_NO"/>
-		<result property="targetSales" column="TARGET_SALES"/>
-		<result property="targetContract" column="TARGET_CONTRACT"/>
-		<result property="performYear" column="PERFORM_YEAR"/>
-		<result property="performMonth" column="PERFORM_MONTH"/>
-		
-	</resultMap>
-	
-
-	<resultMap type="com.deft.crud.dashboard.model.dto.PerformanceDTO" id="performanceResultMap">
-		<id property="performanceNo" column="PERFORMANCE_NO"/>
-		<association property="empInfo" resultMap="empInfoResultMap"/>	
-		<association property="collect" resultMap="collectBillResultMap"/>	
-	
-	</resultMap>
-	
-	<resultMap type="com.deft.crud.dashboard.model.dto.EmpInfoDTO" id="empInfoResultMap">
-		<id property="empNo" column="EMP_NO"/>
-		<result property="empName" column="EMP_NAME"/>
-		<result property="deptCode" column="DEPT_CODE"/>
-		<result property="authority" column="AUTHORITY"/>
-		<association property="department" resultMap="departmentResultMap"/>
-	
-	</resultMap>
-
-	<resultMap type="com.deft.crud.dashboard.model.dto.DepartmentDTO" id="departmentResultMap">
-		<id property="deptCode" column="DEPT_CODE"/>
-		<result property="deptName" column="DEPT_NAME"/>
-	
-	</resultMap>
-
-	<resultMap type="com.deft.crud.dashboard.model.dto.CollectBillDTO" id="collectBillResultMap">
-		<id property="collectBillNo" column="COLLECT_BILL_NO"/>
-		<result property="collectBillAmount" column="COLLECT_BILL_AMOUNT"/>
-		<result property="collectBillYear" column="COLLECT_BILL_YEAR"/>
-		<result property="collectBillMonth" column="COLLECT_BILL_MONTH"/>
-		<result property="cllectBillStatus" column="COLLECT_BILL_STATUS"/>
-	</resultMap>
-	
-	<resultMap type="com.deft.crud.dashboard.model.dto.BusinessChanceDTO" id="businessChanceResultMap">
-		<id property="businessChanceNo" column="BUSINESS_CHANCE_NO"/>
-		<result property="progressStatus" column="PROGRESS_STATUS"/>
-		<result property="salesLevel" column="SALES_LEVEL"/>
-		<result property="successPosibillity" column="SUCCESS_POSIBILLITY"/>
-		<result property="businessTitle" column="BUSINESS_TITLE"/>
-		<result property="dueDate" column="DUE_DATE"/>
-		<result property="empNo" column="EMP_NO"/>
-		<result property="customerNo" column="CUSTOMER_NO"/>
-		<result property="writeDate" column="WRITE_DATE"/>
-		<result property="businessChanceMonth" column="BUSINESS_CHANCE_MONTH"/>
-		<result property="failedBusinessChanceCount" column="FAILED_BUSINESS_CHANCE_COUNT"/>
-	</resultMap>
-	
 	<!-- 사원 실적 그래프 -->
 	<select id="userSalesChart" resultType="_int" parameterType="com.deft.crud.member.model.service.UserImpl">
 		SELECT /*com.deft.crud.dashboard.model.dao.DashBoardMapper#userPerformChart()*/
       	       SUM(B.COLLECT_BILL_AMOUNT)
 		  FROM TBL_PERFORMANCE P
 		  JOIN TBL_COLLECT_BILL B ON (P.COLLECT_BILL_NO = B.COLLECT_BILL_NO)
-		  JOIN TBL_EMP_INFO E ON (P.EMP_NO = E.EMP_NO)
+		  JOIN TBL_EMP_INFO E ON (P.EMP_NO = E.EMP_NO) 
 		 WHERE B.COLLECT_BILL_STATUS = '수금'
 	       AND P.EMP_NO = #{ loginInfo.empNo }
 		   AND EXTRACT(YEAR FROM B.COLLECT_BILL_DATE) = #{ collectBillYear }
 		   AND EXTRACT(MONTH FROM B.COLLECT_BILL_DATE) = #{ collectBillMonth }
-	
 	</select>
 	
 	<!-- 사원 목표실적 그래프 -->
